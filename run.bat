@@ -1,0 +1,1 @@
+java -Xmx256m -cp .;classes -Djava.ext.dirs=lib graphviewer3d.gui.GraphViewerFrame

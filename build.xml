@@ -1,0 +1,21 @@
+<project name="GraphViewer3D" default="compile" basedir=".">
+  <description>GraphViewer3D Ant Build Script</description>
+  
+  <property name="src" location="src"/>
+  <property name="classes" location="classes"/>
+  <property name="lib" location="lib"/>
+
+
+
+  <target name="compile" description="compile the source " >
+    <javac srcdir="${src}" destdir="${classes}" debug="yes">
+    	<classpath>
+	      <pathelement path="${classpath}"/>
+	      <fileset dir="${lib}">
+	        <include name="**/*.jar"/>
+	      </fileset>
+        </classpath>
+    </javac>
+  </target>
+	
+</project>
