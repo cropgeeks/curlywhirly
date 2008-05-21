@@ -1,20 +1,40 @@
 package graphviewer3d.gui;
 
-import graphviewer3d.data.DataLoader;
 import graphviewer3d.data.DataSet;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsEnvironment;
 import java.util.HashMap;
-import java.util.Random;
 import java.util.Vector;
 
-import javax.media.j3d.*;
-import javax.vecmath.*;
+import javax.media.j3d.AlternateAppearance;
+import javax.media.j3d.AmbientLight;
+import javax.media.j3d.Appearance;
+import javax.media.j3d.Background;
+import javax.media.j3d.BoundingSphere;
+import javax.media.j3d.BranchGroup;
+import javax.media.j3d.Canvas3D;
+import javax.media.j3d.DirectionalLight;
+import javax.media.j3d.GeometryArray;
+import javax.media.j3d.GraphicsConfigTemplate3D;
+import javax.media.j3d.LineArray;
+import javax.media.j3d.Material;
+import javax.media.j3d.Shape3D;
+import javax.media.j3d.Transform3D;
+import javax.media.j3d.TransformGroup;
+import javax.vecmath.Color3f;
+import javax.vecmath.Point3d;
+import javax.vecmath.Point3f;
+import javax.vecmath.Vector3f;
 
-
-import com.sun.j3d.utils.geometry.*;
-import com.sun.j3d.utils.pickfast.behaviors.*;
-import com.sun.j3d.utils.universe.*;
+import com.sun.j3d.utils.geometry.ColorCube;
+import com.sun.j3d.utils.geometry.Primitive;
+import com.sun.j3d.utils.geometry.Sphere;
+import com.sun.j3d.utils.pickfast.behaviors.PickRotateBehavior;
+import com.sun.j3d.utils.pickfast.behaviors.PickTranslateBehavior;
+import com.sun.j3d.utils.pickfast.behaviors.PickZoomBehavior;
+import com.sun.j3d.utils.universe.SimpleUniverse;
 
 /**
  * @author Micha Bayer, Scottish Crop Research Institute
@@ -26,72 +46,119 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	// ==================================vars=============================
 	
-	//variables to adjust manually for now
-	int boundsSize = 100;
-	int initialZ = 2;
+	// variables to adjust manually for now
+	int boundsSize = 10;
+	int initialZ = 3;
 	static boolean antiAlias = true;
 	
 	// infrastructure
 	private SimpleUniverse su = null;
 	
 	// this is the initial position of the camera/viewer's eye
-	//a rotation will be applied to this position to create the correct viewing angle so the user looks down onto the object
-	private Point3f initialViewPoint = new Point3f(0,0,initialZ);
+	// a rotation will be applied to this position to create the correct viewing angle so the user looks down onto the object
+	private Point3f initialViewPoint = new Point3f(0, 0, initialZ);
 	int viewingAngle = 0;
 	
-	//the bounds for the scene
-	BoundingSphere bounds = new BoundingSphere(new Point3d(0,0,0), boundsSize);
+	// the bounds for the scene
+	BoundingSphere bounds = new BoundingSphere(new Point3d(0, 0, 0), boundsSize);
 	
 	// this is the root of the object part of the scene
 	private BranchGroup objRoot = null;
 	// this holds all the objects
 	private TransformGroup wholeObj = null;
 	
-	//the dataset with the data to plot
+	// the dataset with the data to plot
 	DataSet dataSet;
 	
-	//the length of the coordinate system axes
+	// the length of the coordinate system axes
 	float axisLength = 0;
 	
-	//the size of the spheres to be used
+	// the size of the spheres to be used
 	float sphereSize = 0;
 	
-	//a hashmap containing category names as keys and colors as values
-	HashMap<String,Color3f> colourMap;
+	// a hashmap containing category names as keys and colors as values
+	HashMap<String, Color3f> colourMap;
+	
+	Shape3D[] allSpheres;
+	String[] categories;
 	
 	// ==================================c'tor=============================
 	
-	public GraphViewer3DCanvas(GraphViewerFrame frame)
+	public GraphViewer3DCanvas(DataSet dataSet)
 	{
-		super(getGraphicsConfig());	
-		
-		//load data
-		//TODO : remove hard coding of file path
-		String filePath = "E:\\SVNSandbox\\graphViewer3D\\pco_data.txt";		
-		DataLoader loader = new DataLoader();		
-		dataSet = loader.getDataFromFile(filePath);
-		
+		super(getGraphicsConfig());
+		this.dataSet = dataSet;
 		calculateSizes();
-		
 		su = new SimpleUniverse(this);
 		su.addBranchGraph(createSceneGraph());
 	}
 	
-	// ---------------------------------------------------------------------------------------------------------------------	
+	// ---------------------------------------------------------------------------------------------------------------------
+	
+	public void colourSpheres(Vector<String> updatableCategories)
+	{
+		// gray out all but the selected categories' data points
+		Color3f colour;
+
+		//for all spheres
+		for (int i = 0; i < allSpheres.length; i++)
+		{
+			Material mat = new Material();
+			String category = categories[i];
+			
+			// if there are selected categories
+			if (null != updatableCategories)
+			{
+				// check whether this sphere belongs to any of the selected categories
+				for (String string : updatableCategories)
+				{
+					// if the current category does not match any of the selected ones
+					if (!category.trim().equals(string))
+					{
+						// grey out the sphere
+						mat.setDiffuseColor(new Color3f(Color.WHITE));
+					}
+					else
+					{
+						// colour it in
+						colour = colourMap.get(category);
+						mat.setDiffuseColor(colour);
+					}
+				}				
+			}
+			
+			//no categories selected
+			else
+			{
+				// colour it in
+				colour = colourMap.get(category);
+				mat.setDiffuseColor(colour);
+			}
+			
+			Appearance app = new Appearance();
+			app.setMaterial(mat);
+			app.setCapability(AlternateAppearance.ALLOW_SCOPE_WRITE);
+			app.setCapability(AlternateAppearance.ALLOW_SCOPE_READ);
+			allSpheres[i].setAppearance(app);
+			
+		}
+	}
+	
+	// ---------------------------------------------------------------------------------------------------------------------
 	
 	private void calculateSizes()
 	{
-		//work out size of corrdinate system needed
-		//this depends on the values of the data
-		//we want the max value the data can take in any dimension
-		//this becomes the length of the axes (with a bit to spare)
-		if(dataSet.absoluteMax > Math.abs(dataSet.absoluteMin))
+		// work out size of corrdinate system needed
+		// this depends on the values of the data
+		// we want the max value the data can take in any dimension
+		// this becomes the length of the axes (with a bit to spare)
+		if (dataSet.absoluteMax > Math.abs(dataSet.absoluteMin))
 			axisLength = dataSet.absoluteMax;
 		else
 			axisLength = dataSet.absoluteMin;
 		
-		//work out sphere size for the plot symbols
-		sphereSize = axisLength/100;
+		// work out sphere size for the plot symbols
+		sphereSize = axisLength / 100;
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
@@ -107,13 +174,13 @@ public class GraphViewer3DCanvas extends Canvas3D
 		
 		// Set up the directional (infinite) light source
 		Color3f lColor1 = new Color3f(1.0f, 1.0f, 1.0f);
-		Vector3f lDir1 = new Vector3f(0.0f,0.0f, -20.0f);
+		Vector3f lDir1 = new Vector3f(0.0f, 0.0f, -20.0f);
 		DirectionalLight lgt1 = new DirectionalLight(lColor1, lDir1);
 		lgt1.setInfluencingBounds(bounds);
 		objRoot.addChild(lgt1);
 	}
 	
-	// ---------------------------------------------------------------------------------------------------------------------	
+	// ---------------------------------------------------------------------------------------------------------------------
 	
 	/**
 	 * Creates a scene graph and returns it in the shape of a single BranchGroup object
@@ -136,36 +203,39 @@ public class GraphViewer3DCanvas extends Canvas3D
 		
 		try
 		{
-			//addWhiteBackground();
+			addWhiteBackground();
 			
-			//this creates a marker at the system's origin for testing
-			//makeOriginMarker();
+			// this creates a marker at the system's origin for testing
+			// makeOriginMarker();
 			
 			// this creates an ambient plus a directional light source to provide some shading
 			setUpLights();
 			
-			//draw the coordinate system
+			// draw the coordinate system
 			drawCoordinateSystem();
 			
 			// position the central cylinder and the peripheral ones
 			makeSpheres();
 			
+			//colour them in
+			colourSpheres(null);
+			
 			// add the whole Object to the root
 			objRoot.addChild(wholeObj);
 			
 			// this allows us to set the initial camera view point
-			//su.getViewingPlatform().setNominalViewingTransform();
+			// su.getViewingPlatform().setNominalViewingTransform();
 			Vector3f translate = new Vector3f();
 			Transform3D T3D = new Transform3D();
 			TransformGroup vpTrans = su.getViewingPlatform().getViewPlatformTransform();
 			translate.set(initialViewPoint);
 			T3D.rotX(Math.toRadians(viewingAngle));
-			T3D.setTranslation(translate);				
-			vpTrans.setTransform(T3D);			
+			T3D.setTranslation(translate);
+			vpTrans.setTransform(T3D);
 			
 			// now add the various behaviours
 			
-			//rotation
+			// rotation
 			PickRotateBehavior rotateBehaviour = new PickRotateBehavior(objRoot, this, bounds);
 			rotateBehaviour.setTolerance(100);
 			objRoot.addChild(rotateBehaviour);
@@ -179,7 +249,6 @@ public class GraphViewer3DCanvas extends Canvas3D
 			PickTranslateBehavior translateBehaviour = new PickTranslateBehavior(objRoot, this, bounds);
 			objRoot.addChild(translateBehaviour);
 			
-			
 			// Let Java 3D perform optimizations on this scene graph.
 			objRoot.compile();
 			
@@ -192,70 +261,67 @@ public class GraphViewer3DCanvas extends Canvas3D
 		return objRoot;
 	}
 	
-	
-	
-	
 	// ---------------------------------------------------------------------------------------------------------------------
 	/**
 	 * Creates the central and peripheral cylinders
 	 */
 	private void makeSpheres()
 	{
-
-		Color3f colour;
-
-		//make up the spheres that represent the data points
-		Vector3f vec = new Vector3f();
-		Transform3D translate = new Transform3D();	
 		
-		//this maps each category to a colour
+		// make up the spheres that represent the data points
+		Vector3f vec = new Vector3f();
+		Transform3D translate = new Transform3D();
+		allSpheres = new Shape3D[dataSet.numEntries];
+		categories = new String[dataSet.numEntries];
+		
+		// this maps each category to a colour
 		makeColourMappings();
 		
-		//for each entry in the dataset
+		// for each entry in the dataset
 		for (int i = 0; i < dataSet.numEntries; i++)
 		{
-			//get x, y and z coords for this data point
-			float x, y, z;			
-			float [] xData = dataSet.data.get(dataSet.currentXIndex);
-			float [] yData = dataSet.data.get(dataSet.currentYIndex);
-			float [] zData = dataSet.data.get(dataSet.currentZIndex);
+			// get x, y and z coords for this data point
+			float x, y, z;
+			float[] xData = dataSet.data.get(dataSet.currentXIndex);
+			float[] yData = dataSet.data.get(dataSet.currentYIndex);
+			float[] zData = dataSet.data.get(dataSet.currentZIndex);
 			x = xData[i];
 			y = yData[i];
 			z = zData[i];
 			
-			//coloring
-			//get new colour
 			String category = dataSet.groupIds[i];
-			colour = colourMap.get(category);
-			Material mat = new Material();
-			mat.setDiffuseColor(colour);
-			Appearance app = new Appearance();
-			app.setMaterial(mat);
 			
-			//apply this and make the sphere
-			vec.set(x,y,z);
+			// apply this and make the sphere
+			vec.set(x, y, z);
 			translate.setTranslation(vec);
 			TransformGroup sphereTG = new TransformGroup(translate);
-			sphereTG.addChild(new Sphere(sphereSize,app));
+			Sphere sphere = new Sphere(sphereSize);
+			Shape3D shape = sphere.getShape();
+			shape.setCapability(Shape3D.ALLOW_APPEARANCE_OVERRIDE_WRITE);
+			shape.setCapability(Shape3D.ALLOW_APPEARANCE_WRITE);
+			// store the sphere shape and the corresponding category in their respective arrays so we can access them easily later
+			allSpheres[i] = shape;
+			categories[i] = category;
+			sphereTG.addChild(sphere);
 			wholeObj.addChild(sphereTG);
 		}
-
+		
 	}
 	
-	// ---------------------------------------------------------------------------------------------------------------------	
+	// ---------------------------------------------------------------------------------------------------------------------
 	
 	private void makeColourMappings()
 	{
-		//get a vector with all discrete categories in the dataset
+		// get a vector with all discrete categories in the dataset
 		Vector<String> categories = dataSet.getCategories();
 		
-		//get a colour array with as many colours as we have categories
-		Color3f [] colours = GUIUtils.generateColours(categories.size());
+		// get a colour array with as many colours as we have categories
+		Color3f[] colours = GUIUtils.generateColours(categories.size());
 		System.out.println("num colours = " + colours.length);
 		System.out.println("num categories = " + categories.size());
 		
-		//now add things into a map
-		colourMap = new HashMap<String,Color3f>();
+		// now add things into a map
+		colourMap = new HashMap<String, Color3f>();
 		int i = 0;
 		for (String category : categories)
 		{
@@ -263,47 +329,75 @@ public class GraphViewer3DCanvas extends Canvas3D
 			i++;
 		}
 		
-//		System.out.println("colour mappings:");
-//		for(String category : colourMap.keySet())
-//		{
-//		System.out.println("category " + category + " = " + colourMap.get(category).toString());
-//		}
+		// System.out.println("colour mappings:");
+		// for(String category : colourMap.keySet())
+		// {
+		// System.out.println("category " + category + " = " + colourMap.get(category).toString());
+		// }
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
 	
 	private void drawCoordinateSystem()
 	{
-		LineArray coordinateAxes = new LineArray(6, GeometryArray.COORDINATES | GeometryArray.COLOR_3);
+		LineArray coordinateAxes = new LineArray(12, GeometryArray.COORDINATES | GeometryArray.COLOR_3);
 		
-		//x
-		//line start point
-		coordinateAxes.setCoordinate(0, new Point3f(0,0,0));
-		coordinateAxes.setColor(0, new float [] {255,255,255});
-		//line end point
-		coordinateAxes.setCoordinate(1, new Point3f(axisLength,0,0));
-		coordinateAxes.setColor(1, new float [] {255,255,255});
+		Color3f blue = new Color3f(0, 0, 255);
+		Color3f white = new Color3f(255, 255, 255);
+		Color3f red = new Color3f(255, 0, 0);
 		
-		//y
-		//line start point
-		coordinateAxes.setCoordinate(2, new Point3f(0,0,0));
-		coordinateAxes.setColor(2, new float [] {255,255,255});
-		//line end point
-		coordinateAxes.setCoordinate(3, new Point3f(0,axisLength,0));
-		coordinateAxes.setColor(3, new float [] {255,255,255});
+		// x positive
+		// line start point
+		coordinateAxes.setCoordinate(0, new Point3f(0, 0, 0));
+		coordinateAxes.setColor(0, blue);
+		// line end point
+		coordinateAxes.setCoordinate(1, new Point3f(axisLength, 0, 0));
+		coordinateAxes.setColor(1, blue);
 		
-		//z
-		//line start point
-		coordinateAxes.setCoordinate(4, new Point3f(0,0,0));
-		coordinateAxes.setColor(4, new float [] {255,255,255});
-		//line end point
-		coordinateAxes.setCoordinate(5, new Point3f(0,0,axisLength));
-		coordinateAxes.setColor(5, new float [] {255,255,255});
+		// y positive
+		// line start point
+		coordinateAxes.setCoordinate(2, new Point3f(0, 0, 0));
+		coordinateAxes.setColor(2, blue);
+		// line end point
+		coordinateAxes.setCoordinate(3, new Point3f(0, axisLength, 0));
+		coordinateAxes.setColor(3, blue);
+		
+		// z positive
+		// line start point
+		coordinateAxes.setCoordinate(4, new Point3f(0, 0, 0));
+		coordinateAxes.setColor(4, blue);
+		// line end point
+		coordinateAxes.setCoordinate(5, new Point3f(0, 0, axisLength));
+		coordinateAxes.setColor(5, blue);
+		
+		// x negative
+		// line start point
+		coordinateAxes.setCoordinate(6, new Point3f(0, 0, 0));
+		coordinateAxes.setColor(6, red);
+		// line end point
+		coordinateAxes.setCoordinate(7, new Point3f(-0.5f, 0, 0));
+		coordinateAxes.setColor(7, red);
+		
+		// y negative
+		// line start point
+		coordinateAxes.setCoordinate(8, new Point3f(0, 0, 0));
+		coordinateAxes.setColor(8, red);
+		// line end point
+		coordinateAxes.setCoordinate(9, new Point3f(0, -0.5f, 0));
+		coordinateAxes.setColor(9, red);
+		
+		// z negative
+		// line start point
+		coordinateAxes.setCoordinate(10, new Point3f(0, 0, 0));
+		coordinateAxes.setColor(10, red);
+		// line end point
+		coordinateAxes.setCoordinate(11, new Point3f(0, 0, -0.5f));
+		coordinateAxes.setColor(11, red);
 		
 		Shape3D s3d = new Shape3D(coordinateAxes);
 		s3d.setCapability(Shape3D.ALLOW_GEOMETRY_WRITE);
 		
-		wholeObj.addChild(s3d);	
+		wholeObj.addChild(s3d);
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
@@ -314,12 +408,12 @@ public class GraphViewer3DCanvas extends Canvas3D
 		wholeObj.addChild(cube);
 	}
 	
-	// ---------------------------------------------------------------------------------------------------------------------	
+	// ---------------------------------------------------------------------------------------------------------------------
 	
 	public void addWhiteBackground()
 	{
 		BoundingSphere boundingSphere = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 100.0);
-		Background background = new Background(new Color3f(Color.white));
+		Background background = new Background(new Color3f(Color.LIGHT_GRAY));
 		background.setApplicationBounds(boundingSphere);
 		objRoot.addChild(background);
 	}
@@ -330,7 +424,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 	private static GraphicsConfiguration getGraphicsConfig()
 	{
 		GraphicsConfigTemplate3D template = new GraphicsConfigTemplate3D();
-		if(antiAlias)
+		if (antiAlias)
 		{
 			template.setSceneAntialiasing(GraphicsConfigTemplate3D.PREFERRED);
 		}
