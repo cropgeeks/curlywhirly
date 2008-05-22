@@ -109,6 +109,11 @@ public class GraphViewer3DCanvas extends Canvas3D
 			// if there are selected categories
 			if (null != updatableCategories)
 			{
+				System.out.println("canvas is updating the following categories");
+				for (String string : updatableCategories)
+				{
+					System.out.println(string);
+				}
 				// check whether this sphere belongs to any of the selected categories
 				for (String string : updatableCategories)
 				{

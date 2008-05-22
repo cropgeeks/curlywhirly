@@ -3,11 +3,12 @@ package graphviewer3d.gui;
 import graphviewer3d.data.DataLoader;
 import graphviewer3d.data.DataSet;
 
-import java.awt.*;
-import java.io.*;
-import java.net.*;
+import java.awt.Dimension;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
 
 public class GraphViewerFrame extends JFrame
 {
@@ -79,8 +80,11 @@ public class GraphViewerFrame extends JFrame
 		splitPane.setOneTouchExpandable(true);
 		splitPane.setResizeWeight(0.0);
 		tabbedPane.setPreferredSize(new Dimension(600, 600));
-		controlPanel.setPreferredSize(new Dimension(170, 600));
+		controlPanel.setPreferredSize(new Dimension(200, 600));
 		this.getContentPane().add(splitPane);
+		
+		// menu bar
+		this.setJMenuBar(new GraphViewerMenuBar(this));
 		
 	}
 	

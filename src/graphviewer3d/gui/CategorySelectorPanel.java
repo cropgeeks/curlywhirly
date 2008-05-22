@@ -2,6 +2,8 @@ package graphviewer3d.gui;
 
 import graphviewer3d.data.DataSet;
 
+import java.awt.BorderLayout;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,12 +15,13 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-public class CategorySelectorPanel extends JPanel implements ListSelectionListener
+public class CategorySelectorPanel extends JPanel implements ListSelectionListener, ActionListener
 {
 	
 	// ===================================================vars===================================================
 	
 	JTable selectorTable;
+	JButton resetButton;
 	DataSet dataSet;
 	String[][] data;
 	public int[] indexes;
@@ -38,6 +41,10 @@ public class CategorySelectorPanel extends JPanel implements ListSelectionListen
 	
 	private void initComponents()
 	{
+
+		//layout 
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		
 		//get the categories and sort them into a usable array for this
 		categories = dataSet.getCategories();
 		Collections.sort(categories);
@@ -55,13 +62,22 @@ public class CategorySelectorPanel extends JPanel implements ListSelectionListen
 		
 		// table for selecting categories to highlight
 		selectorTable = new JTable(data, columnNames);
-		selectorTable.setPreferredScrollableViewportSize(new Dimension(100, 150));
+		selectorTable.setPreferredScrollableViewportSize(new Dimension(80, 190));
 		selectorTable.setFillsViewportHeight(true);
 		selectorTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		selectorTable.getSelectionModel().addListSelectionListener(this);
 		selectorTable.setCellSelectionEnabled(true);
 		JScrollPane scrollPane = new JScrollPane(selectorTable);
-		add(scrollPane);
+		this.add(scrollPane,BorderLayout.NORTH);
+		
+		//space between components
+		Dimension spacer = new Dimension(10,10);
+		add(new Box.Filler(spacer, spacer, spacer));
+		
+		//reset button
+		resetButton = new JButton("Restore all colours");
+		resetButton.addActionListener(this);
+		this.add(resetButton, BorderLayout.CENTER);
 		
 		// make a titled border around it all
 		this.setBorder(BorderFactory.createTitledBorder("Highlight categories: "));
@@ -74,6 +90,13 @@ public class CategorySelectorPanel extends JPanel implements ListSelectionListen
 	{	
 		if(e.getValueIsAdjusting())
 			return;
+		updateColourCoding();
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	private void updateColourCoding()
+	{
 		indexes = selectorTable.getSelectedRows();
 		//get the view to update itself
 		//pass it a vector of categories to highlight
@@ -84,6 +107,18 @@ public class CategorySelectorPanel extends JPanel implements ListSelectionListen
 		}
 		frame.canvas3D.colourSpheres(updatableCategories);		
 	}
+	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
+
+	public void actionPerformed(ActionEvent e)
+	{
+		if(e.getSource() == resetButton)
+		{
+			System.out.println("reset button clicked");
+			frame.canvas3D.colourSpheres(null);		
+		}
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------------------------	
 	
 }// end class
