@@ -17,6 +17,7 @@ public class GraphViewerFrame extends JFrame
 	
 	public static DataSet dataSet;
 	public GraphViewer3DCanvas canvas3D;
+	public int controlPanelWidth = 200;
 	
 	// ===================================================c'tor=================================================
 	
@@ -40,8 +41,8 @@ public class GraphViewerFrame extends JFrame
 			frame.setTitle("3D Graph Viewer");
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.pack();
-			//frame.setLocationRelativeTo(null);
-			frame.setExtendedState(frame.MAXIMIZED_BOTH);
+			frame.setLocationRelativeTo(null);
+			//frame.setExtendedState(frame.MAXIMIZED_BOTH);
 			
 		}
 		catch (Exception e)
@@ -79,8 +80,9 @@ public class GraphViewerFrame extends JFrame
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controlPanel, tabbedPane);
 		splitPane.setOneTouchExpandable(true);
 		splitPane.setResizeWeight(0.0);
+		splitPane.setDividerLocation(controlPanelWidth);
 		tabbedPane.setPreferredSize(new Dimension(600, 600));
-		controlPanel.setPreferredSize(new Dimension(200, 600));
+		controlPanel.setPreferredSize(new Dimension(controlPanelWidth, 600));
 		this.getContentPane().add(splitPane);
 		
 		// menu bar

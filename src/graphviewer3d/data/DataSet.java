@@ -77,7 +77,7 @@ public class DataSet
 	
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	
-	//iterates over the data in the categories array and works out how many discrete categories we have
+	//iterates over the data in the categories array and returns the discrete categories we have
 	public Vector<String> getCategories()
 	{
 		//we will store our unique instances of the categories in here

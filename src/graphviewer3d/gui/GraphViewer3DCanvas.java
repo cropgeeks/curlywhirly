@@ -48,7 +48,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	// variables to adjust manually for now
 	int boundsSize = 10;
-	int initialZ = 3;
+	int initialZ = 2;
 	static boolean antiAlias = true;
 	
 	// infrastructure
@@ -79,6 +79,10 @@ public class GraphViewer3DCanvas extends Canvas3D
 	// a hashmap containing category names as keys and colors as values
 	HashMap<String, Color3f> colourMap;
 	
+	// the background for the canvas
+	Background background;
+	
+	// arrays that hold the sphere (point) objects and the corresponding category strings
 	Shape3D[] allSpheres;
 	String[] categories;
 	
@@ -97,10 +101,18 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	public void colourSpheres(Vector<String> updatableCategories)
 	{
-		// gray out all but the selected categories' data points
-		Color3f colour;
-
-		//for all spheres
+		if (updatableCategories != null)
+		{
+			System.out.println("categories for update:");
+			for (String string : updatableCategories)
+			{
+				System.out.println(string);
+			}
+		}
+		
+		Color3f colour = new Color3f(Color.black);
+		
+		// for all spheres
 		for (int i = 0; i < allSpheres.length; i++)
 		{
 			Material mat = new Material();
@@ -109,38 +121,34 @@ public class GraphViewer3DCanvas extends Canvas3D
 			// if there are selected categories
 			if (null != updatableCategories)
 			{
-				System.out.println("canvas is updating the following categories");
-				for (String string : updatableCategories)
-				{
-					System.out.println(string);
-				}
 				// check whether this sphere belongs to any of the selected categories
 				for (String string : updatableCategories)
 				{
 					// if the current category does not match any of the selected ones
-					if (!category.trim().equals(string))
+					if (!category.equals(string))
 					{
-						// grey out the sphere
-						mat.setDiffuseColor(new Color3f(Color.WHITE));
+						// white out the sphere
+						colour = (new Color3f(Color.WHITE));
 					}
 					else
 					{
 						// colour it in
+						System.out.println("colouring sphere in");
+						System.out.println("compared category " + category + ", updatable category  is " + string);
 						colour = colourMap.get(category);
-						mat.setDiffuseColor(colour);
+						System.out.println("colour for this category = " + colour.toString());
 					}
-				}				
+				}
 			}
-			
-			//no categories selected
+			// no categories selected
 			else
 			{
 				// colour it in
-				colour = colourMap.get(category);
-				mat.setDiffuseColor(colour);
+				colour = colourMap.get(category);				
 			}
 			
 			Appearance app = new Appearance();
+			mat.setDiffuseColor(colour);
 			app.setMaterial(mat);
 			app.setCapability(AlternateAppearance.ALLOW_SCOPE_WRITE);
 			app.setCapability(AlternateAppearance.ALLOW_SCOPE_READ);
@@ -208,7 +216,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 		
 		try
 		{
-			addWhiteBackground();
+			addBackground();
 			
 			// this creates a marker at the system's origin for testing
 			// makeOriginMarker();
@@ -222,7 +230,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 			// position the central cylinder and the peripheral ones
 			makeSpheres();
 			
-			//colour them in
+			// colour them in
 			colourSpheres(null);
 			
 			// add the whole Object to the root
@@ -333,12 +341,6 @@ public class GraphViewer3DCanvas extends Canvas3D
 			colourMap.put(category, colours[i]);
 			i++;
 		}
-		
-		// System.out.println("colour mappings:");
-		// for(String category : colourMap.keySet())
-		// {
-		// System.out.println("category " + category + " = " + colourMap.get(category).toString());
-		// }
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
@@ -415,12 +417,35 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	// ---------------------------------------------------------------------------------------------------------------------
 	
-	public void addWhiteBackground()
+	public void addBackground()
 	{
-		BoundingSphere boundingSphere = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 100.0);
-		Background background = new Background(new Color3f(Color.LIGHT_GRAY));
-		background.setApplicationBounds(boundingSphere);
+		background = new Background(new Color3f(Color.LIGHT_GRAY));
+		background.setCapability(Background.ALLOW_COLOR_WRITE);
+		background.setApplicationBounds(bounds);
 		objRoot.addChild(background);
+	}
+	
+	// ---------------------------------------------------------------------------------------------------------------------
+	
+	public void setBackgroundColour(int bgColour)
+	{
+		Color3f colour = null;
+		switch (bgColour)
+		{
+			case 0:
+				colour = new Color3f(Color.LIGHT_GRAY);
+				break;
+			case 1:
+				colour = new Color3f(Color.DARK_GRAY);
+				break;
+			case 2:
+				colour = new Color3f(Color.BLACK);
+				break;
+			case 3:
+				colour = new Color3f(Color.WHITE);
+				break;
+		}
+		background.setColor(colour);
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
