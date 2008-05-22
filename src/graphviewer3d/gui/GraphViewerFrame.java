@@ -74,7 +74,7 @@ public class GraphViewerFrame extends JFrame
 		tabbedPane.addTab("3D", canvas3D);
 		
 		// side panel
-		ControlPanel controlPanel = new ControlPanel(this);
+		MTControlPanel controlPanel = new MTControlPanel(this);
 		
 		// Create a split pane with the two components in it
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controlPanel, tabbedPane);
