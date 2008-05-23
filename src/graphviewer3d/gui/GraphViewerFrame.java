@@ -3,9 +3,11 @@ package graphviewer3d.gui;
 import graphviewer3d.data.DataLoader;
 import graphviewer3d.data.DataSet;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
@@ -17,6 +19,7 @@ public class GraphViewerFrame extends JFrame
 	
 	public static DataSet dataSet;
 	public GraphViewer3DCanvas canvas3D;
+	JPanel canvasPanel;
 	public int controlPanelWidth = 200;
 	
 	// ===================================================c'tor=================================================
@@ -56,7 +59,7 @@ public class GraphViewerFrame extends JFrame
 	private static void loadData()
 	{
 		// TODO : remove hard coding of file path
-		String filePath = "E:\\SVNSandbox\\graphViewer\\pco_data.txt";
+		String filePath = "pco_data.txt";
 		DataLoader loader = new DataLoader();
 		dataSet = loader.getDataFromFile(filePath);
 	}
@@ -67,22 +70,23 @@ public class GraphViewerFrame extends JFrame
 	{
 		loadData();
 		
-		// make a tabbed pane and add the 3D panel to it
-		JTabbedPane tabbedPane = new JTabbedPane();
-		tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
 		canvas3D = new GraphViewer3DCanvas(dataSet);
-		tabbedPane.addTab("3D", canvas3D);
+		
+		// make a new panel and add the 3D panel to it	
+		canvasPanel = new JPanel(new BorderLayout());
+		canvasPanel.add(canvas3D,BorderLayout.CENTER);
+		canvasPanel.setPreferredSize(new Dimension(600, 600));
 		
 		// side panel
 		MTControlPanel controlPanel = new MTControlPanel(this);
 		
 		// Create a split pane with the two components in it
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controlPanel, tabbedPane);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controlPanel, canvasPanel);
 		splitPane.setOneTouchExpandable(true);
 		splitPane.setResizeWeight(0.0);
 		splitPane.setDividerLocation(controlPanelWidth);
-		tabbedPane.setPreferredSize(new Dimension(600, 600));
-		controlPanel.setPreferredSize(new Dimension(controlPanelWidth, 600));
+
+		//controlPanel.setPreferredSize(new Dimension(controlPanelWidth, 600));
 		this.getContentPane().add(splitPane);
 		
 		// menu bar

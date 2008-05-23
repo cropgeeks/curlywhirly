@@ -19,7 +19,7 @@ import javax.swing.event.ListSelectionListener;
  *
  * @author  __USER__
  */
-public class MTControlPanel extends javax.swing.JPanel implements ListSelectionListener
+public class MTControlPanel extends javax.swing.JPanel
 {
 	
 	//==========================================vars============================================	
@@ -61,7 +61,6 @@ public class MTControlPanel extends javax.swing.JPanel implements ListSelectionL
 		updateColourCoding();
 	}
 	
-	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	private void bgComboActionPerformed(java.awt.event.ActionEvent evt)
@@ -80,6 +79,25 @@ public class MTControlPanel extends javax.swing.JPanel implements ListSelectionL
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
 	
+	private void zComboActionPerformed(java.awt.event.ActionEvent evt)
+	{
+		// TODO add your handling code here:
+	}
+	
+	private void yComboActionPerformed(java.awt.event.ActionEvent evt)
+	{
+		// TODO add your handling code here:
+	}
+	
+	private void xComboActionPerformed(java.awt.event.ActionEvent evt)
+	{
+		int index = xCombo.getSelectedIndex();
+		frame.dataSet.currentXIndex = index;
+		System.out.println("x value changed to " + frame.dataSet.currentXIndex);
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------------------------
+	
 	private void updateColourCoding()
 	{
 		indexes = selectorList.getSelectedIndices();
@@ -93,6 +111,8 @@ public class MTControlPanel extends javax.swing.JPanel implements ListSelectionL
 		frame.canvas3D.colourSpheres(updatableCategories);
 	}
 	
+	//=========================form stuff here==============================	
+	
 	//GEN-BEGIN:initComponents
 	// <editor-fold defaultstate="collapsed" desc="Generated Code">
 	private void initComponents()
@@ -100,11 +120,11 @@ public class MTControlPanel extends javax.swing.JPanel implements ListSelectionL
 		
 		jPanel1 = new javax.swing.JPanel();
 		jLabel1 = new javax.swing.JLabel();
-		jComboBox1 = new javax.swing.JComboBox();
+		xCombo = new javax.swing.JComboBox();
 		jLabel2 = new javax.swing.JLabel();
-		jComboBox2 = new javax.swing.JComboBox();
+		yCombo = new javax.swing.JComboBox();
 		jLabel3 = new javax.swing.JLabel();
-		jComboBox3 = new javax.swing.JComboBox();
+		zCombo = new javax.swing.JComboBox();
 		jPanel2 = new javax.swing.JPanel();
 		jScrollPane1 = new javax.swing.JScrollPane();
 		selectorList = new javax.swing.JList();
@@ -116,21 +136,42 @@ public class MTControlPanel extends javax.swing.JPanel implements ListSelectionL
 		
 		jLabel1.setText("x-axis:");
 		
-		jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[]
+		xCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[]
 		{ "Item 1", "Item 2", "Item 3", "Item 4" }));
-		jComboBox1.setBorder(null);
+		xCombo.setBorder(null);
+		xCombo.addActionListener(new java.awt.event.ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				xComboActionPerformed(evt);
+			}
+		});
 		
 		jLabel2.setText("y-axis:");
 		
-		jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[]
+		yCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[]
 		{ "Item 1", "Item 2", "Item 3", "Item 4" }));
-		jComboBox2.setBorder(null);
+		yCombo.setBorder(null);
+		yCombo.addActionListener(new java.awt.event.ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				yComboActionPerformed(evt);
+			}
+		});
 		
 		jLabel3.setText("z-axis:");
 		
-		jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[]
+		zCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[]
 		{ "Item 1", "Item 2", "Item 3", "Item 4" }));
-		jComboBox3.setBorder(null);
+		zCombo.setBorder(null);
+		zCombo.addActionListener(new java.awt.event.ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				zComboActionPerformed(evt);
+			}
+		});
 		
 		org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
 		jPanel1.setLayout(jPanel1Layout);
@@ -145,15 +186,15 @@ public class MTControlPanel extends javax.swing.JPanel implements ListSelectionL
 										org.jdesktop.layout.LayoutStyle.RELATED).add(
 										jPanel1Layout.createParallelGroup(
 														org.jdesktop.layout.GroupLayout.LEADING).add(
-														jComboBox3,
+														zCombo,
 														0,
 														162,
 														Short.MAX_VALUE).add(
-														jComboBox2,
+														yCombo,
 														0,
 														162,
 														Short.MAX_VALUE).add(
-														jComboBox1,
+														xCombo,
 														0,
 														162,
 														Short.MAX_VALUE)).addContainerGap()));
@@ -163,7 +204,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ListSelectionL
 										jPanel1Layout.createParallelGroup(
 														org.jdesktop.layout.GroupLayout.BASELINE).add(
 														jLabel1).add(
-														jComboBox1,
+														xCombo,
 														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
 														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
@@ -171,7 +212,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ListSelectionL
 										jPanel1Layout.createParallelGroup(
 														org.jdesktop.layout.GroupLayout.BASELINE).add(
 														jLabel2).add(
-														jComboBox2,
+														yCombo,
 														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
 														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
@@ -179,7 +220,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ListSelectionL
 										jPanel1Layout.createParallelGroup(
 														org.jdesktop.layout.GroupLayout.BASELINE).add(
 														jLabel3).add(
-														jComboBox3,
+														zCombo,
 														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
 														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addContainerGap()));
@@ -210,8 +251,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ListSelectionL
 		});
 		jScrollPane1.setViewportView(selectorList);
 		
-		resetButton.setText("Restore all colours");
-		resetButton.setName("null");
+		resetButton.setText("Restore colours");
 		resetButton.addActionListener(new java.awt.event.ActionListener()
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -312,13 +352,10 @@ public class MTControlPanel extends javax.swing.JPanel implements ListSelectionL
 										Short.MAX_VALUE).addContainerGap()));
 	}// </editor-fold>
 	//GEN-END:initComponents
-
+	
 	//GEN-BEGIN:variables
 	// Variables declaration - do not modify
 	private javax.swing.JComboBox bgCombo;
-	private javax.swing.JComboBox jComboBox1;
-	private javax.swing.JComboBox jComboBox2;
-	private javax.swing.JComboBox jComboBox3;
 	private javax.swing.JLabel jLabel1;
 	private javax.swing.JLabel jLabel2;
 	private javax.swing.JLabel jLabel3;
@@ -328,6 +365,9 @@ public class MTControlPanel extends javax.swing.JPanel implements ListSelectionL
 	private javax.swing.JScrollPane jScrollPane1;
 	private javax.swing.JButton resetButton;
 	private javax.swing.JList selectorList;
+	private javax.swing.JComboBox xCombo;
+	private javax.swing.JComboBox yCombo;
+	private javax.swing.JComboBox zCombo;
 	// End of variables declaration//GEN-END:variables
 	
 }

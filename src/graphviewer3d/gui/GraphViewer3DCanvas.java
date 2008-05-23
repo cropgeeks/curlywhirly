@@ -64,6 +64,9 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	// this is the root of the object part of the scene
 	private BranchGroup objRoot = null;
+	
+	BranchGroup allSpheresBG;
+	
 	// this holds all the objects
 	private TransformGroup wholeObj = null;
 	
@@ -259,8 +262,8 @@ public class GraphViewer3DCanvas extends Canvas3D
 			objRoot.addChild(zoomBehaviour);
 			
 			// sideways translation
-			PickTranslateBehavior translateBehaviour = new PickTranslateBehavior(objRoot, this, bounds);
-			objRoot.addChild(translateBehaviour);
+//			PickTranslateBehavior translateBehaviour = new PickTranslateBehavior(objRoot, this, bounds);
+//			objRoot.addChild(translateBehaviour);
 			
 			// Let Java 3D perform optimizations on this scene graph.
 			objRoot.compile();
@@ -278,8 +281,11 @@ public class GraphViewer3DCanvas extends Canvas3D
 	/**
 	 * Creates the central and peripheral cylinders
 	 */
-	private void makeSpheres()
+	public void makeSpheres()
 	{
+		if(allSpheresBG != null)
+			allSpheresBG.detach();
+		allSpheresBG = new BranchGroup();
 		
 		// make up the spheres that represent the data points
 		Vector3f vec = new Vector3f();
