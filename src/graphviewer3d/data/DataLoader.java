@@ -22,12 +22,11 @@ public class DataLoader
 //==========================================methods=========================================
 	
 	//imports the data from file in the specified location
-	public DataSet getDataFromFile(String filePath)
+	public DataSet getDataFromFile(File file)
 	{		
 		try
 		{
 			//read the file content
-			File file = new File(filePath);
 			StringBuilder sb = new StringBuilder((int)file.length());		
 			BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
 			byte[] b = new byte[4096];
@@ -86,6 +85,9 @@ public class DataLoader
 			dataSet.absoluteMin = absoluteMin;
 			System.out.println("absoluteMax = "+absoluteMax);
 			System.out.println("absoluteMin = "+absoluteMin);
+			
+			//set up the vector of discrete categories on the dataset object itself
+			dataSet.extractCategories();
 			
 		}
 		catch (Exception e)

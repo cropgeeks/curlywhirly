@@ -6,50 +6,73 @@
 
 package graphviewer3d.gui;
 
+import graphviewer3d.data.Category;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Vector;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.ListCellRenderer;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.vecmath.Color3f;
 
-/**
- *
- * @author  __USER__
- */
 public class MTControlPanel extends javax.swing.JPanel
 {
 	
-	//==========================================vars============================================	
+	// ==========================================vars============================================
 	
-	public int[] indexes;
+	private int[] indexes;
 	GraphViewerFrame frame;
-	Vector<String> categories;
+	private Vector<String> categories;
+	Vector<Category> listItems;
 	
-	//==========================================c'tor============================================	
+	// ==========================================c'tor============================================
 	
 	/** Creates new form MTControlPanel */
 	public MTControlPanel(GraphViewerFrame frame)
 	{
 		initComponents();
 		this.frame = frame;
-		setUpListData();
 	}
 	
-	//==========================================methods============================================
+	// ==========================================methods============================================
 	
-	private void setUpListData()
+	public void doAdditionalComponentConfig()
 	{
-		//get the categories and sort them into a usable array for this
-		categories = frame.dataSet.getCategories();
-		Collections.sort(categories);
-		String[] categoriesArray = new String[categories.size()];
-		categories.toArray(categoriesArray);
+		// set the Vector with the data headers as the model for the combo boxes that allow selection of variables
+		Vector dataHeaders = frame.dataSet.dataHeaders;
+		xCombo.setModel(new DefaultComboBoxModel(dataHeaders));
+		yCombo.setModel(new DefaultComboBoxModel(dataHeaders));
+		zCombo.setModel(new DefaultComboBoxModel(dataHeaders));
 		
+		// set the combos to display the currently selected index of the variables they display
+		xCombo.setSelectedIndex(frame.canvas3D.currentXIndex);
+		yCombo.setSelectedIndex(frame.canvas3D.currentYIndex);
+		zCombo.setSelectedIndex(frame.canvas3D.currentZIndex);
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	public void setUpListData()
+	{
+		// get the list items
+		listItems = new Vector(frame.dataSet.categoryMap.values());
+		Collections.sort(listItems);
 		// table for selecting categories to highlight
-		selectorList.setListData(categoriesArray);
+		selectorList.setListData(listItems);
+		selectorList.setCellRenderer(new ColorListRenderer());
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -58,7 +81,16 @@ public class MTControlPanel extends javax.swing.JPanel
 	{
 		if (evt.getValueIsAdjusting())
 			return;
-		updateColourCoding();
+		Object [] selectedObjects = selectorList.getSelectedValues();
+		System.out.println("===================");
+		for (int i = 0; i < selectedObjects.length; i++)
+		{
+			Category cat = (Category)selectedObjects[i];
+			System.out.println("selected object = " + cat.name);
+		}
+		frame.canvas3D.selectedObjects = selectedObjects;
+		frame.canvas3D.highlightAllCategories = false;
+		frame.canvas3D.updateGraph();	
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -73,45 +105,97 @@ public class MTControlPanel extends javax.swing.JPanel
 	
 	private void resetButtonActionPerformed(java.awt.event.ActionEvent evt)
 	{
+		frame.canvas3D.updateGraph();
 		selectorList.clearSelection();
-		frame.canvas3D.colourSpheres(null);
+		frame.canvas3D.colourSpheres();
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	private void zComboActionPerformed(java.awt.event.ActionEvent evt)
 	{
-		// TODO add your handling code here:
+		int index = zCombo.getSelectedIndex();
+		frame.canvas3D.currentZIndex = index;
+		frame.canvas3D.highlightAllCategories = true;
+		frame.canvas3D.updateGraph();
+		System.out.println("z value changed to " + frame.canvas3D.currentZIndex);
 	}
 	
 	private void yComboActionPerformed(java.awt.event.ActionEvent evt)
 	{
-		// TODO add your handling code here:
+		int index = yCombo.getSelectedIndex();
+		frame.canvas3D.currentYIndex = index;
+		frame.canvas3D.highlightAllCategories = true;
+		frame.canvas3D.updateGraph();
+		System.out.println("y value changed to " + frame.canvas3D.currentYIndex);
 	}
 	
 	private void xComboActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		int index = xCombo.getSelectedIndex();
-		frame.dataSet.currentXIndex = index;
-		System.out.println("x value changed to " + frame.dataSet.currentXIndex);
+		frame.canvas3D.currentXIndex = index;
+		frame.canvas3D.highlightAllCategories = true;
+		frame.canvas3D.updateGraph();
+		System.out.println("x value changed to " + frame.canvas3D.currentXIndex);
 	}
+	
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	private void updateColourCoding()
+	class ColorListRenderer extends JLabel implements ListCellRenderer
 	{
-		indexes = selectorList.getSelectedIndices();
-		//get the view to update itself
-		//pass it a vector of categories to highlight
-		Vector<String> updatableCategories = new Vector();
-		for (int i = 0; i < indexes.length; i++)
+		ColorListRenderer()
 		{
-			updatableCategories.add((String) categories.get(indexes[i]));
+			// Don't paint behind the component
+			setOpaque(true);
 		}
-		frame.canvas3D.colourSpheres(updatableCategories);
+		
+		// Set the attributes of the class and return a reference
+		public Component getListCellRendererComponent(JList list, Object o, int i, boolean iss, boolean chf)
+		{
+		
+			Category item = listItems.get(i);
+			
+			// Set the font
+			setFont(list.getFont());
+			
+			// Set the text
+			setText(item.name);
+			
+			// Set the icon
+			BufferedImage image = new BufferedImage(20, 10, BufferedImage.TYPE_INT_RGB);
+			Graphics g = image.createGraphics();
+			
+			g.setColor(item.colour.get());
+			g.fillRect(0, 0, 20, 10);
+			g.setColor(Color.black);
+			g.drawRect(0, 0, 20, 10);
+			g.dispose();
+			
+			setIcon(new ImageIcon(image));
+			
+			// Set background/foreground colours
+			if (iss)
+			{
+				setBackground(list.getSelectionBackground());
+				setForeground(list.getSelectionForeground());
+			}
+			else
+			{
+				setBackground(list.getBackground());
+				setForeground(list.getForeground());
+			}
+			
+			return this;
+		}
+		
+		public Insets getInsets(Insets i)
+		{
+			return new Insets(0, 3, 0, 0);
+		}
 	}
 	
-	//=========================form stuff here==============================	
+	// =========================form stuff here==============================
 	
 	//GEN-BEGIN:initComponents
 	// <editor-fold defaultstate="collapsed" desc="Generated Code">
@@ -136,8 +220,6 @@ public class MTControlPanel extends javax.swing.JPanel
 		
 		jLabel1.setText("x-axis:");
 		
-		xCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[]
-		{ "Item 1", "Item 2", "Item 3", "Item 4" }));
 		xCombo.setBorder(null);
 		xCombo.addActionListener(new java.awt.event.ActionListener()
 		{
@@ -149,8 +231,6 @@ public class MTControlPanel extends javax.swing.JPanel
 		
 		jLabel2.setText("y-axis:");
 		
-		yCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[]
-		{ "Item 1", "Item 2", "Item 3", "Item 4" }));
 		yCombo.setBorder(null);
 		yCombo.addActionListener(new java.awt.event.ActionListener()
 		{
@@ -162,8 +242,6 @@ public class MTControlPanel extends javax.swing.JPanel
 		
 		jLabel3.setText("z-axis:");
 		
-		zCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[]
-		{ "Item 1", "Item 2", "Item 3", "Item 4" }));
 		zCombo.setBorder(null);
 		zCombo.addActionListener(new java.awt.event.ActionListener()
 		{
@@ -227,21 +305,6 @@ public class MTControlPanel extends javax.swing.JPanel
 		
 		jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Highlight categories:"));
 		
-		selectorList.setModel(new javax.swing.AbstractListModel()
-		{
-			String[] strings =
-			{ "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-			
-			public int getSize()
-			{
-				return strings.length;
-			}
-			
-			public Object getElementAt(int i)
-			{
-				return strings[i];
-			}
-		});
 		selectorList.addListSelectionListener(new javax.swing.event.ListSelectionListener()
 		{
 			public void valueChanged(javax.swing.event.ListSelectionEvent evt)
@@ -350,6 +413,8 @@ public class MTControlPanel extends javax.swing.JPanel
 										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 										Short.MAX_VALUE).addContainerGap()));
+		
+		jPanel2.getAccessibleContext().setAccessibleName("Select categories:");
 	}// </editor-fold>
 	//GEN-END:initComponents
 	

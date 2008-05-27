@@ -1,6 +1,11 @@
 package graphviewer3d.data;
 
+import graphviewer3d.gui.GUIUtils;
+
+import java.util.HashMap;
 import java.util.Vector;
+
+import javax.vecmath.Color3f;
 
 public class DataSet
 {
@@ -35,14 +40,9 @@ public class DataSet
 	//the number of entries in the dataset
 	public int numEntries;
 	
-	//the index of the float array in the above vector which is currently selected for  display on the x axis
-	public int currentXIndex = 0;
-	//the index of the float array in the above vector which is currently selected for  display on the y axis
-	public int currentYIndex = 1;
-	//the index of the float array in the above vector which is currently selected for  display on the z axis
-	public int currentZIndex = 2;
-	//these default to the first three columns of data in the dataset
-	
+	//a map containing the catgory names as keys and Category objects as values which hold the attributes for each category
+	public HashMap<String, Category> categoryMap;
+		
 	
 //=======================================================methods==================================	
 	
@@ -78,22 +78,38 @@ public class DataSet
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	
 	//iterates over the data in the categories array and returns the discrete categories we have
-	public Vector<String> getCategories()
-	{
-		//we will store our unique instances of the categories in here
-		Vector<String> categories = new Vector<String>();
-		
+	public HashMap<String, Category> extractCategories()
+	{		
+		// now add things into a map
+		categoryMap = new HashMap<String, Category>();
+
 		for (int i = 0; i < groupIds.length; i++)
-		{
-			String label = groupIds[i].trim();
-			//if the vector does not contain the label yet, we add it
-			if(!categories.contains(label))
-			{
-				categories.add(label);
-			}
+		{	
+				String groupId = groupIds[i];
+				//if the map does not contain the category yet, we add it
+				if (categoryMap.get(groupId) == null)
+				{
+					//make a new category object and add it 
+					Category category = new Category();	
+					//by default set the highlight flag to true so that  the category shows initially
+					category.highlight = true;
+					//set its name
+					category.name = groupId;
+					categoryMap.put(groupId,category);
+				}
 		}
+
+		//now we know the number of categories and we can create a colour scheme and apply it
+		Color3f[] colours = GUIUtils.generateColours(categoryMap.keySet().size());
+		int i =0;
+		for (Category category : categoryMap.values())
+		{
+			category.colour = colours[i];
+			System.out.println("setting colour for category " + category.name + " to " + colours[i].get().toString());
+			i++;
+		}	
 		
-		return categories;		
+		return categoryMap;
 	}
 	
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	

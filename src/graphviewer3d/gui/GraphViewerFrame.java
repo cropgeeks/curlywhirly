@@ -3,14 +3,12 @@ package graphviewer3d.gui;
 import graphviewer3d.data.DataLoader;
 import graphviewer3d.data.DataSet;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.*;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
-import javax.swing.UIManager;
+import java.awt.Dimension;
+import java.io.File;
+
+import javax.swing.*;
 
 public class GraphViewerFrame extends JFrame
 {
@@ -19,8 +17,9 @@ public class GraphViewerFrame extends JFrame
 	
 	public static DataSet dataSet;
 	public GraphViewer3DCanvas canvas3D;
-	JPanel canvasPanel;
+	public JPanel canvasPanel;
 	public int controlPanelWidth = 200;
+	public MTControlPanel controlPanel;
 	
 	// ===================================================c'tor=================================================
 	
@@ -41,7 +40,7 @@ public class GraphViewerFrame extends JFrame
 			// get the GUI set up
 			GraphViewerFrame frame = new GraphViewerFrame();
 			frame.setVisible(true);
-			frame.setTitle("3D Graph Viewer");
+			frame.setTitle("CurlyWhirly");
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.pack();
 			frame.setLocationRelativeTo(null);
@@ -56,29 +55,30 @@ public class GraphViewerFrame extends JFrame
 	
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	
-	private static void loadData()
+	public void loadData(File file)
 	{
-		// TODO : remove hard coding of file path
-		String filePath = "pco_data.txt";
 		DataLoader loader = new DataLoader();
-		dataSet = loader.getDataFromFile(filePath);
+		dataSet = loader.getDataFromFile(file);
+		canvas3D = new GraphViewer3DCanvas(dataSet);
+		canvasPanel.add(canvas3D,BorderLayout.CENTER);
+		controlPanel.setUpListData();
+		controlPanel.doAdditionalComponentConfig();
+		repaint();
 	}
 	
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	private void setupComponents()
 	{
-		loadData();
-		
-		canvas3D = new GraphViewer3DCanvas(dataSet);
-		
-		// make a new panel and add the 3D panel to it	
+		// make a new panel for the 3D panel 
 		canvasPanel = new JPanel(new BorderLayout());
-		canvasPanel.add(canvas3D,BorderLayout.CENTER);
+		JLabel openLabel = new JLabel("Open a data file to begin.",JLabel.CENTER);
 		canvasPanel.setPreferredSize(new Dimension(600, 600));
+		canvasPanel.add(openLabel, BorderLayout.CENTER);
+		openLabel.setForeground(new Color(120,120,120));
 		
 		// side panel
-		MTControlPanel controlPanel = new MTControlPanel(this);
+		controlPanel = new MTControlPanel(this);
 		
 		// Create a split pane with the two components in it
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controlPanel, canvasPanel);
@@ -86,11 +86,14 @@ public class GraphViewerFrame extends JFrame
 		splitPane.setResizeWeight(0.0);
 		splitPane.setDividerLocation(controlPanelWidth);
 
-		//controlPanel.setPreferredSize(new Dimension(controlPanelWidth, 600));
 		this.getContentPane().add(splitPane);
 		
 		// menu bar
 		this.setJMenuBar(new GraphViewerMenuBar(this));
+		
+		// TODO : remove hard coding of file path
+		File file = new File("barley_PCOs.txt");
+		loadData(file);
 		
 	}
 	

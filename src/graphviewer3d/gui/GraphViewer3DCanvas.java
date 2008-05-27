@@ -1,11 +1,14 @@
 package graphviewer3d.gui;
 
+import graphviewer3d.data.Category;
 import graphviewer3d.data.DataSet;
 
 import java.awt.Color;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Vector;
 
 import javax.media.j3d.AlternateAppearance;
@@ -79,15 +82,25 @@ public class GraphViewer3DCanvas extends Canvas3D
 	// the size of the spheres to be used
 	float sphereSize = 0;
 	
-	// a hashmap containing category names as keys and colors as values
-	HashMap<String, Color3f> colourMap;
-	
 	// the background for the canvas
 	Background background;
 	
 	// arrays that hold the sphere (point) objects and the corresponding category strings
 	Shape3D[] allSpheres;
 	String[] categories;
+	
+	public Vector<Category> selectorListItems;
+	public Object[] selectedObjects;
+	
+	// the index of the float array in the above vector which is currently selected for display on the x axis
+	public int currentXIndex = 0;
+	// the index of the float array in the above vector which is currently selected for display on the y axis
+	public int currentYIndex = 1;
+	// the index of the float array in the above vector which is currently selected for display on the z axis
+	public int currentZIndex = 2;
+	// these default to the first three columns of data in the dataset
+	
+	boolean highlightAllCategories = true;
 	
 	// ==================================c'tor=============================
 	
@@ -102,61 +115,43 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	// ---------------------------------------------------------------------------------------------------------------------
 	
-	public void colourSpheres(Vector<String> updatableCategories)
+	public void colourSpheres()
 	{
-		if (updatableCategories != null)
+		try
 		{
-			System.out.println("categories for update:");
-			for (String string : updatableCategories)
+			// default colour to flag colour related problems
+			Color3f colour = new Color3f(Color.pink);
+			
+			// a hashmap containing category names as keys and colors as values
+			HashMap<String, Category> categoryMap = dataSet.categoryMap;
+			
+			// for all spheres
+			for (int i = 0; i < allSpheres.length; i++)
 			{
-				System.out.println(string);
+				Material mat = new Material();
+				
+				// the name of the current category
+				String category = categories[i];
+				
+				Category categoryItem = categoryMap.get(category);
+				//System.out.println("category = " + categoryItem.name + " , highlight = " + categoryItem.highlight);
+				if (categoryItem.highlight || highlightAllCategories)
+					colour = categoryItem.colour;
+				else
+					colour = new Color3f(Color.DARK_GRAY);
+				
+				Appearance app = new Appearance();
+				mat.setDiffuseColor(colour);
+				app.setMaterial(mat);
+				app.setCapability(AlternateAppearance.ALLOW_SCOPE_WRITE);
+				app.setCapability(AlternateAppearance.ALLOW_SCOPE_READ);
+				allSpheres[i].setAppearance(app);
 			}
 		}
-		
-		Color3f colour = new Color3f(Color.black);
-		
-		// for all spheres
-		for (int i = 0; i < allSpheres.length; i++)
+		catch (Exception e)
 		{
-			Material mat = new Material();
-			String category = categories[i];
-			
-			// if there are selected categories
-			if (null != updatableCategories)
-			{
-				// check whether this sphere belongs to any of the selected categories
-				for (String string : updatableCategories)
-				{
-					// if the current category does not match any of the selected ones
-					if (!category.equals(string))
-					{
-						// white out the sphere
-						colour = (new Color3f(Color.WHITE));
-					}
-					else
-					{
-						// colour it in
-						System.out.println("colouring sphere in");
-						System.out.println("compared category " + category + ", updatable category  is " + string);
-						colour = colourMap.get(category);
-						System.out.println("colour for this category = " + colour.toString());
-					}
-				}
-			}
-			// no categories selected
-			else
-			{
-				// colour it in
-				colour = colourMap.get(category);				
-			}
-			
-			Appearance app = new Appearance();
-			mat.setDiffuseColor(colour);
-			app.setMaterial(mat);
-			app.setCapability(AlternateAppearance.ALLOW_SCOPE_WRITE);
-			app.setCapability(AlternateAppearance.ALLOW_SCOPE_READ);
-			allSpheres[i].setAppearance(app);
-			
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
@@ -221,9 +216,6 @@ public class GraphViewer3DCanvas extends Canvas3D
 		{
 			addBackground();
 			
-			// this creates a marker at the system's origin for testing
-			// makeOriginMarker();
-			
 			// this creates an ambient plus a directional light source to provide some shading
 			setUpLights();
 			
@@ -234,7 +226,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 			makeSpheres();
 			
 			// colour them in
-			colourSpheres(null);
+			colourSpheres();
 			
 			// add the whole Object to the root
 			objRoot.addChild(wholeObj);
@@ -249,21 +241,15 @@ public class GraphViewer3DCanvas extends Canvas3D
 			T3D.setTranslation(translate);
 			vpTrans.setTransform(T3D);
 			
-			// now add the various behaviours
-			
+			// now add behaviours
 			// rotation
 			PickRotateBehavior rotateBehaviour = new PickRotateBehavior(objRoot, this, bounds);
-			rotateBehaviour.setTolerance(100);
+			rotateBehaviour.setTolerance(50);
 			objRoot.addChild(rotateBehaviour);
-			
 			// zooming
 			PickZoomBehavior zoomBehaviour = new PickZoomBehavior(objRoot, this, bounds);
-			zoomBehaviour.setTolerance(100);
+			zoomBehaviour.setTolerance(50);
 			objRoot.addChild(zoomBehaviour);
-			
-			// sideways translation
-//			PickTranslateBehavior translateBehaviour = new PickTranslateBehavior(objRoot, this, bounds);
-//			objRoot.addChild(translateBehaviour);
 			
 			// Let Java 3D perform optimizations on this scene graph.
 			objRoot.compile();
@@ -278,14 +264,64 @@ public class GraphViewer3DCanvas extends Canvas3D
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
+	
+	public void updateGraph()
+	{
+		System.out.println("updating graph");
+		List selectedCategories = null;
+		if (selectedObjects != null && selectedObjects.length > 0)
+		{
+			selectedCategories = Arrays.asList(selectedObjects);
+		}
+		
+		// for each category
+		for (Category category : dataSet.categoryMap.values())
+		{
+			if (selectedObjects != null && selectedObjects.length > 0)
+			{
+				// if it is contained in the selected items
+				if (selectedCategories.contains(category))
+				{
+					System.out.println("category found in selected items, setting highlight flag: " + category.name);
+					// set its highlight flag to true
+					category.highlight = true;
+				}
+				else
+				{
+					System.out.println("category not selected, setting no highlight: " + category.name);
+						category.highlight = false;
+				}
+			}
+			else
+			{
+				System.out.println("category not selected, setting no highlight: " + category.name);
+					category.highlight = false;
+			}
+		}
+		
+		allSpheresBG.detach();
+		makeSpheres();
+		colourSpheres();
+		makeAxisLabels();
+	}
+	
+	// ---------------------------------------------------------------------------------------------------------------------
+	
+	private void makeAxisLabels()
+	{
+		
+	}
+	
+	// ---------------------------------------------------------------------------------------------------------------------
 	/**
 	 * Creates the central and peripheral cylinders
 	 */
 	public void makeSpheres()
 	{
-		if(allSpheresBG != null)
-			allSpheresBG.detach();
+		
+		// this group takes all the sphere objects
 		allSpheresBG = new BranchGroup();
+		allSpheresBG.setCapability(BranchGroup.ALLOW_DETACH);
 		
 		// make up the spheres that represent the data points
 		Vector3f vec = new Vector3f();
@@ -293,17 +329,14 @@ public class GraphViewer3DCanvas extends Canvas3D
 		allSpheres = new Shape3D[dataSet.numEntries];
 		categories = new String[dataSet.numEntries];
 		
-		// this maps each category to a colour
-		makeColourMappings();
-		
 		// for each entry in the dataset
 		for (int i = 0; i < dataSet.numEntries; i++)
 		{
 			// get x, y and z coords for this data point
 			float x, y, z;
-			float[] xData = dataSet.data.get(dataSet.currentXIndex);
-			float[] yData = dataSet.data.get(dataSet.currentYIndex);
-			float[] zData = dataSet.data.get(dataSet.currentZIndex);
+			float[] xData = dataSet.data.get(currentXIndex);
+			float[] yData = dataSet.data.get(currentYIndex);
+			float[] zData = dataSet.data.get(currentZIndex);
 			x = xData[i];
 			y = yData[i];
 			z = zData[i];
@@ -322,31 +355,9 @@ public class GraphViewer3DCanvas extends Canvas3D
 			allSpheres[i] = shape;
 			categories[i] = category;
 			sphereTG.addChild(sphere);
-			wholeObj.addChild(sphereTG);
+			allSpheresBG.addChild(sphereTG);
 		}
-		
-	}
-	
-	// ---------------------------------------------------------------------------------------------------------------------
-	
-	private void makeColourMappings()
-	{
-		// get a vector with all discrete categories in the dataset
-		Vector<String> categories = dataSet.getCategories();
-		
-		// get a colour array with as many colours as we have categories
-		Color3f[] colours = GUIUtils.generateColours(categories.size());
-		System.out.println("num colours = " + colours.length);
-		System.out.println("num categories = " + categories.size());
-		
-		// now add things into a map
-		colourMap = new HashMap<String, Color3f>();
-		int i = 0;
-		for (String category : categories)
-		{
-			colourMap.put(category, colours[i]);
-			i++;
-		}
+		wholeObj.addChild(allSpheresBG);
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
@@ -355,17 +366,28 @@ public class GraphViewer3DCanvas extends Canvas3D
 	{
 		LineArray coordinateAxes = new LineArray(12, GeometryArray.COORDINATES | GeometryArray.COLOR_3);
 		
+		// colours for the axes
 		Color3f blue = new Color3f(0, 0, 255);
-		Color3f white = new Color3f(255, 255, 255);
 		Color3f red = new Color3f(255, 0, 0);
 		
-		// x positive
+		// colours for the axis labels
+		Color labelFontColour = Color.BLACK;
+		Color labelBgColour = Color.LIGHT_GRAY;
+		
+		// amount by which we want to move the label away from the axis end point
+		float labelSpacer = axisLength * 0.01f;
+		
+		// x positive axis
 		// line start point
 		coordinateAxes.setCoordinate(0, new Point3f(0, 0, 0));
 		coordinateAxes.setColor(0, blue);
 		// line end point
 		coordinateAxes.setCoordinate(1, new Point3f(axisLength, 0, 0));
 		coordinateAxes.setColor(1, blue);
+		// add label here
+		Label.attachLabel(dataSet.dataHeaders.get(currentXIndex), wholeObj,
+						new Vector3f(axisLength + labelSpacer, 0, 0), labelFontColour,
+						labelBgColour);
 		
 		// y positive
 		// line start point
@@ -374,6 +396,10 @@ public class GraphViewer3DCanvas extends Canvas3D
 		// line end point
 		coordinateAxes.setCoordinate(3, new Point3f(0, axisLength, 0));
 		coordinateAxes.setColor(3, blue);
+		// add label here
+		Label.attachLabel(dataSet.dataHeaders.get(currentYIndex), wholeObj,
+						new Vector3f(0, axisLength + labelSpacer, 0), labelFontColour,
+						labelBgColour);
 		
 		// z positive
 		// line start point
@@ -382,13 +408,17 @@ public class GraphViewer3DCanvas extends Canvas3D
 		// line end point
 		coordinateAxes.setCoordinate(5, new Point3f(0, 0, axisLength));
 		coordinateAxes.setColor(5, blue);
+		// add label here
+		Label.attachLabel(dataSet.dataHeaders.get(currentZIndex), wholeObj,
+						new Vector3f(0, 0, axisLength + labelSpacer), labelFontColour,
+						labelBgColour);
 		
 		// x negative
 		// line start point
 		coordinateAxes.setCoordinate(6, new Point3f(0, 0, 0));
 		coordinateAxes.setColor(6, red);
 		// line end point
-		coordinateAxes.setCoordinate(7, new Point3f(-0.5f, 0, 0));
+		coordinateAxes.setCoordinate(7, new Point3f(-axisLength, 0, 0));
 		coordinateAxes.setColor(7, red);
 		
 		// y negative
@@ -396,7 +426,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 		coordinateAxes.setCoordinate(8, new Point3f(0, 0, 0));
 		coordinateAxes.setColor(8, red);
 		// line end point
-		coordinateAxes.setCoordinate(9, new Point3f(0, -0.5f, 0));
+		coordinateAxes.setCoordinate(9, new Point3f(0, -axisLength, 0));
 		coordinateAxes.setColor(9, red);
 		
 		// z negative
@@ -404,7 +434,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 		coordinateAxes.setCoordinate(10, new Point3f(0, 0, 0));
 		coordinateAxes.setColor(10, red);
 		// line end point
-		coordinateAxes.setCoordinate(11, new Point3f(0, 0, -0.5f));
+		coordinateAxes.setCoordinate(11, new Point3f(0, 0, -axisLength));
 		coordinateAxes.setColor(11, red);
 		
 		Shape3D s3d = new Shape3D(coordinateAxes);
