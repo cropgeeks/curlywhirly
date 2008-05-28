@@ -105,7 +105,7 @@ public class DataSet
 		for (Category category : categoryMap.values())
 		{
 			category.colour = colours[i];
-			System.out.println("setting colour for category " + category.name + " to " + colours[i].get().toString());
+			//System.out.println("setting colour for category " + category.name + " to " + colours[i].get().toString());
 			i++;
 		}	
 		

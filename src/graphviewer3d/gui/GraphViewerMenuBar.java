@@ -61,7 +61,6 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 			int returnVal = fc.showOpenDialog(frame);
 			if (returnVal == JFileChooser.APPROVE_OPTION)
 			{
-				System.out.println("file selected = " + fc.getSelectedFile());
 				new Thread(new FileLoader()).start();
 				dataLoadingDialog = new DataLoadingDialog(frame, true);
 				dataLoadingDialog.setLocationRelativeTo(frame);

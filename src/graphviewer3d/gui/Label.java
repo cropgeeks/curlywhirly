@@ -100,7 +100,9 @@ public class Label
 	}
 	
 	// ------------------------------------------------------------------------------------------------------------------------------------
-	
+	/**
+	 * Creates a 2d label that is always readable from whatever angle
+	 */
 	public static TransformGroup getLabel(String tx, Color bg, Color fg, Vector3f p, boolean t)
 	{
 		TransformGroup textGroup = new TransformGroup();
@@ -110,29 +112,6 @@ public class Label
 		textGroup.addChild(getText(tx, bg, fg, t));
 		
 		return textGroup;
-	}
-	
-	// ---------------------------------------------------------------------------------------------------------------------
-	
-	/**
-	 * Creates a 2d label that is always readable from whatever angle
-	 */
-	public static void attachLabel(String text, TransformGroup targetTransformGroup, Vector3f vec, Color fontColour, Color bgColour)
-	{		
-		TransformGroup labelTG = getLabel(text, bgColour, fontColour, new Vector3f(0.0f, 0.0f, 0.0f), true);
-		
-		TransformGroup tg = new TransformGroup();
-		Transform3D t3d = new Transform3D();
-		t3d.set(vec);
-		tg.setTransform(t3d);
-		tg.addChild(labelTG);
-		
-		BranchGroup bg = new BranchGroup();
-		bg.setCapability(BranchGroup.ALLOW_DETACH);
-		bg.setCapability(BranchGroup.ALLOW_CHILDREN_EXTEND);
-		bg.setCapability(BranchGroup.ALLOW_CHILDREN_WRITE);
-		bg.addChild(tg);
-		targetTransformGroup.addChild(bg);
 	}
 	
 	// ------------------------------------------------------------------------------------------------------------------------------------

@@ -18,7 +18,6 @@ public class GUIUtils
 		float currentHue = 0;
 		for (int i = 0; i < colours.length; i++)
 		{
-			//System.out.println("currentHue = " + currentHue);
 			Color col = Color.getHSBColor(currentHue, 1, 1);
 			colours[i] = new Color3f(col);
 			currentHue += increment;

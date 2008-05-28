@@ -83,8 +83,6 @@ public class DataLoader
 			//set the extrema values on the dataset itself
 			dataSet.absoluteMax = absoluteMax;
 			dataSet.absoluteMin = absoluteMin;
-			System.out.println("absoluteMax = "+absoluteMax);
-			System.out.println("absoluteMin = "+absoluteMin);
 			
 			//set up the vector of discrete categories on the dataset object itself
 			dataSet.extractCategories();

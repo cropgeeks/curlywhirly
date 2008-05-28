@@ -28,7 +28,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.vecmath.Color3f;
 
-public class MTControlPanel extends javax.swing.JPanel
+public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 {
 	
 	// ==========================================vars============================================
@@ -61,6 +61,12 @@ public class MTControlPanel extends javax.swing.JPanel
 		xCombo.setSelectedIndex(frame.canvas3D.currentXIndex);
 		yCombo.setSelectedIndex(frame.canvas3D.currentYIndex);
 		zCombo.setSelectedIndex(frame.canvas3D.currentZIndex);
+		
+		// now register the action listener on these components
+		xCombo.addActionListener(this);
+		yCombo.addActionListener(this);
+		zCombo.addActionListener(this);
+		
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -77,20 +83,40 @@ public class MTControlPanel extends javax.swing.JPanel
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
 	
+	public void actionPerformed(ActionEvent e)
+	{
+		if (e.getSource() == xCombo)
+		{
+			int index = xCombo.getSelectedIndex();
+			frame.canvas3D.currentXIndex = index;
+		}
+		if (e.getSource() == yCombo)
+		{
+			int index = yCombo.getSelectedIndex();
+			frame.canvas3D.currentYIndex = index;
+		}
+		if (e.getSource() == zCombo)
+		{
+			int index = zCombo.getSelectedIndex();
+			frame.canvas3D.currentZIndex = index;
+		}
+		
+		frame.canvas3D.highlightAllCategories = true;
+		frame.canvas3D.updateGraph();
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------------------------
+	
 	private void selectorListValueChanged(javax.swing.event.ListSelectionEvent evt)
 	{
 		if (evt.getValueIsAdjusting())
 			return;
-		Object [] selectedObjects = selectorList.getSelectedValues();
-		System.out.println("===================");
-		for (int i = 0; i < selectedObjects.length; i++)
-		{
-			Category cat = (Category)selectedObjects[i];
-			System.out.println("selected object = " + cat.name);
-		}
+		if (selectorList.getSelectedValues().length == 0)
+			return;
+		Object[] selectedObjects = selectorList.getSelectedValues();
 		frame.canvas3D.selectedObjects = selectedObjects;
 		frame.canvas3D.highlightAllCategories = false;
-		frame.canvas3D.updateGraph();	
+		frame.canvas3D.updateGraph();
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -100,45 +126,41 @@ public class MTControlPanel extends javax.swing.JPanel
 		int bgColour = bgCombo.getSelectedIndex();
 		frame.canvas3D.setBackgroundColour(bgColour);
 		
-		// --------------------------------------------------------------------------------------------------------------------------------------------------
-	}
-	
-	private void resetButtonActionPerformed(java.awt.event.ActionEvent evt)
-	{
-		frame.canvas3D.updateGraph();
-		selectorList.clearSelection();
-		frame.canvas3D.colourSpheres();
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	private void zComboActionPerformed(java.awt.event.ActionEvent evt)
+	private void resetViewButtonActionPerformed(java.awt.event.ActionEvent evt)
 	{
-		int index = zCombo.getSelectedIndex();
-		frame.canvas3D.currentZIndex = index;
-		frame.canvas3D.highlightAllCategories = true;
-		frame.canvas3D.updateGraph();
-		System.out.println("z value changed to " + frame.canvas3D.currentZIndex);
+		frame.canvas3D.resetOriginalView();
 	}
 	
-	private void yComboActionPerformed(java.awt.event.ActionEvent evt)
+	// --------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	private void spinButtonActionPerformed(java.awt.event.ActionEvent evt)
 	{
-		int index = yCombo.getSelectedIndex();
-		frame.canvas3D.currentYIndex = index;
-		frame.canvas3D.highlightAllCategories = true;
-		frame.canvas3D.updateGraph();
-		System.out.println("y value changed to " + frame.canvas3D.currentYIndex);
+		if (spinButton.getText().equals("Spin continuously"))
+		{
+			frame.canvas3D.spin();
+			spinButton.setText("Stop spinning");
+		}
+		else
+		{
+			frame.canvas3D.stopSpinning();
+			spinButton.setText("Spin continuously");
+		}
 	}
 	
-	private void xComboActionPerformed(java.awt.event.ActionEvent evt)
+	// --------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	private void resetColoursButtonActionPerformed(java.awt.event.ActionEvent evt)
 	{
-		int index = xCombo.getSelectedIndex();
-		frame.canvas3D.currentXIndex = index;
+		System.out.println("reset button clicked");
+		selectorList.clearSelection();
 		frame.canvas3D.highlightAllCategories = true;
 		frame.canvas3D.updateGraph();
-		System.out.println("x value changed to " + frame.canvas3D.currentXIndex);
+		frame.canvas3D.resetOriginalView();
 	}
-	
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
 	
@@ -153,7 +175,7 @@ public class MTControlPanel extends javax.swing.JPanel
 		// Set the attributes of the class and return a reference
 		public Component getListCellRendererComponent(JList list, Object o, int i, boolean iss, boolean chf)
 		{
-		
+			
 			Category item = listItems.get(i);
 			
 			// Set the font
@@ -195,8 +217,6 @@ public class MTControlPanel extends javax.swing.JPanel
 		}
 	}
 	
-	// =========================form stuff here==============================
-	
 	//GEN-BEGIN:initComponents
 	// <editor-fold defaultstate="collapsed" desc="Generated Code">
 	private void initComponents()
@@ -212,44 +232,28 @@ public class MTControlPanel extends javax.swing.JPanel
 		jPanel2 = new javax.swing.JPanel();
 		jScrollPane1 = new javax.swing.JScrollPane();
 		selectorList = new javax.swing.JList();
-		resetButton = new javax.swing.JButton();
+		resetColoursButton = new javax.swing.JButton();
+		jLabel4 = new javax.swing.JLabel();
 		jPanel3 = new javax.swing.JPanel();
 		bgCombo = new javax.swing.JComboBox();
+		jPanel4 = new javax.swing.JPanel();
+		jPanel5 = new javax.swing.JPanel();
+		resetViewButton = new javax.swing.JButton();
+		spinButton = new javax.swing.JButton();
 		
 		jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Data to display:"));
 		
 		jLabel1.setText("x-axis:");
 		
 		xCombo.setBorder(null);
-		xCombo.addActionListener(new java.awt.event.ActionListener()
-		{
-			public void actionPerformed(java.awt.event.ActionEvent evt)
-			{
-				xComboActionPerformed(evt);
-			}
-		});
 		
 		jLabel2.setText("y-axis:");
 		
 		yCombo.setBorder(null);
-		yCombo.addActionListener(new java.awt.event.ActionListener()
-		{
-			public void actionPerformed(java.awt.event.ActionEvent evt)
-			{
-				yComboActionPerformed(evt);
-			}
-		});
 		
 		jLabel3.setText("z-axis:");
 		
 		zCombo.setBorder(null);
-		zCombo.addActionListener(new java.awt.event.ActionListener()
-		{
-			public void actionPerformed(java.awt.event.ActionEvent evt)
-			{
-				zComboActionPerformed(evt);
-			}
-		});
 		
 		org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
 		jPanel1.setLayout(jPanel1Layout);
@@ -266,15 +270,15 @@ public class MTControlPanel extends javax.swing.JPanel
 														org.jdesktop.layout.GroupLayout.LEADING).add(
 														zCombo,
 														0,
-														162,
+														239,
 														Short.MAX_VALUE).add(
 														yCombo,
 														0,
-														162,
+														239,
 														Short.MAX_VALUE).add(
 														xCombo,
 														0,
-														162,
+														239,
 														Short.MAX_VALUE)).addContainerGap()));
 		jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(
 						org.jdesktop.layout.GroupLayout.LEADING).add(
@@ -303,7 +307,7 @@ public class MTControlPanel extends javax.swing.JPanel
 														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addContainerGap()));
 		
-		jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Highlight categories:"));
+		jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Select categories:"));
 		
 		selectorList.addListSelectionListener(new javax.swing.event.ListSelectionListener()
 		{
@@ -314,14 +318,16 @@ public class MTControlPanel extends javax.swing.JPanel
 		});
 		jScrollPane1.setViewportView(selectorList);
 		
-		resetButton.setText("Restore colours");
-		resetButton.addActionListener(new java.awt.event.ActionListener()
+		resetColoursButton.setText("Restore colours");
+		resetColoursButton.addActionListener(new java.awt.event.ActionListener()
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
-				resetButtonActionPerformed(evt);
+				resetColoursButtonActionPerformed(evt);
 			}
 		});
+		
+		jLabel4.setText("<html>Click to select a category (Ctrl + click to select multiple).");
 		
 		org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
 		jPanel2.setLayout(jPanel2Layout);
@@ -329,21 +335,28 @@ public class MTControlPanel extends javax.swing.JPanel
 						org.jdesktop.layout.GroupLayout.LEADING).add(
 						jPanel2Layout.createSequentialGroup().addContainerGap().add(
 										jPanel2Layout.createParallelGroup(
-														org.jdesktop.layout.GroupLayout.CENTER).add(
-														resetButton).add(
+														org.jdesktop.layout.GroupLayout.LEADING).add(
+														org.jdesktop.layout.GroupLayout.CENTER,
 														jScrollPane1,
 														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-														199,
+														276,
+														Short.MAX_VALUE).add(
+														org.jdesktop.layout.GroupLayout.CENTER,
+														resetColoursButton).add(
+														jLabel4,
+														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+														276,
 														Short.MAX_VALUE)).addContainerGap()));
 		jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(
 						org.jdesktop.layout.GroupLayout.LEADING).add(
 						org.jdesktop.layout.GroupLayout.TRAILING,
-						jPanel2Layout.createSequentialGroup().addContainerGap().add(
+						jPanel2Layout.createSequentialGroup().addContainerGap().add(jLabel4).addPreferredGap(
+										org.jdesktop.layout.LayoutStyle.RELATED).add(
 										jScrollPane1,
 										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-										301, Short.MAX_VALUE).addPreferredGap(
-										org.jdesktop.layout.LayoutStyle.UNRELATED).add(
-										resetButton)));
+										253, Short.MAX_VALUE).addPreferredGap(
+										org.jdesktop.layout.LayoutStyle.RELATED).add(
+										resetColoursButton).addContainerGap()));
 		
 		jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Select background colour:"));
 		
@@ -363,7 +376,7 @@ public class MTControlPanel extends javax.swing.JPanel
 						org.jdesktop.layout.GroupLayout.LEADING).add(
 						org.jdesktop.layout.GroupLayout.TRAILING,
 						jPanel3Layout.createSequentialGroup().addContainerGap().add(bgCombo, 0,
-										199, Short.MAX_VALUE).addContainerGap()));
+										276, Short.MAX_VALUE).addContainerGap()));
 		jPanel3Layout.setVerticalGroup(jPanel3Layout.createParallelGroup(
 						org.jdesktop.layout.GroupLayout.LEADING).add(
 						org.jdesktop.layout.GroupLayout.TRAILING,
@@ -375,6 +388,33 @@ public class MTControlPanel extends javax.swing.JPanel
 										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addContainerGap()));
 		
+		jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Other view controls:"));
+		jPanel4.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 0));
+		
+		jPanel5.setLayout(new java.awt.GridLayout(2, 1, 0, 5));
+		
+		resetViewButton.setText("Reset Viewpoint");
+		resetViewButton.addActionListener(new java.awt.event.ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				resetViewButtonActionPerformed(evt);
+			}
+		});
+		jPanel5.add(resetViewButton);
+		
+		spinButton.setText("Spin continuously");
+		spinButton.addActionListener(new java.awt.event.ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				spinButtonActionPerformed(evt);
+			}
+		});
+		jPanel5.add(spinButton);
+		
+		jPanel4.add(jPanel5);
+		
 		org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
 		this.setLayout(layout);
 		layout.setHorizontalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
@@ -383,12 +423,16 @@ public class MTControlPanel extends javax.swing.JPanel
 										layout.createParallelGroup(
 														org.jdesktop.layout.GroupLayout.TRAILING).add(
 														org.jdesktop.layout.GroupLayout.LEADING,
-														jPanel3,
+														jPanel2,
 														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 														Short.MAX_VALUE).add(
+														jPanel4,
+														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+														312,
+														Short.MAX_VALUE).add(
 														org.jdesktop.layout.GroupLayout.LEADING,
-														jPanel2,
+														jPanel3,
 														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 														Short.MAX_VALUE).add(
@@ -409,12 +453,15 @@ public class MTControlPanel extends javax.swing.JPanel
 										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(
 										org.jdesktop.layout.LayoutStyle.RELATED).add(
+										jPanel4,
+										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+										87,
+										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(
+										org.jdesktop.layout.LayoutStyle.RELATED).add(
 										jPanel2,
 										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 										Short.MAX_VALUE).addContainerGap()));
-		
-		jPanel2.getAccessibleContext().setAccessibleName("Select categories:");
 	}// </editor-fold>
 	//GEN-END:initComponents
 	
@@ -424,12 +471,17 @@ public class MTControlPanel extends javax.swing.JPanel
 	private javax.swing.JLabel jLabel1;
 	private javax.swing.JLabel jLabel2;
 	private javax.swing.JLabel jLabel3;
+	private javax.swing.JLabel jLabel4;
 	private javax.swing.JPanel jPanel1;
 	private javax.swing.JPanel jPanel2;
 	private javax.swing.JPanel jPanel3;
+	private javax.swing.JPanel jPanel4;
+	private javax.swing.JPanel jPanel5;
 	private javax.swing.JScrollPane jScrollPane1;
-	private javax.swing.JButton resetButton;
+	private javax.swing.JButton resetColoursButton;
+	private javax.swing.JButton resetViewButton;
 	private javax.swing.JList selectorList;
+	private javax.swing.JButton spinButton;
 	private javax.swing.JComboBox xCombo;
 	private javax.swing.JComboBox yCombo;
 	private javax.swing.JComboBox zCombo;

@@ -41,9 +41,9 @@ public class GraphViewerFrame extends JFrame
 			GraphViewerFrame frame = new GraphViewerFrame();
 			frame.setVisible(true);
 			frame.setTitle("CurlyWhirly");
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.pack();
 			frame.setLocationRelativeTo(null);
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			//frame.setExtendedState(frame.MAXIMIZED_BOTH);
 			
 		}
@@ -79,12 +79,11 @@ public class GraphViewerFrame extends JFrame
 		
 		// side panel
 		controlPanel = new MTControlPanel(this);
+		controlPanel.setPreferredSize(new Dimension(200, 600));
 		
 		// Create a split pane with the two components in it
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controlPanel, canvasPanel);
-		splitPane.setOneTouchExpandable(true);
 		splitPane.setResizeWeight(0.0);
-		splitPane.setDividerLocation(controlPanelWidth);
 
 		this.getContentPane().add(splitPane);
 		
@@ -92,8 +91,8 @@ public class GraphViewerFrame extends JFrame
 		this.setJMenuBar(new GraphViewerMenuBar(this));
 		
 		// TODO : remove hard coding of file path
-		File file = new File("barley_PCOs.txt");
-		loadData(file);
+//		File file = new File("barley_PCOs.txt");
+//		loadData(file);
 		
 	}
 	

@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
+import javax.media.j3d.Alpha;
 import javax.media.j3d.AlternateAppearance;
 import javax.media.j3d.AmbientLight;
 import javax.media.j3d.Appearance;
@@ -18,26 +19,33 @@ import javax.media.j3d.Background;
 import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
+import javax.media.j3d.ColoringAttributes;
 import javax.media.j3d.DirectionalLight;
 import javax.media.j3d.GeometryArray;
 import javax.media.j3d.GraphicsConfigTemplate3D;
 import javax.media.j3d.LineArray;
 import javax.media.j3d.Material;
+import javax.media.j3d.RotationInterpolator;
 import javax.media.j3d.Shape3D;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
+import javax.vecmath.AxisAngle4d;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
+import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
+import com.sun.j3d.utils.behaviors.vp.ViewPlatformBehavior;
 import com.sun.j3d.utils.geometry.ColorCube;
+import com.sun.j3d.utils.geometry.Cone;
 import com.sun.j3d.utils.geometry.Primitive;
 import com.sun.j3d.utils.geometry.Sphere;
 import com.sun.j3d.utils.pickfast.behaviors.PickRotateBehavior;
 import com.sun.j3d.utils.pickfast.behaviors.PickTranslateBehavior;
 import com.sun.j3d.utils.pickfast.behaviors.PickZoomBehavior;
 import com.sun.j3d.utils.universe.SimpleUniverse;
+import com.sun.j3d.utils.universe.ViewingPlatform;
 
 /**
  * @author Micha Bayer, Scottish Crop Research Institute
@@ -55,7 +63,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 	static boolean antiAlias = true;
 	
 	// infrastructure
-	private SimpleUniverse su = null;
+	public SimpleUniverse su = null;
 	
 	// this is the initial position of the camera/viewer's eye
 	// a rotation will be applied to this position to create the correct viewing angle so the user looks down onto the object
@@ -100,7 +108,12 @@ public class GraphViewer3DCanvas extends Canvas3D
 	public int currentZIndex = 2;
 	// these default to the first three columns of data in the dataset
 	
+	// this flag is set to true when we want all data points coloured in
 	boolean highlightAllCategories = true;
+	
+	BranchGroup allLabelsBG;
+	
+	BranchGroup rotatorGroup;
 	
 	// ==================================c'tor=============================
 	
@@ -134,7 +147,6 @@ public class GraphViewer3DCanvas extends Canvas3D
 				String category = categories[i];
 				
 				Category categoryItem = categoryMap.get(category);
-				//System.out.println("category = " + categoryItem.name + " , highlight = " + categoryItem.highlight);
 				if (categoryItem.highlight || highlightAllCategories)
 					colour = categoryItem.colour;
 				else
@@ -222,6 +234,9 @@ public class GraphViewer3DCanvas extends Canvas3D
 			// draw the coordinate system
 			drawCoordinateSystem();
 			
+			// place labels on the axes
+			makeAxisLabels();
+			
 			// position the central cylinder and the peripheral ones
 			makeSpheres();
 			
@@ -231,15 +246,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 			// add the whole Object to the root
 			objRoot.addChild(wholeObj);
 			
-			// this allows us to set the initial camera view point
-			// su.getViewingPlatform().setNominalViewingTransform();
-			Vector3f translate = new Vector3f();
-			Transform3D T3D = new Transform3D();
-			TransformGroup vpTrans = su.getViewingPlatform().getViewPlatformTransform();
-			translate.set(initialViewPoint);
-			T3D.rotX(Math.toRadians(viewingAngle));
-			T3D.setTranslation(translate);
-			vpTrans.setTransform(T3D);
+			setInitialViewPoint();
 			
 			// now add behaviours
 			// rotation
@@ -265,9 +272,64 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	// ---------------------------------------------------------------------------------------------------------------------
 	
+	public void setInitialViewPoint()
+	{
+		// this allows us to set the initial camera view point
+		// su.getViewingPlatform().setNominalViewingTransform();
+		Vector3f translate = new Vector3f();
+		Transform3D T3D = new Transform3D();
+		ViewingPlatform viewingPlatform = su.getViewingPlatform();
+		// viewingPlatform.setViewPlatformBehavior((new ViewPlatformBehavior());
+		TransformGroup vpTrans = viewingPlatform.getViewPlatformTransform();
+		translate.set(initialViewPoint);
+		T3D.rotX(Math.toRadians(viewingAngle));
+		T3D.setTranslation(translate);
+		vpTrans.setTransform(T3D);
+	}
+	
+	// ---------------------------------------------------------------------------------------------------------------------
+	
+	public void resetOriginalView()
+	{
+		Transform3D trans = new Transform3D();
+		wholeObj.setTransform(trans);
+		trans.set(new Vector3f(0.0f, 0.0f, 0.0f));
+		wholeObj.setTransform(trans);
+		setInitialViewPoint();
+	}
+	
+	// ---------------------------------------------------------------------------------------------------------------------
+	
+	public void spin()
+	{
+		// Create a new Behavior object that will perform the
+		// desired operation on the specified transform and add
+		// it into the scene graph.
+	
+		//rotate about the y axis
+		Transform3D yAxis = new Transform3D();
+		//yAxis.rotZ(10);
+		Alpha yRotationAlpha = new Alpha(-1, 40000);
+		RotationInterpolator yRotator = new RotationInterpolator(yRotationAlpha, wholeObj, yAxis, 0.0f, (float) Math.PI * 2.0f);
+		yRotator.setSchedulingBounds(bounds);
+		rotatorGroup = new BranchGroup();
+		rotatorGroup.addChild(yRotator);
+				
+		rotatorGroup.setCapability(BranchGroup.ALLOW_DETACH);
+		objRoot.addChild(rotatorGroup);
+	}
+	
+	// ---------------------------------------------------------------------------------------------------------------------
+	
+	public void stopSpinning()
+	{
+		rotatorGroup.detach();
+	}
+	
+	// ---------------------------------------------------------------------------------------------------------------------
+	
 	public void updateGraph()
 	{
-		System.out.println("updating graph");
 		List selectedCategories = null;
 		if (selectedObjects != null && selectedObjects.length > 0)
 		{
@@ -282,24 +344,20 @@ public class GraphViewer3DCanvas extends Canvas3D
 				// if it is contained in the selected items
 				if (selectedCategories.contains(category))
 				{
-					System.out.println("category found in selected items, setting highlight flag: " + category.name);
 					// set its highlight flag to true
 					category.highlight = true;
 				}
 				else
 				{
-					System.out.println("category not selected, setting no highlight: " + category.name);
-						category.highlight = false;
+					category.highlight = false;
 				}
 			}
 			else
 			{
-				System.out.println("category not selected, setting no highlight: " + category.name);
-					category.highlight = false;
+				category.highlight = false;
 			}
 		}
 		
-		allSpheresBG.detach();
 		makeSpheres();
 		colourSpheres();
 		makeAxisLabels();
@@ -309,6 +367,39 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	private void makeAxisLabels()
 	{
+		System.out.println("making axis labels");
+		
+		if (allLabelsBG != null)
+			allLabelsBG.detach();
+		
+		allLabelsBG = new BranchGroup();
+		allLabelsBG.setCapability(BranchGroup.ALLOW_DETACH);
+		allLabelsBG.setCapability(BranchGroup.ALLOW_CHILDREN_EXTEND);
+		allLabelsBG.setCapability(BranchGroup.ALLOW_CHILDREN_WRITE);
+		
+		// colours for the axis labels
+		Color labelFontColour = Color.DARK_GRAY;
+		Color labelBgColour = Color.LIGHT_GRAY;
+		
+		// amount by which we want to move the label away from the axis end point
+		float labelSpacer = axisLength * 0.10f;
+		
+		// x
+		TransformGroup xLabelTG = Label.getLabel(dataSet.dataHeaders.get(currentXIndex), labelBgColour,
+						labelFontColour, new Vector3f(axisLength + labelSpacer, 0, 0), true);
+		allLabelsBG.addChild(xLabelTG);
+		
+		// y
+		TransformGroup yLabelTG = Label.getLabel(dataSet.dataHeaders.get(currentYIndex), labelBgColour,
+						labelFontColour, new Vector3f(0, axisLength + labelSpacer, 0), true);
+		allLabelsBG.addChild(yLabelTG);
+		
+		// z
+		TransformGroup zLabelTG = Label.getLabel(dataSet.dataHeaders.get(currentZIndex), labelBgColour,
+						labelFontColour, new Vector3f(0, 0, axisLength + labelSpacer), true);
+		allLabelsBG.addChild(zLabelTG);
+		
+		wholeObj.addChild(allLabelsBG);
 		
 	}
 	
@@ -318,6 +409,8 @@ public class GraphViewer3DCanvas extends Canvas3D
 	 */
 	public void makeSpheres()
 	{
+		if (allSpheresBG != null)
+			allSpheresBG.detach();
 		
 		// this group takes all the sphere objects
 		allSpheresBG = new BranchGroup();
@@ -362,6 +455,37 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	// ---------------------------------------------------------------------------------------------------------------------
 	
+	private void placeCone(Vector3f position, TransformGroup wholeObj, float radius, float height, char axis)
+	{
+		// appearance
+		Appearance ap = new Appearance();
+		Color3f col = new Color3f(Color.BLUE);
+		ColoringAttributes ca = new ColoringAttributes(col, ColoringAttributes.NICEST);
+		ap.setColoringAttributes(ca);
+		
+		// Create a transform, a transform group and an object
+		Transform3D t3d = new Transform3D();
+		if (axis == 'x')
+			t3d.rotZ(Math.toRadians(270));
+		else
+			if (axis == 'z')
+				t3d.rotX(Math.toRadians(90));
+		
+		TransformGroup tg = new TransformGroup();
+		Cone cone = new Cone(radius, height);
+		cone.setAppearance(ap);
+		// Set the transform to move (translate) the object to that location
+		t3d.setTranslation(position);
+		// Add the transform to the transform group
+		tg.setTransform(t3d);
+		// Add the object to the transform group
+		tg.addChild(cone);
+		// add this to the whole object
+		wholeObj.addChild(tg);
+	}
+	
+	// ---------------------------------------------------------------------------------------------------------------------
+	
 	private void drawCoordinateSystem()
 	{
 		LineArray coordinateAxes = new LineArray(12, GeometryArray.COORDINATES | GeometryArray.COLOR_3);
@@ -370,52 +494,53 @@ public class GraphViewer3DCanvas extends Canvas3D
 		Color3f blue = new Color3f(0, 0, 255);
 		Color3f red = new Color3f(255, 0, 0);
 		
-		// colours for the axis labels
-		Color labelFontColour = Color.BLACK;
-		Color labelBgColour = Color.LIGHT_GRAY;
+		// arrow head params
+		float arrowHeadHeight = axisLength / 20;
+		float arrowHeadRadius = 0.005f;
 		
-		// amount by which we want to move the label away from the axis end point
-		float labelSpacer = axisLength * 0.01f;
+		// line start and end points
+		float[] lineStart = new float[]
+		{ 0, 0, 0 };
+		float[] lineEndX = new float[]
+		{ axisLength, 0, 0 };
+		float[] lineEndY = new float[]
+		{ 0, axisLength, 0 };
+		float[] lineEndZ = new float[]
+		{ 0, 0, axisLength };
 		
 		// x positive axis
 		// line start point
-		coordinateAxes.setCoordinate(0, new Point3f(0, 0, 0));
+		coordinateAxes.setCoordinate(0, new Point3f(lineStart));
 		coordinateAxes.setColor(0, blue);
 		// line end point
-		coordinateAxes.setCoordinate(1, new Point3f(axisLength, 0, 0));
+		coordinateAxes.setCoordinate(1, new Point3f(lineEndX));
 		coordinateAxes.setColor(1, blue);
-		// add label here
-		Label.attachLabel(dataSet.dataHeaders.get(currentXIndex), wholeObj,
-						new Vector3f(axisLength + labelSpacer, 0, 0), labelFontColour,
-						labelBgColour);
+		// add cone for arrowhead
+		placeCone(new Vector3f(lineEndX), wholeObj, arrowHeadRadius, arrowHeadHeight, 'x');
 		
 		// y positive
 		// line start point
-		coordinateAxes.setCoordinate(2, new Point3f(0, 0, 0));
+		coordinateAxes.setCoordinate(2, new Point3f(lineStart));
 		coordinateAxes.setColor(2, blue);
 		// line end point
-		coordinateAxes.setCoordinate(3, new Point3f(0, axisLength, 0));
+		coordinateAxes.setCoordinate(3, new Point3f(lineEndY));
 		coordinateAxes.setColor(3, blue);
-		// add label here
-		Label.attachLabel(dataSet.dataHeaders.get(currentYIndex), wholeObj,
-						new Vector3f(0, axisLength + labelSpacer, 0), labelFontColour,
-						labelBgColour);
+		// add cone for arrowhead
+		placeCone(new Vector3f(lineEndY), wholeObj, arrowHeadRadius, arrowHeadHeight, 'y');
 		
 		// z positive
 		// line start point
-		coordinateAxes.setCoordinate(4, new Point3f(0, 0, 0));
+		coordinateAxes.setCoordinate(4, new Point3f(lineStart));
 		coordinateAxes.setColor(4, blue);
 		// line end point
-		coordinateAxes.setCoordinate(5, new Point3f(0, 0, axisLength));
+		coordinateAxes.setCoordinate(5, new Point3f(lineEndZ));
 		coordinateAxes.setColor(5, blue);
-		// add label here
-		Label.attachLabel(dataSet.dataHeaders.get(currentZIndex), wholeObj,
-						new Vector3f(0, 0, axisLength + labelSpacer), labelFontColour,
-						labelBgColour);
+		// add cone for arrowhead
+		placeCone(new Vector3f(lineEndZ), wholeObj, arrowHeadRadius, arrowHeadHeight, 'z');
 		
 		// x negative
 		// line start point
-		coordinateAxes.setCoordinate(6, new Point3f(0, 0, 0));
+		coordinateAxes.setCoordinate(6, new Point3f(lineStart));
 		coordinateAxes.setColor(6, red);
 		// line end point
 		coordinateAxes.setCoordinate(7, new Point3f(-axisLength, 0, 0));
@@ -423,7 +548,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 		
 		// y negative
 		// line start point
-		coordinateAxes.setCoordinate(8, new Point3f(0, 0, 0));
+		coordinateAxes.setCoordinate(8, new Point3f(lineStart));
 		coordinateAxes.setColor(8, red);
 		// line end point
 		coordinateAxes.setCoordinate(9, new Point3f(0, -axisLength, 0));
