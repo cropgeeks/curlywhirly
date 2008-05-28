@@ -20,6 +20,7 @@ public class GraphViewerFrame extends JFrame
 	public JPanel canvasPanel;
 	public int controlPanelWidth = 200;
 	public MTControlPanel controlPanel;
+	JLabel openLabel;
 	
 	// ===================================================c'tor=================================================
 	
@@ -57,13 +58,17 @@ public class GraphViewerFrame extends JFrame
 	
 	public void loadData(File file)
 	{
+		System.out.println("Frame.loadData()");
 		DataLoader loader = new DataLoader();
 		dataSet = loader.getDataFromFile(file);
-		canvas3D = new GraphViewer3DCanvas(dataSet);
+		canvas3D.dataSet = dataSet;
+		canvas3D.createSceneGraph();
+		canvasPanel.remove(openLabel);
 		canvasPanel.add(canvas3D,BorderLayout.CENTER);
 		controlPanel.setUpListData();
 		controlPanel.doAdditionalComponentConfig();
 		repaint();
+		System.out.println("current dataSet = " + dataSet.dataSetName);
 	}
 	
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -72,9 +77,13 @@ public class GraphViewerFrame extends JFrame
 	{
 		// make a new panel for the 3D panel 
 		canvasPanel = new JPanel(new BorderLayout());
-		JLabel openLabel = new JLabel("Open a data file to begin.",JLabel.CENTER);
+		openLabel = new JLabel("Open a data file to begin.",JLabel.CENTER);
 		canvasPanel.setPreferredSize(new Dimension(600, 600));
+		canvas3D = new GraphViewer3DCanvas();
+
+		
 		canvasPanel.add(openLabel, BorderLayout.CENTER);
+
 		openLabel.setForeground(new Color(120,120,120));
 		
 		// side panel

@@ -35,10 +35,10 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 		openFileItem = new JMenuItem("Open...");
 		openFileItem.addActionListener(this);
 		fileMenu.add(openFileItem);
-		// the data import item
-		importDataItem = new JMenuItem("Import data...");
-		importDataItem.addActionListener(this);
-		fileMenu.add(importDataItem);
+//		// the data import item
+//		importDataItem = new JMenuItem("Import data...");
+//		importDataItem.addActionListener(this);
+//		fileMenu.add(importDataItem);
 		
 		// the Help Menu
 		JMenu helpMenu = new JMenu("Help");
@@ -61,6 +61,8 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 			int returnVal = fc.showOpenDialog(frame);
 			if (returnVal == JFileChooser.APPROVE_OPTION)
 			{
+				if (frame.canvas3D != null)
+					frame.canvas3D.clearCurrentView();
 				new Thread(new FileLoader()).start();
 				dataLoadingDialog = new DataLoadingDialog(frame, true);
 				dataLoadingDialog.setLocationRelativeTo(frame);

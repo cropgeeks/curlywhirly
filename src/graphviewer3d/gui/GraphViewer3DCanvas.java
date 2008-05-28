@@ -29,20 +29,15 @@ import javax.media.j3d.RotationInterpolator;
 import javax.media.j3d.Shape3D;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
-import javax.vecmath.AxisAngle4d;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
-import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
-import com.sun.j3d.utils.behaviors.vp.ViewPlatformBehavior;
 import com.sun.j3d.utils.geometry.ColorCube;
 import com.sun.j3d.utils.geometry.Cone;
-import com.sun.j3d.utils.geometry.Primitive;
 import com.sun.j3d.utils.geometry.Sphere;
 import com.sun.j3d.utils.pickfast.behaviors.PickRotateBehavior;
-import com.sun.j3d.utils.pickfast.behaviors.PickTranslateBehavior;
 import com.sun.j3d.utils.pickfast.behaviors.PickZoomBehavior;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 import com.sun.j3d.utils.universe.ViewingPlatform;
@@ -67,14 +62,14 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	// this is the initial position of the camera/viewer's eye
 	// a rotation will be applied to this position to create the correct viewing angle so the user looks down onto the object
-	private Point3f initialViewPoint = new Point3f(0, 0, initialZ);
+	Point3f initialViewPoint = new Point3f(0, 0, initialZ);
 	int viewingAngle = 0;
 	
 	// the bounds for the scene
 	BoundingSphere bounds = new BoundingSphere(new Point3d(0, 0, 0), boundsSize);
 	
 	// this is the root of the object part of the scene
-	private BranchGroup objRoot = null;
+	BranchGroup objRoot = null;
 	
 	BranchGroup allSpheresBG;
 	
@@ -117,13 +112,11 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	// ==================================c'tor=============================
 	
-	public GraphViewer3DCanvas(DataSet dataSet)
+	public GraphViewer3DCanvas()
 	{
 		super(getGraphicsConfig());
-		this.dataSet = dataSet;
-		calculateSizes();
 		su = new SimpleUniverse(this);
-		su.addBranchGraph(createSceneGraph());
+		setBackground(Color.LIGHT_GRAY);
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
@@ -208,8 +201,10 @@ public class GraphViewer3DCanvas extends Canvas3D
 	/**
 	 * Creates a scene graph and returns it in the shape of a single BranchGroup object
 	 */
-	private BranchGroup createSceneGraph()
+	public BranchGroup createSceneGraph()
 	{
+		System.out.println("creating new scene graph");
+
 		objRoot = new BranchGroup();
 		wholeObj = new TransformGroup();
 		
@@ -226,6 +221,8 @@ public class GraphViewer3DCanvas extends Canvas3D
 		
 		try
 		{
+			calculateSizes();
+			
 			addBackground();
 			
 			// this creates an ambient plus a directional light source to provide some shading
@@ -258,11 +255,16 @@ public class GraphViewer3DCanvas extends Canvas3D
 			zoomBehaviour.setTolerance(50);
 			objRoot.addChild(zoomBehaviour);
 			
+			objRoot.setCapability(BranchGroup.ALLOW_DETACH);
+			
 			// Let Java 3D perform optimizations on this scene graph.
 			objRoot.compile();
 			
+			// add this to the universe
+			su.addBranchGraph(objRoot);
+			
 		}
-		catch (Exception e)
+		catch (Throwable e)
 		{
 			e.printStackTrace();
 		}
@@ -305,16 +307,16 @@ public class GraphViewer3DCanvas extends Canvas3D
 		// Create a new Behavior object that will perform the
 		// desired operation on the specified transform and add
 		// it into the scene graph.
-	
-		//rotate about the y axis
+		
+		// rotate about the y axis
 		Transform3D yAxis = new Transform3D();
-		//yAxis.rotZ(10);
+		// yAxis.rotZ(10);
 		Alpha yRotationAlpha = new Alpha(-1, 40000);
 		RotationInterpolator yRotator = new RotationInterpolator(yRotationAlpha, wholeObj, yAxis, 0.0f, (float) Math.PI * 2.0f);
 		yRotator.setSchedulingBounds(bounds);
 		rotatorGroup = new BranchGroup();
 		rotatorGroup.addChild(yRotator);
-				
+		
 		rotatorGroup.setCapability(BranchGroup.ALLOW_DETACH);
 		objRoot.addChild(rotatorGroup);
 	}
@@ -324,6 +326,15 @@ public class GraphViewer3DCanvas extends Canvas3D
 	public void stopSpinning()
 	{
 		rotatorGroup.detach();
+	}
+	
+	// ---------------------------------------------------------------------------------------------------------------------
+	
+	public void clearCurrentView()
+	{
+		System.out.println("clearing current view");
+		if (objRoot != null)
+			objRoot.detach();
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
@@ -367,8 +378,6 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	private void makeAxisLabels()
 	{
-		System.out.println("making axis labels");
-		
 		if (allLabelsBG != null)
 			allLabelsBG.detach();
 		

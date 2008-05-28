@@ -101,8 +101,6 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 			frame.canvas3D.currentZIndex = index;
 		}
 		
-		frame.canvas3D.highlightAllCategories = true;
-		frame.canvas3D.updateGraph();
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -337,12 +335,12 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 										jPanel2Layout.createParallelGroup(
 														org.jdesktop.layout.GroupLayout.LEADING).add(
 														org.jdesktop.layout.GroupLayout.CENTER,
+														resetColoursButton).add(
+														org.jdesktop.layout.GroupLayout.CENTER,
 														jScrollPane1,
 														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 														276,
 														Short.MAX_VALUE).add(
-														org.jdesktop.layout.GroupLayout.CENTER,
-														resetColoursButton).add(
 														jLabel4,
 														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 														276,
@@ -350,11 +348,11 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(
 						org.jdesktop.layout.GroupLayout.LEADING).add(
 						org.jdesktop.layout.GroupLayout.TRAILING,
-						jPanel2Layout.createSequentialGroup().addContainerGap().add(jLabel4).addPreferredGap(
-										org.jdesktop.layout.LayoutStyle.RELATED).add(
+						jPanel2Layout.createSequentialGroup().add(11, 11, 11).add(jLabel4).addPreferredGap(
+										org.jdesktop.layout.LayoutStyle.UNRELATED).add(
 										jScrollPane1,
 										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-										253, Short.MAX_VALUE).addPreferredGap(
+										265, Short.MAX_VALUE).addPreferredGap(
 										org.jdesktop.layout.LayoutStyle.RELATED).add(
 										resetColoursButton).addContainerGap()));
 		
