@@ -100,7 +100,8 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 			int index = zCombo.getSelectedIndex();
 			frame.canvas3D.currentZIndex = index;
 		}
-		
+		frame.canvas3D.highlightAllCategories = true;
+		frame.canvas3D.updateGraph();
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -153,11 +154,9 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 	
 	private void resetColoursButtonActionPerformed(java.awt.event.ActionEvent evt)
 	{
-		System.out.println("reset button clicked");
 		selectorList.clearSelection();
 		frame.canvas3D.highlightAllCategories = true;
 		frame.canvas3D.updateGraph();
-		frame.canvas3D.resetOriginalView();
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -244,14 +243,35 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		jLabel1.setText("x-axis:");
 		
 		xCombo.setBorder(null);
+		xCombo.addActionListener(new java.awt.event.ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				MTControlPanel.this.actionPerformed(evt);
+			}
+		});
 		
 		jLabel2.setText("y-axis:");
 		
 		yCombo.setBorder(null);
+		yCombo.addActionListener(new java.awt.event.ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				MTControlPanel.this.actionPerformed(evt);
+			}
+		});
 		
 		jLabel3.setText("z-axis:");
 		
 		zCombo.setBorder(null);
+		zCombo.addActionListener(new java.awt.event.ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				MTControlPanel.this.actionPerformed(evt);
+			}
+		});
 		
 		org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
 		jPanel1.setLayout(jPanel1Layout);
@@ -316,7 +336,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		});
 		jScrollPane1.setViewportView(selectorList);
 		
-		resetColoursButton.setText("Restore colours");
+		resetColoursButton.setText("Reset selection");
 		resetColoursButton.addActionListener(new java.awt.event.ActionListener()
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -391,7 +411,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		
 		jPanel5.setLayout(new java.awt.GridLayout(2, 1, 0, 5));
 		
-		resetViewButton.setText("Reset Viewpoint");
+		resetViewButton.setText("Reset viewpoint");
 		resetViewButton.addActionListener(new java.awt.event.ActionListener()
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)

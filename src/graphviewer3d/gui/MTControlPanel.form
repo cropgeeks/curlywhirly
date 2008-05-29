@@ -110,6 +110,9 @@
               <Border info="null"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="actionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
@@ -125,6 +128,9 @@
               <Border info="null"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="actionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
@@ -140,6 +146,9 @@
               <Border info="null"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="actionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -202,7 +211,7 @@
         </Container>
         <Component class="javax.swing.JButton" name="resetColoursButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Restore colours"/>
+            <Property name="text" type="java.lang.String" value="Reset selection"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="resetColoursButtonActionPerformed"/>
@@ -285,7 +294,7 @@
           <SubComponents>
             <Component class="javax.swing.JButton" name="resetViewButton">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Reset Viewpoint"/>
+                <Property name="text" type="java.lang.String" value="Reset viewpoint"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="resetViewButtonActionPerformed"/>

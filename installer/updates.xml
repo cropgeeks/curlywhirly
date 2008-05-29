@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<updateDescriptor baseUrl="">
-  <entry targetMediaFileId="21" updatableVersionMin="" updatableVersionMax="" fileName="CurlyWhirly_windows_0_08_05_23.exe" newVersion="0.08.05.23" newMediaFileId="21" fileSize="17480192" bundledJre="windows-x86-1.6.0_06" archive="false">
-    <comment />
-  </entry>
-</updateDescriptor>
-

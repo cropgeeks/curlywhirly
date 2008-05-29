@@ -53,8 +53,8 @@ public class GraphViewer3DCanvas extends Canvas3D
 	// ==================================vars=============================
 	
 	// variables to adjust manually for now
-	int boundsSize = 10;
-	int initialZ = 2;
+	int boundsSize;
+	int initialZ;
 	static boolean antiAlias = true;
 	
 	// infrastructure
@@ -62,11 +62,11 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	// this is the initial position of the camera/viewer's eye
 	// a rotation will be applied to this position to create the correct viewing angle so the user looks down onto the object
-	Point3f initialViewPoint = new Point3f(0, 0, initialZ);
+	Point3f initialViewPoint;
 	int viewingAngle = 0;
 	
 	// the bounds for the scene
-	BoundingSphere bounds = new BoundingSphere(new Point3d(0, 0, 0), boundsSize);
+	BoundingSphere bounds;
 	
 	// this is the root of the object part of the scene
 	BranchGroup objRoot = null;
@@ -106,8 +106,13 @@ public class GraphViewer3DCanvas extends Canvas3D
 	// this flag is set to true when we want all data points coloured in
 	boolean highlightAllCategories = true;
 	
+	// scaling factor to multiply the data with so that everything is normalized to be between 1 and -1
+	float scalingFactor;
+	
+	// bracnh group containing all axis labels
 	BranchGroup allLabelsBG;
 	
+	// branch group for the automatic rotation of the graph
 	BranchGroup rotatorGroup;
 	
 	// ==================================c'tor=============================
@@ -116,7 +121,6 @@ public class GraphViewer3DCanvas extends Canvas3D
 	{
 		super(getGraphicsConfig());
 		su = new SimpleUniverse(this);
-		setBackground(Color.LIGHT_GRAY);
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
@@ -155,7 +159,6 @@ public class GraphViewer3DCanvas extends Canvas3D
 		}
 		catch (Exception e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -164,17 +167,24 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	private void calculateSizes()
 	{
-		// work out size of corrdinate system needed
-		// this depends on the values of the data
-		// we want the max value the data can take in any dimension
-		// this becomes the length of the axes (with a bit to spare)
+		// scaling factor to multiply the data with so that everything is normalized to be between 1 and -1
 		if (dataSet.absoluteMax > Math.abs(dataSet.absoluteMin))
-			axisLength = dataSet.absoluteMax;
+			scalingFactor = dataSet.absoluteMax;
 		else
-			axisLength = dataSet.absoluteMin;
+			scalingFactor = Math.abs(dataSet.absoluteMin);
+
+		axisLength = 1.5f;
 		
 		// work out sphere size for the plot symbols
 		sphereSize = axisLength / 100;
+		
+		// these can be hard coded because we have scaled all the data to be displayed
+		boundsSize = 100;
+		initialZ = 5;
+
+		System.out.println("dataSet.absoluteMax = " + dataSet.absoluteMax);
+		System.out.println("dataSet.absoluteMin = " + dataSet.absoluteMin);
+		System.out.println("scalingFactor = " + scalingFactor);
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
@@ -204,7 +214,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 	public BranchGroup createSceneGraph()
 	{
 		System.out.println("creating new scene graph");
-
+		
 		objRoot = new BranchGroup();
 		wholeObj = new TransformGroup();
 		
@@ -222,6 +232,9 @@ public class GraphViewer3DCanvas extends Canvas3D
 		try
 		{
 			calculateSizes();
+			
+			initialViewPoint = new Point3f(0, 0, initialZ);
+			bounds = new BoundingSphere(new Point3d(0, 0, 0), boundsSize);
 			
 			addBackground();
 			
@@ -442,6 +455,11 @@ public class GraphViewer3DCanvas extends Canvas3D
 			x = xData[i];
 			y = yData[i];
 			z = zData[i];
+			
+			// scale them so they fit onto a coordinate 1 unit long
+			x = x / scalingFactor;
+			y = y / scalingFactor;
+			z = z / scalingFactor;
 			
 			String category = dataSet.groupIds[i];
 			
