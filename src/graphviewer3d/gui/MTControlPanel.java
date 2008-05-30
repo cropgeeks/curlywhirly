@@ -23,6 +23,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JSlider;
 import javax.swing.ListCellRenderer;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -152,6 +153,18 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
 	
+	private void spinSpeedSliderStateChanged(javax.swing.event.ChangeEvent evt)
+	{
+		JSlider source = (JSlider) evt.getSource();
+		if (!source.getValueIsAdjusting())
+		{
+			int speed = source.getValue();
+			frame.canvas3D.setSpinSpeed(speed);
+		}
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------------------------
+	
 	private void resetColoursButtonActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		selectorList.clearSelection();
@@ -214,7 +227,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		}
 	}
 	
-	//GEN-BEGIN:initComponents
+	// GEN-BEGIN:initComponents
 	// <editor-fold defaultstate="collapsed" desc="Generated Code">
 	private void initComponents()
 	{
@@ -235,8 +248,12 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		bgCombo = new javax.swing.JComboBox();
 		jPanel4 = new javax.swing.JPanel();
 		jPanel5 = new javax.swing.JPanel();
-		resetViewButton = new javax.swing.JButton();
+		jPanel6 = new javax.swing.JPanel();
 		spinButton = new javax.swing.JButton();
+		spinSpeedSlider = new javax.swing.JSlider();
+		jLabel5 = new javax.swing.JLabel();
+		jLabel6 = new javax.swing.JLabel();
+		resetViewButton = new javax.swing.JButton();
 		
 		jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Data to display:"));
 		
@@ -288,15 +305,15 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 														org.jdesktop.layout.GroupLayout.LEADING).add(
 														zCombo,
 														0,
-														239,
+														120,
 														Short.MAX_VALUE).add(
 														yCombo,
 														0,
-														239,
+														120,
 														Short.MAX_VALUE).add(
 														xCombo,
 														0,
-														239,
+														120,
 														Short.MAX_VALUE)).addContainerGap()));
 		jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(
 						org.jdesktop.layout.GroupLayout.LEADING).add(
@@ -359,20 +376,20 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 														org.jdesktop.layout.GroupLayout.CENTER,
 														jScrollPane1,
 														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-														276,
+														157,
 														Short.MAX_VALUE).add(
 														jLabel4,
 														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-														276,
+														157,
 														Short.MAX_VALUE)).addContainerGap()));
 		jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(
 						org.jdesktop.layout.GroupLayout.LEADING).add(
 						org.jdesktop.layout.GroupLayout.TRAILING,
-						jPanel2Layout.createSequentialGroup().add(11, 11, 11).add(jLabel4).addPreferredGap(
+						jPanel2Layout.createSequentialGroup().add(jLabel4).addPreferredGap(
 										org.jdesktop.layout.LayoutStyle.UNRELATED).add(
 										jScrollPane1,
 										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-										265, Short.MAX_VALUE).addPreferredGap(
+										346, Short.MAX_VALUE).addPreferredGap(
 										org.jdesktop.layout.LayoutStyle.RELATED).add(
 										resetColoursButton).addContainerGap()));
 		
@@ -394,7 +411,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 						org.jdesktop.layout.GroupLayout.LEADING).add(
 						org.jdesktop.layout.GroupLayout.TRAILING,
 						jPanel3Layout.createSequentialGroup().addContainerGap().add(bgCombo, 0,
-										276, Short.MAX_VALUE).addContainerGap()));
+										157, Short.MAX_VALUE).addContainerGap()));
 		jPanel3Layout.setVerticalGroup(jPanel3Layout.createParallelGroup(
 						org.jdesktop.layout.GroupLayout.LEADING).add(
 						org.jdesktop.layout.GroupLayout.TRAILING,
@@ -407,19 +424,6 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addContainerGap()));
 		
 		jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Other view controls:"));
-		jPanel4.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 0));
-		
-		jPanel5.setLayout(new java.awt.GridLayout(2, 1, 0, 5));
-		
-		resetViewButton.setText("Reset viewpoint");
-		resetViewButton.addActionListener(new java.awt.event.ActionListener()
-		{
-			public void actionPerformed(java.awt.event.ActionEvent evt)
-			{
-				resetViewButtonActionPerformed(evt);
-			}
-		});
-		jPanel5.add(resetViewButton);
 		
 		spinButton.setText("Spin continuously");
 		spinButton.addActionListener(new java.awt.event.ActionListener()
@@ -429,32 +433,127 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 				spinButtonActionPerformed(evt);
 			}
 		});
-		jPanel5.add(spinButton);
 		
-		jPanel4.add(jPanel5);
+		spinSpeedSlider.addChangeListener(new javax.swing.event.ChangeListener()
+		{
+			public void stateChanged(javax.swing.event.ChangeEvent evt)
+			{
+				spinSpeedSliderStateChanged(evt);
+			}
+		});
+		
+		jLabel5.setText("slow spin");
+		
+		jLabel6.setText("fast spin");
+		
+		org.jdesktop.layout.GroupLayout jPanel6Layout = new org.jdesktop.layout.GroupLayout(jPanel6);
+		jPanel6.setLayout(jPanel6Layout);
+		jPanel6Layout.setHorizontalGroup(jPanel6Layout.createParallelGroup(
+						org.jdesktop.layout.GroupLayout.LEADING).add(
+						jPanel6Layout.createSequentialGroup().addContainerGap().add(
+										jPanel6Layout.createParallelGroup(
+														org.jdesktop.layout.GroupLayout.LEADING).add(
+														jPanel6Layout.createSequentialGroup().add(
+																		jLabel5).addPreferredGap(
+																		org.jdesktop.layout.LayoutStyle.RELATED,
+																		31,
+																		Short.MAX_VALUE).add(
+																		jLabel6)).add(
+														spinButton).add(
+														spinSpeedSlider,
+														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+														115,
+														Short.MAX_VALUE)).addContainerGap()));
+		jPanel6Layout.setVerticalGroup(jPanel6Layout.createParallelGroup(
+						org.jdesktop.layout.GroupLayout.LEADING).add(
+						org.jdesktop.layout.GroupLayout.TRAILING,
+						jPanel6Layout.createSequentialGroup().add(spinButton).addPreferredGap(
+										org.jdesktop.layout.LayoutStyle.RELATED,
+										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE).add(
+										jPanel6Layout.createParallelGroup(
+														org.jdesktop.layout.GroupLayout.BASELINE).add(
+														jLabel5).add(
+														jLabel6)).addPreferredGap(
+										org.jdesktop.layout.LayoutStyle.RELATED).add(
+										spinSpeedSlider,
+										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addContainerGap()));
+		
+		resetViewButton.setText("Reset viewpoint");
+		resetViewButton.addActionListener(new java.awt.event.ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				resetViewButtonActionPerformed(evt);
+			}
+		});
+		
+		org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
+		jPanel5.setLayout(jPanel5Layout);
+		jPanel5Layout.setHorizontalGroup(jPanel5Layout.createParallelGroup(
+						org.jdesktop.layout.GroupLayout.LEADING).add(
+						jPanel5Layout.createSequentialGroup().addContainerGap().add(
+										jPanel5Layout.createParallelGroup(
+														org.jdesktop.layout.GroupLayout.CENTER).add(
+														resetViewButton,
+														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+														115,
+														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(
+														jPanel6,
+														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addContainerGap(
+										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)));
+		jPanel5Layout.setVerticalGroup(jPanel5Layout.createParallelGroup(
+						org.jdesktop.layout.GroupLayout.LEADING).add(
+						jPanel5Layout.createSequentialGroup().add(resetViewButton).addPreferredGap(
+										org.jdesktop.layout.LayoutStyle.RELATED,
+										8, Short.MAX_VALUE).add(
+										jPanel6,
+										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+										74,
+										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addContainerGap()));
+		
+		org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
+		jPanel4.setLayout(jPanel4Layout);
+		jPanel4Layout.setHorizontalGroup(jPanel4Layout.createParallelGroup(
+						org.jdesktop.layout.GroupLayout.LEADING).add(
+						jPanel4Layout.createSequentialGroup().add(12, 12, 12).add(
+										jPanel5,
+										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addContainerGap(
+										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)));
+		jPanel4Layout.setVerticalGroup(jPanel4Layout.createParallelGroup(
+						org.jdesktop.layout.GroupLayout.LEADING).add(jPanel5,
+						org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+						org.jdesktop.layout.GroupLayout.PREFERRED_SIZE));
 		
 		org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
 		this.setLayout(layout);
 		layout.setHorizontalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
-						org.jdesktop.layout.GroupLayout.TRAILING,
 						layout.createSequentialGroup().addContainerGap().add(
 										layout.createParallelGroup(
-														org.jdesktop.layout.GroupLayout.TRAILING).add(
-														org.jdesktop.layout.GroupLayout.LEADING,
+														org.jdesktop.layout.GroupLayout.LEADING).add(
+														org.jdesktop.layout.GroupLayout.TRAILING,
 														jPanel2,
 														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 														Short.MAX_VALUE).add(
+														org.jdesktop.layout.GroupLayout.TRAILING,
 														jPanel4,
 														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-														312,
+														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 														Short.MAX_VALUE).add(
-														org.jdesktop.layout.GroupLayout.LEADING,
 														jPanel3,
 														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 														Short.MAX_VALUE).add(
-														org.jdesktop.layout.GroupLayout.LEADING,
 														jPanel1,
 														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
@@ -473,7 +572,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 										org.jdesktop.layout.LayoutStyle.RELATED).add(
 										jPanel4,
 										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
-										87,
+										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(
 										org.jdesktop.layout.LayoutStyle.RELATED).add(
 										jPanel2,
@@ -481,25 +580,29 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 										Short.MAX_VALUE).addContainerGap()));
 	}// </editor-fold>
-	//GEN-END:initComponents
+	// GEN-END:initComponents
 	
-	//GEN-BEGIN:variables
+	// GEN-BEGIN:variables
 	// Variables declaration - do not modify
 	private javax.swing.JComboBox bgCombo;
 	private javax.swing.JLabel jLabel1;
 	private javax.swing.JLabel jLabel2;
 	private javax.swing.JLabel jLabel3;
 	private javax.swing.JLabel jLabel4;
+	private javax.swing.JLabel jLabel5;
+	private javax.swing.JLabel jLabel6;
 	private javax.swing.JPanel jPanel1;
 	private javax.swing.JPanel jPanel2;
 	private javax.swing.JPanel jPanel3;
 	private javax.swing.JPanel jPanel4;
 	private javax.swing.JPanel jPanel5;
+	private javax.swing.JPanel jPanel6;
 	private javax.swing.JScrollPane jScrollPane1;
 	private javax.swing.JButton resetColoursButton;
 	private javax.swing.JButton resetViewButton;
 	private javax.swing.JList selectorList;
 	private javax.swing.JButton spinButton;
+	private javax.swing.JSlider spinSpeedSlider;
 	private javax.swing.JComboBox xCombo;
 	private javax.swing.JComboBox yCombo;
 	private javax.swing.JComboBox zCombo;

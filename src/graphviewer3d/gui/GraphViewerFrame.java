@@ -10,6 +10,8 @@ import java.io.File;
 
 import javax.swing.*;
 
+import scri.commons.gui.TaskDialog;
+
 public class GraphViewerFrame extends JFrame
 {
 	
@@ -21,6 +23,10 @@ public class GraphViewerFrame extends JFrame
 	public int controlPanelWidth = 200;
 	public MTControlPanel controlPanel;
 	JLabel openLabel;
+	static JCheckBox instructionsCheckBox;
+	
+	private static File prefsFile = new File(System.getProperty("user.home"), ".curlywhirly.xml");
+	public static Preferences prefs = new Preferences();
 	
 	// ===================================================c'tor=================================================
 	
@@ -35,6 +41,9 @@ public class GraphViewerFrame extends JFrame
 	{
 		try
 		{
+			//preferences
+			prefs.loadPreferences(prefsFile, Preferences.class);
+			
 			// Set System L&F
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			
@@ -46,13 +55,23 @@ public class GraphViewerFrame extends JFrame
 			frame.setLocationRelativeTo(null);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			//frame.setExtendedState(frame.MAXIMIZED_BOTH);
-			
+							
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
 	}
+	
+	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------		
+	
+	public void shutdown()
+	{
+		prefs.savePreferences(prefsFile, Preferences.class);
+		System.exit(0);
+	}
+	
+	
 	
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	
@@ -102,7 +121,7 @@ public class GraphViewerFrame extends JFrame
 		// TODO : remove hard coding of file path
 //		File file = new File("barley_PCOs.txt");
 //		loadData(file);
-		
+				
 	}
 	
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

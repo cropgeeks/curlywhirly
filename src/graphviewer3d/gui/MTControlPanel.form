@@ -14,11 +14,11 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
-                  <Component id="jPanel4" alignment="1" pref="312" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jPanel2" alignment="1" max="32767" attributes="0"/>
+                  <Component id="jPanel4" alignment="1" max="32767" attributes="0"/>
                   <Component id="jPanel3" alignment="0" max="32767" attributes="0"/>
                   <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
               </Group>
@@ -34,7 +34,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jPanel4" min="-2" pref="87" max="-2" attributes="0"/>
+              <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel2" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
@@ -64,9 +64,9 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="zCombo" alignment="0" pref="239" max="32767" attributes="0"/>
-                      <Component id="yCombo" alignment="0" pref="239" max="32767" attributes="0"/>
-                      <Component id="xCombo" alignment="0" pref="239" max="32767" attributes="0"/>
+                      <Component id="zCombo" alignment="0" pref="120" max="32767" attributes="0"/>
+                      <Component id="yCombo" alignment="0" pref="120" max="32767" attributes="0"/>
+                      <Component id="xCombo" alignment="0" pref="120" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -168,8 +168,8 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="resetColoursButton" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" alignment="2" pref="276" max="32767" attributes="0"/>
-                      <Component id="jLabel4" alignment="0" pref="276" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" alignment="2" pref="157" max="32767" attributes="0"/>
+                      <Component id="jLabel4" alignment="0" pref="157" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -178,10 +178,9 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                   <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="265" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="346" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="resetColoursButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -238,7 +237,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="bgCombo" pref="276" max="32767" attributes="0"/>
+                  <Component id="bgCombo" pref="157" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -280,32 +279,118 @@
         </Property>
       </Properties>
 
-      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
-        <Property name="verticalGap" type="int" value="0"/>
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                  <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
+          </Group>
+        </DimensionLayout>
       </Layout>
       <SubComponents>
         <Container class="javax.swing.JPanel" name="jPanel5">
 
-          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
-            <Property name="columns" type="int" value="1"/>
-            <Property name="rows" type="int" value="2"/>
-            <Property name="verticalGap" type="int" value="5"/>
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="2" attributes="0">
+                          <Component id="resetViewButton" alignment="2" min="-2" pref="115" max="-2" attributes="0"/>
+                          <Component id="jPanel6" alignment="2" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="resetViewButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="8" max="32767" attributes="0"/>
+                      <Component id="jPanel6" min="-2" pref="74" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
           </Layout>
           <SubComponents>
+            <Container class="javax.swing.JPanel" name="jPanel6">
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace pref="31" max="32767" attributes="0"/>
+                                  <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="spinButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="spinSpeedSlider" alignment="0" pref="115" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="spinButton" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="spinSpeedSlider" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+              <SubComponents>
+                <Component class="javax.swing.JButton" name="spinButton">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Spin continuously"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="spinButtonActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JSlider" name="spinSpeedSlider">
+                  <Events>
+                    <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="spinSpeedSliderStateChanged"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JLabel" name="jLabel5">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="slow spin"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="jLabel6">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="fast spin"/>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
             <Component class="javax.swing.JButton" name="resetViewButton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Reset viewpoint"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="resetViewButtonActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JButton" name="spinButton">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Spin continuously"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="spinButtonActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

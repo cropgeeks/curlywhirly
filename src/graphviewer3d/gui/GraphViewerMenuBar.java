@@ -10,6 +10,8 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 	JMenuItem aboutItem;
 	JMenuItem helpItem;
 	JMenuItem importDataItem;
+	JMenuItem exitItem;
+	
 	GraphViewerFrame frame;
 	JFileChooser fc;
 	DataLoadingDialog dataLoadingDialog;
@@ -23,7 +25,7 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 	private void init()
 	{
 		// file chooser
-		fc = new JFileChooser(System.getProperty("user.dir"));
+		fc = new JFileChooser(System.getProperty("user.dir")+ System.getProperty("file.separator")+ "data");
 		
 		// this enables swing components to be drawn on top of the 3D canvas
 		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
@@ -35,10 +37,14 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 		openFileItem = new JMenuItem("Open...");
 		openFileItem.addActionListener(this);
 		fileMenu.add(openFileItem);
-//		// the data import item
-//		importDataItem = new JMenuItem("Import data...");
-//		importDataItem.addActionListener(this);
-//		fileMenu.add(importDataItem);
+		// // the data import item
+		// importDataItem = new JMenuItem("Import data...");
+		// importDataItem.addActionListener(this);
+		// fileMenu.add(importDataItem);
+		// the Exit item
+		exitItem = new JMenuItem("Exit");
+		exitItem.addActionListener(this);
+		fileMenu.add(exitItem);
 		
 		// the Help Menu
 		JMenu helpMenu = new JMenu("Help");
@@ -56,6 +62,7 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 	public void actionPerformed(ActionEvent e)
 	{
 		Object src = e.getSource();
+		
 		if (src.equals(openFileItem))
 		{
 			int returnVal = fc.showOpenDialog(frame);
@@ -70,6 +77,11 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 				dataLoadingDialog.setModal(false);
 			}
 		}
+		
+		if (src.equals(exitItem))
+		{
+			frame.shutdown();
+		}
 	}
 	
 	class FileLoader implements Runnable
@@ -78,6 +90,11 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 		{
 			frame.loadData(fc.getSelectedFile());
 			dataLoadingDialog.setVisible(false);
+			if (Preferences.show3DControlInstructions)
+			{
+				Instructions3D instr = new Instructions3D(frame);
+				instr.show3DInstructions();
+			}
 		}
 	}
 	

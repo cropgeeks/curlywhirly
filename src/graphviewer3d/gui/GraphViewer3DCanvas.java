@@ -109,11 +109,16 @@ public class GraphViewer3DCanvas extends Canvas3D
 	// scaling factor to multiply the data with so that everything is normalized to be between 1 and -1
 	float scalingFactor;
 	
-	// bracnh group containing all axis labels
+	// branch group containing all axis labels
 	BranchGroup allLabelsBG;
 	
 	// branch group for the automatic rotation of the graph
 	BranchGroup rotatorGroup;
+	
+	// speed at which graph spins automatically
+	long spinSpeed = 50000;
+	
+	Alpha yRotationAlpha;
 	
 	// ==================================c'tor=============================
 	
@@ -172,7 +177,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 			scalingFactor = dataSet.absoluteMax;
 		else
 			scalingFactor = Math.abs(dataSet.absoluteMin);
-
+		
 		axisLength = 1.5f;
 		
 		// work out sphere size for the plot symbols
@@ -181,7 +186,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 		// these can be hard coded because we have scaled all the data to be displayed
 		boundsSize = 100;
 		initialZ = 5;
-
+		
 		System.out.println("dataSet.absoluteMax = " + dataSet.absoluteMax);
 		System.out.println("dataSet.absoluteMin = " + dataSet.absoluteMin);
 		System.out.println("scalingFactor = " + scalingFactor);
@@ -323,8 +328,8 @@ public class GraphViewer3DCanvas extends Canvas3D
 		
 		// rotate about the y axis
 		Transform3D yAxis = new Transform3D();
-		// yAxis.rotZ(10);
-		Alpha yRotationAlpha = new Alpha(-1, 40000);
+		//yAxis.rotZ(45);
+		yRotationAlpha = new Alpha(-1, spinSpeed);
 		RotationInterpolator yRotator = new RotationInterpolator(yRotationAlpha, wholeObj, yAxis, 0.0f, (float) Math.PI * 2.0f);
 		yRotator.setSchedulingBounds(bounds);
 		rotatorGroup = new BranchGroup();
@@ -339,6 +344,19 @@ public class GraphViewer3DCanvas extends Canvas3D
 	public void stopSpinning()
 	{
 		rotatorGroup.detach();
+	}
+	
+	// ---------------------------------------------------------------------------------------------------------------------
+	
+	public void setSpinSpeed(long speed)
+	{
+		// subtract this from 100 because it is the wrong way round
+		speed = (100 - speed);
+		// can't have a value of 0 so set it to  at least 1
+		if (speed == 0)
+			speed = 1;
+		if (yRotationAlpha != null)
+			yRotationAlpha.setIncreasingAlphaDuration(speed * 1000);
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
@@ -523,7 +541,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 		
 		// arrow head params
 		float arrowHeadHeight = axisLength / 20;
-		float arrowHeadRadius = 0.005f;
+		float arrowHeadRadius = 0.01f;
 		
 		// line start and end points
 		float[] lineStart = new float[]
