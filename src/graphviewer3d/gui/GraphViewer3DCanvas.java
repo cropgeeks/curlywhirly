@@ -120,6 +120,8 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	Alpha yRotationAlpha;
 	
+	static GraphicsConfigTemplate3D template;
+	
 	// ==================================c'tor=============================
 	
 	public GraphViewer3DCanvas()
@@ -185,7 +187,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 		
 		// these can be hard coded because we have scaled all the data to be displayed
 		boundsSize = 100;
-		initialZ = 5;
+		initialZ = 6;
 		
 		System.out.println("dataSet.absoluteMax = " + dataSet.absoluteMax);
 		System.out.println("dataSet.absoluteMin = " + dataSet.absoluteMin);
@@ -219,6 +221,8 @@ public class GraphViewer3DCanvas extends Canvas3D
 	public BranchGroup createSceneGraph()
 	{
 		System.out.println("creating new scene graph");
+		
+		template.setSceneAntialiasing(GraphicsConfigTemplate3D.REQUIRED);
 		
 		objRoot = new BranchGroup();
 		wholeObj = new TransformGroup();
@@ -299,7 +303,6 @@ public class GraphViewer3DCanvas extends Canvas3D
 		Vector3f translate = new Vector3f();
 		Transform3D T3D = new Transform3D();
 		ViewingPlatform viewingPlatform = su.getViewingPlatform();
-		// viewingPlatform.setViewPlatformBehavior((new ViewPlatformBehavior());
 		TransformGroup vpTrans = viewingPlatform.getViewPlatformTransform();
 		translate.set(initialViewPoint);
 		T3D.rotX(Math.toRadians(viewingAngle));
@@ -418,7 +421,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 		allLabelsBG.setCapability(BranchGroup.ALLOW_CHILDREN_WRITE);
 		
 		// colours for the axis labels
-		Color labelFontColour = Color.DARK_GRAY;
+		Color labelFontColour = Color.BLACK;
 		Color labelBgColour = Color.LIGHT_GRAY;
 		
 		// amount by which we want to move the label away from the axis end point
@@ -659,10 +662,10 @@ public class GraphViewer3DCanvas extends Canvas3D
 	// get a nice graphics config
 	private static GraphicsConfiguration getGraphicsConfig()
 	{
-		GraphicsConfigTemplate3D template = new GraphicsConfigTemplate3D();
+		template = new GraphicsConfigTemplate3D();
 		if (antiAlias)
 		{
-			template.setSceneAntialiasing(GraphicsConfigTemplate3D.PREFERRED);
+			template.setSceneAntialiasing(GraphicsConfigTemplate3D.REQUIRED);
 		}
 		GraphicsConfiguration gcfg = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getBestConfiguration(
 						template);

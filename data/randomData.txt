@@ -1,4 +1,4 @@
-Category	Label	pco1	pco2	pco3
+Category	Label	pa1	pa2	pa3
 bla	obj1	0.47	0.95	0.39
 bla	obj2	0.98	0.98	0.36
 bla	obj3	0.5	0.4	0.11

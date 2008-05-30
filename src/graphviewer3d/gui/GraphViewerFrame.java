@@ -99,27 +99,23 @@ public class GraphViewerFrame extends JFrame
 		openLabel = new JLabel("Open a data file to begin.",JLabel.CENTER);
 		canvasPanel.setPreferredSize(new Dimension(600, 600));
 		canvas3D = new GraphViewer3DCanvas();
-
-		
 		canvasPanel.add(openLabel, BorderLayout.CENTER);
-
+		canvasPanel.setBackground(Color.LIGHT_GRAY);
 		openLabel.setForeground(new Color(120,120,120));
 		
 		// side panel
 		controlPanel = new MTControlPanel(this);
-		controlPanel.setPreferredSize(new Dimension(200, 600));
 		
-		// Create a split pane with the two components in it
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controlPanel, canvasPanel);
-		splitPane.setResizeWeight(0.0);
-
-		this.getContentPane().add(splitPane);
+		//main panel
+		JPanel mainPanel = new JPanel(new BorderLayout());
+		mainPanel.add(controlPanel,BorderLayout.WEST);
+		mainPanel.add(canvasPanel,BorderLayout.CENTER);
+		this.getContentPane().add(mainPanel);
 		
 		// menu bar
 		this.setJMenuBar(new GraphViewerMenuBar(this));
 		
-		// TODO : remove hard coding of file path
-//		File file = new File("barley_PCOs.txt");
+//		File file = new File("data/barley_PCOs.txt");
 //		loadData(file);
 				
 	}
