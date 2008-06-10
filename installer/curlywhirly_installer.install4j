@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.1.1" transformSequenceNumber="2">
-  <directoryPresets config="../pco_data.txt" />
-  <application name="CurlyWhirly" distributionSourceDir="" applicationId="7308-4813-7424-6439" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="false" shortName="CurlyWhirly" publisher="Scottish Crop Research Institute" publisherWeb="http://www.scri.ac.uk" version="0.08.05.23" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="true" jdkMode="runtimeJre" jdkName="">
+  <directoryPresets config="../j3dcore-ogl-chk.dll" />
+  <application name="CurlyWhirly" distributionSourceDir="" applicationId="7308-4813-7424-6439" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="false" shortName="CurlyWhirly" publisher="Scottish Crop Research Institute" publisherWeb="http://www.scri.ac.uk" version="0.08.05.30" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="true" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -31,8 +31,8 @@
       <fileEntry mountPoint="19" file="../j3dcore-d3d.dll" overwrite="1" shared="false" mode="644" uninstallMode="0" />
       <fileEntry mountPoint="19" file="../j3dcore-ogl-cg.dll" overwrite="1" shared="false" mode="644" uninstallMode="0" />
       <fileEntry mountPoint="19" file="../j3dcore-ogl.dll" overwrite="1" shared="false" mode="644" uninstallMode="0" />
+      <fileEntry mountPoint="19" file="../j3dcore-ogl-chk.dll" overwrite="1" shared="false" mode="644" uninstallMode="0" />
       <fileEntry mountPoint="19" file="../j3dutils.dll" overwrite="1" shared="false" mode="644" uninstallMode="0" />
-      <fileEntry mountPoint="19" file="../pco_data.txt" overwrite="1" shared="false" mode="644" uninstallMode="0" />
     </entries>
     <components />
   </files>

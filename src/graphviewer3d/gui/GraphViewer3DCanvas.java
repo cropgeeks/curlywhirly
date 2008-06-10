@@ -122,11 +122,18 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	static GraphicsConfigTemplate3D template;
 	
+	HashMap<Sphere, String> spheresMap;
+	
+	GraphViewerFrame frame;
+	
+	MouseOverBehavior mouseOverBehaviour;
+	
 	// ==================================c'tor=============================
 	
-	public GraphViewer3DCanvas()
+	public GraphViewer3DCanvas(GraphViewerFrame frame)
 	{
 		super(getGraphicsConfig());
+		this.frame = frame;
 		su = new SimpleUniverse(this);
 	}
 	
@@ -189,9 +196,6 @@ public class GraphViewer3DCanvas extends Canvas3D
 		boundsSize = 100;
 		initialZ = 6;
 		
-		System.out.println("dataSet.absoluteMax = " + dataSet.absoluteMax);
-		System.out.println("dataSet.absoluteMin = " + dataSet.absoluteMin);
-		System.out.println("scalingFactor = " + scalingFactor);
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
@@ -220,7 +224,6 @@ public class GraphViewer3DCanvas extends Canvas3D
 	 */
 	public BranchGroup createSceneGraph()
 	{
-		System.out.println("creating new scene graph");
 		
 		template.setSceneAntialiasing(GraphicsConfigTemplate3D.REQUIRED);
 		
@@ -276,6 +279,10 @@ public class GraphViewer3DCanvas extends Canvas3D
 			PickZoomBehavior zoomBehaviour = new PickZoomBehavior(objRoot, this, bounds);
 			zoomBehaviour.setTolerance(50);
 			objRoot.addChild(zoomBehaviour);
+			//selective highlighting
+			mouseOverBehaviour = new MouseOverBehavior(frame, spheresMap, objRoot, sphereSize);
+			mouseOverBehaviour.setSchedulingBounds(bounds);
+			objRoot.addChild(mouseOverBehaviour);
 			
 			objRoot.setCapability(BranchGroup.ALLOW_DETACH);
 			
@@ -366,7 +373,6 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	public void clearCurrentView()
 	{
-		System.out.println("clearing current view");
 		if (objRoot != null)
 			objRoot.detach();
 	}
@@ -458,6 +464,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 		// this group takes all the sphere objects
 		allSpheresBG = new BranchGroup();
 		allSpheresBG.setCapability(BranchGroup.ALLOW_DETACH);
+		spheresMap = new HashMap<Sphere, String>();
 		
 		// make up the spheres that represent the data points
 		Vector3f vec = new Vector3f();
@@ -497,8 +504,13 @@ public class GraphViewer3DCanvas extends Canvas3D
 			categories[i] = category;
 			sphereTG.addChild(sphere);
 			allSpheresBG.addChild(sphereTG);
+			spheresMap.put(sphere, dataSet.groupLabels[i]);
 		}
 		wholeObj.addChild(allSpheresBG);
+		
+		//need to pass the new map of spheres and labels to the mouse over behaviour class now
+		if(mouseOverBehaviour !=null)
+			mouseOverBehaviour.namesHashT = spheresMap;
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
@@ -548,13 +560,13 @@ public class GraphViewer3DCanvas extends Canvas3D
 		
 		// line start and end points
 		float[] lineStart = new float[]
-		{ 0, 0, 0 };
+		                              { 0, 0, 0 };
 		float[] lineEndX = new float[]
-		{ axisLength, 0, 0 };
+		                             { axisLength, 0, 0 };
 		float[] lineEndY = new float[]
-		{ 0, axisLength, 0 };
+		                             { 0, axisLength, 0 };
 		float[] lineEndZ = new float[]
-		{ 0, 0, axisLength };
+		                             { 0, 0, axisLength };
 		
 		// x positive axis
 		// line start point

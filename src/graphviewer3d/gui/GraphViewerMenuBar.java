@@ -1,7 +1,14 @@
 package graphviewer3d.gui;
 
+import java.awt.Desktop;
 import java.awt.event.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import javax.swing.*;
+
+import scri.commons.gui.TaskDialog;
 
 public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 {
@@ -25,7 +32,7 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 	private void init()
 	{
 		// file chooser
-		fc = new JFileChooser(System.getProperty("user.dir")+ System.getProperty("file.separator")+ "data");
+		fc = new JFileChooser(System.getProperty("user.dir") + System.getProperty("file.separator") + "data");
 		
 		// this enables swing components to be drawn on top of the 3D canvas
 		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
@@ -54,7 +61,7 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 		helpItem.addActionListener(this);
 		helpMenu.add(helpItem);
 		// the about item
-		aboutItem = new JMenuItem("About 3D Graph Viewer");
+		aboutItem = new JMenuItem("About CurlyWhirly");
 		aboutItem.addActionListener(this);
 		helpMenu.add(aboutItem);
 	}
@@ -82,6 +89,45 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 		{
 			frame.shutdown();
 		}
+		
+		if (src.equals(helpItem))
+		{			
+//			Desktop desktop = null;
+//			// Before more Desktop API is used, first check
+//			// whether the API is supported by this particular
+//			// virtual machine (VM) on this particular host.
+//			if (Desktop.isDesktopSupported())
+//			{
+//				desktop = Desktop.getDesktop();
+//				
+//				try
+//				{
+//					URI uri = new URI("http://gruffalo.scri.sari.ac.uk/curlywhirly");
+//					
+//					String message = "Please refer to the up to date online help system available at " + uri;
+//					TaskDialog.initialize(frame, "CurlyWhirly");
+//					TaskDialog.info(message, "Close");
+//					
+//					//desktop.browse(uri);
+//				}
+//				catch (URISyntaxException e1)
+//				{
+//					e1.printStackTrace();
+//				}
+////				catch (IOException e2)
+////				{
+////					e2.printStackTrace();
+////				}
+//			}			
+		}
+		
+		if (src.equals(aboutItem))
+		{
+			String message = "CurlyWhirly version 0.1 ©  Scottish Crop Research Institute 2008. Developed by " + "Micha Bayer with contributions from Iain Milne.";
+			TaskDialog.initialize(frame, "CurlyWhirly");
+			TaskDialog.info(message, "Close");
+		}
+		
 	}
 	
 	class FileLoader implements Runnable

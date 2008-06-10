@@ -24,9 +24,11 @@ public class GraphViewerFrame extends JFrame
 	public MTControlPanel controlPanel;
 	JLabel openLabel;
 	static JCheckBox instructionsCheckBox;
+	public boolean dataLoaded = false;
 	
 	private static File prefsFile = new File(System.getProperty("user.home"), ".curlywhirly.xml");
 	public static Preferences prefs = new Preferences();
+	public StatusBar statusBar;
 	
 	// ===================================================c'tor=================================================
 	
@@ -77,17 +79,17 @@ public class GraphViewerFrame extends JFrame
 	
 	public void loadData(File file)
 	{
-		System.out.println("Frame.loadData()");
-		DataLoader loader = new DataLoader();
+		DataLoader loader = new DataLoader(this);
 		dataSet = loader.getDataFromFile(file);
 		canvas3D.dataSet = dataSet;
 		canvas3D.createSceneGraph();
 		canvasPanel.remove(openLabel);
 		canvasPanel.add(canvas3D,BorderLayout.CENTER);
 		controlPanel.setUpListData();
-		controlPanel.doAdditionalComponentConfig();
+		controlPanel.resetComboBoxes();
+		dataLoaded = true;
+		statusBar.setDefaultText();
 		repaint();
-		System.out.println("current dataSet = " + dataSet.dataSetName);
 	}
 	
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -98,7 +100,7 @@ public class GraphViewerFrame extends JFrame
 		canvasPanel = new JPanel(new BorderLayout());
 		openLabel = new JLabel("Open a data file to begin.",JLabel.CENTER);
 		canvasPanel.setPreferredSize(new Dimension(600, 600));
-		canvas3D = new GraphViewer3DCanvas();
+		canvas3D = new GraphViewer3DCanvas(this);
 		canvasPanel.add(openLabel, BorderLayout.CENTER);
 		canvasPanel.setBackground(Color.LIGHT_GRAY);
 		openLabel.setForeground(new Color(120,120,120));
@@ -115,7 +117,11 @@ public class GraphViewerFrame extends JFrame
 		// menu bar
 		this.setJMenuBar(new GraphViewerMenuBar(this));
 		
-//		File file = new File("data/barley_PCOs.txt");
+		//status bar
+		statusBar = new StatusBar();
+		getContentPane().add(statusBar, java.awt.BorderLayout.SOUTH);
+		
+//		File file = new File("data/barley_PCA.txt");
 //		loadData(file);
 				
 	}

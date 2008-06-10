@@ -7,9 +7,9 @@ public class DataLoaderTest
 {
 	public static void main(String[] args)
 	{
-		File file = new File("pco_data.txt");
+		File file = new File("data/barley_PCA_original.txt");
 		
-		DataLoader loader = new DataLoader();		
+		DataLoader loader = new DataLoader(null);		
 		DataSet dataSet = loader.getDataFromFile(file);
 //		dataSet.listAllData();		
 	}
