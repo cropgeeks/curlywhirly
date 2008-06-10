@@ -89,7 +89,6 @@ public class MouseOverBehavior extends Behavior
 						if (pickResult != null && pickResult.getNode(PickResult.PRIMITIVE) != null)
 						{
 							pickedNode = ((Primitive) pickResult.getNode(PickResult.PRIMITIVE));
-							System.out.println("pickedNode = " + pickedNode);
 							
 							// check whether this is the same object as before or not
 							if (lastPickedNode != null)

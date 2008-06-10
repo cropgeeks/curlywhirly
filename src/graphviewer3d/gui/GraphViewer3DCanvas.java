@@ -128,6 +128,8 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	MouseOverBehavior mouseOverBehaviour;
 	
+	Color3f bgColour = new Color3f(Color.LIGHT_GRAY);
+	
 	// ==================================c'tor=============================
 	
 	public GraphViewer3DCanvas(GraphViewerFrame frame)
@@ -360,13 +362,14 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	public void setSpinSpeed(long speed)
 	{
-		// subtract this from 100 because it is the wrong way round
+		// subtract this from 100 because it is the wrong way round otherwise
 		speed = (100 - speed);
 		// can't have a value of 0 so set it to  at least 1
 		if (speed == 0)
 			speed = 1;
 		if (yRotationAlpha != null)
 			yRotationAlpha.setIncreasingAlphaDuration(speed * 1000);
+		spinSpeed = speed*1000;
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
@@ -640,7 +643,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	public void addBackground()
 	{
-		background = new Background(new Color3f(Color.LIGHT_GRAY));
+		background = new Background(bgColour);
 		background.setCapability(Background.ALLOW_COLOR_WRITE);
 		background.setApplicationBounds(bounds);
 		objRoot.addChild(background);
@@ -648,25 +651,26 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	// ---------------------------------------------------------------------------------------------------------------------
 	
-	public void setBackgroundColour(int bgColour)
+	public void setBackgroundColour(int newColour)
 	{
-		Color3f colour = null;
-		switch (bgColour)
+		switch (newColour)
 		{
 			case 0:
-				colour = new Color3f(Color.LIGHT_GRAY);
+				bgColour = new Color3f(Color.LIGHT_GRAY);
 				break;
 			case 1:
-				colour = new Color3f(Color.DARK_GRAY);
+				bgColour = new Color3f(Color.DARK_GRAY);
 				break;
 			case 2:
-				colour = new Color3f(Color.BLACK);
+				bgColour = new Color3f(Color.BLACK);
 				break;
 			case 3:
-				colour = new Color3f(Color.WHITE);
+				bgColour = new Color3f(Color.WHITE);
 				break;
 		}
-		background.setColor(colour);
+		frame.canvasPanel.setBackground(bgColour.get());
+		if(background!=null)
+			background.setColor(bgColour);
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
