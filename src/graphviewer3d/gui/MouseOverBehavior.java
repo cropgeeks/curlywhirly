@@ -116,7 +116,7 @@ public class MouseOverBehavior extends Behavior
 										Sphere sphere = (Sphere) pickedNode;
 										String mName = (String) namesHashT.get(sphere);
 										// display the feature name on the status bar of the frame
-										frame.statusBar.setText(" Feature selected: " + mName);
+										frame.statusBar.setText(" Point selected: " + mName);
 									}
 								}
 								catch (CapabilityNotSetException e)

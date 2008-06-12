@@ -2,6 +2,7 @@ package graphviewer3d.gui;
 
 import java.awt.Desktop;
 import java.awt.event.*;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -16,7 +17,7 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 	JMenuItem openFileItem;
 	JMenuItem aboutItem;
 	JMenuItem helpItem;
-	JMenuItem importDataItem;
+	JMenuItem exampleDataItem;
 	JMenuItem exitItem;
 	
 	GraphViewerFrame frame;
@@ -37,31 +38,55 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 		// this enables swing components to be drawn on top of the 3D canvas
 		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 		
+		////////////////////////////////////////
 		// the File Menu
 		JMenu fileMenu = new JMenu("File");
+		fileMenu.setMnemonic(KeyEvent.VK_F);
 		this.add(fileMenu);
+		
 		// the Open File item
 		openFileItem = new JMenuItem("Open...");
 		openFileItem.addActionListener(this);
+		openFileItem.setMnemonic(KeyEvent.VK_O);
+		openFileItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
 		fileMenu.add(openFileItem);
-		// // the data import item
-		// importDataItem = new JMenuItem("Import data...");
-		// importDataItem.addActionListener(this);
-		// fileMenu.add(importDataItem);
+		
+		// // the example data import item
+		 exampleDataItem = new JMenuItem("Load example data");
+		 exampleDataItem.setMnemonic(KeyEvent.VK_E);
+		 exampleDataItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.CTRL_MASK));
+		 exampleDataItem.addActionListener(this);
+		 fileMenu.add(exampleDataItem);
+		 
+		// separator
+		fileMenu.addSeparator();
+		
 		// the Exit item
 		exitItem = new JMenuItem("Exit");
+		exitItem.setMnemonic(KeyEvent.VK_X);
 		exitItem.addActionListener(this);
 		fileMenu.add(exitItem);
 		
+		
+		//////////////////////////////////////////////////////////////////////////////////
 		// the Help Menu
 		JMenu helpMenu = new JMenu("Help");
+		helpMenu.setMnemonic(KeyEvent.VK_H);
 		this.add(helpMenu);
+		
 		// the help item
-		helpItem = new JMenuItem("General Help");
+		helpItem = new JMenuItem("Online Help");
 		helpItem.addActionListener(this);
+		helpItem.setMnemonic(KeyEvent.VK_O);
+		helpItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
 		helpMenu.add(helpItem);
+		
+		// separator
+		helpMenu.addSeparator();
+		
 		// the about item
 		aboutItem = new JMenuItem("About CurlyWhirly");
+		aboutItem.setMnemonic(KeyEvent.VK_A);
 		aboutItem.addActionListener(this);
 		helpMenu.add(aboutItem);
 	}
@@ -85,40 +110,35 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 			}
 		}
 		
+		if (src.equals(exampleDataItem))
+		{
+			//load the example dataset provided with the application
+			File file = new File("randomData.txt");
+			frame.loadData(file);
+		}
+		
+		
 		if (src.equals(exitItem))
 		{
 			frame.shutdown();
 		}
 		
 		if (src.equals(helpItem))
-		{			
-//			Desktop desktop = null;
-//			// Before more Desktop API is used, first check
-//			// whether the API is supported by this particular
-//			// virtual machine (VM) on this particular host.
-//			if (Desktop.isDesktopSupported())
-//			{
-//				desktop = Desktop.getDesktop();
-//				
-//				try
-//				{
-//					URI uri = new URI("http://gruffalo.scri.sari.ac.uk/curlywhirly");
-//					
-//					String message = "Please refer to the up to date online help system available at " + uri;
-//					TaskDialog.initialize(frame, "CurlyWhirly");
-//					TaskDialog.info(message, "Close");
-//					
-//					//desktop.browse(uri);
-//				}
-//				catch (URISyntaxException e1)
-//				{
-//					e1.printStackTrace();
-//				}
-////				catch (IOException e2)
-////				{
-////					e2.printStackTrace();
-////				}
-//			}			
+		{
+			Desktop desktop = Desktop.getDesktop();
+			try
+			{
+				URI uri = new URI("http://gruffalo.scri.sari.ac.uk/curlywhirly");
+				desktop.browse(uri);
+			}
+			catch (URISyntaxException e1)
+			{
+				e1.printStackTrace();
+			}
+			catch (IOException e1)
+			{
+				e1.printStackTrace();
+			}
 		}
 		
 		if (src.equals(aboutItem))

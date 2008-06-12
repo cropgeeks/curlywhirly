@@ -21,8 +21,8 @@ public class Instructions3D  implements ItemListener
 	{
 		instructionsCheckBox = new JCheckBox("Do not show this again");
 		instructionsCheckBox.addItemListener(this);
-		String message = "Controls for the 3D graph: Left-click and drag to spin," +
-				"middle-click and drag or Alt + left-click and drag to zoom";
+		String message = "Controls for the 3D graph: Left-click + drag to spin," +
+				"middle-click + drag or Alt + left-click + drag to zoom";
 		String label = "Close";
 		TaskDialog.initialize(frame, "CurlyWhirly");
 		TaskDialog.info(message, label, instructionsCheckBox);		

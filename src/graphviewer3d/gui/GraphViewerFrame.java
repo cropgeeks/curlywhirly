@@ -53,6 +53,8 @@ public class GraphViewerFrame extends JFrame
 			GraphViewerFrame frame = new GraphViewerFrame();
 			frame.setVisible(true);
 			frame.setTitle("CurlyWhirly");
+			Image img = Toolkit.getDefaultToolkit().getImage("curlywurly_icon.gif");
+			frame.setIconImage(img);
 			frame.pack();
 			frame.setLocationRelativeTo(null);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
