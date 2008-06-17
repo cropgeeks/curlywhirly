@@ -50,7 +50,7 @@ public class MouseOverBehavior extends Behavior
 		
 		pickCanvas = new PickCanvas(canvas, objRoot);
 		pickCanvas.setTolerance(sphereSize*2);
-		pickCanvas.setMode(PickCanvas.GEOMETRY);
+		pickCanvas.setMode(PickCanvas.GEOMETRY_INTERSECT_INFO);
 	}
 	
 	// ===========================================methods============================

@@ -1,13 +1,22 @@
 package graphviewer3d.gui;
 
+import graphviewer3d.controller.ScreenCaptureThread;
+
 import java.awt.Desktop;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import javax.swing.*;
+import javax.swing.JFileChooser;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
 
 import scri.commons.gui.TaskDialog;
 
@@ -19,7 +28,7 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 	JMenuItem helpItem;
 	JMenuItem exampleDataItem;
 	JMenuItem exitItem;
-	
+	JMenuItem saveItem;
 	GraphViewerFrame frame;
 	JFileChooser fc;
 	DataLoadingDialog dataLoadingDialog;
@@ -38,7 +47,7 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 		// this enables swing components to be drawn on top of the 3D canvas
 		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 		
-		////////////////////////////////////////
+		// //////////////////////////////////////
 		// the File Menu
 		JMenu fileMenu = new JMenu("File");
 		fileMenu.setMnemonic(KeyEvent.VK_F);
@@ -52,12 +61,22 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 		fileMenu.add(openFileItem);
 		
 		// // the example data import item
-		 exampleDataItem = new JMenuItem("Load example data");
-		 exampleDataItem.setMnemonic(KeyEvent.VK_E);
-		 exampleDataItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.CTRL_MASK));
-		 exampleDataItem.addActionListener(this);
-		 fileMenu.add(exampleDataItem);
-		 
+		exampleDataItem = new JMenuItem("Load example data");
+		exampleDataItem.setMnemonic(KeyEvent.VK_E);
+		exampleDataItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.CTRL_MASK));
+		exampleDataItem.addActionListener(this);
+		fileMenu.add(exampleDataItem);
+		
+		// separator
+		fileMenu.addSeparator();
+		
+		// the save view item
+		saveItem = new JMenuItem("Capture view screenshot");
+		saveItem.setMnemonic(KeyEvent.VK_S);
+		saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+		saveItem.addActionListener(this);
+		fileMenu.add(saveItem);
+				
 		// separator
 		fileMenu.addSeparator();
 		
@@ -67,8 +86,7 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 		exitItem.addActionListener(this);
 		fileMenu.add(exitItem);
 		
-		
-		//////////////////////////////////////////////////////////////////////////////////
+		// ////////////////////////////////////////////////////////////////////////////////
 		// the Help Menu
 		JMenu helpMenu = new JMenu("Help");
 		helpMenu.setMnemonic(KeyEvent.VK_H);
@@ -112,9 +130,16 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 		
 		if (src.equals(exampleDataItem))
 		{
-			//load the example dataset provided with the application
+			// load the example dataset provided with the application
 			File file = new File("randomData.txt");
 			frame.loadData(file);
+		}
+		
+		if (src.equals(saveItem))
+		{						
+			//save the canvas to this file
+			new ScreenCaptureThread(new File(System.getProperty("user.dir")+System.getProperty("file.separator") + 
+							"curlywhirly_screenshot.jpg"),frame,"jpg",fc).start();	
 		}
 		
 		
@@ -123,12 +148,13 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 			frame.shutdown();
 		}
 		
+		
 		if (src.equals(helpItem))
 		{
 			Desktop desktop = Desktop.getDesktop();
 			try
 			{
-				URI uri = new URI("http://gruffalo.scri.sari.ac.uk/curlywhirly");
+				URI uri = new URI("http://gruffalo.scri.sari.ac.uk/mbayer/curlywhirly");
 				desktop.browse(uri);
 			}
 			catch (URISyntaxException e1)

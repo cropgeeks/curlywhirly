@@ -6,6 +6,10 @@ import graphviewer3d.data.DataSet;
 import java.awt.Color;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -23,17 +27,26 @@ import javax.media.j3d.ColoringAttributes;
 import javax.media.j3d.DirectionalLight;
 import javax.media.j3d.GeometryArray;
 import javax.media.j3d.GraphicsConfigTemplate3D;
+import javax.media.j3d.GraphicsContext3D;
+import javax.media.j3d.ImageComponent;
+import javax.media.j3d.ImageComponent2D;
 import javax.media.j3d.LineArray;
 import javax.media.j3d.Material;
+import javax.media.j3d.Raster;
 import javax.media.j3d.RotationInterpolator;
 import javax.media.j3d.Shape3D;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
 
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGEncodeParam;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import com.sun.j3d.utils.geometry.ColorCube;
 import com.sun.j3d.utils.geometry.Cone;
 import com.sun.j3d.utils.geometry.Sphere;
@@ -129,6 +142,9 @@ public class GraphViewer3DCanvas extends Canvas3D
 	MouseOverBehavior mouseOverBehaviour;
 	
 	Color3f bgColour = new Color3f(Color.LIGHT_GRAY);
+	
+	public boolean writeJPEG;
+	public File outputFile;
 	
 	// ==================================c'tor=============================
 	
@@ -672,6 +688,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 		if(background!=null)
 			background.setColor(bgColour);
 	}
+	
 	
 	// ---------------------------------------------------------------------------------------------------------------------
 	

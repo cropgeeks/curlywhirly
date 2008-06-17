@@ -1,25 +1,31 @@
 package graphviewer3d.gui;
 
+import graphviewer3d.controller.FatController;
 import graphviewer3d.data.DataLoader;
 import graphviewer3d.data.DataSet;
 
-import java.awt.*;
-
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.io.File;
 
-import javax.swing.*;
-
-import scri.commons.gui.TaskDialog;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 public class GraphViewerFrame extends JFrame
 {
 	
 	// ===================================================vars =================================================
 	
+	public FatController controller = new FatController(this); 
 	public static DataSet dataSet;
-	public GraphViewer3DCanvas canvas3D;
-	public JPanel canvasPanel;
+	public static GraphViewer3DCanvas canvas3D;
+	public static JPanel canvasPanel;
 	public int controlPanelWidth = 200;
 	public MTControlPanel controlPanel;
 	JLabel openLabel;
@@ -59,7 +65,6 @@ public class GraphViewerFrame extends JFrame
 			frame.setLocationRelativeTo(null);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			//frame.setExtendedState(frame.MAXIMIZED_BOTH);
-							
 		}
 		catch (Exception e)
 		{
@@ -123,9 +128,9 @@ public class GraphViewerFrame extends JFrame
 		statusBar = new StatusBar();
 		getContentPane().add(statusBar, java.awt.BorderLayout.SOUTH);
 		
-//		File file = new File("data/barley_PCA.txt");
-//		loadData(file);
-				
+		File file = new File("data/barley_PCA.txt");
+		loadData(file);	
+		
 	}
 	
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
