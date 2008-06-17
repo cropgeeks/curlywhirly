@@ -1,6 +1,7 @@
 package graphviewer3d.gui;
 
 import graphviewer3d.controller.FatController;
+import graphviewer3d.controller.UsageLogger;
 import graphviewer3d.data.DataLoader;
 import graphviewer3d.data.DataSet;
 
@@ -65,6 +66,9 @@ public class GraphViewerFrame extends JFrame
 			frame.setLocationRelativeTo(null);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			//frame.setExtendedState(frame.MAXIMIZED_BOTH);
+			
+			//send a message to the script on bioinf to indicate that the application has been started up
+			UsageLogger.logUsage();
 		}
 		catch (Exception e)
 		{
