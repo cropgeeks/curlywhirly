@@ -1,10 +1,11 @@
 feature additions:
 
-- multiple category handling
-- data input handling: missing data, default values, errors, unit tests, undeclared categories
-- mac support
 - linux installer
 - ant task for install4j
+- multiple category handling
+- mac support
+- applet
+- webstart
 
 bug fixes:
 

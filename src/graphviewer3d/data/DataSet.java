@@ -2,6 +2,7 @@ package graphviewer3d.data;
 
 import graphviewer3d.gui.GUIUtils;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -78,7 +79,7 @@ public class DataSet
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	
 	//iterates over the data in the categories array and returns the discrete categories we have
-	public HashMap<String, Category> extractCategories()
+	public HashMap<String, Category> extractCategories() throws IOException
 	{		
 		// now add things into a map
 		categoryMap = new HashMap<String, Category>();
@@ -94,6 +95,8 @@ public class DataSet
 					//by default set the highlight flag to true so that  the category shows initially
 					category.highlight = true;
 					//set its name
+					if(groupId == null || groupId.trim().equals(""))
+						throw new IOException("Missing category value ");
 					category.name = groupId;
 					categoryMap.put(groupId,category);
 				}

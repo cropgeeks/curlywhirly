@@ -23,6 +23,8 @@ public class DataLoader
 	GraphViewerFrame frame;
 	DataSet dataSet = new DataSet();
 	
+	boolean errorInHeaders = false;
+	
 	// ==========================================c'tor=========================================
 	
 	public DataLoader(GraphViewerFrame frame)
@@ -61,11 +63,24 @@ public class DataLoader
 			String[] headers = lines[0].split("\t");
 			dataSet.groupIdHeader = headers[0];
 			dataSet.groupLabelHeader = headers[1];
+			// check they are there
+			if (headers[0].trim().equals("") || headers[1].trim().equals(""))
+			{
+				errorInHeaders = true;
+				throw new IOException("Missing data header ");
+			}
+			
 			// rest of headers are data column headers
 			int numDataColumns = headers.length - 2;
 			for (int i = 0; i < numDataColumns; i++)
 			{
-				dataSet.dataHeaders.add(headers[i + 2]);
+				String header = headers[i + 2];
+				if (header == null || header.trim().equals(""))
+				{
+					errorInHeaders = true;
+					throw new IOException("Missing data header ");
+				}
+				dataSet.dataHeaders.add(header);
 				// add a new float array to the data Vector
 				dataSet.data.add(new float[numEntries]);
 			}
@@ -81,18 +96,38 @@ public class DataLoader
 			
 			for (int i = 0; i < numEntries; i++)
 			{
+				lastLineParsed = i;
 				String[] line = lines[i].split("\t");
 				dataSet.groupIds[i] = line[0];
 				dataSet.groupLabels[i] = line[1];
+				// check they are there
+				if (line[0].equals(""))
+				{
+					throw new IOException("Missing category label ");
+				}
+				if (line[1].equals(""))
+				{
+					throw new IOException("Missing data label ");
+				}
+
 				for (int j = 0; j < numDataColumns; j++)
 				{
 					float[] array = dataSet.data.get(j);
-					float value = Float.parseFloat(line[j + 2]);
+					float value;
+					try
+					{
+						value = Float.parseFloat(line[j + 2]);
+					}
+					catch (NumberFormatException e)
+					{
+						e.printStackTrace();
+						throw new IOException("Missing or invalid numerical data ");
+					}
 					checkExtrema(value);
-					array[i] = value;
-					lastLineParsed = i;
+					array[i] = value;				
 				}
 			}
+			System.out.println("total lines parsed = "+lastLineParsed);
 			
 			// set the extrema values on the dataset itself
 			dataSet.absoluteMax = absoluteMax;
@@ -104,14 +139,16 @@ public class DataLoader
 		}
 		catch (Exception e)
 		{
-			System.out.println("error on data load -- line " + lastLineParsed);
+			int lineWithError = lastLineParsed +2;
+			if(errorInHeaders)
+				lineWithError = lastLineParsed+1;
 			
-			String message = "error on data load -- line " + lastLineParsed + "\n" + e.getMessage();
-			
-			TaskDialog.initialize(frame, "CurlyWhirly");
+			String message = "Error in data file on line " + lineWithError + ":\n" + e.getMessage() + " -- please correct your data and try again.";
+			System.out.println(message);
+			TaskDialog.initialize(frame, "Data error");
 			TaskDialog.info(message, "Close");
 			e.printStackTrace();
-			throw new IOException( "error on data load -- line " + lastLineParsed + "\n" + e.getMessage());
+			throw new IOException(message);
 		}
 		
 		return dataSet;
