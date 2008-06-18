@@ -1,6 +1,7 @@
 package graphviewer3d.gui;
 
 import graphviewer3d.controller.ScreenCaptureThread;
+import graphviewer3d.data.FileLoader;
 
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
@@ -118,10 +119,17 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 			int returnVal = fc.showOpenDialog(frame);
 			if (returnVal == JFileChooser.APPROVE_OPTION)
 			{
+				//clear view
 				if (frame.canvas3D != null)
 					frame.canvas3D.clearCurrentView();
-				new Thread(new FileLoader()).start();
-				dataLoadingDialog = new DataLoadingDialog(frame, true);
+				
+				//start the load in a separate thread
+				DataLoadingDialog dataLoadingDialog = new DataLoadingDialog(frame, true);
+				FileLoader loader = new FileLoader(frame,fc,dataLoadingDialog);
+				loader.setName("curlywhirly_dataload");
+				loader.start();
+				
+				//show a dialog with a progress bar
 				dataLoadingDialog.setLocationRelativeTo(frame);
 				dataLoadingDialog.setVisible(true);
 				dataLoadingDialog.setModal(false);
@@ -176,18 +184,6 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 		
 	}
 	
-	class FileLoader implements Runnable
-	{
-		public void run()
-		{
-			frame.loadData(fc.getSelectedFile());
-			dataLoadingDialog.setVisible(false);
-			if (Preferences.show3DControlInstructions)
-			{
-				Instructions3D instr = new Instructions3D(frame);
-				instr.show3DInstructions();
-			}
-		}
-	}
+
 	
 }

@@ -33,7 +33,7 @@ public class DataLoader
 	// ==========================================methods=========================================
 	
 	// imports the data from file in the specified location
-	public DataSet getDataFromFile(File file)
+	public DataSet getDataFromFile(File file) throws IOException
 	{
 		int lastLineParsed = 0;
 		
@@ -111,6 +111,7 @@ public class DataLoader
 			TaskDialog.initialize(frame, "CurlyWhirly");
 			TaskDialog.info(message, "Close");
 			e.printStackTrace();
+			throw new IOException( "error on data load -- line " + lastLineParsed + "\n" + e.getMessage());
 		}
 		
 		return dataSet;

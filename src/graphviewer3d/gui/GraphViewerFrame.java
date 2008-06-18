@@ -11,6 +11,7 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -36,6 +37,7 @@ public class GraphViewerFrame extends JFrame
 	private static File prefsFile = new File(System.getProperty("user.home"), ".curlywhirly.xml");
 	public static Preferences prefs = new Preferences();
 	public StatusBar statusBar;
+	public GraphViewerMenuBar menuBar;
 	
 	// ===================================================c'tor=================================================
 	
@@ -90,8 +92,18 @@ public class GraphViewerFrame extends JFrame
 	
 	public void loadData(File file)
 	{
+		System.out.println("loading data...");
 		DataLoader loader = new DataLoader(this);
-		dataSet = loader.getDataFromFile(file);
+		try
+		{
+			dataSet = loader.getDataFromFile(file);
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return;
+		}
 		canvas3D.dataSet = dataSet;
 		canvas3D.createSceneGraph();
 		canvasPanel.remove(openLabel);
@@ -126,14 +138,16 @@ public class GraphViewerFrame extends JFrame
 		this.getContentPane().add(mainPanel);
 		
 		// menu bar
-		this.setJMenuBar(new GraphViewerMenuBar(this));
+		menuBar = new GraphViewerMenuBar(this);
+		this.setJMenuBar(menuBar);
 		
 		//status bar
 		statusBar = new StatusBar();
 		getContentPane().add(statusBar, java.awt.BorderLayout.SOUTH);
 		
-		File file = new File("data/barley_PCA.txt");
-		loadData(file);	
+		//load data -- hard coded for testing only
+//		File file = new File("data/barley_PCA.txt");
+//		loadData(file);	
 		
 	}
 	

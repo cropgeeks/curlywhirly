@@ -32,7 +32,7 @@ public class DataLoadingDialog extends javax.swing.JDialog
 		
 		jProgressBar1 = new javax.swing.JProgressBar();
 		jLabel1 = new javax.swing.JLabel();
-		jButton1 = new javax.swing.JButton();
+		cancelDataLoadButton = new javax.swing.JButton();
 		
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("Data loading");
@@ -42,7 +42,14 @@ public class DataLoadingDialog extends javax.swing.JDialog
 		
 		jLabel1.setText("Data loading -- please wait ...");
 		
-		jButton1.setText("Cancel");
+		cancelDataLoadButton.setText("Cancel");
+		cancelDataLoadButton.addActionListener(new java.awt.event.ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				cancelDataLoadButtonActionPerformed(evt);
+			}
+		});
 		
 		org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
@@ -50,7 +57,7 @@ public class DataLoadingDialog extends javax.swing.JDialog
 						layout.createSequentialGroup().add(61, 61, 61).add(
 										layout.createParallelGroup(
 														org.jdesktop.layout.GroupLayout.CENTER).add(
-														jButton1).add(
+														cancelDataLoadButton).add(
 														jProgressBar1,
 														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
 														199,
@@ -65,13 +72,18 @@ public class DataLoadingDialog extends javax.swing.JDialog
 										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(
 										org.jdesktop.layout.LayoutStyle.RELATED).add(
-										jButton1).addContainerGap(
+										cancelDataLoadButton).addContainerGap(
 										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 										Short.MAX_VALUE)));
 		
 		pack();
 	}// </editor-fold>
 	//GEN-END:initComponents
+	
+	private void cancelDataLoadButtonActionPerformed(java.awt.event.ActionEvent evt)
+	{
+		this.setVisible(false);
+	}
 	
 	/**
 	 * @param args the command line arguments
@@ -97,7 +109,7 @@ public class DataLoadingDialog extends javax.swing.JDialog
 	
 	//GEN-BEGIN:variables
 	// Variables declaration - do not modify
-	private javax.swing.JButton jButton1;
+	private javax.swing.JButton cancelDataLoadButton;
 	private javax.swing.JLabel jLabel1;
 	private javax.swing.JProgressBar jProgressBar1;
 	// End of variables declaration//GEN-END:variables

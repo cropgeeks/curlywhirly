@@ -1,0 +1,11 @@
+feature additions:
+
+- multiple category handling
+- data input handling: missing data, default values, errors, unit tests, undeclared categories
+- mac support
+- linux installer
+- ant task for install4j
+
+bug fixes:
+
+- antialiasing goes to pot when new dataset is loaded (performance related)
