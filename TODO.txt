@@ -2,6 +2,8 @@ feature additions:
 
 - linux installer
 - ant task for install4j
+- docu: separate out header/footer and provide through server side includes
+- move docu to bioinf
 - multiple category handling
 - mac support
 - applet
