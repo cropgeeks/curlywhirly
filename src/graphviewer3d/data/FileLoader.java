@@ -1,5 +1,7 @@
 package graphviewer3d.data;
 
+import java.io.File;
+
 import javax.swing.JFileChooser;
 
 import graphviewer3d.gui.DataLoadingDialog;
@@ -11,19 +13,19 @@ public class FileLoader extends Thread
 {
 	GraphViewerFrame frame;
 	public boolean done = false;
-	JFileChooser fileChooser;
+	File file;
 	DataLoadingDialog dataLoadingDialog;
 	
-	public FileLoader(GraphViewerFrame frame, JFileChooser fileChooser, DataLoadingDialog dataLoadingDialog)
+	public FileLoader(GraphViewerFrame frame, File file, DataLoadingDialog dataLoadingDialog)
 	{
 		this.frame = frame;
-		this.fileChooser = fileChooser;
+		this.file = file;
 		this.dataLoadingDialog = dataLoadingDialog;
 	}
 	
 	public void run()
 	{
-		frame.loadData(fileChooser.getSelectedFile());
+		frame.loadData(file);
 		if (dataLoadingDialog != null)
 			dataLoadingDialog.setVisible(false);
 		if (frame.dataLoaded)

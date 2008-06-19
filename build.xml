@@ -5,9 +5,14 @@
   <property name="classes" location="classes"/>
   <property name="lib" location="lib"/>
 
+	<target name="clean">
+		<delete>
+			<fileset dir="classes" includes="**/*.class"/>
+		</delete>	
+	</target>
 
 
-  <target name="compile" description="compile the source " >
+  <target name="compile" depends="clean">
     <javac srcdir="${src}" destdir="${classes}" debug="yes">
     	<classpath>
 	      <pathelement path="${classpath}"/>
@@ -17,5 +22,21 @@
         </classpath>
     </javac>
   </target>
-		
+
+	
+	
+	<target name="install4j" depends="compile">
+		<taskdef name="install4j"
+		classname="com.install4j.Install4JTask"
+		classpath="C:\Program Files\install4j\bin\ant.jar"/>	
+		<delete>
+			<fileset dir="installer" includes="**/*.exe"/>
+			<fileset dir="installer" includes="**/*.sh"/>
+			<fileset dir="installer" includes="**/*.dmg"/>
+		</delete>
+		<input message="Enter the version number:" addproperty="version"/>
+		<install4j projectfile="installer/curlywhirly_installer.install4j" release="${version}"/>
+	</target>
+	
+	
 </project>

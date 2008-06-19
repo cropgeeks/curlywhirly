@@ -4,12 +4,10 @@ import graphviewer3d.data.Category;
 import graphviewer3d.data.DataSet;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -27,26 +25,17 @@ import javax.media.j3d.ColoringAttributes;
 import javax.media.j3d.DirectionalLight;
 import javax.media.j3d.GeometryArray;
 import javax.media.j3d.GraphicsConfigTemplate3D;
-import javax.media.j3d.GraphicsContext3D;
-import javax.media.j3d.ImageComponent;
-import javax.media.j3d.ImageComponent2D;
 import javax.media.j3d.LineArray;
 import javax.media.j3d.Material;
-import javax.media.j3d.Raster;
 import javax.media.j3d.RotationInterpolator;
 import javax.media.j3d.Shape3D;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
 
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGEncodeParam;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import com.sun.j3d.utils.geometry.ColorCube;
 import com.sun.j3d.utils.geometry.Cone;
 import com.sun.j3d.utils.geometry.Sphere;
@@ -131,21 +120,23 @@ public class GraphViewer3DCanvas extends Canvas3D
 	// speed at which graph spins automatically
 	long spinSpeed = 50000;
 	
+	//the alpha for the graph spin animation
 	Alpha yRotationAlpha;
 	
 	static GraphicsConfigTemplate3D template;
 	
+	//a map containing all the spheres as keys and their individual data labels as values
 	HashMap<Sphere, String> spheresMap;
 	
+	//the parent frame
 	GraphViewerFrame frame;
 	
+	//this behaviour allows us to mouse over a sphere and detect its value
 	MouseOverBehavior mouseOverBehaviour;
 	
+	//the default background colour for the canvas
 	Color3f bgColour = new Color3f(Color.LIGHT_GRAY);
-	
-	public boolean writeJPEG;
-	public File outputFile;
-	
+		
 	// ==================================c'tor=============================
 	
 	public GraphViewer3DCanvas(GraphViewerFrame frame)
@@ -156,7 +147,8 @@ public class GraphViewer3DCanvas extends Canvas3D
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
-	
+
+	//colour the spheres by category
 	public void colourSpheres()
 	{
 		try
@@ -197,6 +189,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	// ---------------------------------------------------------------------------------------------------------------------
 	
+	//works out relative sizes required for the system
 	private void calculateSizes()
 	{
 		// scaling factor to multiply the data with so that everything is normalized to be between 1 and -1
@@ -218,6 +211,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	// ---------------------------------------------------------------------------------------------------------------------
 	
+	//sets up ambient and directional light
 	private void setUpLights()
 	{
 		
@@ -240,7 +234,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 	/**
 	 * Creates a scene graph and returns it in the shape of a single BranchGroup object
 	 */
-	public BranchGroup createSceneGraph()
+	public void createSceneGraph()
 	{
 		
 		template.setSceneAntialiasing(GraphicsConfigTemplate3D.REQUIRED);
@@ -285,9 +279,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 			
 			// add the whole Object to the root
 			objRoot.addChild(wholeObj);
-			
-			setInitialViewPoint();
-			
+
 			// now add behaviours
 			// rotation
 			PickRotateBehavior rotateBehaviour = new PickRotateBehavior(objRoot, this, bounds);
@@ -297,7 +289,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 			PickZoomBehavior zoomBehaviour = new PickZoomBehavior(objRoot, this, bounds);
 			zoomBehaviour.setTolerance(50);
 			objRoot.addChild(zoomBehaviour);
-			//selective highlighting
+			// selective highlighting
 			mouseOverBehaviour = new MouseOverBehavior(frame, spheresMap, objRoot, sphereSize);
 			mouseOverBehaviour.setSchedulingBounds(bounds);
 			objRoot.addChild(mouseOverBehaviour);
@@ -310,20 +302,20 @@ public class GraphViewer3DCanvas extends Canvas3D
 			// add this to the universe
 			su.addBranchGraph(objRoot);
 			
+			setInitialViewPoint();
 		}
 		catch (Throwable e)
 		{
 			e.printStackTrace();
 		}
 		
-		return objRoot;
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
 	
+	// this allows us to set the initial camera view point
 	public void setInitialViewPoint()
 	{
-		// this allows us to set the initial camera view point
 		// su.getViewingPlatform().setNominalViewingTransform();
 		Vector3f translate = new Vector3f();
 		Transform3D T3D = new Transform3D();
@@ -337,6 +329,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	// ---------------------------------------------------------------------------------------------------------------------
 	
+	//restores the initial zoom factor and viewing angle
 	public void resetOriginalView()
 	{
 		Transform3D trans = new Transform3D();
@@ -348,6 +341,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	// ---------------------------------------------------------------------------------------------------------------------
 	
+	//puts the graph into an indefinite spin
 	public void spin()
 	{
 		// Create a new Behavior object that will perform the
@@ -356,7 +350,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 		
 		// rotate about the y axis
 		Transform3D yAxis = new Transform3D();
-		//yAxis.rotZ(45);
+		// yAxis.rotZ(45);
 		yRotationAlpha = new Alpha(-1, spinSpeed);
 		RotationInterpolator yRotator = new RotationInterpolator(yRotationAlpha, wholeObj, yAxis, 0.0f, (float) Math.PI * 2.0f);
 		yRotator.setSchedulingBounds(bounds);
@@ -369,6 +363,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	// ---------------------------------------------------------------------------------------------------------------------
 	
+	//stop the graph from spinning
 	public void stopSpinning()
 	{
 		rotatorGroup.detach();
@@ -376,20 +371,22 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	// ---------------------------------------------------------------------------------------------------------------------
 	
+	//sets the spin speed
 	public void setSpinSpeed(long speed)
 	{
 		// subtract this from 100 because it is the wrong way round otherwise
 		speed = (100 - speed);
-		// can't have a value of 0 so set it to  at least 1
+		// can't have a value of 0 so set it to at least 1
 		if (speed == 0)
 			speed = 1;
 		if (yRotationAlpha != null)
 			yRotationAlpha.setIncreasingAlphaDuration(speed * 1000);
-		spinSpeed = speed*1000;
+		spinSpeed = speed * 1000;
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
 	
+	//get rid of the current scene graph
 	public void clearCurrentView()
 	{
 		if (objRoot != null)
@@ -398,6 +395,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	// ---------------------------------------------------------------------------------------------------------------------
 	
+	//update the current scene graph with new settings
 	public void updateGraph()
 	{
 		List selectedCategories = null;
@@ -435,6 +433,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	// ---------------------------------------------------------------------------------------------------------------------
 	
+	//sticks a label on each of the 3 axes
 	private void makeAxisLabels()
 	{
 		if (allLabelsBG != null)
@@ -473,7 +472,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	// ---------------------------------------------------------------------------------------------------------------------
 	/**
-	 * Creates the central and peripheral cylinders
+	 *sets up all the sphere (data point) objects
 	 */
 	public void makeSpheres()
 	{
@@ -527,13 +526,14 @@ public class GraphViewer3DCanvas extends Canvas3D
 		}
 		wholeObj.addChild(allSpheresBG);
 		
-		//need to pass the new map of spheres and labels to the mouse over behaviour class now
-		if(mouseOverBehaviour !=null)
+		// need to pass the new map of spheres and labels to the mouse over behaviour class now
+		if (mouseOverBehaviour != null)
 			mouseOverBehaviour.namesHashT = spheresMap;
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
 	
+	//creates pointy tips for the axes
 	private void placeCone(Vector3f position, TransformGroup wholeObj, float radius, float height, char axis)
 	{
 		// appearance
@@ -565,6 +565,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	// ---------------------------------------------------------------------------------------------------------------------
 	
+	//darws the lines that make up the coordinate system
 	private void drawCoordinateSystem()
 	{
 		LineArray coordinateAxes = new LineArray(12, GeometryArray.COORDINATES | GeometryArray.COLOR_3);
@@ -579,13 +580,13 @@ public class GraphViewer3DCanvas extends Canvas3D
 		
 		// line start and end points
 		float[] lineStart = new float[]
-		                              { 0, 0, 0 };
+		{ 0, 0, 0 };
 		float[] lineEndX = new float[]
-		                             { axisLength, 0, 0 };
+		{ axisLength, 0, 0 };
 		float[] lineEndY = new float[]
-		                             { 0, axisLength, 0 };
+		{ 0, axisLength, 0 };
 		float[] lineEndZ = new float[]
-		                             { 0, 0, axisLength };
+		{ 0, 0, axisLength };
 		
 		// x positive axis
 		// line start point
@@ -646,17 +647,10 @@ public class GraphViewer3DCanvas extends Canvas3D
 		
 		wholeObj.addChild(s3d);
 	}
-	
+		
 	// ---------------------------------------------------------------------------------------------------------------------
 	
-	private void makeOriginMarker()
-	{
-		ColorCube cube = new ColorCube(sphereSize);
-		wholeObj.addChild(cube);
-	}
-	
-	// ---------------------------------------------------------------------------------------------------------------------
-	
+	//adds a mutable background to the scene
 	public void addBackground()
 	{
 		background = new Background(bgColour);
@@ -667,6 +661,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	// ---------------------------------------------------------------------------------------------------------------------
 	
+	//changes the background colour
 	public void setBackgroundColour(int newColour)
 	{
 		switch (newColour)
@@ -685,10 +680,9 @@ public class GraphViewer3DCanvas extends Canvas3D
 				break;
 		}
 		frame.canvasPanel.setBackground(bgColour.get());
-		if(background!=null)
+		if (background != null)
 			background.setColor(bgColour);
 	}
-	
 	
 	// ---------------------------------------------------------------------------------------------------------------------
 	

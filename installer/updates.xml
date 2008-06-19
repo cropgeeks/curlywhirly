@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <updateDescriptor baseUrl="">
-  <entry targetMediaFileId="21" updatableVersionMin="" updatableVersionMax="" fileName="CurlyWhirly_windows_0_08_06_18.exe" newVersion="0.08.06.18" newMediaFileId="21" fileSize="20045824" bundledJre="windows-x86-1.6.0_06" archive="false">
+  <entry targetMediaFileId="21" updatableVersionMin="" updatableVersionMax="" fileName="CurlyWhirly_windows_0_08_06_19.exe" newVersion="0.08.06.19" newMediaFileId="21" fileSize="20810240" bundledJre="windows-x86-1.6.0_06" archive="false">
     <comment />
   </entry>
-  <entry targetMediaFileId="56" updatableVersionMin="" updatableVersionMax="" fileName="CurlyWhirly_unix_0_08_06_18.sh" newVersion="0.08.06.18" newMediaFileId="56" fileSize="24642608" bundledJre="linux-x86-1.6.0_06" archive="false">
+  <entry targetMediaFileId="56" updatableVersionMin="" updatableVersionMax="" fileName="CurlyWhirly_unix_0_08_06_19.sh" newVersion="0.08.06.19" newMediaFileId="56" fileSize="25404631" bundledJre="linux-x86-1.6.0_06" archive="false">
     <comment />
   </entry>
 </updateDescriptor>

@@ -127,7 +127,6 @@ public class DataLoader
 					array[i] = value;				
 				}
 			}
-			System.out.println("total lines parsed = "+lastLineParsed);
 			
 			// set the extrema values on the dataset itself
 			dataSet.absoluteMax = absoluteMax;

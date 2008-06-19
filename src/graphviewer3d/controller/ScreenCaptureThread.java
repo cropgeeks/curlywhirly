@@ -9,22 +9,11 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.media.j3d.Canvas3D;
-import javax.media.j3d.GraphicsContext3D;
-import javax.media.j3d.ImageComponent;
-import javax.media.j3d.ImageComponent2D;
-import javax.media.j3d.Raster;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.vecmath.Point3f;
-
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGEncodeParam;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 /**
  * Thread class for saving screenshots of the canvas
@@ -77,13 +66,15 @@ public class ScreenCaptureThread extends Thread
 		// Write that to disk....
 		try
 		{
-			FileOutputStream out = new FileOutputStream(outfile);
-			JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-			JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(img);
-			param.setQuality(1.0f, false);
-			encoder.setJPEGEncodeParam(param);
-			encoder.encode(img);
-			out.close();
+			ImageIO.write(img, fileType,outfile);
+			
+//			FileOutputStream out = new FileOutputStream(outfile);
+//			JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
+//			JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(img);
+//			param.setQuality(1.0f, false);
+//			encoder.setJPEGEncodeParam(param);
+//			encoder.encode(img);
+//			out.close();
 			
 			JOptionPane.showMessageDialog(frame, "saved image to file " + outfile.getAbsolutePath());	
 		}

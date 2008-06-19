@@ -119,35 +119,21 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 			int returnVal = fc.showOpenDialog(frame);
 			if (returnVal == JFileChooser.APPROVE_OPTION)
 			{
-				//clear view
-				if (frame.canvas3D != null)
-					frame.canvas3D.clearCurrentView();
-				
-				//start the load in a separate thread
-				DataLoadingDialog dataLoadingDialog = new DataLoadingDialog(frame, true);
-				FileLoader loader = new FileLoader(frame,fc,dataLoadingDialog);
-				loader.setName("curlywhirly_dataload");
-				loader.start();
-				
-				//show a dialog with a progress bar
-				dataLoadingDialog.setLocationRelativeTo(frame);
-				dataLoadingDialog.setVisible(true);
-				dataLoadingDialog.setModal(false);
+				frame.controller.loadDataInThread(fc.getSelectedFile());
 			}
 		}
 		
 		if (src.equals(exampleDataItem))
 		{
 			// load the example dataset provided with the application
-			File file = new File("randomData.txt");
-			frame.loadData(file);
+			frame.controller.loadDataInThread(new File("randomData.txt"));
 		}
 		
 		if (src.equals(saveItem))
 		{						
 			//save the canvas to this file
 			new ScreenCaptureThread(new File(System.getProperty("user.dir")+System.getProperty("file.separator") + 
-							"curlywhirly_screenshot.jpg"),frame,"jpg",fc).start();	
+							"curlywhirly_screenshot.png"),frame,"png",fc).start();	
 		}
 		
 		
@@ -162,7 +148,7 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 			Desktop desktop = Desktop.getDesktop();
 			try
 			{
-				URI uri = new URI("http://gruffalo.scri.sari.ac.uk/mbayer/curlywhirly");
+				URI uri = new URI("http://bioinf.scri.sari.ac.uk/curlywhirly/manual.html");
 				desktop.browse(uri);
 			}
 			catch (URISyntaxException e1)
@@ -184,6 +170,6 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 		
 	}
 	
-
+//-------------------------------------------------------------------------------------------------------------------------------------
 	
 }
