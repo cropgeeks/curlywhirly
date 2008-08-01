@@ -66,7 +66,13 @@ TABLE.outline {
 }
 
 TABLE.grey {
-		background: lightgray;
+		background: #F5F5F5;
+		border-width: 0px;
+}
+
+TABLE.blue {
+		background: #415A89;
+		border-width: 0px;
 }
 
 TD.outline {
@@ -85,8 +91,7 @@ TR.outline {
 		border-width: 1px;
 }
 
-B
-{
-	color: #415a89;
-	font-weight: bolder;
+B {
+		color: #415a89;
+		font-weight: bolder;
 }
