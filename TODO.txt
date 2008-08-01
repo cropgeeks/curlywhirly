@@ -4,7 +4,15 @@ feature additions:
 - docu: separate out header/footer and provide through server side includes
 - multiple category handling
 - mac support?
-- applet?
-- webstart?
+- movies
+
+
+Michael Moeller's list:
+- Continuous spinning in different directions without having to change the axis assignment.
+
+- an option to centre the image
+- ability to choose colours and different symbols (+ size)
+- labelling individuals or all points from within the GUI
+
 
 bug fixes:

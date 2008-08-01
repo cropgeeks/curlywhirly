@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.Vector;
 
 import scri.commons.gui.TaskDialog;
@@ -110,13 +111,15 @@ public class DataLoader
 					throw new IOException("Missing data label ");
 				}
 
+				NumberFormat nf = NumberFormat.getInstance();
 				for (int j = 0; j < numDataColumns; j++)
 				{
 					float[] array = dataSet.data.get(j);
 					float value;
 					try
-					{
-						value = Float.parseFloat(line[j + 2]);
+					{						
+						value = nf.parse(line[j + 2]).floatValue();
+						//value = Float.parseFloat(line[j + 2]);
 					}
 					catch (NumberFormatException e)
 					{

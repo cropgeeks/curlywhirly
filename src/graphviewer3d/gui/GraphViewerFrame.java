@@ -17,6 +17,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.UIManager;
 
 public class GraphViewerFrame extends JFrame
@@ -123,6 +124,9 @@ public class GraphViewerFrame extends JFrame
 	
 	private void setupComponents()
 	{
+		//workaround for the 3D drawing problem with Swing menus
+//		JPopupMenu.setDefaultLightWeightPopupEnabled( false );	
+		
 		// make a new panel for the 3D panel
 		canvasPanel = new JPanel(new BorderLayout());
 		canvasPanel.setPreferredSize(new Dimension(600, 600));
@@ -153,10 +157,6 @@ public class GraphViewerFrame extends JFrame
 		// status bar
 		statusBar = new StatusBar();
 		getContentPane().add(statusBar, java.awt.BorderLayout.SOUTH);
-		
-		// load data -- hard coded, for testing only
-		// File file = new File("data/barley_PCA.txt");
-		// loadData(file);
 		
 	}
 	
