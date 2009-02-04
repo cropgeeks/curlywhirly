@@ -30,26 +30,26 @@ import javax.vecmath.Color3f;
 
 public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 {
-	
+
 	// ==========================================vars============================================
-	
+
 	private int[] indexes;
 	GraphViewerFrame frame;
 	private Vector<String> categories;
 	Vector<Category> listItems;
-	
+
 	// ==========================================c'tor============================================
-	
+
 	/** Creates new form MTControlPanel */
 	public MTControlPanel(GraphViewerFrame frame)
 	{
 		initComponents();
 		this.frame = frame;
-		
+
 	}
-	
+
 	// ==========================================methods============================================
-	
+
 	private void addComboModels()
 	{
 		// set the Vector with the data headers as the model for the combo boxes that allow selection of variables
@@ -58,31 +58,31 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		yCombo.setModel(new DefaultComboBoxModel(dataHeaders));
 		zCombo.setModel(new DefaultComboBoxModel(dataHeaders));
 	}
-	
+
 	public void resetComboBoxes()
 	{
 		addComboModels();
-		
+
 		// set the combos to display the currently selected index of the variables they display
 		xCombo.setSelectedIndex(0);
 		yCombo.setSelectedIndex(1);
 		zCombo.setSelectedIndex(2);
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	public void setUpListData()
 	{
 		// get the list items
-		listItems = new Vector(frame.dataSet.categoryMap.values());
+		listItems = new Vector<Category>(frame.dataSet.categoryMap.values());
 		Collections.sort(listItems);
 		// table for selecting categories to highlight
 		selectorList.setListData(listItems);
 		selectorList.setCellRenderer(new ColorListRenderer());
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == xCombo && e.getActionCommand().equals("comboBoxChanged"))
@@ -100,7 +100,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 			int index = zCombo.getSelectedIndex();
 			frame.canvas3D.currentZIndex = index;
 		}
-		
+
 		// if we had data loaded already we must now update the graph
 		if (frame.dataLoaded)
 		{
@@ -108,9 +108,9 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 			frame.canvas3D.updateGraph();
 		}
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	private void selectorListValueChanged(javax.swing.event.ListSelectionEvent evt)
 	{
 		if (evt.getValueIsAdjusting())
@@ -122,25 +122,25 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		frame.canvas3D.highlightAllCategories = false;
 		frame.canvas3D.updateGraph();
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	private void bgComboActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		int bgColour = bgCombo.getSelectedIndex();
 		frame.canvas3D.setBackgroundColour(bgColour);
-		
+
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	private void resetViewButtonActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		frame.canvas3D.resetOriginalView();
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	private void spinButtonActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		if (spinButton.getText().equals("Spin continuously"))
@@ -154,9 +154,9 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 			spinButton.setText("Spin continuously");
 		}
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	private void spinSpeedSliderStateChanged(javax.swing.event.ChangeEvent evt)
 	{
 		JSlider source = (JSlider) evt.getSource();
@@ -166,18 +166,18 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 			frame.canvas3D.setSpinSpeed(speed);
 		}
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	private void resetColoursButtonActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		selectorList.clearSelection();
 		frame.canvas3D.highlightAllCategories = true;
 		frame.canvas3D.updateGraph();
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	class ColorListRenderer extends JLabel implements ListCellRenderer
 	{
 		ColorListRenderer()
@@ -185,31 +185,31 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 			// Don't paint behind the component
 			setOpaque(true);
 		}
-		
+
 		// Set the attributes of the class and return a reference
 		public Component getListCellRendererComponent(JList list, Object o, int i, boolean iss, boolean chf)
 		{
-			
+
 			Category item = listItems.get(i);
-			
+
 			// Set the font
 			setFont(list.getFont());
-			
+
 			// Set the text
 			setText(item.name);
-			
+
 			// Set the icon
 			BufferedImage image = new BufferedImage(20, 10, BufferedImage.TYPE_INT_RGB);
 			Graphics g = image.createGraphics();
-			
+
 			g.setColor(item.colour.get());
 			g.fillRect(0, 0, 20, 10);
 			g.setColor(Color.black);
 			g.drawRect(0, 0, 20, 10);
 			g.dispose();
-			
+
 			setIcon(new ImageIcon(image));
-			
+
 			// Set background/foreground colours
 			if (iss)
 			{
@@ -221,21 +221,21 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 				setBackground(list.getBackground());
 				setForeground(list.getForeground());
 			}
-			
+
 			return this;
 		}
-		
+
 		public Insets getInsets(Insets i)
 		{
 			return new Insets(0, 3, 0, 0);
 		}
 	}
-	
+
 	//GEN-BEGIN:initComponents
 	// <editor-fold defaultstate="collapsed" desc="Generated Code">
 	private void initComponents()
 	{
-		
+
 		jPanel1 = new javax.swing.JPanel();
 		jLabel1 = new javax.swing.JLabel();
 		xCombo = new javax.swing.JComboBox();
@@ -256,11 +256,11 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		jLabel4 = new javax.swing.JLabel();
 		jPanel3 = new javax.swing.JPanel();
 		bgCombo = new javax.swing.JComboBox();
-		
+
 		jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Display controls:"));
-		
+
 		jLabel1.setText("x-axis:");
-		
+
 		xCombo.setBorder(null);
 		xCombo.addActionListener(new java.awt.event.ActionListener()
 		{
@@ -269,9 +269,9 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 				MTControlPanel.this.actionPerformed(evt);
 			}
 		});
-		
+
 		jLabel2.setText("y-axis:");
-		
+
 		yCombo.setBorder(null);
 		yCombo.addActionListener(new java.awt.event.ActionListener()
 		{
@@ -280,9 +280,9 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 				MTControlPanel.this.actionPerformed(evt);
 			}
 		});
-		
+
 		jLabel3.setText("z-axis:");
-		
+
 		zCombo.setBorder(null);
 		zCombo.addActionListener(new java.awt.event.ActionListener()
 		{
@@ -291,7 +291,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 				MTControlPanel.this.actionPerformed(evt);
 			}
 		});
-		
+
 		resetViewButton.setText("Reset viewpoint");
 		resetViewButton.addActionListener(new java.awt.event.ActionListener()
 		{
@@ -300,7 +300,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 				resetViewButtonActionPerformed(evt);
 			}
 		});
-		
+
 		spinButton.setText("Spin continuously");
 		spinButton.addActionListener(new java.awt.event.ActionListener()
 		{
@@ -309,13 +309,13 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 				spinButtonActionPerformed(evt);
 			}
 		});
-		
+
 		jLabel5.setText("slow spin");
-		
+
 		jLabel6.setText("fast spin");
 		jLabel6.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 		jLabel6.setInheritsPopupMenu(false);
-		
+
 		spinSpeedSlider.addChangeListener(new javax.swing.event.ChangeListener()
 		{
 			public void stateChanged(javax.swing.event.ChangeEvent evt)
@@ -323,9 +323,9 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 				spinSpeedSliderStateChanged(evt);
 			}
 		});
-		
+
 		jLabel7.setText("Data to display:");
-		
+
 		org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
 		jPanel1.setLayout(jPanel1Layout);
 		jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(
@@ -423,9 +423,9 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
 										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)));
-		
+
 		jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Select categories:"));
-		
+
 		selectorList.addListSelectionListener(new javax.swing.event.ListSelectionListener()
 		{
 			public void valueChanged(javax.swing.event.ListSelectionEvent evt)
@@ -434,7 +434,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 			}
 		});
 		jScrollPane1.setViewportView(selectorList);
-		
+
 		resetColoursButton.setText("Reset selection");
 		resetColoursButton.addActionListener(new java.awt.event.ActionListener()
 		{
@@ -443,9 +443,9 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 				resetColoursButtonActionPerformed(evt);
 			}
 		});
-		
+
 		jLabel4.setText("<html>Click to select a category (Ctrl + click to select multiple).");
-		
+
 		org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
 		jPanel2.setLayout(jPanel2Layout);
 		jPanel2Layout.setHorizontalGroup(jPanel2Layout.createParallelGroup(
@@ -474,9 +474,9 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 										166, Short.MAX_VALUE).addPreferredGap(
 										org.jdesktop.layout.LayoutStyle.RELATED).add(
 										resetColoursButton).addContainerGap()));
-		
+
 		jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Select background colour:"));
-		
+
 		bgCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[]
 		{ "black", "dark grey", "light grey", "white" }));
 		bgCombo.addActionListener(new java.awt.event.ActionListener()
@@ -486,7 +486,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 				bgComboActionPerformed(evt);
 			}
 		});
-		
+
 		org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
 		jPanel3.setLayout(jPanel3Layout);
 		jPanel3Layout.setHorizontalGroup(jPanel3Layout.createParallelGroup(
@@ -504,7 +504,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
 										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addContainerGap()));
-		
+
 		org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
 		this.setLayout(layout);
 		layout.setHorizontalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
@@ -542,7 +542,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 										Short.MAX_VALUE).addContainerGap()));
 	}// </editor-fold>
 	//GEN-END:initComponents
-	
+
 	//GEN-BEGIN:variables
 	// Variables declaration - do not modify
 	private javax.swing.JComboBox bgCombo;
@@ -566,5 +566,5 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 	private javax.swing.JComboBox yCombo;
 	private javax.swing.JComboBox zCombo;
 	// End of variables declaration//GEN-END:variables
-	
+
 }

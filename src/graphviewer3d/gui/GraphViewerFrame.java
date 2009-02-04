@@ -47,13 +47,14 @@ public class GraphViewerFrame extends JFrame
 
 			// get the GUI set up
 			GraphViewerFrame frame = new GraphViewerFrame();
-			frame.setVisible(true);
 			frame.setTitle("CurlyWhirly");
 			frame.setIconImage(new ImageIcon("res/curlywurly_icon16px.gif").getImage());
 			frame.pack();
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setLocationRelativeTo(null);
 //			frame.setExtendedState(frame.MAXIMIZED_BOTH);
+
+			frame.setVisible(true);
 
 
 			// send a message to the script on bioinf to indicate that the application has been started up
