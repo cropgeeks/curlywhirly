@@ -56,7 +56,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	// variables to adjust manually for now
 	int boundsSize;
-	int initialZ;
+	float initialZ;
 	static boolean antiAlias = true;
 	
 	// infrastructure
@@ -108,9 +108,6 @@ public class GraphViewer3DCanvas extends Canvas3D
 	// this flag is set to true when we want all data points coloured in
 	boolean highlightAllCategories = true;
 	
-	// scaling factor to multiply the data with so that everything is normalized to be between 1 and -1
-	float scalingFactor;
-	
 	// branch group containing all axis labels
 	BranchGroup allLabelsBG;
 	
@@ -135,8 +132,8 @@ public class GraphViewer3DCanvas extends Canvas3D
 	MouseOverBehavior mouseOverBehaviour;
 	
 	//the default background colour for the canvas
-	Color3f bgColour = new Color3f(Color.LIGHT_GRAY);
-		
+	Color3f bgColour = new Color3f(Color.BLACK);
+	
 	// ==================================c'tor=============================
 	
 	public GraphViewer3DCanvas(GraphViewerFrame frame)
@@ -147,14 +144,14 @@ public class GraphViewer3DCanvas extends Canvas3D
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
-
+	
 	//colour the spheres by category
 	public void colourSpheres()
 	{
 		try
 		{
 			// default colour to flag colour related problems
-			Color3f colour = new Color3f(Color.pink);
+			Color3f colour = new Color3f(Color.RED);
 			
 			// a hashmap containing category names as keys and colors as values
 			HashMap<String, Category> categoryMap = dataSet.categoryMap;
@@ -168,10 +165,13 @@ public class GraphViewer3DCanvas extends Canvas3D
 				String category = categories[i];
 				
 				Category categoryItem = categoryMap.get(category);
-				if (categoryItem.highlight || highlightAllCategories)
-					colour = categoryItem.colour;
-				else
-					colour = new Color3f(Color.DARK_GRAY);
+				if (categoryItem != null)
+				{
+					if(categoryItem.highlight || highlightAllCategories)
+						colour = categoryItem.colour;
+					else
+						colour = new Color3f(Color.DARK_GRAY);
+				}
 				
 				Appearance app = new Appearance();
 				mat.setDiffuseColor(colour);
@@ -192,20 +192,15 @@ public class GraphViewer3DCanvas extends Canvas3D
 	//works out relative sizes required for the system
 	private void calculateSizes()
 	{
-		// scaling factor to multiply the data with so that everything is normalized to be between 1 and -1
-		if (dataSet.absoluteMax > Math.abs(dataSet.absoluteMin))
-			scalingFactor = dataSet.absoluteMax;
-		else
-			scalingFactor = Math.abs(dataSet.absoluteMin);
-		
-		axisLength = 1.5f;
+		//hard code this for now -- seems to be ok at a fixed value
+		axisLength = 1.0f;
 		
 		// work out sphere size for the plot symbols
 		sphereSize = axisLength / 100;
 		
 		// these can be hard coded because we have scaled all the data to be displayed
 		boundsSize = 100;
-		initialZ = 6;
+		initialZ = 4;
 		
 	}
 	
@@ -256,8 +251,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 		try
 		{
 			calculateSizes();
-			
-			initialViewPoint = new Point3f(0, 0, initialZ);
+
 			bounds = new BoundingSphere(new Point3d(0, 0, 0), boundsSize);
 			
 			addBackground();
@@ -279,7 +273,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 			
 			// add the whole Object to the root
 			objRoot.addChild(wholeObj);
-
+			
 			// now add behaviours
 			// rotation
 			PickRotateBehavior rotateBehaviour = new PickRotateBehavior(objRoot, this, bounds);
@@ -321,6 +315,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 		Transform3D T3D = new Transform3D();
 		ViewingPlatform viewingPlatform = su.getViewingPlatform();
 		TransformGroup vpTrans = viewingPlatform.getViewPlatformTransform();
+		initialViewPoint = new Point3f(0, 0, initialZ);
 		translate.set(initialViewPoint);
 		T3D.rotX(Math.toRadians(viewingAngle));
 		T3D.setTranslation(translate);
@@ -502,11 +497,6 @@ public class GraphViewer3DCanvas extends Canvas3D
 			y = yData[i];
 			z = zData[i];
 			
-			// scale them so they fit onto a coordinate 1 unit long
-			x = x / scalingFactor;
-			y = y / scalingFactor;
-			z = z / scalingFactor;
-			
 			String category = dataSet.groupIds[i];
 			
 			// apply this and make the sphere
@@ -580,13 +570,13 @@ public class GraphViewer3DCanvas extends Canvas3D
 		
 		// line start and end points
 		float[] lineStart = new float[]
-		{ 0, 0, 0 };
+		                              { 0, 0, 0 };
 		float[] lineEndX = new float[]
-		{ axisLength, 0, 0 };
+		                             { axisLength, 0, 0 };
 		float[] lineEndY = new float[]
-		{ 0, axisLength, 0 };
+		                             { 0, axisLength, 0 };
 		float[] lineEndZ = new float[]
-		{ 0, 0, axisLength };
+		                             { 0, 0, axisLength };
 		
 		// x positive axis
 		// line start point
@@ -647,7 +637,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 		
 		wholeObj.addChild(s3d);
 	}
-		
+	
 	// ---------------------------------------------------------------------------------------------------------------------
 	
 	//adds a mutable background to the scene
@@ -667,13 +657,13 @@ public class GraphViewer3DCanvas extends Canvas3D
 		switch (newColour)
 		{
 			case 0:
-				bgColour = new Color3f(Color.LIGHT_GRAY);
+				bgColour = new Color3f(Color.BLACK);
 				break;
 			case 1:
 				bgColour = new Color3f(Color.DARK_GRAY);
 				break;
 			case 2:
-				bgColour = new Color3f(Color.BLACK);
+				bgColour = new Color3f(Color.LIGHT_GRAY);
 				break;
 			case 3:
 				bgColour = new Color3f(Color.WHITE);

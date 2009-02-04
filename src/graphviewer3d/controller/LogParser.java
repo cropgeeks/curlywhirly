@@ -85,7 +85,7 @@ public class LogParser
 		
 		for (User user : users)
 		{
-			System.out.println(user.id + " " + user.runCount + "\t" + user.os + "\t" + user.countryCode + "\t" + user.username);
+			System.out.println(user.id + " " + user.ip + "\t" + user.os + "\t" + user.countryCode + "\t" + user.username);
 		}
 	}
 	

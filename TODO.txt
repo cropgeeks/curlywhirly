@@ -1,6 +1,6 @@
 feature additions:
 
-- linux installer
+- multiple category scheme handling: have users select pairs of categories from the different schemes to make single "compound" category which is then assigned a colour and the spheres are updated accordingly
 - docu: separate out header/footer and provide through server side includes
 - multiple category handling
 - mac support?
@@ -9,7 +9,6 @@ feature additions:
 
 Michael Moeller's list:
 - Continuous spinning in different directions without having to change the axis assignment.
-
 - an option to centre the image
 - ability to choose colours and different symbols (+ size)
 - labelling individuals or all points from within the GUI

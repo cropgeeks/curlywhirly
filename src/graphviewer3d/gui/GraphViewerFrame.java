@@ -1,24 +1,10 @@
 package graphviewer3d.gui;
 
-import graphviewer3d.controller.FatController;
-import graphviewer3d.controller.UsageLogger;
-import graphviewer3d.data.DataLoader;
-import graphviewer3d.data.DataSet;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.io.File;
-import java.io.IOException;
-
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.UIManager;
+import graphviewer3d.controller.*;
+import graphviewer3d.data.*;
+import java.awt.*;
+import java.io.*;
+import javax.swing.*;
 
 public class GraphViewerFrame extends JFrame
 {
@@ -66,9 +52,10 @@ public class GraphViewerFrame extends JFrame
 			Image img = Toolkit.getDefaultToolkit().getImage("curlywurly_icon16px.gif");
 			frame.setIconImage(img);
 			frame.pack();
-			frame.setLocationRelativeTo(null);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			// frame.setExtendedState(frame.MAXIMIZED_BOTH);
+			frame.setLocationRelativeTo(null);
+			frame.setExtendedState(frame.MAXIMIZED_BOTH);
+
 			
 			// send a message to the script on bioinf to indicate that the application has been started up
 			UsageLogger.logUsage();
@@ -109,6 +96,9 @@ public class GraphViewerFrame extends JFrame
 			canvasPanel.add(canvas3D, BorderLayout.CENTER);
 		
 		//set up the new dataset and make a new scene graph
+		//normalize first
+		//this sets the data up so that each axis is normalized to between -1 and 1 and the data fills the whole range 
+		DataNormalizer.normalizeDataSet(dataSet);		
 		canvas3D.dataSet = dataSet;
 		canvas3D.createSceneGraph();
 		
@@ -136,10 +126,11 @@ public class GraphViewerFrame extends JFrame
 		canvas3D = new GraphViewer3DCanvas(this);
 		
 		// //add a label instructing the user to open a file
-		 openLabel = new JLabel("Open a data file to begin.",JLabel.CENTER);
-		 canvasPanel.add(openLabel, BorderLayout.CENTER);
-		 canvasPanel.setBackground(Color.LIGHT_GRAY);
-		 openLabel.setForeground(new Color(120,120,120));
+		openLabel = new JLabel("Open a data file to begin.",JLabel.CENTER);
+		openLabel.setFont(new Font("SANS_SERIF", Font.PLAIN, 18));
+		canvasPanel.add(openLabel, BorderLayout.CENTER);
+		canvasPanel.setBackground(Color.LIGHT_GRAY);
+		openLabel.setForeground(new Color(120,120,120));
 		
 		// side panel
 		controlPanel = new MTControlPanel(this);

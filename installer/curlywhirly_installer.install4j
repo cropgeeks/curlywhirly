@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.1.3" transformSequenceNumber="2">
   <directoryPresets config="../curlywurly_icon16px.gif" />
-  <application name="CurlyWhirly" distributionSourceDir="" applicationId="7308-4813-7424-6439" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="false" shortName="CurlyWhirly" publisher="Scottish Crop Research Institute" publisherWeb="http://www.scri.ac.uk" version="0.08.08.01" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="true" jdkMode="runtimeJre" jdkName="">
+  <application name="CurlyWhirly" distributionSourceDir="" applicationId="7308-4813-7424-6439" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_installer" compression="9" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="false" shortName="CurlyWhirly" publisher="Scottish Crop Research Institute" publisherWeb="http://www.scri.ac.uk" version="0.08.08.01" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="true" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -160,6 +160,14 @@
             <preActivation />
             <postActivation />
             <actions>
+              <action name="" id="66" beanClass="com.install4j.runtime.beans.actions.UninstallPreviousAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.UninstallPreviousAction" />
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
               <action name="" id="7" beanClass="com.install4j.runtime.beans.actions.InstallFilesAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
@@ -205,7 +213,16 @@
             <validation />
             <preActivation />
             <postActivation />
-            <actions />
+            <actions>
+              <action name="" id="67" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction" />
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+            </actions>
             <formComponents />
           </screen>
         </screens>

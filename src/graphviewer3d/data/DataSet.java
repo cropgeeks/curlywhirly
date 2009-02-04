@@ -33,10 +33,6 @@ public class DataSet
 	
 	//the values of the raw data
 	public Vector<float[]> data = new Vector<float[]>();
-		
-	//variables that store the max and min values of the data in this dataset
-	public float absoluteMax = 0;
-	public float absoluteMin = 0;
 	
 	//the number of entries in the dataset
 	public int numEntries;
@@ -96,7 +92,7 @@ public class DataSet
 					category.highlight = true;
 					//set its name
 					if(groupId == null || groupId.trim().equals(""))
-						throw new IOException("Missing category value ");
+						groupId = "unspecified category";
 					category.name = groupId;
 					categoryMap.put(groupId,category);
 				}
@@ -108,7 +104,6 @@ public class DataSet
 		for (Category category : categoryMap.values())
 		{
 			category.colour = colours[i];
-			//System.out.println("setting colour for category " + category.name + " to " + colours[i].get().toString());
 			i++;
 		}	
 		

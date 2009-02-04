@@ -16,11 +16,7 @@ public class DataLoader
 {
 	
 	// ==========================================vars=========================================
-	
-	// variables that store the max and min values of the data we have to represent
-	float absoluteMax = 0;
-	float absoluteMin = 0;
-	
+
 	GraphViewerFrame frame;
 	DataSet dataSet = new DataSet();
 	
@@ -65,10 +61,14 @@ public class DataLoader
 			dataSet.groupIdHeader = headers[0];
 			dataSet.groupLabelHeader = headers[1];
 			// check they are there
-			if (headers[0].trim().equals("") || headers[1].trim().equals(""))
+			if (headers[0].trim().equals(""))
+			{
+				
+			}
+			if(headers[1].trim().equals(""))
 			{
 				errorInHeaders = true;
-				throw new IOException("Missing data header ");
+				throw new IOException("Missing group label header ");
 			}
 			
 			// rest of headers are data column headers
@@ -99,16 +99,25 @@ public class DataLoader
 			{
 				lastLineParsed = i;
 				String[] line = lines[i].split("\t");
-				dataSet.groupIds[i] = line[0];
-				dataSet.groupLabels[i] = line[1];
+				try
+				{
+					dataSet.groupIds[i] = line[0];
+					dataSet.groupLabels[i] = line[1];
+				}
+				catch (ArrayIndexOutOfBoundsException aix)
+				{
+					aix.printStackTrace();
+					throw new IOException("Empty line ");
+				}
 				// check they are there
 				if (line[0].equals(""))
 				{
-					throw new IOException("Missing category label ");
+					line[0] = "unspecified category";
+//					throw new IOException("Missing category label value");
 				}
 				if (line[1].equals(""))
 				{
-					throw new IOException("Missing data label ");
+					throw new IOException("Missing data label value");
 				}
 
 				NumberFormat nf = NumberFormat.getInstance();
@@ -119,21 +128,16 @@ public class DataLoader
 					try
 					{						
 						value = nf.parse(line[j + 2]).floatValue();
-						//value = Float.parseFloat(line[j + 2]);
 					}
 					catch (NumberFormatException e)
 					{
 						e.printStackTrace();
 						throw new IOException("Missing or invalid numerical data ");
 					}
-					checkExtrema(value);
 					array[i] = value;				
 				}
 			}
 			
-			// set the extrema values on the dataset itself
-			dataSet.absoluteMax = absoluteMax;
-			dataSet.absoluteMin = absoluteMin;
 			
 			// set up the vector of discrete categories on the dataset object itself
 			dataSet.extractCategories();
@@ -155,16 +159,7 @@ public class DataLoader
 		
 		return dataSet;
 	}
-	
-	// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	// checks whether the value passed in is greater than the maximum or less than the minimum
-	private void checkExtrema(float value)
-	{
-		if (value > absoluteMax)
-			absoluteMax = value;
-		if (value < absoluteMin)
-			absoluteMin = value;
-	}
+
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 }// end class
 

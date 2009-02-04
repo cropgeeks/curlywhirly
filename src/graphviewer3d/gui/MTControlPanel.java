@@ -7,7 +7,6 @@
 package graphviewer3d.gui;
 
 import graphviewer3d.data.Category;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -19,7 +18,6 @@ import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Vector;
-
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -233,7 +231,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		}
 	}
 	
-	// GEN-BEGIN:initComponents
+	//GEN-BEGIN:initComponents
 	// <editor-fold defaultstate="collapsed" desc="Generated Code">
 	private void initComponents()
 	{
@@ -473,14 +471,14 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 										org.jdesktop.layout.LayoutStyle.UNRELATED).add(
 										jScrollPane1,
 										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-										180, Short.MAX_VALUE).addPreferredGap(
+										166, Short.MAX_VALUE).addPreferredGap(
 										org.jdesktop.layout.LayoutStyle.RELATED).add(
 										resetColoursButton).addContainerGap()));
 		
 		jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Select background colour:"));
 		
 		bgCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[]
-		{ "light grey", "dark grey", "black", "white" }));
+		{ "black", "dark grey", "light grey", "white" }));
 		bgCombo.addActionListener(new java.awt.event.ActionListener()
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -543,9 +541,9 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 										Short.MAX_VALUE).addContainerGap()));
 	}// </editor-fold>
-	// GEN-END:initComponents
+	//GEN-END:initComponents
 	
-	// GEN-BEGIN:variables
+	//GEN-BEGIN:variables
 	// Variables declaration - do not modify
 	private javax.swing.JComboBox bgCombo;
 	private javax.swing.JLabel jLabel1;
