@@ -11,12 +11,12 @@ public class Instructions3D  implements ItemListener
 {
 	GraphViewerFrame frame;
 	JCheckBox instructionsCheckBox;
-	
+
 	public Instructions3D(GraphViewerFrame frame)
 	{
 		this.frame = frame;
 	}
-	
+
 	public void show3DInstructions()
 	{
 		instructionsCheckBox = new JCheckBox("Do not show this again");
@@ -25,7 +25,7 @@ public class Instructions3D  implements ItemListener
 				"middle-click + drag or Alt + left-click + drag to zoom";
 		String label = "Close";
 		TaskDialog.initialize(frame, "CurlyWhirly");
-		TaskDialog.info(message, label, instructionsCheckBox);		
+		TaskDialog.info(message, label, instructionsCheckBox);
 	}
 
 	public void itemStateChanged(ItemEvent e)
@@ -37,5 +37,5 @@ public class Instructions3D  implements ItemListener
 	}
 
 
-	
+
 }

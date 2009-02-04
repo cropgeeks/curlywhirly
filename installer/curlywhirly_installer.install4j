@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="4.1.3" transformSequenceNumber="2">
-  <directoryPresets config="../curlywurly_icon16px.gif" />
-  <application name="CurlyWhirly" distributionSourceDir="" applicationId="7308-4813-7424-6439" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_installer" compression="9" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="false" shortName="CurlyWhirly" publisher="Scottish Crop Research Institute" publisherWeb="http://www.scri.ac.uk" version="0.08.08.01" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="true" jdkMode="runtimeJre" jdkName="">
-    <languages skipLanguageSelection="false">
+<install4j version="4.2" transformSequenceNumber="2">
+  <directoryPresets config="../curlywhirly.jar" />
+  <application name="CurlyWhirly" distributionSourceDir="" applicationId="7308-4813-7424-6439" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_installer" compression="9" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="false" missingFilesStrategy="warn" shortName="CurlyWhirly" publisher="Scottish Crop Research Institute" publisherWeb="http://www.scri.ac.uk" version="0.09.02.04" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="true" jdkMode="runtimeJre" jdkName="">
+    <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
     </languages>
@@ -14,54 +14,61 @@
     <variables />
   </application>
   <files>
-    <filesets />
-    <roots />
+    <filesets>
+      <fileset name="Windows file set" id="100" />
+      <fileset name="OS X file set" id="124" />
+      <fileset name="Linux file set" id="126" />
+    </filesets>
+    <roots>
+      <root id="101" fileset="100" location="" />
+      <root id="125" fileset="124" location="" />
+      <root id="127" fileset="126" location="" />
+    </roots>
     <mountPoints>
-      <mountPoint id="17" root="" location="classes" mode="755" />
       <mountPoint id="18" root="" location="lib" mode="755" />
+      <mountPoint id="102" root="" location="res" mode="755" />
       <mountPoint id="19" root="" location="" mode="755" />
+      <mountPoint id="103" root="101" location="" mode="755" />
+      <mountPoint id="178" root="125" location="" mode="755" />
+      <mountPoint id="187" root="127" location="" mode="755" />
     </mountPoints>
     <entries>
-      <dirEntry mountPoint="17" file="../classes" overwrite="1" shared="false" mode="644" uninstallMode="0" excludeSuffixes=".svn" dirMode="755">
-        <exclude />
-      </dirEntry>
       <dirEntry mountPoint="18" file="../lib" overwrite="1" shared="false" mode="644" uninstallMode="0" excludeSuffixes=".svn" dirMode="755">
         <exclude />
       </dirEntry>
-      <fileEntry mountPoint="19" file="../j3dcore-d3d.dll" overwrite="1" shared="false" mode="644" uninstallMode="0" />
-      <fileEntry mountPoint="19" file="../j3dcore-ogl-cg.dll" overwrite="1" shared="false" mode="644" uninstallMode="0" />
-      <fileEntry mountPoint="19" file="../j3dcore-ogl.dll" overwrite="1" shared="false" mode="644" uninstallMode="0" />
-      <fileEntry mountPoint="19" file="../j3dcore-ogl-chk.dll" overwrite="1" shared="false" mode="644" uninstallMode="0" />
+      <dirEntry mountPoint="102" file="../res" overwrite="1" shared="false" mode="644" uninstallMode="0" excludeSuffixes=".svn" dirMode="755">
+        <exclude />
+      </dirEntry>
       <fileEntry mountPoint="19" file="../data/randomData.txt" overwrite="1" shared="false" mode="644" uninstallMode="2" />
-      <fileEntry mountPoint="19" file="../j3dutils.dll" overwrite="1" shared="false" mode="644" uninstallMode="0" />
-      <fileEntry mountPoint="19" file="../libj3dcore-ogl-cg.so" overwrite="1" shared="false" mode="644" uninstallMode="2" />
-      <fileEntry mountPoint="19" file="../libj3dcore-ogl.so" overwrite="1" shared="false" mode="644" uninstallMode="2" />
-      <fileEntry mountPoint="19" file="../libgluegen-rt.jnilib" overwrite="1" shared="false" mode="644" uninstallMode="2" />
-      <fileEntry mountPoint="19" file="../libjogl.jnilib" overwrite="1" shared="false" mode="644" uninstallMode="2" />
-      <fileEntry mountPoint="19" file="../libjogl_awt.jnilib" overwrite="1" shared="false" mode="644" uninstallMode="2" />
-      <fileEntry mountPoint="19" file="../libjogl_cg.jnilib" overwrite="1" shared="false" mode="644" uninstallMode="2" />
-      <fileEntry mountPoint="19" file="../curlywurly_icon16px.png" overwrite="1" shared="false" mode="644" uninstallMode="2" />
-      <fileEntry mountPoint="19" file="../curlywurly_icon32px.png" overwrite="1" shared="false" mode="644" uninstallMode="2" />
-      <fileEntry mountPoint="19" file="../curlywurly_icon16px.gif" overwrite="1" shared="false" mode="644" uninstallMode="2" />
-      <fileEntry mountPoint="19" file="../curlywhirly_icon.icns" overwrite="1" shared="false" mode="644" uninstallMode="2" />
+      <fileEntry mountPoint="19" file="../curlywhirly.jar" overwrite="1" shared="false" mode="644" uninstallMode="0" />
+      <fileEntry mountPoint="103" file="../system/j3dutils.dll" overwrite="1" shared="false" mode="644" uninstallMode="0" />
+      <fileEntry mountPoint="103" file="../system/j3dcore-ogl.dll" overwrite="1" shared="false" mode="644" uninstallMode="0" />
+      <fileEntry mountPoint="103" file="../system/j3dcore-ogl-chk.dll" overwrite="1" shared="false" mode="644" uninstallMode="0" />
+      <fileEntry mountPoint="103" file="../system/j3dcore-ogl-cg.dll" overwrite="1" shared="false" mode="644" uninstallMode="0" />
+      <fileEntry mountPoint="103" file="../system/j3dcore-d3d.dll" overwrite="1" shared="false" mode="644" uninstallMode="0" />
+      <fileEntry mountPoint="178" file="../system/libgluegen-rt.jnilib" overwrite="1" shared="false" mode="644" uninstallMode="0" />
+      <fileEntry mountPoint="178" file="../system/libjogl.jnilib" overwrite="1" shared="false" mode="644" uninstallMode="0" />
+      <fileEntry mountPoint="178" file="../system/libjogl_awt.jnilib" overwrite="1" shared="false" mode="644" uninstallMode="0" />
+      <fileEntry mountPoint="178" file="../system/libjogl_cg.jnilib" overwrite="1" shared="false" mode="644" uninstallMode="0" />
+      <fileEntry mountPoint="187" file="../system/libj3dcore-ogl-cg.so" overwrite="1" shared="false" mode="644" uninstallMode="0" />
+      <fileEntry mountPoint="187" file="../system/libj3dcore-ogl.so" overwrite="1" shared="false" mode="644" uninstallMode="0" />
     </entries>
     <components />
   </files>
   <launchers>
-    <launcher name="curlywhirly" id="20" external="false" excludeFromMenu="false" menuName="" icnsFile="../curlywhirly_icon.icns" pngIcon16File="../curlywurly_icon16px.png" pngIcon32File="../curlywurly_icon32px.png" macServiceDependencies="" swtApp="false" fileset="">
-      <executable name="CurlyWhirly" type="1" iconSet="true" iconFile="" executableDir="." redirectStderr="true" stderrFile="curlywhirly.log" redirectStdout="true" stdoutFile="curlywhirly.log" failOnStderrOutput="true" executableMode="1" changeWorkingDirectory="true" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker">
+    <launcher name="CurlyWhirly" id="20" external="false" excludeFromMenu="false" menuName="" icnsFile="../res/curlywhirly_icon.icns" pngIcon16File="../res/curlywurly_icon16px.png" pngIcon32File="../res/curlywurly_icon32px.png" macServiceDependencies="" swtApp="false" fileset="">
+      <executable name="curlywhirly" type="1" iconSet="true" iconFile="" executableDir="." redirectStderr="true" stderrFile="curlywhirly.log" redirectStdout="true" stdoutFile="curlywhirly.log" failOnStderrOutput="true" executableMode="1" changeWorkingDirectory="true" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="false">
         <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" />
       </executable>
-      <splashScreen show="true" autoOff="true" alwaysOnTop="true" width="0" height="0" bitmapFile="../curlywhirlysplashScreen.png" java6SplashScreen="false">
+      <splashScreen show="true" autoOff="true" alwaysOnTop="true" width="0" height="0" bitmapFile="../res/curlywhirlysplashScreen.png" java6SplashScreen="false">
         <text>
           <statusLine x="20" y="20" text="" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
           <versionLine x="20" y="40" text="version ${compiler:sys.version}" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
         </text>
       </splashScreen>
-      <java mainClass="graphviewer3d.gui.GraphViewerFrame" vmParameters="-Xmx256m -Djava.ext.dirs=lib -Djava.library.path=." arguments="" allowVMPassthroughParameters="true" preferredVM="">
+      <java mainClass="graphviewer3d.gui.GraphViewerFrame" vmParameters="-Xmx256m -Djava.ext.dirs=lib -Djava.library.path=${launcher:sys.launcherDirectory}" arguments="" allowVMPassthroughParameters="true" preferredVM="">
         <classPath>
-          <directory location="classes" failOnError="false" />
-          <scanDirectory location="lib" failOnError="false" />
+          <archive location="lib/curlywhirly.jar" failOnError="false" />
         </classPath>
         <nativeLibraryDirectories />
       </java>
@@ -214,16 +221,39 @@
             <preActivation />
             <postActivation />
             <actions>
-              <action name="" id="67" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+              <action name="" id="122" beanClass="com.install4j.runtime.beans.actions.finish.ExecuteLauncherAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction" />
+                    <object class="com.install4j.runtime.beans.actions.finish.ExecuteLauncherAction">
+                      <void property="launcherId">
+                        <string>20</string>
+                      </void>
+                    </object>
                   </java>
                 </serializedBean>
-                <condition />
+                <condition>context.getBooleanVariable("executeLauncherAction") &amp;&amp; (!context.isUnattended())</condition>
               </action>
             </actions>
-            <formComponents />
+            <formComponents>
+              <formComponent name="Execute launcher" id="123" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
+                      <void property="checkboxText">
+                        <string>${i18n:RunEntryExec("${compiler:sys.fullName}")}</string>
+                      </void>
+                      <void property="initiallySelected">
+                        <boolean>true</boolean>
+                      </void>
+                      <void property="variableName">
+                        <string>executeLauncherAction</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+              </formComponent>
+            </formComponents>
           </screen>
         </screens>
       </application>
@@ -315,59 +345,44 @@
     </applications>
   </installerGui>
   <mediaSets>
-    <win32 name="Windows" id="21" mediaFileName="" installDir="CurlyWhirly" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="windows-x86-1.6.0_06" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="" runAsAdmin="false">
+    <win32 name="Windows" id="21" mediaFileName="" installDir="CurlyWhirly" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="windows-x86-1.6.0_11" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="" runAsAdmin="false">
       <excludedLaunchers />
       <excludedComponents />
       <excludedBeans />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
       <exclude>
-        <entry location="libj3dcore-ogl-cg.so" fileType="regular" />
-        <entry location="libj3dcore-ogl.so" fileType="regular" />
+        <entry location=".i4j_fileset_124" fileType="regular" />
+        <entry location=".i4j_fileset_126" fileType="regular" />
       </exclude>
       <variables />
     </win32>
-    <unixInstaller name="Unix Installer" id="56" mediaFileName="" installDir="CurlyWhirly" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="linux-x86-1.6.0_06" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="">
+    <unixInstaller name="Linux" id="56" mediaFileName="" installDir="CurlyWhirly" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="linux-x86-1.6.0_11_client_only" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="">
       <excludedLaunchers />
       <excludedComponents />
       <excludedBeans />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
       <exclude>
-        <entry location="j3dcore-d3d.dll" fileType="regular" />
-        <entry location="j3dcore-ogl-cg.dll" fileType="regular" />
-        <entry location="j3dcore-ogl.dll" fileType="regular" />
-        <entry location="j3dcore-ogl-chk.dll" fileType="regular" />
-        <entry location="j3dutils.dll" fileType="regular" />
-        <entry location="libgluegen-rt.jnilib" fileType="regular" />
-        <entry location="libjogl.jnilib" fileType="regular" />
-        <entry location="libjogl_awt.jnilib" fileType="regular" />
-        <entry location="libjogl_cg.jnilib" fileType="regular" />
+        <entry location=".i4j_fileset_100" fileType="regular" />
+        <entry location=".i4j_fileset_124" fileType="regular" />
       </exclude>
       <variables />
       <installerScript mode="1" file="">
         <scriptLines />
       </installerScript>
     </unixInstaller>
-    <macosFolder name="Mac OS X Folder" id="63" mediaFileName="" installDir="CurlyWhirly" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="">
-      <excludedLaunchers />
+    <macos name="Mac OS X Single Bundle" id="131" mediaFileName="" installDir="CurlyWhirly" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="" launcherId="20">
       <excludedComponents />
       <excludedBeans />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
       <exclude>
-        <entry location="j3dcore-d3d.dll" fileType="regular" />
-        <entry location="j3dcore-ogl-cg.dll" fileType="regular" />
-        <entry location="j3dcore-ogl.dll" fileType="regular" />
-        <entry location="j3dcore-ogl-chk.dll" fileType="regular" />
-        <entry location="j3dutils.dll" fileType="regular" />
-        <entry location="libj3dcore-ogl-cg.so" fileType="regular" />
-        <entry location="libj3dcore-ogl.so" fileType="regular" />
+        <entry location=".i4j_fileset_100" fileType="regular" />
+        <entry location=".i4j_fileset_126" fileType="regular" />
       </exclude>
       <variables />
-    </macosFolder>
+    </macos>
   </mediaSets>
-  <buildIds buildAll="true">
-    <mediaSet refId="21" />
-    <mediaSet refId="56" />
-    <mediaSet refId="63" />
+  <buildIds buildAll="false">
+    <mediaSet refId="131" />
   </buildIds>
 </install4j>
 
