@@ -155,20 +155,9 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 
 		else if (src.equals(helpItem))
 		{
-			Desktop desktop = Desktop.getDesktop();
-			try
-			{
-				URI uri = new URI("http://bioinf.scri.sari.ac.uk/curlywhirly/manual.shtml");
-				desktop.browse(uri);
-			}
-			catch (URISyntaxException e1)
-			{
-				e1.printStackTrace();
-			}
-			catch (IOException e1)
-			{
-				e1.printStackTrace();
-			}
+			String url = "http://bioinf.scri.sari.ac.uk/curlywhirly/manual.shtml";
+
+			GUIUtils.visitURL(url);
 		}
 
 		else if (src.equals(helpCtrlItem))
