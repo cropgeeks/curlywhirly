@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.2" transformSequenceNumber="2">
-  <directoryPresets config="../curlywhirly.jar" />
+  <directoryPresets config="../res/curlywurly_icon32px.png" />
   <application name="CurlyWhirly" distributionSourceDir="" applicationId="7308-4813-7424-6439" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_installer" compression="9" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="false" missingFilesStrategy="warn" shortName="CurlyWhirly" publisher="Scottish Crop Research Institute" publisherWeb="http://www.scri.ac.uk" version="1.09.02.05" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="true" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
       <principalLanguage id="en" customLocalizationFile="" />
@@ -38,9 +38,7 @@
       <dirEntry mountPoint="18" file="../lib" overwrite="1" shared="false" mode="644" uninstallMode="0" excludeSuffixes=".svn" dirMode="755">
         <exclude />
       </dirEntry>
-      <dirEntry mountPoint="102" file="../res" overwrite="1" shared="false" mode="644" uninstallMode="0" excludeSuffixes=".svn" dirMode="755">
-        <exclude />
-      </dirEntry>
+      <fileEntry mountPoint="102" file="../res/curlywurly_icon32px.png" overwrite="1" shared="false" mode="644" uninstallMode="0" />
       <fileEntry mountPoint="19" file="../curlywhirly.jar" overwrite="1" shared="false" mode="644" uninstallMode="0" />
       <fileEntry mountPoint="103" file="../system/j3dutils.dll" overwrite="1" shared="false" mode="644" uninstallMode="0" />
       <fileEntry mountPoint="103" file="../system/j3dcore-ogl.dll" overwrite="1" shared="false" mode="644" uninstallMode="0" />
@@ -383,9 +381,7 @@
       <variables />
     </macos>
   </mediaSets>
-  <buildIds buildAll="true">
-    <mediaSet refId="21" />
-    <mediaSet refId="56" />
+  <buildIds buildAll="false">
     <mediaSet refId="131" />
   </buildIds>
 </install4j>

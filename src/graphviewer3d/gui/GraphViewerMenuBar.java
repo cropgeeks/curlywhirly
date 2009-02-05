@@ -3,7 +3,7 @@ package graphviewer3d.gui;
 import graphviewer3d.controller.ScreenCaptureThread;
 import graphviewer3d.data.FileLoader;
 
-import java.awt.Desktop;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -19,10 +19,12 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 
-import scri.commons.gui.TaskDialog;
+import scri.commons.gui.*;
 
 public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 {
+	// Returns value for "CTRL" under most OSs, and the "apple" key for OS X
+	private int menuShortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
 	JMenuItem openFileItem;
 	JMenuItem aboutItem;
@@ -56,16 +58,15 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 		this.add(fileMenu);
 
 		// the Open File item
-		openFileItem = new JMenuItem("Open...");
+		openFileItem = new JMenuItem("Open data...");
 		openFileItem.addActionListener(this);
 		openFileItem.setMnemonic(KeyEvent.VK_O);
-		openFileItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
+		openFileItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, menuShortcut));
 		fileMenu.add(openFileItem);
 
 		// // the example data import item
 		exampleDataItem = new JMenuItem("Load example data");
-		exampleDataItem.setMnemonic(KeyEvent.VK_E);
-		exampleDataItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.CTRL_MASK));
+		exampleDataItem.setMnemonic(KeyEvent.VK_L);
 		exampleDataItem.addActionListener(this);
 		fileMenu.add(exampleDataItem);
 
@@ -74,8 +75,8 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 
 		// the save view item
 		saveItem = new JMenuItem("Capture view screenshot");
-		saveItem.setMnemonic(KeyEvent.VK_S);
-		saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+		saveItem.setMnemonic(KeyEvent.VK_C);
+		saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, menuShortcut));
 		saveItem.addActionListener(this);
 		fileMenu.add(saveItem);
 
@@ -86,7 +87,9 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 		exitItem = new JMenuItem("Exit");
 		exitItem.setMnemonic(KeyEvent.VK_X);
 		exitItem.addActionListener(this);
-		fileMenu.add(exitItem);
+		// We don't add this option to OS X as it is auto-added by Apple
+		if (SystemUtils.isMacOS() == false)
+			fileMenu.add(exitItem);
 
 		// ////////////////////////////////////////////////////////////////////////////////
 		// the Help Menu
@@ -95,7 +98,7 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 		this.add(helpMenu);
 
 		// the help item
-		helpItem = new JMenuItem("Online Help");
+		helpItem = new JMenuItem("Online help");
 		helpItem.addActionListener(this);
 		helpItem.setMnemonic(KeyEvent.VK_O);
 		helpItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
@@ -113,7 +116,9 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 		aboutItem = new JMenuItem("About CurlyWhirly");
 		aboutItem.setMnemonic(KeyEvent.VK_A);
 		aboutItem.addActionListener(this);
-		helpMenu.add(aboutItem);
+		// We don't add this option to OS X as it is auto-added by Apple
+		if (SystemUtils.isMacOS() == false)
+			helpMenu.add(aboutItem);
 	}
 
 	public void actionPerformed(ActionEvent e)
