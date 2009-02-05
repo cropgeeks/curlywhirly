@@ -387,26 +387,6 @@
           </screen>
         </startup>
         <screens>
-          <screen name="Welcome" id="283" beanClass="com.install4j.runtime.beans.screens.CustomizableBannerScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="2" finishScreen="false">
-            <serializedBean>
-              <java class="java.beans.XMLDecoder">
-                <object class="com.install4j.runtime.beans.screens.CustomizableBannerScreen">
-                  <void property="infoText">
-                    <string>${i18n:updater.WelcomeInfoText("${compiler:sys.fullName}")}</string>
-                  </void>
-                  <void property="title">
-                    <string>${i18n:updater.WelcomeTitle("${compiler:sys.fullName}")}</string>
-                  </void>
-                </object>
-              </java>
-            </serializedBean>
-            <condition />
-            <validation />
-            <preActivation />
-            <postActivation />
-            <actions />
-            <formComponents />
-          </screen>
           <screen name="Check for update" id="284" beanClass="com.install4j.runtime.beans.screens.CustomizableProgressScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="2" finishScreen="false">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
@@ -1170,7 +1150,7 @@ if (wizardContext != null) {
       </installerScript>
     </unixInstaller>
   </mediaSets>
-  <buildIds buildAll="false">
+  <buildIds buildAll="true">
     <mediaSet refId="131" />
   </buildIds>
 </install4j>

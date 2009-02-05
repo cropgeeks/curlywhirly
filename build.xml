@@ -1,5 +1,7 @@
 <project name="CurlyWhirly" default="compile" basedir=".">
     
+    <property name="i4j" value="C:\Program Files\install4j\bin\ant.jar"/>
+    
 	<property name="src" location="src"/>
 	<property name="classes" location="classes"/>
 	<property name="lib" location="lib"/>
@@ -42,7 +44,7 @@
 	<target name="install4j" depends="compile">
 		<taskdef name="install4j"
 		classname="com.install4j.Install4JTask"
-		classpath="C:\Program Files\install4j\bin\ant.jar"/>	
+		classpath="${i4j}"/>	
 		<delete>
 			<fileset dir="installer" includes="**/*.exe"/>
 			<fileset dir="installer" includes="**/*.sh"/>
