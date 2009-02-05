@@ -45,9 +45,6 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 
 	private void init()
 	{
-		// file chooser
-		fc = new JFileChooser(System.getProperty("user.dir") + System.getProperty("file.separator") + "data");
-
 		// this enables swing components to be drawn on top of the 3D canvas
 		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 
@@ -127,9 +124,14 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 
 		if (src.equals(openFileItem))
 		{
+			// file chooser
+			fc = new JFileChooser(Preferences.lastDir);
+
 			int returnVal = fc.showOpenDialog(frame);
 			if (returnVal == JFileChooser.APPROVE_OPTION)
 			{
+				Preferences.lastDir = "" + fc.getSelectedFile().getParent();
+
 				frame.controller.loadDataInThread(fc.getSelectedFile());
 			}
 		}
