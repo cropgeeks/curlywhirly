@@ -3,6 +3,7 @@ package graphviewer3d.gui;
 import graphviewer3d.controller.*;
 import graphviewer3d.data.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
 
@@ -26,15 +27,6 @@ public class GraphViewerFrame extends JFrame
 	public StatusBar statusBar;
 	public GraphViewerMenuBar menuBar;
 
-	// ===================================================c'tor=================================================
-
-	public GraphViewerFrame()
-	{
-		setupComponents();
-	}
-
-	// ============================================methods====================================================
-
 	public static void main(String[] args)
 	{
 		try
@@ -45,30 +37,42 @@ public class GraphViewerFrame extends JFrame
 			// Set System L&F
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-			// get the GUI set up
-			GraphViewerFrame frame = new GraphViewerFrame();
-			frame.setTitle("CurlyWhirly");
-			frame.setIconImage(new ImageIcon("res/curlywurly_icon16px.gif").getImage());
-			frame.pack();
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			frame.setLocationRelativeTo(null);
-//			frame.setExtendedState(frame.MAXIMIZED_BOTH);
-
-			frame.setVisible(true);
-
-
-			// send a message to the script on bioinf to indicate that the application has been started up
-			UsageLogger.logUsage();
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
+
+		new GraphViewerFrame();
+	}
+
+	GraphViewerFrame()
+	{
+		setupComponents();
+
+		// get the GUI set up
+		setTitle("CurlyWhirly");
+		setIconImage(new ImageIcon("res/curlywurly_icon16px.gif").getImage());
+		pack();
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				shutdown();
+			}
+		});
+
+		setVisible(true);
+
+
+		// send a message to the script on bioinf to indicate that the application has been started up
+		UsageLogger.logUsage();
 	}
 
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	public void shutdown()
+	void shutdown()
 	{
 		prefs.savePreferences(prefsFile, Preferences.class);
 		System.exit(0);

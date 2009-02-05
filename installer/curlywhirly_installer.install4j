@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.2" transformSequenceNumber="2">
   <directoryPresets config="../curlywhirly.jar" />
-  <application name="CurlyWhirly" distributionSourceDir="" applicationId="7308-4813-7424-6439" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_installer" compression="9" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="false" missingFilesStrategy="warn" shortName="CurlyWhirly" publisher="Scottish Crop Research Institute" publisherWeb="http://www.scri.ac.uk" version="0.09.02.04" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="true" jdkMode="runtimeJre" jdkName="">
+  <application name="CurlyWhirly" distributionSourceDir="" applicationId="7308-4813-7424-6439" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_installer" compression="9" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="false" missingFilesStrategy="warn" shortName="CurlyWhirly" publisher="Scottish Crop Research Institute" publisherWeb="http://www.scri.ac.uk" version="1.09.02.05" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="true" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -25,6 +25,7 @@
       <root id="127" fileset="126" location="" />
     </roots>
     <mountPoints>
+      <mountPoint id="231" root="" location="data" mode="755" />
       <mountPoint id="18" root="" location="lib" mode="755" />
       <mountPoint id="102" root="" location="res" mode="755" />
       <mountPoint id="19" root="" location="" mode="755" />
@@ -33,13 +34,13 @@
       <mountPoint id="187" root="127" location="" mode="755" />
     </mountPoints>
     <entries>
+      <fileEntry mountPoint="231" file="../data/randomData.txt" overwrite="1" shared="false" mode="644" uninstallMode="2" />
       <dirEntry mountPoint="18" file="../lib" overwrite="1" shared="false" mode="644" uninstallMode="0" excludeSuffixes=".svn" dirMode="755">
         <exclude />
       </dirEntry>
       <dirEntry mountPoint="102" file="../res" overwrite="1" shared="false" mode="644" uninstallMode="0" excludeSuffixes=".svn" dirMode="755">
         <exclude />
       </dirEntry>
-      <fileEntry mountPoint="19" file="../data/randomData.txt" overwrite="1" shared="false" mode="644" uninstallMode="2" />
       <fileEntry mountPoint="19" file="../curlywhirly.jar" overwrite="1" shared="false" mode="644" uninstallMode="0" />
       <fileEntry mountPoint="103" file="../system/j3dutils.dll" overwrite="1" shared="false" mode="644" uninstallMode="0" />
       <fileEntry mountPoint="103" file="../system/j3dcore-ogl.dll" overwrite="1" shared="false" mode="644" uninstallMode="0" />
@@ -66,9 +67,10 @@
           <versionLine x="20" y="40" text="version ${compiler:sys.version}" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
         </text>
       </splashScreen>
-      <java mainClass="graphviewer3d.gui.GraphViewerFrame" vmParameters="-Xmx256m -Djava.ext.dirs=lib -Djava.library.path=${launcher:sys.launcherDirectory}" arguments="" allowVMPassthroughParameters="true" preferredVM="">
+      <java mainClass="graphviewer3d.gui.GraphViewerFrame" vmParameters="-Xmx256m -Djava.ext.dirs=lib -Djava.library.path=." arguments="" allowVMPassthroughParameters="true" preferredVM="">
         <classPath>
-          <archive location="lib/curlywhirly.jar" failOnError="false" />
+          <archive location="curlywhirly.jar" failOnError="false" />
+          <scanDirectory location="lib" failOnError="false" />
         </classPath>
         <nativeLibraryDirectories />
       </java>
@@ -345,7 +347,7 @@
     </applications>
   </installerGui>
   <mediaSets>
-    <win32 name="Windows" id="21" mediaFileName="" installDir="CurlyWhirly" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="windows-x86-1.6.0_11" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="" runAsAdmin="false">
+    <win32 name="Windows" id="21" mediaFileName="" installDir="CurlyWhirly" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="" runAsAdmin="false">
       <excludedLaunchers />
       <excludedComponents />
       <excludedBeans />
@@ -381,7 +383,9 @@
       <variables />
     </macos>
   </mediaSets>
-  <buildIds buildAll="false">
+  <buildIds buildAll="true">
+    <mediaSet refId="21" />
+    <mediaSet refId="56" />
     <mediaSet refId="131" />
   </buildIds>
 </install4j>

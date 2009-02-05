@@ -15,14 +15,14 @@ public class FileLoader extends Thread
 	public boolean done = false;
 	File file;
 	DataLoadingDialog dataLoadingDialog;
-	
+
 	public FileLoader(GraphViewerFrame frame, File file, DataLoadingDialog dataLoadingDialog)
 	{
 		this.frame = frame;
 		this.file = file;
 		this.dataLoadingDialog = dataLoadingDialog;
 	}
-	
+
 	public void run()
 	{
 		frame.loadData(file);
@@ -33,9 +33,9 @@ public class FileLoader extends Thread
 			if (Preferences.show3DControlInstructions)
 			{
 				Instructions3D instr = new Instructions3D(frame);
-				instr.show3DInstructions();
+				instr.show3DInstructions(true);
 			}
 		}
 	}
-	
+
 }
