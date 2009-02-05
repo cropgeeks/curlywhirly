@@ -57,10 +57,12 @@ public class GraphViewerFrame extends JFrame
 		if (SystemUtils.isMacOS())
 			handleOSXStupidities();
 
+		Install4j.doStartUpCheck();
+
 		setupComponents();
 
 		// get the GUI set up
-		setTitle("CurlyWhirly");
+		setTitle("CurlyWhirly - " + Install4j.VERSION);
 		setIconImage(new ImageIcon("res/curlywurly_icon32px.png").getImage());
 		pack();
 		setLocationRelativeTo(null);
@@ -73,10 +75,6 @@ public class GraphViewerFrame extends JFrame
 		});
 
 		setVisible(true);
-
-
-		// send a message to the script on bioinf to indicate that the application has been started up
-		UsageLogger.logUsage();
 	}
 
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -195,9 +193,7 @@ public class GraphViewerFrame extends JFrame
 	/** "About CurlyWhirly" on the OS X system menu. */
 	public void osxAbout()
 	{
-		String message = "CurlyWhirly version 0.1 ©  Scottish Crop Research Institute 2008. Developed by " + "Micha Bayer with contributions from Iain Milne.";
-		TaskDialog.initialize(this, "CurlyWhirly");
-		TaskDialog.info(message, "Close");
+		new AboutDialog(this, true);
 	}
 
 	/** "Quit CurlyWhirly" on the OS X system menu. */

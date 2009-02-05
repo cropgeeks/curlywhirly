@@ -158,7 +158,7 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 			Desktop desktop = Desktop.getDesktop();
 			try
 			{
-				URI uri = new URI("http://bioinf.scri.sari.ac.uk/curlywhirly/manual.html");
+				URI uri = new URI("http://bioinf.scri.sari.ac.uk/curlywhirly/manual.shtml");
 				desktop.browse(uri);
 			}
 			catch (URISyntaxException e1)
@@ -179,9 +179,7 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 
 		else if (src.equals(aboutItem))
 		{
-			String message = "CurlyWhirly version 0.1 ©  Scottish Crop Research Institute 2008. Developed by " + "Micha Bayer with contributions from Iain Milne.";
-			TaskDialog.initialize(frame, "CurlyWhirly");
-			TaskDialog.info(message, "Close");
+			new AboutDialog(frame, true);
 		}
 
 	}
