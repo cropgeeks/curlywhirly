@@ -1,10 +1,11 @@
 feature additions:
 
 - multiple category scheme handling: have users select pairs of categories from the different schemes to make single "compound" category which is then assigned a colour and the spheres are updated accordingly
-- docu: separate out header/footer and provide through server side includes
 - multiple category handling
-- mac support?
 - movies
+- file prompt for location of saved image (and movie)
+- window position/size tracking to preferences
+
 
 
 Michael Moeller's list:
@@ -15,3 +16,5 @@ Michael Moeller's list:
 
 
 bug fixes:
+
+- fix exceptions from the user pre-playing with the controls with no data loaded
