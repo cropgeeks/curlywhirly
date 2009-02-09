@@ -1,0 +1,57 @@
+<project name="CurlyWhirly" default="compile" basedir=".">
+    
+    <property name="i4j" value="C:\Program Files\install4j\bin\ant.jar"/>
+    
+	<property name="src" location="src"/>
+	<property name="classes" location="classes"/>
+	<property name="lib" location="lib"/>
+	<property name="curlywhirly.jar" value="curlywhirly.jar"/>
+
+	<target name="init">
+		<mkdir dir="${classes}"/>
+	</target>
+
+	<target name="clean">
+		<delete includeemptydirs="true">
+			<fileset dir="${classes}" includes="**/*"/>
+			<fileset file="${curlywhirly.jar}"/>
+		</delete>
+	</target>
+
+	<path id="project.classpath">
+		<fileset dir="${lib}">
+			<include name="**/*.jar"/>
+			<exclude name="**/${curlywhirly.jar}"/>
+		</fileset>
+	</path>
+
+	<target name="compile" depends="init">
+		<javac srcdir="${src}" destdir="${classes}" target="1.5" debug="true">
+			<classpath refid="project.classpath"/>
+			<exclude name="**/package-info.java"/>
+		</javac>
+	</target>
+	
+	<target name="jar" depends="clean, compile">
+		<jar jarfile="${curlywhirly.jar}">
+			<fileset dir="${classes}"/>			
+			<manifest>
+				<attribute name="Main-Class" value="graphviewer3d.gui.GraphViewerFrame"/>
+			</manifest>
+		</jar>
+	</target>
+	
+	<target name="install4j" depends="compile">
+		<taskdef name="install4j"
+		classname="com.install4j.Install4JTask"
+		classpath="${i4j}"/>	
+		<delete>
+			<fileset dir="installer" includes="**/*.exe"/>
+			<fileset dir="installer" includes="**/*.sh"/>
+			<fileset dir="installer" includes="**/*.dmg"/>
+		</delete>
+		<input message="Enter the version number:" addproperty="version"/>
+		<install4j projectfile="installer/curlywhirly_installer.install4j" release="${version}"/>
+	</target>
+	
+</project>
