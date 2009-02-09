@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<link rel="stylesheet" href="stylesheet/styles.css" type="text/css">
+
+<title>CurlyWhirly</title>
+
+</head>
+<body>
+
+<!--#include virtual="header.html" -->
+
+
+<h2>CurlyWhirly</h2>
+
+<p>CurlyWhirly is a very simple Java 3D graph viewer suited for viewing any kind
+of data in three dimensions. This includes, but is not restricted to, output
+from Principal Components Analysis or Principal Coordinate Analysis.
+CurlyWhirly is a Java Swing application and uses the Java 3D API to render its
+data. It is built using Java 1.6 and is shipped with its own JRE, so there is no
+need for users to install or update Java.
+</p>
+
+<p>This application is free to download and use but no warranty is given as to
+its correct functioning. </p>
+
+<p>Features: </p>
+
+<ul>
+<li>Load any kind of numerical data and any number of variables </li>
+<li>Reorient graph to any position for inspection of data </li>
+<li>Zoom graph in and out </li>
+<li>Select which combination of variables to display </li>
+<li>Highlight data points according to category to selectively view data from one or more categories only </li>
+<li>Choose from several background colours </li>
+<li>Display data label with mouseover on data points </li>
+<li>Spin graph continuously </li>
+<li>Save view to image </li>
+</ul>
+
+<!--#include virtual="footer.html" -->
+
+</body>
+</html>
