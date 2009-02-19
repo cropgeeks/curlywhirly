@@ -18,12 +18,7 @@ import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Vector;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JSlider;
-import javax.swing.ListCellRenderer;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.vecmath.Color3f;
@@ -182,22 +177,15 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
 
-	class ColorListRenderer extends JLabel implements ListCellRenderer
+	class ColorListRenderer extends DefaultListCellRenderer
 	{
-		ColorListRenderer()
-		{
-			// Don't paint behind the component
-			setOpaque(true);
-		}
 
 		// Set the attributes of the class and return a reference
 		public Component getListCellRendererComponent(JList list, Object o, int i, boolean iss, boolean chf)
 		{
-
+			super.getListCellRendererComponent(list, o, i, iss, chf);
+			
 			Category item = listItems.get(i);
-
-			// Set the font
-			setFont(list.getFont());
 
 			// Set the text
 			setText(item.name);
@@ -213,18 +201,6 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 			g.dispose();
 
 			setIcon(new ImageIcon(image));
-
-			// Set background/foreground colours
-			if (iss)
-			{
-				setBackground(list.getSelectionBackground());
-				setForeground(list.getSelectionForeground());
-			}
-			else
-			{
-				setBackground(list.getBackground());
-				setForeground(list.getForeground());
-			}
 
 			return this;
 		}
