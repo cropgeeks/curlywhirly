@@ -7,10 +7,7 @@
 package graphviewer3d.gui;
 
 import graphviewer3d.data.Category;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -184,7 +181,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		public Component getListCellRendererComponent(JList list, Object o, int i, boolean iss, boolean chf)
 		{
 			super.getListCellRendererComponent(list, o, i, iss, chf);
-			
+
 			Category item = listItems.get(i);
 
 			// Set the text
@@ -192,9 +189,12 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 
 			// Set the icon
 			BufferedImage image = new BufferedImage(20, 10, BufferedImage.TYPE_INT_RGB);
-			Graphics g = image.createGraphics();
+			Graphics2D g = (Graphics2D) image.createGraphics();
 
-			g.setColor(item.colour.get());
+			Color c1 = item.colour.get().brighter();
+			Color c2 = item.colour.get().darker();
+
+			g.setPaint(new GradientPaint(0, 0, c1, 20, 10, c2));
 			g.fillRect(0, 0, 20, 10);
 			g.setColor(Color.black);
 			g.drawRect(0, 0, 20, 10);
