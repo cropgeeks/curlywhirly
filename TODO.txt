@@ -5,6 +5,8 @@ feature additions:
 - movies
 - file prompt for location of saved image (and movie)
 - window position/size tracking to preferences
+- increase exposure on web -- add keywords to web pages etc
+- make data points clickable and point them at a URL with annotation info
 
 
 
@@ -18,3 +20,5 @@ Michael Moeller's list:
 bug fixes:
 
 - fix exceptions from the user pre-playing with the controls with no data loaded
+- does not start under Windows 7 -- needs 64-bit dll (and possibly more?)
+- not all data is visible when spinning (reproducible with barley data)
