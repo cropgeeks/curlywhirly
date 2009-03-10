@@ -15,7 +15,7 @@
 <!--#include virtual="header.html" -->
 
 
-<h2>CurlyWhirly</h2>
+<h2>CurlyWhirly - Multi-Dimensional Data Visualization</h2>
 
 <p>CurlyWhirly is a very simple Java 3D graph viewer suited for viewing any kind
 of data in three dimensions. This includes, but is not restricted to, output
