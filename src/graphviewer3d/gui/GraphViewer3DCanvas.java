@@ -115,7 +115,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 	BranchGroup rotatorGroup;
 
 	// speed at which graph spins automatically
-	long spinSpeed = 50000;
+	public long spinSpeed = 50000;
 
 	//the alpha for the graph spin animation
 	Alpha yRotationAlpha;

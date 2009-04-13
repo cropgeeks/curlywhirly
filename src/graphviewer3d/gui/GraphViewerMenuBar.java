@@ -1,24 +1,10 @@
 package graphviewer3d.gui;
 
-import graphviewer3d.controller.ScreenCaptureThread;
-import graphviewer3d.data.FileLoader;
-
+import graphviewer3d.controller.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-
-import javax.swing.JFileChooser;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.KeyStroke;
-
+import java.awt.event.*;
+import java.io.*;
+import javax.swing.*;
 import scri.commons.gui.*;
 
 public class GraphViewerMenuBar extends JMenuBar implements ActionListener
@@ -33,6 +19,7 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 	JMenuItem exampleDataItem;
 	JMenuItem exitItem;
 	JMenuItem saveItem;
+	JMenuItem movieItem;
 	GraphViewerFrame frame;
 	JFileChooser fc;
 	DataLoadingDialog dataLoadingDialog;
@@ -71,11 +58,18 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 		fileMenu.addSeparator();
 
 		// the save view item
-		saveItem = new JMenuItem("Capture view screenshot");
+		saveItem = new JMenuItem("Capture screenshot");
 		saveItem.setMnemonic(KeyEvent.VK_C);
 		saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, menuShortcut));
 		saveItem.addActionListener(this);
 		fileMenu.add(saveItem);
+		
+		// the movie item
+		movieItem = new JMenuItem("Capture movie");
+		movieItem.setMnemonic(KeyEvent.VK_M);
+		movieItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, menuShortcut));
+		movieItem.addActionListener(this);
+		fileMenu.add(movieItem);
 
 		// separator
 		fileMenu.addSeparator();
@@ -147,6 +141,12 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 			//save the canvas to this file
 			new ScreenCaptureThread(new File(System.getProperty("user.dir")+System.getProperty("file.separator") +
 							"curlywhirly_screenshot.png"),frame,"png",fc).start();
+		}
+		
+		else if (src.equals(movieItem))
+		{
+			//save the canvas to this file
+			new MovieCaptureThread(frame,fc).start();
 		}
 
 		else if (src.equals(exitItem))
