@@ -1,9 +1,12 @@
 package graphviewer3d.controller;
 
-import java.util.*;
 import graphviewer3d.gui.*;
-import javax.media.*;
+import java.awt.*;
+import java.awt.image.*;
+import java.io.*;
+import javax.imageio.*;
 import javax.media.format.*;
+import javax.media.j3d.*;
 import javax.media.protocol.*;
 import javax.swing.*;
 
@@ -14,6 +17,20 @@ public class MovieCaptureThread extends Thread
 {
 	GraphViewerFrame frame;
 	JFileChooser fileChooser;
+	
+	String movieFileExtension = ".avi";
+	String movieFilePath = System.getProperty("user.dir") + System.getProperty("file.separator") + "animation" + movieFileExtension;	
+	String imageDirectory  = System.getProperty("user.dir") + System.getProperty("file.separator") + "imageTempDir";
+	String videoFormatEncoding = VideoFormat.RGB;
+	String contentType = FileTypeDescriptor.MSVIDEO;
+	String fileType = "BMP";
+	String imageFileExtension = ".bmp";	
+	int frameRate = 30;
+	int numRotations = 1;
+	//time the graph takes to do one full rotation
+	int rotationTime = 2;
+	
+	
 	
 	public MovieCaptureThread(GraphViewerFrame frame, JFileChooser fileChooser)
 	{
@@ -28,63 +45,64 @@ public class MovieCaptureThread extends Thread
 		{
 			System.out.println("starting capture.....");
 			
-			// get the canvas and itsd dimensions
+			//set up the screen capture robot
 			GraphViewer3DCanvas canvas = frame.canvas3D;
-			JPanel canvasPanel = frame.canvasPanel;
-			canvas.setSize(400, 400);
-			canvasPanel.setSize(400, 400);
-			canvas.setVisible(true);
+			Robot robot  = new Robot();
+			robot.setAutoWaitForIdle(true);
+			Point p = canvas.getLocationOnScreen();
+			int canvasWidth = canvas.getWidth();
+			int canvasHeight = canvas.getHeight();
+			Rectangle screenRect = new Rectangle((int) p.getX(), (int) p.getY(), canvasWidth, canvasHeight);
+			
+			//get the canvas ready
+			canvas.resetOriginalView();
+			canvas.setSpinSpeed(100-rotationTime);
+			
+			//work out total number of frames required
+			int animationTimeSecs = numRotations * rotationTime;
+			int totalNumFrames = frameRate * animationTimeSecs + 2;
+			//work out the time increment required to achieve the frame rate
+			int timeIncrementMillis = Math.round((rotationTime*1000)/totalNumFrames);
+			
+			System.out.println("timeIncrementMillis = " + timeIncrementMillis);
+			System.out.println("totalNumFrames = " + totalNumFrames);
+			
+			//now rotate the graph in steps, taking images along the way
+			for(int i = 0; i < totalNumFrames; i++)
+			{			
+				//start the spin if necessary
+				if(!canvas.isGraphSpinning)
+					canvas.spin();
+				Alpha alpha = canvas.yRotator.getAlpha();
 
-			int frameRate = 30;
+				//resume the Alpha object if it was paused				
+				if(alpha.isPaused())
+					alpha.resume();	
+				
+				//sleep this thread while we spin the graph but only after the first iteration
+				if(i > 0)
+					try{Thread.sleep(timeIncrementMillis);}catch(InterruptedException x){}
+				
+				//now pause the spinning							
+				alpha.pause();	
+				
+				//take a screenshot and write it to disk
+				BufferedImage image = robot.createScreenCapture(screenRect);
+				String fileName = imageDirectory+ System.getProperty("file.separator") + "img" + new java.text.DecimalFormat("000000").format(i) + imageFileExtension;
+				ImageIO.write(image, fileType, new File(fileName));
+//				while(!new File(fileName).exists())
+//				{
+//					try{Thread.sleep(500);}catch(InterruptedException x){}	
+//				}
+			}
 			
-			// the output media file
-			String outputURL = "file:/" + System.getProperty("user.dir") + System.getProperty("file.separator") + "/animation.mov";
-			// the input URL
-			// You can specify the location, size and frame rate in the URL string as follows:
-			// screen://x,y,width,height/framespersecond
-			// Eg: screen://20,40,160,120/12.5
-			String inputURL = "screen://" + canvasPanel.getX() + ","+ canvasPanel.getY() + "," + 
-			canvasPanel.getWidth() + "," + canvasPanel.getHeight() + "/" + frameRate;
+			//stop the graph spinning
+			canvas.stopSpinning();	
 			
-			System.out.println("inputURL = " + inputURL);
-			
-			// start the data source
-//			Manager.createCloneableDataSource(new ScreenGrabDataSource(inputURL));
-//			Manager.createPlayer(new ScreenGrabDataSource(inputURL));
-			 ScreenGrabDataSource screenGrabber = new ScreenGrabDataSource(inputURL);
-			 screenGrabber.connect();
-			
-			Format formats[] = new Format[1];
-			formats[0] = new VideoFormat(VideoFormat.RGB);
-			FileTypeDescriptor outputType = new FileTypeDescriptor(FileTypeDescriptor.QUICKTIME);
-			Processor p = Manager.createRealizedProcessor(new ProcessorModel(screenGrabber,formats, outputType));
-			
-			// get the output of the processor
-			DataSource source = p.getDataOutput();
-			// create a File protocol MediaLocator with the location
-			// of the file to
-			// which bits are to be written
-			MediaLocator dest = new MediaLocator(outputURL);
-			// create a datasink to do the file writing & open the
-			// sink to make sure
-			// we can write to it.
-			DataSink filewriter = null;
-			filewriter = Manager.createDataSink(source, dest);
-			filewriter.open();
-			filewriter.start();
-			p.start();
-			canvas.setSpinSpeed(90);
-			canvas.spin();
-			
-			// stop and close the processor when done capturing...
-			// close the datasink when EndOfStream event is received...
-			try{Thread.sleep(canvas.spinSpeed);}catch(InterruptedException x){}
-			
-			canvas.stopSpinning();
-			p.stop();
-			p.close();
-			filewriter.stop();
-			filewriter.close();
+			//now string images together into a movie
+			JpegImagesToMovie imageToMovie = new JpegImagesToMovie(videoFormatEncoding, contentType, canvasWidth, 
+							canvasHeight,  animationTimeSecs,  frameRate, imageDirectory, movieFilePath);
+			imageToMovie.writeMovie();
 			
 			System.out.println("done");
 		}

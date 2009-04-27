@@ -6,20 +6,12 @@
 
 package graphviewer3d.gui;
 
-import graphviewer3d.data.Category;
+import graphviewer3d.data.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Vector;
+import java.awt.event.*;
+import java.awt.image.*;
+import java.util.*;
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.vecmath.Color3f;
-
 import scri.commons.gui.*;
 
 public class MTControlPanel extends javax.swing.JPanel implements ActionListener

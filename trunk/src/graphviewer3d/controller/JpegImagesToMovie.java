@@ -30,37 +30,15 @@ package graphviewer3d.controller;
  * redistribute the Software for such purposes.
  */
 
+import java.io.*;
+import java.net.*;
+import java.util.*;
 import java.awt.Dimension;
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.util.Vector;
-
-import javax.media.Buffer;
-import javax.media.ConfigureCompleteEvent;
-import javax.media.ControllerEvent;
-import javax.media.ControllerListener;
-import javax.media.DataSink;
-import javax.media.EndOfMediaEvent;
-import javax.media.Format;
-import javax.media.Manager;
-import javax.media.MediaLocator;
-import javax.media.PrefetchCompleteEvent;
-import javax.media.Processor;
-import javax.media.RealizeCompleteEvent;
-import javax.media.ResourceUnavailableEvent;
-import javax.media.Time;
-import javax.media.control.TrackControl;
-import javax.media.datasink.DataSinkErrorEvent;
-import javax.media.datasink.DataSinkEvent;
-import javax.media.datasink.DataSinkListener;
-import javax.media.datasink.EndOfStreamEvent;
+import javax.media.*;
+import javax.media.control.*;
+import javax.media.protocol.*;
+import javax.media.datasink.*;
 import javax.media.format.VideoFormat;
-import javax.media.protocol.ContentDescriptor;
-import javax.media.protocol.DataSource;
-import javax.media.protocol.FileTypeDescriptor;
-import javax.media.protocol.PullBufferDataSource;
-import javax.media.protocol.PullBufferStream;
 
 /**
  * This program takes a list of JPEG image files and convert them into a QuickTime movie.
@@ -68,41 +46,59 @@ import javax.media.protocol.PullBufferStream;
 public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 {
 	
-	float frameRate;
-	long seqNo = 0;
+	// ========================================================vars========================================
 	
-	public JpegImagesToMovie()
+	int canvasWidth, canvasHeight, animationTimeSecs, frameRate;
+	String imageDirectory, videoFormatEncoding, fileExtension, contentType,movieFilePath;
+	
+	// ========================================================c'tor=======================================
+	
+	public JpegImagesToMovie(String videoFormatEncoding, String contentType, int canvasWidth, int canvasHeight, int animationTimeSecs, int frameRate, String imageDirectory, String movieFilePath)
 	{
-		this.frameRate = (float) frameRate;
+		this.videoFormatEncoding = videoFormatEncoding;
+		this.contentType = contentType;
+		this.canvasWidth = canvasWidth;
+		this.canvasHeight = canvasHeight;
+		this.animationTimeSecs = animationTimeSecs;
+		this.frameRate = frameRate;
+		this.imageDirectory = imageDirectory;
+		this.movieFilePath = movieFilePath;
 	}
 	
 	// ==============================================methods===============================================
 	
-	public static void writeMovie(int width, int height, int frameRate, String directory)
+	public void writeMovie()
 	{
-		System.out.println("creating movie");
-		// this is where we will write the movie
-		String outputURL = "file:///" + directory + "/" + "animation.avi";
-		// File movieFile = new File(outputURL);
-		// if(!movieFile.exists())
-		// System.out.println("no movie file made");
-		
-		// assemble the files in a vector
-		File[] fileArray = new File(directory).listFiles();
-		Vector<String> inputFiles = new Vector<String>();
-		for (int i = 0; i < fileArray.length; i++)
+		try
 		{
-			inputFiles.add(fileArray[i].getAbsolutePath());
+			File movieFile = new File(movieFilePath);
+			boolean fileCreated = movieFile.createNewFile();
+			if (!fileCreated)
+				System.out.println("ERROR: movie file could not be created");
+			
+			// this is where we will write the movie
+			URL outputURL = movieFile.toURL();
+			System.out.println("outputURL = " + outputURL);
+			
+			// assemble the files in a vector
+			File[] fileArray = new File(imageDirectory).listFiles();
+			Vector<String> inputFiles = new Vector<String>();
+			for (int i = 0; i < fileArray.length; i++)
+			{
+				inputFiles.add(fileArray[i].getAbsolutePath());
+			}
+			
+			// Generate the output media locators.
+			MediaLocator oml = new MediaLocator(outputURL);		
+			doIt(canvasWidth, canvasHeight, frameRate, inputFiles, oml);
 		}
-		
-		// Generate the output media locators.
-		MediaLocator oml = new MediaLocator(outputURL);
-		
-		JpegImagesToMovie imageToMovie = new JpegImagesToMovie();
-		imageToMovie.doIt(width, height, frameRate, inputFiles, oml);
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
-	// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	// --------------------------------------------------------------------------------------------------------------------------------------
 	
 	public boolean doIt(int width, int height, int frameRate, Vector inFiles, MediaLocator outML)
 	{
@@ -133,7 +129,7 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 		}
 		
 		// Set the output content descriptor to QuickTime.
-		p.setContentDescriptor(new ContentDescriptor(FileTypeDescriptor.MSVIDEO));
+		p.setContentDescriptor(new ContentDescriptor(contentType));
 		
 		// Query for the processor for supported formats.
 		// Then set it on the processor.
@@ -268,21 +264,19 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 				waitSync.notifyAll();
 			}
 		}
-		else
-			if (evt instanceof ResourceUnavailableEvent)
+		else if (evt instanceof ResourceUnavailableEvent)
+		{
+			synchronized (waitSync)
 			{
-				synchronized (waitSync)
-				{
-					stateTransitionOK = false;
-					waitSync.notifyAll();
-				}
+				stateTransitionOK = false;
+				waitSync.notifyAll();
 			}
-			else
-				if (evt instanceof EndOfMediaEvent)
-				{
-					evt.getSourceController().stop();
-					evt.getSourceController().close();
-				}
+		}
+		else if (evt instanceof EndOfMediaEvent)
+		{
+			evt.getSourceController().stop();
+			evt.getSourceController().close();
+		}
 	}
 	
 	Object waitFileSync = new Object();
@@ -322,22 +316,15 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 				waitFileSync.notifyAll();
 			}
 		}
-		else
-			if (evt instanceof DataSinkErrorEvent)
+		else if (evt instanceof DataSinkErrorEvent)
+		{
+			synchronized (waitFileSync)
 			{
-				synchronized (waitFileSync)
-				{
-					fileDone = true;
-					fileSuccess = false;
-					waitFileSync.notifyAll();
-				}
+				fileDone = true;
+				fileSuccess = false;
+				waitFileSync.notifyAll();
 			}
-	}
-	
-	static void prUsage()
-	{
-		System.err.println("Usage: java JpegImagesToMovie -w <width> -h <height> -f <frame rate> -o <output URL> <input JPEG file 1> <input JPEG file 2> ...");
-		System.exit(-1);
+		}
 	}
 	
 	/**
@@ -431,7 +418,8 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 		 */
 		public Time getDuration()
 		{
-			return DURATION_UNKNOWN;
+			return new Time(new Double(animationTimeSecs));
+			//return DURATION_UNKNOWN;
 		}
 		
 		public Object[] getControls()
@@ -458,13 +446,15 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 		int nextImage = 0; // index of the next image to be read.
 		boolean ended = false;
 		
+		long seqNo = 1;
+		
 		public ImageSourceStream(int width, int height, int frameRate, Vector images)
 		{
 			this.width = width;
 			this.height = height;
 			this.images = images;
 			
-			format = new VideoFormat(VideoFormat.JPEG, new Dimension(width, height), Format.NOT_SPECIFIED, Format.byteArray, (float) frameRate);
+			format = new VideoFormat(videoFormatEncoding, new Dimension(width, height), Format.NOT_SPECIFIED, Format.byteArray, (float) frameRate);
 		}
 		
 		/**
@@ -516,9 +506,11 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 				buf.setData(data);
 			}
 			
-			long time = (long) (seqNo * (1000 / frameRate) * 1000000);
+			//added from forum thread at http://forums.sun.com/thread.jspa?threadID=514583
+			//bug fix for missing length info in resulting media file
+			long time = seqNo * (1000 / frameRate) * 1000000;
 			buf.setTimeStamp(time);
-			buf.setSequenceNumber(seqNo++);
+			buf.setSequenceNumber(seqNo++);			
 			
 			// Read the entire JPEG image from the file.
 			raFile.readFully(data, 0, (int) raFile.length());
