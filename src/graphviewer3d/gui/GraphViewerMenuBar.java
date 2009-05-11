@@ -23,10 +23,12 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 	GraphViewerFrame frame;
 	JFileChooser fc;
 	DataLoadingDialog dataLoadingDialog;
+	public MovieCaptureDialog movieCaptureDialog;
 
 	public GraphViewerMenuBar(GraphViewerFrame frame)
 	{
 		this.frame = frame;
+		movieCaptureDialog = new MovieCaptureDialog(frame,true);
 		init();
 	}
 
@@ -65,7 +67,7 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 		fileMenu.add(saveItem);
 		
 		// the movie item
-		movieItem = new JMenuItem("Capture movie");
+		movieItem = new JMenuItem("Capture movie...");
 		movieItem.setMnemonic(KeyEvent.VK_M);
 		movieItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, menuShortcut));
 		movieItem.addActionListener(this);
@@ -126,14 +128,14 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 			{
 				Preferences.lastDir = "" + fc.getSelectedFile().getParent();
 
-				frame.controller.loadDataInThread(fc.getSelectedFile());
+				frame.fatController.loadDataInThread(fc.getSelectedFile());
 			}
 		}
 
 		else if (src.equals(exampleDataItem))
 		{
 			// load the example dataset provided with the application
-			frame.controller.loadDataInThread(new File("data/randomData.txt"));
+			frame.fatController.loadDataInThread(new File("data/randomData.txt"));
 		}
 
 		else if (src.equals(saveItem))
@@ -145,8 +147,11 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 		
 		else if (src.equals(movieItem))
 		{
-			//save the canvas to this file
-			new MovieCaptureThread(frame,fc).start();
+			movieCaptureDialog.setLocationRelativeTo(frame);
+			movieCaptureDialog.updateFileFileSize();
+			movieCaptureDialog.getSavedFileTF().setText("");
+			movieCaptureDialog.movieFile = null;
+			movieCaptureDialog.setVisible(true);
 		}
 
 		else if (src.equals(exitItem))

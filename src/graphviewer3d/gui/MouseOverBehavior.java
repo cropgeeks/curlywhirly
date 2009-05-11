@@ -116,7 +116,7 @@ public class MouseOverBehavior extends Behavior
 										Sphere sphere = (Sphere) pickedNode;
 										String mName = (String) namesHashT.get(sphere);
 										// display the feature name on the status bar of the frame
-										frame.statusBar.setText(" Point selected: " + mName);
+										frame.statusBar.setMessage(" Point selected: " + mName);
 									}
 								}
 								catch (CapabilityNotSetException e)
@@ -135,7 +135,8 @@ public class MouseOverBehavior extends Behavior
 						// this is executed when no primitive has been picked at all
 						else
 						{
-							frame.statusBar.setDefaultText();
+							if(frame.currentMovieCaptureThread == null)
+								frame.statusBar.setDefaultText();
 							pickedNode = null;
 							isObjectSelectedBefore = false;
 						}

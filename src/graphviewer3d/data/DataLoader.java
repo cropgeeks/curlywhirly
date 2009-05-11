@@ -1,16 +1,9 @@
 package graphviewer3d.data;
 
-import graphviewer3d.gui.GraphViewerFrame;
-
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.NumberFormat;
-import java.util.Vector;
-
-import scri.commons.gui.TaskDialog;
+import graphviewer3d.gui.*;
+import java.io.*;
+import java.text.*;
+import scri.commons.gui.*;
 
 public class DataLoader
 {
@@ -150,7 +143,6 @@ public class DataLoader
 				lineWithError = lastLineParsed+1;
 			
 			String message = "Error in data file on line " + lineWithError + ":\n" + e.getMessage() + " -- please correct your data and try again.";
-			System.out.println(message);
 			TaskDialog.initialize(frame, "Data error");
 			TaskDialog.info(message, "Close");
 			e.printStackTrace();

@@ -1,48 +1,14 @@
 package graphviewer3d.gui;
 
-import graphviewer3d.data.Category;
-import graphviewer3d.data.DataSet;
-
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsEnvironment;
-import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
+import graphviewer3d.data.*;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Vector;
-
-import javax.media.j3d.Alpha;
-import javax.media.j3d.AlternateAppearance;
-import javax.media.j3d.AmbientLight;
-import javax.media.j3d.Appearance;
-import javax.media.j3d.Background;
-import javax.media.j3d.BoundingSphere;
-import javax.media.j3d.BranchGroup;
-import javax.media.j3d.Canvas3D;
-import javax.media.j3d.ColoringAttributes;
-import javax.media.j3d.DirectionalLight;
-import javax.media.j3d.GeometryArray;
-import javax.media.j3d.GraphicsConfigTemplate3D;
-import javax.media.j3d.LineArray;
-import javax.media.j3d.Material;
-import javax.media.j3d.RotationInterpolator;
-import javax.media.j3d.Shape3D;
-import javax.media.j3d.Transform3D;
-import javax.media.j3d.TransformGroup;
-import javax.vecmath.Color3f;
-import javax.vecmath.Point3d;
-import javax.vecmath.Point3f;
-import javax.vecmath.Vector3f;
-
-import com.sun.j3d.utils.geometry.ColorCube;
-import com.sun.j3d.utils.geometry.Cone;
-import com.sun.j3d.utils.geometry.Sphere;
-import com.sun.j3d.utils.pickfast.behaviors.PickRotateBehavior;
-import com.sun.j3d.utils.pickfast.behaviors.PickZoomBehavior;
-import com.sun.j3d.utils.universe.SimpleUniverse;
-import com.sun.j3d.utils.universe.ViewingPlatform;
+import javax.media.j3d.*;
+import javax.vecmath.*;
+import com.sun.j3d.utils.geometry.*;
+import com.sun.j3d.utils.pickfast.behaviors.*;
+import com.sun.j3d.utils.universe.*;
 
 /**
  * @author Micha Bayer, Scottish Crop Research Institute
@@ -140,8 +106,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 	//the default background colour for the canvas
 	Color3f bgColour = new Color3f(Color.BLACK);
 	
-	//a transform for rotating the graph about the y axis
-	Transform3D yRotationTransform = null;
+
 	
 	// ==================================c'tor=============================
 	
@@ -150,6 +115,12 @@ public class GraphViewer3DCanvas extends Canvas3D
 		super(getGraphicsConfig());
 		this.frame = frame;
 		su = new SimpleUniverse(this);
+		
+		//key listener
+		
+		//this is for detecting key events
+		addKeyListener(new CanvasKeyListener(this));
+		setFocusable(true);
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
@@ -300,10 +271,10 @@ public class GraphViewer3DCanvas extends Canvas3D
 			//for stepwise rotation about the y axis
 			// Create the transform group node and add the transformation
 			// to the node. Add the transformation group to the scene graph.
-			yRotationTransform = new Transform3D();	
-			TransformGroup transformGroup = new TransformGroup(yRotationTransform);
-			objRoot.addChild(transformGroup);  
-			transformGroup.addChild(wholeObj);
+//			yRotationTransform = new Transform3D();	
+//			TransformGroup transformGroup = new TransformGroup(yRotationTransform);			
+//			transformGroup.addChild(wholeObj);
+//			objRoot.addChild(transformGroup);  
 			
 			objRoot.setCapability(BranchGroup.ALLOW_DETACH);
 			
@@ -379,7 +350,10 @@ public class GraphViewer3DCanvas extends Canvas3D
 	
 	public void rotateGraph(float degrees)
 	{	
+		//a transform for rotating the graph about the y axis
+		Transform3D yRotationTransform = new Transform3D();
 		yRotationTransform.rotY(Math.toRadians(degrees));
+		wholeObj.setTransform(yRotationTransform);
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------

@@ -24,8 +24,7 @@ public class Instructions3D  implements ItemListener
 		String message = "Controls for the 3D graph: Left-click + drag to spin," +
 				" middle-click (or Alt) + drag to zoom.";
 		String label = "Close";
-		TaskDialog.initialize(frame, "CurlyWhirly");
-
+		
 		if (useCheckbox)
 			TaskDialog.info(message, label, instructionsCheckBox);
 		else
