@@ -16,7 +16,7 @@ public class GraphViewerFrame extends JFrame
 
 	// ===================================================vars =================================================
 
-	public FatController controller = new FatController(this);
+	public FatController fatController = new FatController(this);
 	public static DataSet dataSet;
 	public static GraphViewer3DCanvas canvas3D;
 	public static JPanel canvasPanel;
@@ -30,6 +30,8 @@ public class GraphViewerFrame extends JFrame
 	public static Preferences prefs = new Preferences();
 	public StatusBar statusBar;
 	public GraphViewerMenuBar menuBar;
+	
+	public MovieCaptureThread currentMovieCaptureThread = null;
 
 	public static void main(String[] args)
 	{
@@ -54,6 +56,9 @@ public class GraphViewerFrame extends JFrame
 
 	GraphViewerFrame()
 	{
+		//this initializes all the task dialog instances
+		TaskDialog.initialize(this, "CurlyWhirly");
+		
 		if (SystemUtils.isMacOS())
 			handleOSXStupidities();
 
@@ -73,6 +78,10 @@ public class GraphViewerFrame extends JFrame
 				shutdown();
 			}
 		});
+		
+		FrameListener frameListener = new FrameListener(this);
+		addWindowFocusListener(frameListener);
+		addComponentListener(frameListener);
 
 		setVisible(true);
 	}
@@ -202,5 +211,6 @@ public class GraphViewerFrame extends JFrame
 		shutdown();
 		return true;
 	}
+	
 
 }// end class

@@ -6,47 +6,65 @@ import java.awt.image.*;
 import java.io.*;
 import javax.imageio.*;
 import javax.media.format.*;
-import javax.media.j3d.*;
 import javax.media.protocol.*;
-import javax.swing.*;
+import scri.commons.gui.*;
 
 /**
  * Thread class for saving screenshots of the canvas
  */
 public class MovieCaptureThread extends Thread
 {
-	GraphViewerFrame frame;
-	JFileChooser fileChooser;
 	
+	//===============================vars================================================	
+	
+	//these parameters are all fixed -- movie and image format etc
 	String movieFileExtension = ".avi";
-	String movieFilePath = System.getProperty("user.dir") + System.getProperty("file.separator") + "animation" + movieFileExtension;	
-	String imageDirectory  = System.getProperty("user.dir") + System.getProperty("file.separator") + "imageTempDir";
 	String videoFormatEncoding = VideoFormat.RGB;
 	String contentType = FileTypeDescriptor.MSVIDEO;
 	String fileType = "BMP";
 	String imageFileExtension = ".bmp";	
-	int frameRate = 30;
+	
+	//where are we writing this to
+	File movieFile;
+	File imageDirectory;
+	
+	//other params
+	int frameRate = 0;
 	int numRotations = 1;
 	//time the graph takes to do one full rotation
-	int rotationTime = 2;
+	int rotationTime = 0;
 	
+	GraphViewerFrame frame;
 	
+	public boolean threadCanceled = false;
 	
-	public MovieCaptureThread(GraphViewerFrame frame, JFileChooser fileChooser)
+	//===============================c'tor================================================	
+	
+	public MovieCaptureThread(GraphViewerFrame frame, File movieFile,int frameRate,int rotationTime)
 	{
 		this.frame = frame;
-		this.fileChooser = fileChooser;
+		this.movieFile = movieFile;
+		this.frameRate = frameRate;
+		this.rotationTime = rotationTime;
+		imageDirectory  = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "imageTempDir");
+		imageDirectory.mkdir();
 	}
 	
-	// take a screenshot of the canvas only
+	//===============================methods================================================	
+	
 	public void run()
 	{
 		try
 		{
-			System.out.println("starting capture.....");
+			frame.currentMovieCaptureThread = this;
+			frame.canvas3D.requestFocusInWindow();
+			frame.setAlwaysOnTop(true);
+			
+			//wait to make sure the calling dialog is no longer visible
+			try{Thread.sleep(500);}catch(InterruptedException x){}
 			
 			//set up the screen capture robot
-			GraphViewer3DCanvas canvas = frame.canvas3D;
+			GraphViewer3DCanvas canvas = GraphViewerFrame.canvas3D;
 			Robot robot  = new Robot();
 			robot.setAutoWaitForIdle(true);
 			Point p = canvas.getLocationOnScreen();
@@ -56,61 +74,97 @@ public class MovieCaptureThread extends Thread
 			
 			//get the canvas ready
 			canvas.resetOriginalView();
-			canvas.setSpinSpeed(100-rotationTime);
 			
 			//work out total number of frames required
 			int animationTimeSecs = numRotations * rotationTime;
-			int totalNumFrames = frameRate * animationTimeSecs + 2;
-			//work out the time increment required to achieve the frame rate
-			int timeIncrementMillis = Math.round((rotationTime*1000)/totalNumFrames);
+			int totalNumFrames = frameRate * animationTimeSecs;
 			
-			System.out.println("timeIncrementMillis = " + timeIncrementMillis);
-			System.out.println("totalNumFrames = " + totalNumFrames);
+			//work out the number of degrees required for each step of the rotation
+			float degrees = 0;
+			float degreesIncrement =  (360*numRotations)/(float)totalNumFrames;
+			
+			frame.statusBar.progressBar.setVisible(true);
 			
 			//now rotate the graph in steps, taking images along the way
 			for(int i = 0; i < totalNumFrames; i++)
-			{			
-				//start the spin if necessary
-				if(!canvas.isGraphSpinning)
-					canvas.spin();
-				Alpha alpha = canvas.yRotator.getAlpha();
-
-				//resume the Alpha object if it was paused				
-				if(alpha.isPaused())
-					alpha.resume();	
+			{		
+				//if the user pressed the ESC key we cancel this thread
+				if(threadCanceled)
+				{
+					cleanUp();
+					return;
+				}
 				
-				//sleep this thread while we spin the graph but only after the first iteration
-				if(i > 0)
-					try{Thread.sleep(timeIncrementMillis);}catch(InterruptedException x){}
+				//increment the degrees rotation
+				degrees = degrees + degreesIncrement;
 				
-				//now pause the spinning							
-				alpha.pause();	
+				//rotate by a given number of degrees
+				canvas.rotateGraph(degrees);
 				
 				//take a screenshot and write it to disk
 				BufferedImage image = robot.createScreenCapture(screenRect);
-				String fileName = imageDirectory+ System.getProperty("file.separator") + "img" + new java.text.DecimalFormat("000000").format(i) + imageFileExtension;
-				ImageIO.write(image, fileType, new File(fileName));
-//				while(!new File(fileName).exists())
-//				{
-//					try{Thread.sleep(500);}catch(InterruptedException x){}	
-//				}
+				String fileName =  "img" + new java.text.DecimalFormat("000000").format(i) + imageFileExtension;
+				File imageFile = new File(imageDirectory, fileName);
+				ImageIO.write(image, fileType, imageFile);
+				
+				//update progress bar
+				int progressPercent = Math.round((i/(float)totalNumFrames)*100);
+				frame.statusBar.progressBar.setValue(progressPercent);
+				
+				try{Thread.sleep(300);}catch(InterruptedException x){}
 			}
 			
-			//stop the graph spinning
-			canvas.stopSpinning();	
-			
 			//now string images together into a movie
-			JpegImagesToMovie imageToMovie = new JpegImagesToMovie(videoFormatEncoding, contentType, canvasWidth, 
-							canvasHeight,  animationTimeSecs,  frameRate, imageDirectory, movieFilePath);
+			JpegImagesToMovie imageToMovie = new JpegImagesToMovie(frame, videoFormatEncoding, contentType, canvasWidth, 
+							canvasHeight,  animationTimeSecs,  frameRate, imageDirectory, movieFile);
 			imageToMovie.writeMovie();
 			
-			System.out.println("done");
+			//remove all files in temp dir
+			boolean allDeleted = deleteDirectory(imageDirectory);
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
+			String message = e.getMessage();
+			if(message == null)
+				message = "no data";
+			TaskDialog.info("Movie capture failed: " + message, "Close");
 		}
-		
+		finally
+		{
+			cleanUp();
+			frame.setAlwaysOnTop(false);
+		}
 	}
 	
+	//--------------------------------------------------------------------------------------------------------------------------	
+	
+	private void cleanUp()
+	{
+		frame.statusBar.setDefaultText();
+		frame.statusBar.progressBar.setVisible(false);
+		frame.currentMovieCaptureThread = null;
+	}
+	
+	public boolean deleteDirectory(File path)
+	{
+		if (path.exists())
+		{
+			File[] files = path.listFiles();
+			for (int i = 0; i < files.length; i++)
+			{
+				if (files[i].isDirectory())
+				{
+					deleteDirectory(files[i]);
+				}
+				else
+				{
+					files[i].delete();
+				}
+			}
+		}
+		return (path.delete());
+	}
+	
+	//--------------------------------------------------------------------------------------------------------------------------		
 }

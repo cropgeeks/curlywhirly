@@ -30,6 +30,7 @@ package graphviewer3d.controller;
  * redistribute the Software for such purposes.
  */
 
+import graphviewer3d.gui.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -39,6 +40,7 @@ import javax.media.control.*;
 import javax.media.protocol.*;
 import javax.media.datasink.*;
 import javax.media.format.VideoFormat;
+import scri.commons.gui.*;
 
 /**
  * This program takes a list of JPEG image files and convert them into a QuickTime movie.
@@ -49,12 +51,17 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 	// ========================================================vars========================================
 	
 	int canvasWidth, canvasHeight, animationTimeSecs, frameRate;
-	String imageDirectory, videoFormatEncoding, fileExtension, contentType,movieFilePath;
+	String videoFormatEncoding, fileExtension, contentType,movieFilePath;
+	File imageDirectory, movieFile;
+	GraphViewerFrame frame;
+	MovieAssembleDialog movieAssembleDialog;
 	
 	// ========================================================c'tor=======================================
 	
-	public JpegImagesToMovie(String videoFormatEncoding, String contentType, int canvasWidth, int canvasHeight, int animationTimeSecs, int frameRate, String imageDirectory, String movieFilePath)
+	public JpegImagesToMovie(GraphViewerFrame frame, String videoFormatEncoding, String contentType, int canvasWidth, int canvasHeight, int animationTimeSecs, int frameRate, File imageDirectory, File movieFile)
 	{
+		this.frame = frame;
+		movieAssembleDialog = new MovieAssembleDialog(frame, false);
 		this.videoFormatEncoding = videoFormatEncoding;
 		this.contentType = contentType;
 		this.canvasWidth = canvasWidth;
@@ -62,7 +69,7 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 		this.animationTimeSecs = animationTimeSecs;
 		this.frameRate = frameRate;
 		this.imageDirectory = imageDirectory;
-		this.movieFilePath = movieFilePath;
+		this.movieFile = movieFile;
 	}
 	
 	// ==============================================methods===============================================
@@ -71,17 +78,12 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 	{
 		try
 		{
-			File movieFile = new File(movieFilePath);
-			boolean fileCreated = movieFile.createNewFile();
-			if (!fileCreated)
-				System.out.println("ERROR: movie file could not be created");
 			
 			// this is where we will write the movie
 			URL outputURL = movieFile.toURL();
-			System.out.println("outputURL = " + outputURL);
 			
 			// assemble the files in a vector
-			File[] fileArray = new File(imageDirectory).listFiles();
+			File[] fileArray = imageDirectory.listFiles();
 			Vector<String> inputFiles = new Vector<String>();
 			for (int i = 0; i < fileArray.length; i++)
 			{
@@ -91,9 +93,15 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 			// Generate the output media locators.
 			MediaLocator oml = new MediaLocator(outputURL);		
 			doIt(canvasWidth, canvasHeight, frameRate, inputFiles, oml);
+
+			movieAssembleDialog.getAssembleLabel().setText("Movie assembly complete");
+			movieAssembleDialog.getCloseButton().setEnabled(true);		
+			movieAssembleDialog.requestFocus();
 		}
 		catch (Exception e)
 		{
+			frame.currentMovieCaptureThread.movieFile.delete();
+			movieAssembleDialog.getAssembleLabel().setText("Movie assembly failed");
 			e.printStackTrace();
 		}
 	}
@@ -108,12 +116,11 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 		
 		try
 		{
-			System.err.println("- create processor for the image datasource ...");
 			p = Manager.createProcessor(ids);
 		}
 		catch (Exception e)
 		{
-			System.err.println("Yikes!  Cannot create a processor from the data source.");
+			e.printStackTrace();
 			return false;
 		}
 		
@@ -143,8 +150,6 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 		
 		tcs[0].setFormat(f[0]);
 		
-		System.err.println("Setting the track format to: " + f[0]);
-		
 		// We are done with programming the processor. Let's just
 		// realize it.
 		p.realize();
@@ -164,9 +169,7 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 		
 		dsink.addDataSinkListener(this);
 		fileDone = false;
-		
-		System.err.println("start processing...");
-		
+
 		// OK, we can now start the actual transcoding.
 		try
 		{
@@ -189,11 +192,10 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 		}
 		p.removeControllerListener(this);
-		
-		System.err.println("...done processing.");
-		
+
 		return true;
 	}
 	
@@ -215,12 +217,14 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 		
 		try
 		{
-			System.err.println("- create DataSink for: " + outML);
 			dsink = Manager.createDataSink(ds, outML);
 			dsink.open();
 		}
 		catch (Exception e)
 		{
+			movieFile.delete();
+			movieAssembleDialog.getAssembleLabel().setText("Movie assembly failed");
+			TaskDialog.error("Error: movie cannot be created -- please check a file by the same name is not currently open", "Close");
 			System.err.println("Cannot create the DataSink: " + e);
 			return null;
 		}
@@ -447,6 +451,8 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 		boolean ended = false;
 		
 		long seqNo = 1;
+		float percentIncrement = 0;
+		
 		
 		public ImageSourceStream(int width, int height, int frameRate, Vector images)
 		{
@@ -455,6 +461,11 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 			this.images = images;
 			
 			format = new VideoFormat(videoFormatEncoding, new Dimension(width, height), Format.NOT_SPECIFIED, Format.byteArray, (float) frameRate);
+			
+			//progress monitor
+			percentIncrement = 100.0f/(float)images.size();
+			movieAssembleDialog.setLocationRelativeTo(frame);
+			movieAssembleDialog.setVisible(true);		
 		}
 		
 		/**
@@ -475,7 +486,6 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 			if (nextImage >= images.size())
 			{
 				// We are done. Set EndOfMedia.
-				System.err.println("Done reading all images.");
 				buf.setEOM(true);
 				buf.setOffset(0);
 				buf.setLength(0);
@@ -486,7 +496,9 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 			String imageFile = (String) images.elementAt(nextImage);
 			nextImage++;
 			
-			System.err.println("  - reading image file: " + imageFile);
+			int percentComplete = Math.round(percentIncrement*nextImage);
+			//update progress monitor
+			movieAssembleDialog.getProgressBar().setValue(percentComplete);
 			
 			// Open a random access file for the next image.
 			RandomAccessFile raFile;
@@ -514,9 +526,7 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 			
 			// Read the entire JPEG image from the file.
 			raFile.readFully(data, 0, (int) raFile.length());
-			
-			System.err.println("    read " + raFile.length() + " bytes.");
-			
+
 			buf.setOffset(0);
 			buf.setLength((int) raFile.length());
 			buf.setFormat(format);

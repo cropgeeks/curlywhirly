@@ -1,30 +1,41 @@
 package graphviewer3d.gui;
 
-import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
+import javax.swing.*;
 
-public class StatusBar extends JLabel
+public class StatusBar extends JPanel
 {
 	public final String DEFAULT_TEXT = " Position the mouse over a point to see its label.";
+	JLabel label;
+	public JProgressBar progressBar;
 	
 	public StatusBar()
 	{
-		super();
-		super.setPreferredSize(new Dimension(100, 16));
+		super(new BorderLayout());
+
+		label = new JLabel();
+		label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+		label.setBackground(Color.green);
+		progressBar = new JProgressBar();
+		progressBar.setPreferredSize(new Dimension(progressBar.getWidth(), 5));
+
+		add(progressBar,BorderLayout.CENTER);
+		add(label, BorderLayout.WEST);
+		progressBar.setVisible(false);
+		
 		setMessage(" Ready");
 		setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+
 	}
 	
 	public void setMessage(String message)
 	{
-		setText(" " + message);
+		label.setText(" " + message);
 	}
 	
 	public void setDefaultText()
 	{
-		setText(DEFAULT_TEXT);
+		label.setText(DEFAULT_TEXT);
 	}
 }

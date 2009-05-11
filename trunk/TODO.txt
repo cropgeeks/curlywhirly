@@ -7,6 +7,7 @@ feature additions:
 - window position/size tracking to preferences
 - increase exposure on web -- add keywords to web pages etc
 - make data points clickable and point them at a URL with annotation info
+- change point size
 
 
 

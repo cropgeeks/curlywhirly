@@ -45,34 +45,15 @@ public class FatController
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-//	public void recordMovie()
-//	{
-//		GraphViewer3DCanvas canvas = frame.canvas3D;
-//		
-//		//this is where we store the images and later the movie
-//		String directory = "c:/tmp";
-//		
-//		frame.setVisible(true);
-//		frame.toFront();
-//		
-//		//spin
-//		frame.canvas3D.spin();
-//		
-//		//record
-//		for (int i = 0; i < 10; i++)
-//		{
-//			canvas.outputFile = new File(directory + System.getProperty("file.separator") + "img" +i+".jpg");
-//			canvas.writeJPEG = true;
-//			try{Thread.sleep(500);}catch(InterruptedException x){}
-//		}
-//		
-//		//stop
-//		frame.canvas3D.stopSpinning();
-//		
-//		//make the movie
-//		JpegImagesToMovie.writeMovie(600, 600, 2, directory);
-//	}
+	public void cancelMovieCapture()
+	{
+		//cancel any ongoing movie capture thread
+		frame.currentMovieCaptureThread.threadCanceled = true;
+		frame.currentMovieCaptureThread.movieFile.delete();
+		frame.canvas3D.resetOriginalView();
+		frame.canvas3D.repaint();
+	}
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 }// end class
