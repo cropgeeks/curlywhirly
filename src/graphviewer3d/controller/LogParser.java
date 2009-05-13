@@ -30,7 +30,7 @@ public class LogParser
 	
 	LogParser() throws Exception
 	{
-		File logFile = new File("curlywhirly_usage.log");
+		File logFile = new File("curlywhirly.log");
 		
 		BufferedReader in = new BufferedReader(new FileReader(logFile));
 		String str = in.readLine();

@@ -41,7 +41,7 @@
 		</jar>
 	</target>
 	
-	<target name="install4j" depends="compile">
+	<target name="install4j" depends="jar">
 		<taskdef name="install4j"
 		classname="com.install4j.Install4JTask"
 		classpath="${i4j}"/>	

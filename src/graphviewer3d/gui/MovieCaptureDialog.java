@@ -219,6 +219,7 @@ public class MovieCaptureDialog extends javax.swing.JDialog implements ChangeLis
 		//start the movie capture
 		if (movieFile != null)
 		{
+			frame.frameListener.windowMoved = false;
 			frame.statusBar.setMessage("Capturing movie -- press Esc to abort");
 			new MovieCaptureThread(frame, movieFile, frameRate, rotationTime).start();
 		}

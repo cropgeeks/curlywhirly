@@ -115,8 +115,9 @@ public class MouseOverBehavior extends Behavior
 										// first find out which marker ring (cylinder) has been picked
 										Sphere sphere = (Sphere) pickedNode;
 										String mName = (String) namesHashT.get(sphere);
-										// display the feature name on the status bar of the frame
-										frame.statusBar.setMessage(" Point selected: " + mName);
+										// display the feature name on the status bar of the frame but only if we are not currently recording a movie
+										if(frame.currentMovieCaptureThread == null)
+											frame.statusBar.setMessage(" Point selected: " + mName);
 									}
 								}
 								catch (CapabilityNotSetException e)
