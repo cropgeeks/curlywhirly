@@ -179,7 +179,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 		sphereSize = axisLength / 100;
 		
 		// these can be hard coded because we have scaled all the data to be displayed
-		boundsSize = 100;
+		boundsSize = 1000;
 		initialZ = 4;
 		
 	}
@@ -257,24 +257,16 @@ public class GraphViewer3DCanvas extends Canvas3D
 			// now add behaviours
 			// rotation
 			PickRotateBehavior rotateBehaviour = new PickRotateBehavior(objRoot, this, bounds);
-			rotateBehaviour.setTolerance(50);
+			rotateBehaviour.setTolerance(500);
 			objRoot.addChild(rotateBehaviour);
 			// zooming
 			PickZoomBehavior zoomBehaviour = new PickZoomBehavior(objRoot, this, bounds);
-			zoomBehaviour.setTolerance(50);
+			zoomBehaviour.setTolerance(500);
 			objRoot.addChild(zoomBehaviour);
 			// selective highlighting
 			mouseOverBehaviour = new MouseOverBehavior(frame, spheresMap, objRoot, sphereSize);
 			mouseOverBehaviour.setSchedulingBounds(bounds);
 			objRoot.addChild(mouseOverBehaviour);
-			
-			//for stepwise rotation about the y axis
-			// Create the transform group node and add the transformation
-			// to the node. Add the transformation group to the scene graph.
-//			yRotationTransform = new Transform3D();	
-//			TransformGroup transformGroup = new TransformGroup(yRotationTransform);			
-//			transformGroup.addChild(wholeObj);
-//			objRoot.addChild(transformGroup);  
 			
 			objRoot.setCapability(BranchGroup.ALLOW_DETACH);
 			

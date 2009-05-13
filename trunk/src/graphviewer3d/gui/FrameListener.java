@@ -9,6 +9,8 @@ public class FrameListener implements ComponentListener,WindowFocusListener
 	
 	GraphViewerFrame frame = null;
 	
+	public boolean windowMoved = false;
+	
 	public FrameListener(GraphViewerFrame frame)
 	{
 		this.frame = frame;
@@ -21,17 +23,22 @@ public class FrameListener implements ComponentListener,WindowFocusListener
 	
 	public void componentMoved(ComponentEvent e)
 	{
-		if(frame.currentMovieCaptureThread != null)
+		//if the user has moved the window the movie screen capture will be disrupted and
+		//we need to cancel the capture
+		if(frame.currentMovieCaptureThread != null && !windowMoved)
 		{
 			frame.fatController.cancelMovieCapture();
-			TaskDialog.initialize(frame, "CurlyWhirly");
+			TaskDialog.initialize(null, "CurlyWhirly");
 			TaskDialog.error("Window moved -- movie capture failed", "Close");
 		}
+		windowMoved = true;
 	}
 	
 	
 	public void componentResized(ComponentEvent e)
 	{
+		//if the user has resized the window the movie screen capture will be disrupted and
+		//we need to cancel the capture
 		if(frame.currentMovieCaptureThread != null)
 		{
 			frame.fatController.cancelMovieCapture();

@@ -7,6 +7,9 @@ import javax.swing.*;
 
 public class Preferences extends XMLPreferences
 {
+	//the number of the last version released
+	public static String lastVersion = null;
+	
 	// Unique Curlywhirly ID for this user
 	public static String curlywhirlyID = SystemUtils.createGUID(32);
 

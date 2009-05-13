@@ -32,6 +32,8 @@ public class GraphViewerFrame extends JFrame
 	public GraphViewerMenuBar menuBar;
 	
 	public MovieCaptureThread currentMovieCaptureThread = null;
+	
+	public FrameListener frameListener = null;
 
 	public static void main(String[] args)
 	{
@@ -73,13 +75,22 @@ public class GraphViewerFrame extends JFrame
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
-		addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
+		addWindowListener(new WindowAdapter()
+		{
+			public void windowClosing(WindowEvent e)
+			{
 				shutdown();
+			}
+			
+			public void windowOpened(WindowEvent e)
+			{
+				//if the version has been updated, go to the website and get the update info
+				if (Install4j.displayUpdate)
+					GUIUtils.visitURL("http://bioinf.scri.ac.uk/curlywhirly/whatsnew.shtml");
 			}
 		});
 		
-		FrameListener frameListener = new FrameListener(this);
+		frameListener = new FrameListener(this);
 		addWindowFocusListener(frameListener);
 		addComponentListener(frameListener);
 

@@ -1,15 +1,12 @@
 package graphviewer3d.controller;
 
+import graphviewer3d.gui.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-
+import scri.commons.gui.*;
 import com.install4j.api.launcher.*;
 import com.install4j.api.update.*;
-
-import scri.commons.gui.*;
-
-import graphviewer3d.gui.*;
 
 /**
  * Utility class that performs install4j updater actions on behalf of CurlyWhirly.
@@ -19,6 +16,7 @@ public class Install4j
 	private static String URL = "http://bioinf.scri.ac.uk/curlywhirly/installers/updates.xml";
 
 	public static String VERSION = "x.xx.xx.xx";
+	public static boolean displayUpdate = false;
 
 	/**
 	 * install4j update check. This will only work when running under the full
@@ -67,6 +65,11 @@ public class Install4j
 				com.install4j.api.ApplicationRegistry.getApplicationInfoByDir(new File("."));
 
 			VERSION = info.getVersion();
+			
+			if (Preferences.lastVersion == null || !Preferences.lastVersion.equals(VERSION))
+				displayUpdate = true;
+
+			Preferences.lastVersion = VERSION;
 		}
 		catch (Exception e) {}
 		catch (Throwable e) {}
