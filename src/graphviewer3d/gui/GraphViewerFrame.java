@@ -9,6 +9,7 @@ import javax.swing.*;
 
 import apple.dts.samplecode.osxadapter.*;
 
+import scri.commons.file.*;
 import scri.commons.gui.*;
 
 public class GraphViewerFrame extends JFrame
@@ -26,13 +27,13 @@ public class GraphViewerFrame extends JFrame
 	static JCheckBox instructionsCheckBox;
 	public boolean dataLoaded = false;
 
-	private static File prefsFile = new File(System.getProperty("user.home"), ".curlywhirly.xml");
+	private static File prefsFile = getPrefsFile();
 	public static Preferences prefs = new Preferences();
 	public StatusBar statusBar;
 	public GraphViewerMenuBar menuBar;
-	
+
 	public MovieCaptureThread currentMovieCaptureThread = null;
-	
+
 	public FrameListener frameListener = null;
 
 	public static void main(String[] args)
@@ -60,7 +61,7 @@ public class GraphViewerFrame extends JFrame
 	{
 		//this initializes all the task dialog instances
 		TaskDialog.initialize(this, "CurlyWhirly");
-		
+
 		if (SystemUtils.isMacOS())
 			handleOSXStupidities();
 
@@ -81,7 +82,7 @@ public class GraphViewerFrame extends JFrame
 			{
 				shutdown();
 			}
-			
+
 			public void windowOpened(WindowEvent e)
 			{
 				//if the version has been updated, go to the website and get the update info
@@ -89,7 +90,7 @@ public class GraphViewerFrame extends JFrame
 					GUIUtils.visitURL("http://bioinf.scri.ac.uk/curlywhirly/whatsnew.shtml");
 			}
 		});
-		
+
 		frameListener = new FrameListener(this);
 		addWindowFocusListener(frameListener);
 		addComponentListener(frameListener);
@@ -182,6 +183,27 @@ public class GraphViewerFrame extends JFrame
 
 	}
 
+	private static File getPrefsFile()
+	{
+		// Ensure the .scri-bioinf folder exists
+		File fldr = new File(System.getProperty("user.home"), ".scri-bioinf");
+		fldr.mkdirs();
+
+		// This is the file we really want
+		File file = new File(fldr, "curlywhirly.xml");
+		// So if it exists, just use it
+		if (file.exists())
+			return file;
+
+		// If not, see if the "old" (pre 21/06/2010) file is available
+		File old = new File(System.getProperty("user.home"), ".curlywhirly.xml");
+		if (old.exists())
+			try { FileUtils.copyFile(old, file, true); }
+			catch (IOException e) {}
+
+		return file;
+	}
+
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	// --------------------------------------------------
@@ -222,6 +244,6 @@ public class GraphViewerFrame extends JFrame
 		shutdown();
 		return true;
 	}
-	
+
 
 }// end class
