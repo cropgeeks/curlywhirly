@@ -1,14 +1,11 @@
 feature additions:
 
 - multiple category scheme handling: have users select pairs of categories from the different schemes to make single "compound" category which is then assigned a colour and the spheres are updated accordingly
-- multiple category handling
-- movies
-- file prompt for location of saved image (and movie)
+- 64-bit Windows installer
 - window position/size tracking to preferences
 - increase exposure on web -- add keywords to web pages etc
 - make data points clickable and point them at a URL with annotation info
 - change point size
-
 
 
 Michael Moeller's list:

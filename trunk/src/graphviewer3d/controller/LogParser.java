@@ -25,12 +25,12 @@ public class LogParser
 		Class.forName("com.mysql.jdbc.Driver").newInstance();
 		c = DriverManager.getConnection("jdbc:mysql://penguin.scri.sari.ac.uk:3306/IP_locator", "root", "");
 		
-		new LogParser();
+		new LogParser(args[0]);
 	}
 	
-	LogParser() throws Exception
+	LogParser(String file) throws Exception
 	{
-		File logFile = new File("curlywhirly.log");
+		File logFile = new File(file);
 		
 		BufferedReader in = new BufferedReader(new FileReader(logFile));
 		String str = in.readLine();
@@ -53,10 +53,10 @@ public class LogParser
 		
 		String ip = tokens[1];
 		String id = tokens[2];
-		String locale = tokens[3];
-		String os = tokens[4];
+		String locale = tokens[4];
+		String os = tokens[6];
 		// Only parse the username if it's actually there
-		String username = (tokens.length == 6) ? tokens[5] : "";
+		String username = (tokens.length == 8) ? tokens[7] : "";
 		
 		// Check to see if this user has been included already?
 		User user = hashtable.get(id);
