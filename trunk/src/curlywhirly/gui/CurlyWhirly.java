@@ -12,14 +12,14 @@ import apple.dts.samplecode.osxadapter.*;
 import scri.commons.file.*;
 import scri.commons.gui.*;
 
-public class GraphViewerFrame extends JFrame
+public class CurlyWhirly extends JFrame
 {
 
 	// ===================================================vars =================================================
 
 	public FatController fatController = new FatController(this);
 	public static DataSet dataSet;
-	public static GraphViewer3DCanvas canvas3D;
+	public static MainCanvas canvas3D;
 	public int controlPanelWidth = 200;
 	public MTControlPanel controlPanel;
 	static JCheckBox instructionsCheckBox;
@@ -28,7 +28,7 @@ public class GraphViewerFrame extends JFrame
 	private static File prefsFile = getPrefsFile();
 	public static Preferences prefs = new Preferences();
 	public StatusBar statusBar;
-	public GraphViewerMenuBar menuBar;
+	public MenuBar menuBar;
 
 	public MovieCaptureThread currentMovieCaptureThread = null;
 
@@ -52,10 +52,10 @@ public class GraphViewerFrame extends JFrame
 			e.printStackTrace();
 		}
 
-		new GraphViewerFrame();
+		new CurlyWhirly();
 	}
 
-	GraphViewerFrame()
+	CurlyWhirly()
 	{
 		//this initializes all the task dialog instances
 		TaskDialog.initialize(this, "CurlyWhirly");
@@ -85,9 +85,7 @@ public class GraphViewerFrame extends JFrame
 			@Override
 			public void windowOpened(WindowEvent e)
 			{
-				//if the version has been updated, go to the website and get the update info
-				if (Install4j.displayUpdate)
-					GUIUtils.visitURL("http://bioinf.scri.ac.uk/curlywhirly/whatsnew.shtml");
+
 			}
 		});
 
@@ -147,7 +145,7 @@ public class GraphViewerFrame extends JFrame
 
 		// instantiate the canvas here rather than in the data load method
 		// we want to be able to recycle it when we load another dataset over the top of the current one
-		canvas3D = new GraphViewer3DCanvas(this);
+		canvas3D = new MainCanvas(this);
 
 		// side panel
 		controlPanel = new MTControlPanel(this);
@@ -160,7 +158,7 @@ public class GraphViewerFrame extends JFrame
 		canvas3D.createSceneGraph(false);
 
 		// menu bar
-		menuBar = new GraphViewerMenuBar(this);
+		menuBar = new MenuBar(this);
 		this.setJMenuBar(menuBar);
 
 		// status bar

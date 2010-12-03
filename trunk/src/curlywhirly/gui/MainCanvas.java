@@ -15,7 +15,7 @@ import curlywhirly.data.*;
  *
  * A 3D graph viewing Canvas
  */
-public class GraphViewer3DCanvas extends Canvas3D
+public class MainCanvas extends Canvas3D
 {
 
 	// ==================================vars=============================
@@ -98,7 +98,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 	HashMap<Sphere, String> spheresMap;
 
 	//the parent frame
-	GraphViewerFrame frame;
+	CurlyWhirly frame;
 
 	//this behaviour allows us to mouse over a sphere and detect its value
 	MouseOverBehavior mouseOverBehaviour;
@@ -110,7 +110,7 @@ public class GraphViewer3DCanvas extends Canvas3D
 
 	// ==================================c'tor=============================
 
-	public GraphViewer3DCanvas(GraphViewerFrame frame)
+	public MainCanvas(CurlyWhirly frame)
 	{
 		super(getGraphicsConfig());
 		this.frame = frame;
