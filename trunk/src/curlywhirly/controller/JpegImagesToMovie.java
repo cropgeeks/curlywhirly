@@ -53,12 +53,12 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 	int canvasWidth, canvasHeight, animationTimeSecs, frameRate;
 	String videoFormatEncoding, fileExtension, contentType,movieFilePath;
 	File imageDirectory, movieFile;
-	GraphViewerFrame frame;
+	CurlyWhirly frame;
 	MovieAssembleDialog movieAssembleDialog;
 	
 	// ========================================================c'tor=======================================
 	
-	public JpegImagesToMovie(GraphViewerFrame frame, String videoFormatEncoding, String contentType, int canvasWidth, int canvasHeight, int animationTimeSecs, int frameRate, File imageDirectory, File movieFile)
+	public JpegImagesToMovie(CurlyWhirly frame, String videoFormatEncoding, String contentType, int canvasWidth, int canvasHeight, int animationTimeSecs, int frameRate, File imageDirectory, File movieFile)
 	{
 		this.frame = frame;
 		movieAssembleDialog = new MovieAssembleDialog(frame, false);

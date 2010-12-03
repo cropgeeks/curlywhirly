@@ -36,12 +36,12 @@ public class MouseOverBehavior extends Behavior
 	
 	public HashMap namesHashT = null;
 	
-	GraphViewer3DCanvas canvas;
-	GraphViewerFrame frame;
+	MainCanvas canvas;
+	CurlyWhirly frame;
 	
 	// ========================================c'tor============================
 	
-	public MouseOverBehavior(GraphViewerFrame frame, HashMap _namesHashT, BranchGroup _objRoot, float sphereSize)
+	public MouseOverBehavior(CurlyWhirly frame, HashMap _namesHashT, BranchGroup _objRoot, float sphereSize)
 	{
 		this.namesHashT = _namesHashT;
 		this.objRoot = _objRoot;

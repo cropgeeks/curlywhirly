@@ -4,9 +4,9 @@ import java.awt.event.*;
 
 public class CanvasKeyListener implements KeyListener
 {
-	private GraphViewer3DCanvas canvas;
+	private MainCanvas canvas;
 	
-	public CanvasKeyListener(GraphViewer3DCanvas canvas)
+	public CanvasKeyListener(MainCanvas canvas)
 	{
 		this.canvas = canvas;
 	}

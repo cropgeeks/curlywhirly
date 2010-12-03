@@ -12,11 +12,11 @@ public class FatController
 	
 	// ============================================vars==============================================	
 	
-	GraphViewerFrame frame;
+	CurlyWhirly frame;
 	
 	// ============================================c'tor==============================================
 	
-	public FatController(GraphViewerFrame frame)
+	public FatController(CurlyWhirly frame)
 	{
 		this.frame = frame;
 	}

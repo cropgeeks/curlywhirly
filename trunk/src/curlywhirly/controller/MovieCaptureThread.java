@@ -34,13 +34,13 @@ public class MovieCaptureThread extends Thread
 	//time the graph takes to do one full rotation
 	int rotationTime = 0;
 	
-	GraphViewerFrame frame;
+	CurlyWhirly frame;
 	
 	public boolean threadCanceled = false;
 	
 	//===============================c'tor================================================	
 	
-	public MovieCaptureThread(GraphViewerFrame frame, File movieFile,int frameRate,int rotationTime)
+	public MovieCaptureThread(CurlyWhirly frame, File movieFile,int frameRate,int rotationTime)
 	{
 		this.frame = frame;
 		this.movieFile = movieFile;
@@ -64,7 +64,7 @@ public class MovieCaptureThread extends Thread
 			try{Thread.sleep(500);}catch(InterruptedException x){}
 			
 			//set up the screen capture robot
-			GraphViewer3DCanvas canvas = GraphViewerFrame.canvas3D;
+			MainCanvas canvas = CurlyWhirly.canvas3D;
 			Robot robot  = new Robot();
 			robot.setAutoWaitForIdle(true);
 			Point p = canvas.getLocationOnScreen();

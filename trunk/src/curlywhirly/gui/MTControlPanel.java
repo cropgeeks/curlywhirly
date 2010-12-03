@@ -20,14 +20,14 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 	// ==========================================vars============================================
 
 	private int[] indexes;
-	GraphViewerFrame frame;
+	CurlyWhirly frame;
 	private Vector<String> categories;
 	Vector<Category> listItems;
 
 	// ==========================================c'tor============================================
 
 	/** Creates new form MTControlPanel */
-	public MTControlPanel(GraphViewerFrame frame)
+	public MTControlPanel(CurlyWhirly frame)
 	{
 		initComponents();
 		this.frame = frame;

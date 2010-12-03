@@ -10,14 +10,14 @@ public class DataLoader
 
 	// ==========================================vars=========================================
 
-	GraphViewerFrame frame;
+	CurlyWhirly frame;
 	DataSet dataSet = new DataSet();
 
 	boolean errorInHeaders = false;
 
 	// ==========================================c'tor=========================================
 
-	public DataLoader(GraphViewerFrame frame)
+	public DataLoader(CurlyWhirly frame)
 	{
 		this.frame = frame;
 	}
