@@ -20,10 +20,8 @@ public class GraphViewerFrame extends JFrame
 	public FatController fatController = new FatController(this);
 	public static DataSet dataSet;
 	public static GraphViewer3DCanvas canvas3D;
-	public static JPanel canvasPanel;
 	public int controlPanelWidth = 200;
 	public MTControlPanel controlPanel;
-	JLabel openLabel;
 	static JCheckBox instructionsCheckBox;
 	public boolean dataLoaded = false;
 
@@ -78,11 +76,13 @@ public class GraphViewerFrame extends JFrame
 
 		addWindowListener(new WindowAdapter()
 		{
+			@Override
 			public void windowClosing(WindowEvent e)
 			{
 				shutdown();
 			}
 
+			@Override
 			public void windowOpened(WindowEvent e)
 			{
 				//if the version has been updated, go to the website and get the update info
@@ -123,16 +123,12 @@ public class GraphViewerFrame extends JFrame
 			return;
 		}
 
-		// only add the canvas to the panel if we haven't got data loaded already
-		if (!dataLoaded)
-			canvasPanel.add(canvas3D, BorderLayout.CENTER);
-
 		//set up the new dataset and make a new scene graph
 		//normalize first
 		//this sets the data up so that each axis is normalized to between -1 and 1 and the data fills the whole range
 		DataNormalizer.normalizeDataSet(dataSet);
 		canvas3D.dataSet = dataSet;
-		canvas3D.createSceneGraph();
+		canvas3D.createSceneGraph(true);
 
 		//do the rest of the set up
 		controlPanel.setUpListData();
@@ -149,20 +145,9 @@ public class GraphViewerFrame extends JFrame
 		//workaround for the 3D drawing problem with Swing menus
 //		JPopupMenu.setDefaultLightWeightPopupEnabled( false );
 
-		// make a new panel for the 3D panel
-		canvasPanel = new JPanel(new BorderLayout());
-		canvasPanel.setPreferredSize(new Dimension(600, 600));
-
 		// instantiate the canvas here rather than in the data load method
 		// we want to be able to recycle it when we load another dataset over the top of the current one
 		canvas3D = new GraphViewer3DCanvas(this);
-
-		// //add a label instructing the user to open a file
-		openLabel = new JLabel("Open a data file to begin.",JLabel.CENTER);
-		openLabel.setFont(new Font("SANS_SERIF", Font.PLAIN, 18));
-		canvasPanel.add(openLabel, BorderLayout.CENTER);
-		canvasPanel.setBackground(Color.LIGHT_GRAY);
-		openLabel.setForeground(new Color(120,120,120));
 
 		// side panel
 		controlPanel = new MTControlPanel(this);
@@ -170,8 +155,9 @@ public class GraphViewerFrame extends JFrame
 		// main panel
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		mainPanel.add(controlPanel, BorderLayout.WEST);
-		mainPanel.add(canvasPanel, BorderLayout.CENTER);
-		this.getContentPane().add(mainPanel);
+		mainPanel.add(canvas3D, BorderLayout.CENTER);
+		canvas3D.setPreferredSize(new Dimension(600, 600));
+		canvas3D.createSceneGraph(false);
 
 		// menu bar
 		menuBar = new GraphViewerMenuBar(this);
@@ -181,6 +167,7 @@ public class GraphViewerFrame extends JFrame
 		statusBar = new StatusBar();
 		getContentPane().add(statusBar, java.awt.BorderLayout.SOUTH);
 
+		this.getContentPane().add(mainPanel);
 	}
 
 	private static File getPrefsFile()
@@ -206,7 +193,6 @@ public class GraphViewerFrame extends JFrame
 
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	// --------------------------------------------------
 	// Methods required for better native support on OS X
 
 	private void handleOSXStupidities()
