@@ -7,11 +7,11 @@ public class FrameListener implements ComponentListener,WindowFocusListener
 
 {
 	
-	GraphViewerFrame frame = null;
+	CurlyWhirly frame = null;
 	
 	public boolean windowMoved = false;
 	
-	public FrameListener(GraphViewerFrame frame)
+	public FrameListener(CurlyWhirly frame)
 	{
 		this.frame = frame;
 	}

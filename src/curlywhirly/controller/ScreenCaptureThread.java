@@ -20,12 +20,12 @@ import curlywhirly.gui.*;
 public class ScreenCaptureThread extends Thread
 {
 	File outfile;
-	GraphViewerFrame frame;
+	CurlyWhirly frame;
 	String fileType;
 	JFileChooser fileChooser;
 	
 	
-	public ScreenCaptureThread(File outfile, GraphViewerFrame frame,String fileType, JFileChooser fileChooser)
+	public ScreenCaptureThread(File outfile, CurlyWhirly frame,String fileType, JFileChooser fileChooser)
 	{
 		this.outfile = outfile;
 		this.frame = frame;
@@ -36,7 +36,7 @@ public class ScreenCaptureThread extends Thread
 	//take a screenshot of the canvas only
 	public void run()
 	{		
-		GraphViewer3DCanvas canvas = frame.canvas3D;
+		MainCanvas canvas = frame.canvas3D;
 		canvas.setVisible(true);				
 		Robot robot =null;
 		try

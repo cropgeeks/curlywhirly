@@ -9,10 +9,10 @@ import scri.commons.gui.TaskDialog;
 
 public class Instructions3D  implements ItemListener
 {
-	GraphViewerFrame frame;
+	CurlyWhirly frame;
 	JCheckBox instructionsCheckBox;
 
-	public Instructions3D(GraphViewerFrame frame)
+	public Instructions3D(CurlyWhirly frame)
 	{
 		this.frame = frame;
 	}

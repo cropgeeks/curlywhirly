@@ -25,14 +25,14 @@ public class MovieCaptureDialog extends javax.swing.JDialog implements ChangeLis
 	public File movieFile;
 	int defaultFrameRate = 20;
 	int defaultAnimationTime = 5;
-	GraphViewerFrame frame;
+	CurlyWhirly frame;
 	
 	final int spinSpeedSlow = 15;
 	final int spinSpeedMedium = 8;
 	final int spinSpeedFast = 3;
 	
 	/** Creates new form MovieCaptureDialog */
-	public MovieCaptureDialog(GraphViewerFrame frame, boolean modal)
+	public MovieCaptureDialog(CurlyWhirly frame, boolean modal)
 	{
 		super(frame, modal);
 		initComponents();
@@ -271,7 +271,7 @@ public class MovieCaptureDialog extends javax.swing.JDialog implements ChangeLis
 	{
 		int fileSize = 0;
 		
-		GraphViewer3DCanvas canvas = GraphViewerFrame.canvas3D;
+		MainCanvas canvas = CurlyWhirly.canvas3D;
 		int canvasWidth = canvas.getWidth();
 		int canvasHeight = canvas.getHeight();
 		

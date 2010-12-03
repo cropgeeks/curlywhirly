@@ -8,12 +8,12 @@ import curlywhirly.gui.*;
 
 public class FileLoader extends Thread
 {
-	GraphViewerFrame frame;
+	CurlyWhirly frame;
 	public boolean done = false;
 	File file;
 	DataLoadingDialog dataLoadingDialog;
 
-	public FileLoader(GraphViewerFrame frame, File file, DataLoadingDialog dataLoadingDialog)
+	public FileLoader(CurlyWhirly frame, File file, DataLoadingDialog dataLoadingDialog)
 	{
 		this.frame = frame;
 		this.file = file;

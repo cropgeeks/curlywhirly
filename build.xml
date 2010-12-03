@@ -1,6 +1,6 @@
 <project name="CurlyWhirly" default="compile" basedir=".">
     
-    <property name="i4j" value="C:\Program Files\install4j\bin\ant.jar"/>
+    <property name="i4j" value="C:\Program Files\install4j5\bin\ant.jar"/>
     
 	<property name="src" location="src"/>
 	<property name="classes" location="classes"/>
@@ -53,5 +53,7 @@
 		<input message="Enter the version number:" addproperty="version"/>
 		<install4j projectfile="installer/curlywhirly_installer.install4j" release="${version}"/>
 	</target>
+	
+	
 	
 </project>
