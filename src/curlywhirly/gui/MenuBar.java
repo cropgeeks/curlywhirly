@@ -7,7 +7,7 @@ import javax.swing.*;
 import curlywhirly.controller.*;
 import scri.commons.gui.*;
 
-public class GraphViewerMenuBar extends JMenuBar implements ActionListener
+public class MenuBar extends JMenuBar implements ActionListener
 {
 	// Returns value for "CTRL" under most OSs, and the "apple" key for OS X
 	private int menuShortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
@@ -20,12 +20,12 @@ public class GraphViewerMenuBar extends JMenuBar implements ActionListener
 	JMenuItem exitItem;
 	JMenuItem saveItem;
 	JMenuItem movieItem;
-	GraphViewerFrame frame;
+	CurlyWhirly frame;
 	JFileChooser fc;
 	DataLoadingDialog dataLoadingDialog;
 	public MovieCaptureDialog movieCaptureDialog;
 
-	public GraphViewerMenuBar(GraphViewerFrame frame)
+	public MenuBar(CurlyWhirly frame)
 	{
 		this.frame = frame;
 		movieCaptureDialog = new MovieCaptureDialog(frame,true);
