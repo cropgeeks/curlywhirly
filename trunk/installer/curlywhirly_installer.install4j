@@ -11,7 +11,10 @@
       <envVar name="JAVA_HOME" />
       <envVar name="JDK_HOME" />
     </searchSequence>
-    <variables />
+    <variables>
+      <variable name="changeLog" value="Show change log" description="" category="" />
+      <variable name="urlWhatsNew" value="http://bioinf.scri.ac.uk/curlywhirly/whatsnew.shtml" description="" category="" />
+    </variables>
     <mergedProjects />
   </application>
   <files keepModificationTimes="false" missingFilesStrategy="warn" defaultOverwriteMode="4" defaultUninstallMode="0" launcherOverwriteMode="3" defaultFileMode="644" defaultDirMode="755">
@@ -69,7 +72,7 @@
           <versionLine x="20" y="40" text="version ${compiler:sys.version}" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
         </text>
       </splashScreen>
-      <java mainClass="graphviewer3d.gui.GraphViewerFrame" vmParameters="-Xmx256m -Djava.ext.dirs=lib -Djava.library.path=." arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
+      <java mainClass="curlywhirly.gui.CurlyWhirly" vmParameters="-Xmx256m -Djava.ext.dirs=lib -Djava.library.path=." arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
         <classPath>
           <archive location="curlywhirly.jar" failOnError="false" />
           <scanDirectory location="lib" failOnError="false" />
@@ -781,6 +784,22 @@
                           </void>
                           <void property="valueLabelText">
                             <string>${installer:updaterNewVersion}</string>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <initScript />
+                    <visibilityScript />
+                  </formComponent>
+                  <formComponent name="" id="434" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.HyperlinkLabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.formcomponents.HyperlinkLabelComponent">
+                          <void property="hyperlinkText">
+                            <string>${compiler:changeLog}</string>
+                          </void>
+                          <void property="url">
+                            <string>${compiler:urlWhatsNew}</string>
                           </void>
                         </object>
                       </java>

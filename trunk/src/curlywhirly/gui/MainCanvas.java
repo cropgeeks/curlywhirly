@@ -21,8 +21,8 @@ public class MainCanvas extends Canvas3D
 	// ==================================vars=============================
 
 	// variables to adjust manually for now
-	int boundsSize;
-	float initialZ;
+	int boundsSize = 1000;
+	float initialZ = 4;
 	static boolean antiAlias = true;
 
 	// infrastructure
@@ -48,16 +48,16 @@ public class MainCanvas extends Canvas3D
 	DataSet dataSet;
 
 	// the length of the coordinate system axes
-	float axisLength = 0;
+	float axisLength = 1.0f ;
 
 	// the size of the spheres to be used
-	float sphereSize = 0;
+	float sphereSize = axisLength / 100;
 
 	// the background for the canvas
 	Background background;
 
 	// arrays that hold the sphere (point) objects and the corresponding category strings
-	Shape3D[] allSpheres;
+	ArrayList<DataSphere> allDataSpheres = new ArrayList<DataSphere>();
 	String[] categories;
 
 	public Vector<Category> selectorListItems;
@@ -105,6 +105,9 @@ public class MainCanvas extends Canvas3D
 
 	//the default background colour for the canvas
 	Color3f bgColour = new Color3f(Color.BLACK);
+	
+	//the categorization scheme we are currently using
+	public static ClassificationScheme currentClassificationScheme;
 
 
 
@@ -133,22 +136,20 @@ public class MainCanvas extends Canvas3D
 			// default colour to flag colour related problems
 			Color3f colour = new Color3f(Color.RED);
 
-			// a hashmap containing category names as keys and colors as values
-			HashMap<String, Category> categoryMap = dataSet.categoryMap;
-
 			// for all spheres
-			for (int i = 0; i < allSpheres.length; i++)
+			for (DataSphere dataSphere : allDataSpheres)
 			{
+				Shape3D shape3d = dataSphere.getShape();
 				Material mat = new Material();
+				
+				//find out which category scheme is getting used at the moment and retrieve the appropriate value from the data entry object
+				int categorySchemeIndex =  dataSet.classificationSchemes.indexOf(currentClassificationScheme);				
+				Category category = dataSphere.dataEntry.categories.get(categorySchemeIndex);
 
-				// the name of the current category
-				String category = categories[i];
-
-				Category categoryItem = categoryMap.get(category);
-				if (categoryItem != null)
+				if (category != null)
 				{
-					if(categoryItem.highlight || highlightAllCategories)
-						colour = categoryItem.colour;
+					if(category.highlight || highlightAllCategories)
+						colour = category.colour;
 					else
 						colour = new Color3f(Color.DARK_GRAY);
 				}
@@ -158,7 +159,7 @@ public class MainCanvas extends Canvas3D
 				app.setMaterial(mat);
 				app.setCapability(AlternateAppearance.ALLOW_SCOPE_WRITE);
 				app.setCapability(AlternateAppearance.ALLOW_SCOPE_READ);
-				allSpheres[i].setAppearance(app);
+				shape3d.setAppearance(app);
 			}
 		}
 		catch (Exception e)
@@ -170,7 +171,7 @@ public class MainCanvas extends Canvas3D
 	// ---------------------------------------------------------------------------------------------------------------------
 
 	//works out relative sizes required for the system
-	private void calculateSizes()
+	public void calculateSizes()
 	{
 		//hard code this for now -- seems to be ok at a fixed value
 		axisLength = 1.0f;
@@ -395,6 +396,8 @@ public class MainCanvas extends Canvas3D
 	//update the current scene graph with new settings
 	public void updateGraph()
 	{
+//		System.out.println("updating graph");
+		
 		List selectedCategories = null;
 		if (selectedObjects != null && selectedObjects.length > 0)
 		{
@@ -402,7 +405,7 @@ public class MainCanvas extends Canvas3D
 		}
 
 		// for each category
-		for (Category category : dataSet.categoryMap.values())
+		for (Category category : currentClassificationScheme.categories)
 		{
 			if (selectedObjects != null && selectedObjects.length > 0)
 			{
@@ -484,37 +487,34 @@ public class MainCanvas extends Canvas3D
 		// make up the spheres that represent the data points
 		Vector3f vec = new Vector3f();
 		Transform3D translate = new Transform3D();
-		allSpheres = new Shape3D[dataSet.numEntries];
-		categories = new String[dataSet.numEntries];
+//		allSpheres = new Shape3D[dataSet.numEntries];
+//		categories = new String[dataSet.numEntries];
 
 		// for each entry in the dataset
-		for (int i = 0; i < dataSet.numEntries; i++)
+		for (DataEntry dataEntry : dataSet.dataEntries)
 		{
 			// get x, y and z coords for this data point
-			float x, y, z;
-			float[] xData = dataSet.data.get(currentXIndex);
-			float[] yData = dataSet.data.get(currentYIndex);
-			float[] zData = dataSet.data.get(currentZIndex);
-			x = xData[i];
-			y = yData[i];
-			z = zData[i];
-
-			String category = dataSet.groupIds[i];
+			float x = dataEntry.normalizedDataValues.get(currentXIndex);
+			float y = dataEntry.normalizedDataValues.get(currentYIndex);
+			float z = dataEntry.normalizedDataValues.get(currentZIndex);
 
 			// apply this and make the sphere
 			vec.set(x, y, z);
 			translate.setTranslation(vec);
 			TransformGroup sphereTG = new TransformGroup(translate);
-			Sphere sphere = new Sphere(sphereSize);
-			Shape3D shape = sphere.getShape();
+			
+			//get the sphere object for the current datapoint			
+			dataEntry.dataSphere = new DataSphere(sphereSize);
+			dataEntry.dataSphere.dataEntry = dataEntry;
+			Shape3D shape = dataEntry.dataSphere.getShape();
 			shape.setCapability(Shape3D.ALLOW_APPEARANCE_OVERRIDE_WRITE);
 			shape.setCapability(Shape3D.ALLOW_APPEARANCE_WRITE);
-			// store the sphere shape and the corresponding category in their respective arrays so we can access them easily later
-			allSpheres[i] = shape;
-			categories[i] = category;
-			sphereTG.addChild(sphere);
+			
+			//add the sphere to the list and to the scene graph
+			allDataSpheres.add(dataEntry.dataSphere);
+			sphereTG.addChild(dataEntry.dataSphere);
 			allSpheresBG.addChild(sphereTG);
-			spheresMap.put(sphere, dataSet.groupLabels[i]);
+			spheresMap.put(dataEntry.dataSphere, dataEntry.label);
 		}
 		wholeObj.addChild(allSpheresBG);
 
@@ -523,6 +523,7 @@ public class MainCanvas extends Canvas3D
 			mouseOverBehaviour.namesHashT = spheresMap;
 	}
 
+	
 	// ---------------------------------------------------------------------------------------------------------------------
 
 	//creates pointy tips for the axes
