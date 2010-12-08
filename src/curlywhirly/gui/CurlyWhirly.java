@@ -33,6 +33,8 @@ public class CurlyWhirly extends JFrame
 	public MovieCaptureThread currentMovieCaptureThread = null;
 
 	public FrameListener frameListener = null;
+	
+	public static DataLoader dataLoader;
 
 	public static void main(String[] args)
 	{
@@ -109,10 +111,10 @@ public class CurlyWhirly extends JFrame
 	public void loadData(File file)
 	{
 		//load the data from file
-		DataLoader loader = new DataLoader(this);
+		dataLoader = new DataLoader(this);
 		try
 		{
-			dataSet = loader.getDataFromFile(file);
+			dataSet = dataLoader.getDataFromFile(file);
 		}
 		catch (IOException e)
 		{

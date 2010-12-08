@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import java.util.*;
+import java.util.List;
 import javax.swing.*;
 import curlywhirly.data.*;
 import scri.commons.gui.*;
@@ -40,11 +41,10 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 
 	private void addComboModels()
 	{
-		// set the Vector with the data headers as the model for the combo boxes that allow selection of variables
-		Vector dataHeaders = frame.dataSet.dataHeaders;
-		xCombo.setModel(new DefaultComboBoxModel(dataHeaders));
-		yCombo.setModel(new DefaultComboBoxModel(dataHeaders));
-		zCombo.setModel(new DefaultComboBoxModel(dataHeaders));
+		// set the data headers as the model for the combo boxes that allow selection of variables
+		xCombo.setModel(new DefaultComboBoxModel(frame.dataSet.allHeaders));
+		yCombo.setModel(new DefaultComboBoxModel(frame.dataSet.allHeaders));
+		zCombo.setModel(new DefaultComboBoxModel(frame.dataSet.allHeaders));
 	}
 
 	public void resetComboBoxes()
@@ -62,7 +62,8 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 	public void setUpListData()
 	{
 		// get the list items
-		listItems = new Vector<Category>(frame.dataSet.categoryMap.values());
+		listItems = new Vector<Category>();
+		listItems.addAll(MainCanvas.currentClassificationScheme.categories);
 		Collections.sort(listItems);
 		// table for selecting categories to highlight
 		selectorList.setListData(listItems);

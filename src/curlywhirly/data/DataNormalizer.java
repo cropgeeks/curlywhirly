@@ -1,6 +1,7 @@
 package curlywhirly.data;
 
 import java.util.*;
+import curlywhirly.gui.*;
 
 public class DataNormalizer
 {
@@ -11,20 +12,19 @@ public class DataNormalizer
 	
 	//================================================methods=======================================
 	
+	//divide the data by a scaling factor so that everything is normalized to be between 1 and -1
 	public static DataSet normalizeDataSet(DataSet dataSet)
 	{
-		
-		//the values of the raw data
-		Vector<float[]> data = dataSet.data;
-		
-		for (float[] variableArray : data)
+		//for each column of data we have
+		for (int i = 0; i < CurlyWhirly.dataLoader.numDataColumns; i++)
 		{
-			//first iterate over the entire array to find the maximum value
+			//first iterate over the variable values to find the maximum value
 			float absoluteMax = 0;
-			float absoluteMin = 0;		
-			for (int i = 0; i < variableArray.length; i++)
+			float absoluteMin = 0;
+			// for each entry in the dataset
+			for (DataEntry dataEntry : dataSet.dataEntries)
 			{
-				float value = variableArray[i];
+				float value = dataEntry.dataValues.get(i);
 				if (value > absoluteMax)
 					absoluteMax = value;
 				if (value < absoluteMin)
@@ -38,12 +38,14 @@ public class DataNormalizer
 			else
 				scalingFactor = Math.abs(absoluteMin);
 			
-			//now replace every value in the original data with its normalized equivalent
-			for (int i = 0; i < variableArray.length; i++)
+			for (DataEntry dataEntry : dataSet.dataEntries)
 			{
-				variableArray[i] = (variableArray[i]/scalingFactor);
+				float value = dataEntry.dataValues.get(i);
+				float normalizedValue = value/scalingFactor;
+				//store this 
+				dataEntry.normalizedDataValues.add(normalizedValue);
 			}
-			
+		
 		}
 
 		return dataSet;
