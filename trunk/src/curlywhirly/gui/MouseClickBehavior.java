@@ -21,7 +21,7 @@ import com.sun.j3d.utils.picking.PickResult;
  * 
  * @author Micha Bayer, Scottish Crop Research Institute
  */
-public class MouseOverBehavior extends Behavior
+public class MouseClickBehavior extends Behavior
 {
 	
 	// =======================================vars==============================
@@ -41,7 +41,7 @@ public class MouseOverBehavior extends Behavior
 	
 	// ========================================c'tor============================
 	
-	public MouseOverBehavior(CurlyWhirly frame, HashMap _namesHashT, BranchGroup _objRoot, float sphereSize)
+	public MouseClickBehavior(CurlyWhirly frame, HashMap _namesHashT, BranchGroup _objRoot, float sphereSize)
 	{
 		this.namesHashT = _namesHashT;
 		this.objRoot = _objRoot;
@@ -57,7 +57,7 @@ public class MouseOverBehavior extends Behavior
 	
 	public void initialize()
 	{
-		wakeupOn(new WakeupOnAWTEvent(MouseEvent.MOUSE_MOVED));		
+		wakeupOn(new WakeupOnAWTEvent(MouseEvent.MOUSE_CLICKED));		
 	}
 	
 	// ------------------------------------------------------------------------------------------------------------------------------------------
@@ -77,7 +77,7 @@ public class MouseOverBehavior extends Behavior
 				for (int ii = 0; ii < event.length; ii++)
 				{
 					eventId = event[ii].getID();
-					if (eventId == MouseEvent.MOUSE_MOVED)
+					if (eventId == MouseEvent.MOUSE_CLICKED)
 					{
 						int x = ((MouseEvent) event[ii]).getX();
 						int y = ((MouseEvent) event[ii]).getY();
@@ -112,16 +112,17 @@ public class MouseOverBehavior extends Behavior
 									if (Class.forName("com.sun.j3d.utils.geometry.Sphere").isInstance(pickedNode))
 									{
 										// first find out which marker ring (cylinder) has been picked
-										Sphere sphere = (Sphere) pickedNode;
-										String mName = (String) namesHashT.get(sphere);
+										Sphere sphere = (Sphere) pickedNode;								
 										// display the feature name on the status bar of the frame but only if we are not currently recording a movie
 										if(frame.currentMovieCaptureThread == null)
 										{
-											frame.statusBar.setMessage(" Point selected: " + mName);
-											
-											if (CurlyWhirly.dataAnnotationURL != null)
+											String dataEntryLabel = ((DataSphere)sphere).dataEntry.label;
+											//now we can open a web browser with the stored URL and the current label as a parameter
+											String url = null;
+											if(CurlyWhirly.dataAnnotationURL != null)
 											{
-												CurlyWhirly.canvas3D.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+												url = CurlyWhirly.dataAnnotationURL + dataEntryLabel;
+												GUIUtils.visitURL(url);
 											}
 										}
 									}
@@ -143,11 +144,7 @@ public class MouseOverBehavior extends Behavior
 						else
 						{
 							if(frame.currentMovieCaptureThread == null)
-							{
 								frame.statusBar.setDefaultText();
-								//show a normal cursor
-								CurlyWhirly.canvas3D.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-							}
 							pickedNode = null;
 							isObjectSelectedBefore = false;
 						}
@@ -155,7 +152,7 @@ public class MouseOverBehavior extends Behavior
 				}
 			}
 		}
-		wakeupOn(new WakeupOnAWTEvent(MouseEvent.MOUSE_MOVED));
+		wakeupOn(new WakeupOnAWTEvent(MouseEvent.MOUSE_CLICKED));
 	}
 	
 	// ------------------------------------------------------------------------------------------------------------------------------------------
