@@ -410,7 +410,7 @@ public class MainCanvas extends Canvas3D
 			if (selectedObjects != null && selectedObjects.length > 0)
 			{
 				// if it is contained in the selected items
-				if (selectedCategories.contains(category))
+				if (selectedCategories.contains(category.name))
 				{
 					// set its highlight flag to true
 					category.highlight = true;

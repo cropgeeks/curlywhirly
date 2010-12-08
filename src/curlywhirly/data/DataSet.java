@@ -23,7 +23,7 @@ public class DataSet
 	public String[] allHeaders;
 	
 	//the headers for data columns only
-	public LinkedList<String> dataHeaders = new LinkedList<String>();
+	public Vector<String> dataHeaders = new Vector<String>();
 
 	//the number of entries in the dataset
 	public int numEntries;
@@ -51,10 +51,7 @@ public class DataSet
 			dataEntry.printAsLine();
 
 	}
-	
-	
 
-	
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	
 	

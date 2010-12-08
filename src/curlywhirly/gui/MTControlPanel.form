@@ -64,9 +64,9 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="zCombo" alignment="0" pref="130" max="32767" attributes="0"/>
-                              <Component id="yCombo" alignment="0" pref="130" max="32767" attributes="0"/>
-                              <Component id="xCombo" alignment="0" pref="130" max="32767" attributes="0"/>
+                              <Component id="zCombo" alignment="0" pref="135" max="32767" attributes="0"/>
+                              <Component id="yCombo" alignment="0" pref="135" max="32767" attributes="0"/>
+                              <Component id="xCombo" alignment="0" pref="135" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -78,11 +78,11 @@
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Component id="spinSpeedSlider" alignment="0" pref="131" max="32767" attributes="1"/>
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="jLabel5" pref="76" max="32767" attributes="0"/>
+                          <Component id="jLabel5" pref="80" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="spinButton" alignment="0" max="32767" attributes="3"/>
+                      <Component id="spinButton" alignment="0" pref="131" max="32767" attributes="3"/>
                       <Component id="resetViewButton" alignment="0" pref="131" max="32767" attributes="2"/>
                   </Group>
                   <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
@@ -131,8 +131,8 @@
         </Component>
         <Component class="javax.swing.JComboBox" name="xCombo">
           <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="0"/>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new DefaultComboBoxModel()" type="code"/>
             </Property>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="null"/>
@@ -149,8 +149,8 @@
         </Component>
         <Component class="javax.swing.JComboBox" name="yCombo">
           <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="0"/>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new DefaultComboBoxModel()" type="code"/>
             </Property>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="null"/>
@@ -167,8 +167,8 @@
         </Component>
         <Component class="javax.swing.JComboBox" name="zCombo">
           <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="0"/>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new DefaultComboBoxModel()" type="code"/>
             </Property>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="null"/>
@@ -230,11 +230,11 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="categoryTabbedPane" alignment="0" pref="173" max="32767" attributes="0"/>
                       <Component id="resetColoursButton" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" alignment="2" pref="173" max="32767" attributes="0"/>
                       <Component id="jLabel4" alignment="0" pref="173" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -245,9 +245,9 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="166" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
+                  <Component id="categoryTabbedPane" pref="134" max="32767" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="resetColoursButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -255,25 +255,6 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Container class="javax.swing.JScrollPane" name="jScrollPane1">
-          <AuxValues>
-            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-          </AuxValues>
-
-          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-          <SubComponents>
-            <Component class="javax.swing.JList" name="selectorList">
-              <Properties>
-                <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-                  <StringArray count="0"/>
-                </Property>
-              </Properties>
-              <Events>
-                <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="selectorListValueChanged"/>
-              </Events>
-            </Component>
-          </SubComponents>
-        </Container>
         <Component class="javax.swing.JButton" name="resetColoursButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Reset selection"/>
@@ -287,6 +268,10 @@
             <Property name="text" type="java.lang.String" value="&lt;html&gt;Click to select. Use CTRL+click for multiple selections."/>
           </Properties>
         </Component>
+        <Container class="javax.swing.JTabbedPane" name="categoryTabbedPane">
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
+        </Container>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel3">

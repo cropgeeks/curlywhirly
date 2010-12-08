@@ -11,7 +11,7 @@ public class ClassificationScheme
 	public ArrayList<Category> categories = new ArrayList<Category>();	
 	
 
-	public Category categoryExists(String categoryName)
+	public Category getCategoryByName(String categoryName)
 	{
 		for (Category category : categories)
 		{
