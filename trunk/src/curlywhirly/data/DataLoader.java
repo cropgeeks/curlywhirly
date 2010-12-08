@@ -116,7 +116,7 @@ public class DataLoader
 						//extract the value in this data cell
 						String categoryValue = line[j];
 						//check whether there is a Category object with this name
-						Category category = scheme.categoryExists(categoryValue);
+						Category category = scheme.getCategoryByName(categoryValue);
 						//if there isn't
 						if(category == null)
 						{
@@ -130,7 +130,7 @@ public class DataLoader
 					}
 					
 					//this is the label for the data point
-					dataEntry.label = line[numCategorySchemes + 1];
+					dataEntry.label = line[numCategorySchemes];
 				}
 				catch (ArrayIndexOutOfBoundsException aix)
 				{

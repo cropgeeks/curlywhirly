@@ -131,7 +131,7 @@ public class CurlyWhirly extends JFrame
 		canvas3D.createSceneGraph(true);
 
 		//do the rest of the set up
-		controlPanel.setUpListData();
+		controlPanel.setUpCategoryLists();
 		controlPanel.resetComboBoxes();
 		dataLoaded = true;
 		statusBar.setDefaultText();
