@@ -35,7 +35,13 @@ public class CurlyWhirly extends JFrame
 	public FrameListener frameListener = null;
 	
 	public static DataLoader dataLoader;
+	
+	public static String dataAnnotationURL = null;
 
+	
+	//==========================================================
+	
+	
 	public static void main(String[] args)
 	{
 		// OS X: This has to be set before anything else

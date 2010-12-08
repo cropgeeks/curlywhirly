@@ -102,6 +102,9 @@ public class MainCanvas extends Canvas3D
 
 	//this behaviour allows us to mouse over a sphere and detect its value
 	MouseOverBehavior mouseOverBehaviour;
+	
+	//allows us to click on a data point and open an annotation URL in a web browser
+	MouseClickBehavior mouseClickBehavior;
 
 	//the default background colour for the canvas
 	Color3f bgColour = new Color3f(Color.BLACK);
@@ -271,6 +274,10 @@ public class MainCanvas extends Canvas3D
 				mouseOverBehaviour = new MouseOverBehavior(frame, spheresMap, objRoot, sphereSize);
 				mouseOverBehaviour.setSchedulingBounds(bounds);
 				objRoot.addChild(mouseOverBehaviour);
+				//clicking with URL opening in web browser
+				mouseClickBehavior = new MouseClickBehavior(frame, spheresMap, objRoot, sphereSize);
+				mouseClickBehavior.setSchedulingBounds(bounds);
+				objRoot.addChild(mouseClickBehavior);
 				
 				objRoot.setCapability(BranchGroup.ALLOW_DETACH);
 				

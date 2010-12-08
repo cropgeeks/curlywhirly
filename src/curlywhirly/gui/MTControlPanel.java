@@ -37,6 +37,9 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		
 		if (SystemUtils.isMacOS())
 			jLabel4.setText("<html>Click to select. Use CMD+click for multiple selections.");
+		
+		//add a single blank tab for now until we have loaded data
+		categoryTabbedPane.addTab("Categories", null);
 	}
 	
 	// ==========================================methods============================================
@@ -63,6 +66,9 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 	
 	public void setUpCategoryLists()
 	{
+		//remove the blank tab we add at the start
+		categoryTabbedPane.remove(0);
+		
 		//first set up a change listener on the tabbed pane so we can switch between classification schemes
 		// Register a change listener
 		categoryTabbedPane.addChangeListener(new ChangeListener() {
@@ -79,7 +85,6 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		        clearAllCategorySelections();
 		    }
 		});
-
 		
 		//make a new JList for each classification scheme
 		for (ClassificationScheme scheme : CurlyWhirly.dataSet.classificationSchemes)

@@ -20,15 +20,18 @@ public class MenuBar extends JMenuBar implements ActionListener
 	JMenuItem exitItem;
 	JMenuItem saveItem;
 	JMenuItem movieItem;
+	JMenuItem dataURLItem;
 	CurlyWhirly frame;
 	JFileChooser fc;
 	DataLoadingDialog dataLoadingDialog;
 	public MovieCaptureDialog movieCaptureDialog;
+	public URLEntryForm urlEntryForm;
 
 	public MenuBar(CurlyWhirly frame)
 	{
 		this.frame = frame;
 		movieCaptureDialog = new MovieCaptureDialog(frame,true);
+		urlEntryForm = new URLEntryForm(frame, true);
 		init();
 	}
 
@@ -50,11 +53,17 @@ public class MenuBar extends JMenuBar implements ActionListener
 		openFileItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, menuShortcut));
 		fileMenu.add(openFileItem);
 
-		// // the example data import item
+		// the example data import item
 		exampleDataItem = new JMenuItem("Load example data");
 		exampleDataItem.setMnemonic(KeyEvent.VK_L);
 		exampleDataItem.addActionListener(this);
 		fileMenu.add(exampleDataItem);
+		
+		//the item for configuring data URLs
+		dataURLItem = new JMenuItem("Annotation URL...");
+		dataURLItem.setMnemonic(KeyEvent.VK_A);
+		dataURLItem.addActionListener(this);
+		fileMenu.add(dataURLItem);
 
 		// separator
 		fileMenu.addSeparator();
@@ -152,6 +161,12 @@ public class MenuBar extends JMenuBar implements ActionListener
 			movieCaptureDialog.getSavedFileTF().setText("");
 			movieCaptureDialog.movieFile = null;
 			movieCaptureDialog.setVisible(true);
+		}
+		
+		else if (src.equals(dataURLItem))
+		{
+			urlEntryForm.setLocationRelativeTo(frame);
+			urlEntryForm.setVisible(true);
 		}
 
 		else if (src.equals(exitItem))
