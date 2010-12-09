@@ -13,7 +13,7 @@ public class DataSet
 //=======================================================vars==================================	
 	
 	//a general name for the dataset
-	public String dataSetName;
+	public String name;
 	
 	//the list of categorization schemes that can be applied to the data, and a corresponding name based lookup
 	public LinkedList<ClassificationScheme> classificationSchemes = new LinkedList<ClassificationScheme>();
@@ -38,7 +38,7 @@ public class DataSet
 	public void listAllData()
 	{
 		//print headers
-		System.out.println("dataSetName = " + dataSetName);
+		System.out.println("dataSetName = " + name);
 
 		for (int i = 0; i < allHeaders.length; i++)
 		{

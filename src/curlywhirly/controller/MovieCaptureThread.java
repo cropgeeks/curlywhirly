@@ -25,7 +25,7 @@ public class MovieCaptureThread extends Thread
 	String imageFileExtension = ".bmp";	
 	
 	//where are we writing this to
-	File movieFile;
+	public File movieFile;
 	File imageDirectory;
 	
 	//other params

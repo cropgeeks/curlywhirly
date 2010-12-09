@@ -27,7 +27,7 @@ public class FrameListener implements ComponentListener,WindowFocusListener
 		//we need to cancel the capture
 		if(frame.currentMovieCaptureThread != null && !windowMoved)
 		{
-			frame.fatController.cancelMovieCapture();
+			GUIUtils.cancelMovieCapture();
 			TaskDialog.initialize(null, "CurlyWhirly");
 			TaskDialog.error("Window moved -- movie capture failed", "Close");
 		}
@@ -41,7 +41,7 @@ public class FrameListener implements ComponentListener,WindowFocusListener
 		//we need to cancel the capture
 		if(frame.currentMovieCaptureThread != null)
 		{
-			frame.fatController.cancelMovieCapture();
+			GUIUtils.cancelMovieCapture();
 			TaskDialog.initialize(frame, "CurlyWhirly");
 			TaskDialog.error("Window resized -- movie capture failed", "Close");
 		}

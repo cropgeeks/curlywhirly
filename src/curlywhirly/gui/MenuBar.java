@@ -137,14 +137,14 @@ public class MenuBar extends JMenuBar implements ActionListener
 			{
 				Preferences.lastDir = "" + fc.getSelectedFile().getParent();
 
-				frame.fatController.loadDataInThread(fc.getSelectedFile());
+				CurlyWhirly.dataLoader.loadDataInThread(fc.getSelectedFile());
 			}
 		}
 
 		else if (src.equals(exampleDataItem))
 		{
 			// load the example dataset provided with the application
-			frame.fatController.loadDataInThread(new File("data/randomData.txt"));
+			CurlyWhirly.dataLoader.loadDataInThread(new File("data/randomData.txt"));
 		}
 
 		else if (src.equals(saveItem))
@@ -166,6 +166,7 @@ public class MenuBar extends JMenuBar implements ActionListener
 		else if (src.equals(dataURLItem))
 		{
 			urlEntryForm.setLocationRelativeTo(frame);
+			urlEntryForm.getDataURLTextField().requestFocusInWindow();
 			urlEntryForm.setVisible(true);
 		}
 
