@@ -22,7 +22,7 @@ public class MainCanvas extends Canvas3D
 
 	// variables to adjust manually for now
 	int boundsSize = 1000;
-	float initialZ = 4;
+	public float viewPointZCoord = 4;
 	static boolean antiAlias = true;
 
 	// infrastructure
@@ -43,9 +43,6 @@ public class MainCanvas extends Canvas3D
 
 	// this holds all the objects
 	private TransformGroup wholeObj = null;
-
-	// the dataset with the data to plot
-	DataSet dataSet;
 
 	// the length of the coordinate system axes
 	float axisLength = 1.0f ;
@@ -110,7 +107,7 @@ public class MainCanvas extends Canvas3D
 	Color3f bgColour = new Color3f(Color.BLACK);
 	
 	//the categorization scheme we are currently using
-	public static ClassificationScheme currentClassificationScheme;
+	public ClassificationScheme currentClassificationScheme;
 
 
 
@@ -121,8 +118,7 @@ public class MainCanvas extends Canvas3D
 		super(getGraphicsConfig());
 		this.frame = frame;
 		su = new SimpleUniverse(this);
-
-		//key listener
+		setBackground(CurlyWhirly.controlPanel.getBackground());
 
 		//this is for detecting key events
 		addKeyListener(new CanvasKeyListener(this));
@@ -146,7 +142,7 @@ public class MainCanvas extends Canvas3D
 				Material mat = new Material();
 				
 				//find out which category scheme is getting used at the moment and retrieve the appropriate value from the data entry object
-				int categorySchemeIndex =  dataSet.classificationSchemes.indexOf(currentClassificationScheme);				
+				int categorySchemeIndex =  CurlyWhirly.dataSet.classificationSchemes.indexOf(currentClassificationScheme);				
 				Category category = dataSphere.dataEntry.categories.get(categorySchemeIndex);
 
 				if (category != null)
@@ -184,7 +180,7 @@ public class MainCanvas extends Canvas3D
 
 		// these can be hard coded because we have scaled all the data to be displayed
 		boundsSize = 1000;
-		initialZ = 4;
+		viewPointZCoord = 4;
 
 	}
 
@@ -261,6 +257,11 @@ public class MainCanvas extends Canvas3D
 				// add the whole Object to the root
 				objRoot.addChild(wholeObj);
 				
+//				System.out.println("bounds = "+ wholeObj.getBounds());
+//				System.out.println("getScreen3D().getPhysicalScreenWidth() = " + getScreen3D().getPhysicalScreenWidth());
+//				System.out.println("getScreen3D().getPhysicalScreenHeight() = " + getScreen3D().getPhysicalScreenHeight());
+				
+				
 				// now add behaviours
 				// rotation
 				PickRotateBehavior rotateBehaviour = new PickRotateBehavior(objRoot, this, bounds);
@@ -287,7 +288,7 @@ public class MainCanvas extends Canvas3D
 				// add this to the universe
 				su.addBranchGraph(objRoot);
 				
-				setInitialViewPoint();
+				setViewPoint();
 			}
 			else
 			{
@@ -304,19 +305,19 @@ public class MainCanvas extends Canvas3D
 
 	// ---------------------------------------------------------------------------------------------------------------------
 
-	// this allows us to set the initial camera view point
-	public void setInitialViewPoint()
+	// this allows us to set the camera view point
+	public void setViewPoint()
 	{
 		// su.getViewingPlatform().setNominalViewingTransform();
 		Vector3f translate = new Vector3f();
-		Transform3D T3D = new Transform3D();
+		Transform3D t3d = new Transform3D();
 		ViewingPlatform viewingPlatform = su.getViewingPlatform();
 		TransformGroup vpTrans = viewingPlatform.getViewPlatformTransform();
-		initialViewPoint = new Point3f(0, 0, initialZ);
+		initialViewPoint = new Point3f(0, 0, viewPointZCoord);
 		translate.set(initialViewPoint);
-		T3D.rotX(Math.toRadians(viewingAngle));
-		T3D.setTranslation(translate);
-		vpTrans.setTransform(T3D);
+		t3d.rotX(Math.toRadians(viewingAngle));
+		t3d.setTranslation(translate);
+		vpTrans.setTransform(t3d);
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------
@@ -328,7 +329,7 @@ public class MainCanvas extends Canvas3D
 		wholeObj.setTransform(trans);
 		trans.set(new Vector3f(0.0f, 0.0f, 0.0f));
 		wholeObj.setTransform(trans);
-		setInitialViewPoint();
+		setViewPoint();
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------
@@ -403,7 +404,7 @@ public class MainCanvas extends Canvas3D
 	//update the current scene graph with new settings
 	public void updateGraph()
 	{
-//		System.out.println("updating graph");
+		System.out.println("updating graph");
 		
 		List selectedCategories = null;
 		if (selectedObjects != null && selectedObjects.length > 0)
@@ -459,17 +460,17 @@ public class MainCanvas extends Canvas3D
 		float labelSpacer = axisLength * 0.10f;
 
 		// x
-		TransformGroup xLabelTG = Label.getLabel(dataSet.dataHeaders.get(currentXIndex), labelBgColour,
+		TransformGroup xLabelTG = Label.getLabel(CurlyWhirly.dataSet.dataHeaders.get(currentXIndex), labelBgColour,
 						labelFontColour, new Vector3f(axisLength + labelSpacer, 0, 0), true);
 		allLabelsBG.addChild(xLabelTG);
 
 		// y
-		TransformGroup yLabelTG = Label.getLabel(dataSet.dataHeaders.get(currentYIndex), labelBgColour,
+		TransformGroup yLabelTG = Label.getLabel(CurlyWhirly.dataSet.dataHeaders.get(currentYIndex), labelBgColour,
 						labelFontColour, new Vector3f(0, axisLength + labelSpacer, 0), true);
 		allLabelsBG.addChild(yLabelTG);
 
 		// z
-		TransformGroup zLabelTG = Label.getLabel(dataSet.dataHeaders.get(currentZIndex), labelBgColour,
+		TransformGroup zLabelTG = Label.getLabel(CurlyWhirly.dataSet.dataHeaders.get(currentZIndex), labelBgColour,
 						labelFontColour, new Vector3f(0, 0, axisLength + labelSpacer), true);
 		allLabelsBG.addChild(zLabelTG);
 
@@ -498,7 +499,7 @@ public class MainCanvas extends Canvas3D
 //		categories = new String[dataSet.numEntries];
 
 		// for each entry in the dataset
-		for (DataEntry dataEntry : dataSet.dataEntries)
+		for (DataEntry dataEntry : CurlyWhirly.dataSet.dataEntries)
 		{
 			// get x, y and z coords for this data point
 			float x = dataEntry.normalizedDataValues.get(currentXIndex);
@@ -711,21 +712,23 @@ public class MainCanvas extends Canvas3D
 		if(!frame.dataLoaded)
 		{
 			//if we don't have data loaded we just want to display a grey background and a label prompting the user to open a file
-			setBackground(Color.LIGHT_GRAY);
-			g2.setColor(Color.white);			
+//			setBackground(CurlyWhirly.controlPanel.getBackground());
+			g2.setColor(Color.DARK_GRAY);			
 			Font font = (new Font("SANS_SERIF", Font.PLAIN, 18));	
 			g2.setFont(font);
 			FontMetrics fm = getFontMetrics(font);
 			String label = "Open a data file to start";
 			int stringWidth = fm.stringWidth(label);
 			int x = (getWidth()/2) - (stringWidth/2);
-			int y = getHeight()/2;			
+			int y = getHeight()/2;	
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g2.drawString(label, x, y);
 		}
 
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------
+
 
 
 } // end of class

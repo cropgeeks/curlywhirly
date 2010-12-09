@@ -71,27 +71,34 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		
 		//first set up a change listener on the tabbed pane so we can switch between classification schemes
 		// Register a change listener
-		categoryTabbedPane.addChangeListener(new ChangeListener() {
-		    // This method is called whenever the selected tab changes
-		    public void stateChanged(ChangeEvent evt) {
-		        JTabbedPane pane = (JTabbedPane)evt.getSource();
-		        
-		        // Get current tab
-		        String selectedTabName = pane.getTitleAt(pane.getSelectedIndex());		        
-		        //find the corresponding classification scheme and select it
-		        CurlyWhirly.canvas3D.currentClassificationScheme = CurlyWhirly.dataSet.categorizationSchemesLookup.get(selectedTabName);
-		        
-		        //clear everything that is currently selected
-		        clearAllCategorySelections();
-		    }
+		categoryTabbedPane.addChangeListener(new ChangeListener()
+		{
+			// This method is called whenever the selected tab changes
+			public void stateChanged(ChangeEvent evt)
+			{
+				JTabbedPane pane = (JTabbedPane) evt.getSource();
+				
+				// Get current tab
+				int selectedIndex = pane.getSelectedIndex();
+				if (selectedIndex != -1)
+				{
+					String selectedTabName = pane.getTitleAt(selectedIndex);
+					//find the corresponding classification scheme and select it
+					ClassificationScheme selectedScheme = CurlyWhirly.dataSet.categorizationSchemesLookup.get(selectedTabName);
+					if(selectedScheme != null)
+						CurlyWhirly.canvas3D.currentClassificationScheme = selectedScheme;
+				}
+				//clear everything that is currently selected
+				clearAllCategorySelections();
+			}
 		});
 		
 		//make a new JList for each classification scheme
 		for (ClassificationScheme scheme : CurlyWhirly.dataSet.classificationSchemes)
 		{
 			// get the list items' names and sort them
-			Vector<String> listItems = new Vector<String>();			
-			for(Category category : scheme.categories)
+			Vector<String> listItems = new Vector<String>();
+			for (Category category : scheme.categories)
 				listItems.add(category.name);
 			Collections.sort(listItems);
 			
@@ -100,7 +107,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 			selectorListsLookup.put(selectorList, scheme);
 			
 			//now add the JList to the tabbed pane
-			categoryTabbedPane.addTab(scheme.name,selectorList);
+			categoryTabbedPane.addTab(scheme.name, selectorList);
 			categoryTabbedPane.revalidate();
 			
 			//set the data on the list

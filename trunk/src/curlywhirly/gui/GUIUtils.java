@@ -66,4 +66,16 @@ public class GUIUtils
 
 		openURL.invoke(null, new Object[] {html});
 	}
+	
+	
+	public static void cancelMovieCapture()
+	{
+		//cancel any ongoing movie capture thread
+		CurlyWhirly.currentMovieCaptureThread.threadCanceled = true;
+		CurlyWhirly.currentMovieCaptureThread.movieFile.delete();
+		CurlyWhirly.canvas3D.resetOriginalView();
+		CurlyWhirly.canvas3D.repaint();
+	}
+	
+	
 }

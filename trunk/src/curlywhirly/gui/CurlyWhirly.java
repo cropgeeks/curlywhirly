@@ -1,6 +1,7 @@
 package curlywhirly.gui;
 
 import java.awt.*;
+import java.awt.dnd.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
@@ -8,6 +9,7 @@ import curlywhirly.controller.*;
 import curlywhirly.data.*;
 
 import apple.dts.samplecode.osxadapter.*;
+
 
 import scri.commons.file.*;
 import scri.commons.gui.*;
@@ -17,11 +19,10 @@ public class CurlyWhirly extends JFrame
 
 	// ===================================================vars =================================================
 
-	public FatController fatController = new FatController(this);
 	public static DataSet dataSet;
 	public static MainCanvas canvas3D;
 	public int controlPanelWidth = 200;
-	public MTControlPanel controlPanel;
+	public static MTControlPanel controlPanel;
 	static JCheckBox instructionsCheckBox;
 	public boolean dataLoaded = false;
 
@@ -30,13 +31,17 @@ public class CurlyWhirly extends JFrame
 	public StatusBar statusBar;
 	public MenuBar menuBar;
 
-	public MovieCaptureThread currentMovieCaptureThread = null;
+	public static MovieCaptureThread currentMovieCaptureThread = null;
 
 	public FrameListener frameListener = null;
 	
-	public static DataLoader dataLoader;
+	public static DataLoader dataLoader =null;
 	
 	public static String dataAnnotationURL = null;
+	
+	// Optional path to a file to be loaded when app opens
+	public static String initialFile = null;
+	public static boolean dragAndDropDataLoad = false;
 
 	
 	//==========================================================
@@ -60,7 +65,8 @@ public class CurlyWhirly extends JFrame
 			e.printStackTrace();
 		}
 
-		new CurlyWhirly();
+		CurlyWhirly curlyWhirly = new CurlyWhirly();
+		dataLoader = new DataLoader(curlyWhirly);
 	}
 
 	CurlyWhirly()
@@ -93,7 +99,21 @@ public class CurlyWhirly extends JFrame
 			@Override
 			public void windowOpened(WindowEvent e)
 			{
+				// Do we want to open an initial project?
+				if (initialFile != null)
+				{
+					CurlyWhirly.dataLoader.loadDataInThread(new File(initialFile));
+				}
+			}
 
+		});
+		
+		
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e)
+			{
+				
 			}
 		});
 
@@ -112,37 +132,7 @@ public class CurlyWhirly extends JFrame
 		System.exit(0);
 	}
 
-	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	public void loadData(File file)
-	{
-		//load the data from file
-		dataLoader = new DataLoader(this);
-		try
-		{
-			dataSet = dataLoader.getDataFromFile(file);
-		}
-		catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return;
-		}
-
-		//set up the new dataset and make a new scene graph
-		//normalize first
-		//this sets the data up so that each axis is normalized to between -1 and 1 and the data fills the whole range
-		DataNormalizer.normalizeDataSet(dataSet);
-		canvas3D.dataSet = dataSet;
-		canvas3D.createSceneGraph(true);
-
-		//do the rest of the set up
-		controlPanel.setUpCategoryLists();
-		controlPanel.resetComboBoxes();
-		dataLoaded = true;
-		statusBar.setDefaultText();
-		repaint();
-	}
 
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -151,12 +141,12 @@ public class CurlyWhirly extends JFrame
 		//workaround for the 3D drawing problem with Swing menus
 //		JPopupMenu.setDefaultLightWeightPopupEnabled( false );
 
+		// side panel
+		controlPanel = new MTControlPanel(this);
+		
 		// instantiate the canvas here rather than in the data load method
 		// we want to be able to recycle it when we load another dataset over the top of the current one
 		canvas3D = new MainCanvas(this);
-
-		// side panel
-		controlPanel = new MTControlPanel(this);
 
 		// main panel
 		JPanel mainPanel = new JPanel(new BorderLayout());
@@ -174,6 +164,12 @@ public class CurlyWhirly extends JFrame
 		getContentPane().add(statusBar, java.awt.BorderLayout.SOUTH);
 
 		this.getContentPane().add(mainPanel);
+		
+		
+		//drag and drop support
+		FileDropAdapter dropAdapter = new FileDropAdapter(this);
+		setDropTarget(new DropTarget(this, dropAdapter));
+		
 	}
 
 	private static File getPrefsFile()

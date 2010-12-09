@@ -17,7 +17,7 @@ public class CanvasKeyListener implements KeyListener
 		if(e.getKeyCode() == 27)
 		{
 			//cancel any ongoing movie capture thread
-			canvas.frame.fatController.cancelMovieCapture();
+			GUIUtils.cancelMovieCapture();
 		}
 	}
 	

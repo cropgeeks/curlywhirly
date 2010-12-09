@@ -39,6 +39,8 @@ public class URLEntryForm extends javax.swing.JDialog
 		
 		jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Enter data annotation URL:"));
 		
+		dataURLTextField.setNextFocusableComponent(saveButton);
+		
 		cancelButton.setText("Cancel");
 		cancelButton.addActionListener(new java.awt.event.ActionListener()
 		{
@@ -49,6 +51,8 @@ public class URLEntryForm extends javax.swing.JDialog
 		});
 		
 		saveButton.setText("Save");
+		saveButton.setFocusCycleRoot(true);
+		saveButton.setNextFocusableComponent(cancelButton);
 		saveButton.addActionListener(new java.awt.event.ActionListener()
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -80,13 +84,12 @@ public class URLEntryForm extends javax.swing.JDialog
 	{
 		//get the text entered
 		String url = dataURLTextField.getText();
-		if(url != null)
+		if (url != null)
 		{
 			CurlyWhirly.dataAnnotationURL = url;
 			//close the window
 			setVisible(false);
 		}
-		
 		
 	}
 	
@@ -118,6 +121,16 @@ public class URLEntryForm extends javax.swing.JDialog
 	private javax.swing.JTextField dataURLTextField;
 	private javax.swing.JPanel jPanel1;
 	private javax.swing.JButton saveButton;
+	
 	// End of variables declaration//GEN-END:variables
 	
+	public javax.swing.JTextField getDataURLTextField()
+	{
+		return dataURLTextField;
+	}
+	
+	public javax.swing.JButton getSaveButton()
+	{
+		return saveButton;
+	}
 }
