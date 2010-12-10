@@ -51,6 +51,7 @@ public class DataLoader
 	public void loadData(File file)
 	{
 		DataSet dataSet = null;
+		CurlyWhirly.dataAnnotationURL = null;
 		frame.dataLoaded = false;
 		
 		//load the data from file
