@@ -10,7 +10,6 @@ import curlywhirly.data.*;
 
 import apple.dts.samplecode.osxadapter.*;
 
-
 import scri.commons.file.*;
 import scri.commons.gui.*;
 
@@ -24,7 +23,7 @@ public class CurlyWhirly extends JFrame
 	public int controlPanelWidth = 200;
 	public static MTControlPanel controlPanel;
 	static JCheckBox instructionsCheckBox;
-	public boolean dataLoaded = false;
+	public static boolean dataLoaded = false;
 
 	private static File prefsFile = getPrefsFile();
 	public static Preferences prefs = new Preferences();
@@ -80,12 +79,29 @@ public class CurlyWhirly extends JFrame
 		Install4j.doStartUpCheck();
 
 		setupComponents();
+		pack();
 
 		// get the GUI set up
 		setTitle("CurlyWhirly - " + Install4j.VERSION);
+		setSize(Preferences.guiWinMainWidth, Preferences.guiWinMainHeight);
+		
+		// Work out the current screen's width and height
+		int scrnW = SwingUtils.getVirtualScreenDimension().width;
+		int scrnH = SwingUtils.getVirtualScreenDimension().height;
+
+		// Determine where on screen to display
+		if (Preferences.isFirstRun || Preferences.guiWinMainX > (scrnW-50) || Preferences.guiWinMainY > (scrnH-50))
+			setLocationRelativeTo(null);
+		else
+			setLocation(Preferences.guiWinMainX, Preferences.guiWinMainY);
+
+		// Maximize the frame if neccassary
+		if (Preferences.guiWinMainMaximized)
+			setExtendedState(Frame.MAXIMIZED_BOTH);
+		
 		setIconImage(new ImageIcon("res/curlywurly_icon32px.png").getImage());
-		pack();
-		setLocationRelativeTo(null);
+	
+
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
 		addWindowListener(new WindowAdapter()
@@ -93,6 +109,7 @@ public class CurlyWhirly extends JFrame
 			@Override
 			public void windowClosing(WindowEvent e)
 			{
+				Preferences.isFirstRun = false;
 				shutdown();
 			}
 
@@ -113,7 +130,17 @@ public class CurlyWhirly extends JFrame
 			@Override
 			public void componentResized(ComponentEvent e)
 			{
-				
+				if (getExtendedState() != Frame.MAXIMIZED_BOTH)
+				{
+					Preferences.guiWinMainWidth  = getSize().width;
+					Preferences.guiWinMainHeight = getSize().height;
+					Preferences.guiWinMainX = getLocation().x;
+					Preferences.guiWinMainY = getLocation().y;
+
+					Preferences.guiWinMainMaximized = false;
+				}
+				else
+					Preferences.guiWinMainMaximized = true;
 			}
 		});
 
@@ -180,12 +207,14 @@ public class CurlyWhirly extends JFrame
 
 		// This is the file we really want
 		File file = new File(fldr, "curlywhirly.xml");
+		System.out.println("writing prefs to " + file.getAbsolutePath());
 		// So if it exists, just use it
 		if (file.exists())
 			return file;
 
 		// If not, see if the "old" (pre 21/06/2010) file is available
 		File old = new File(System.getProperty("user.home"), ".curlywhirly.xml");
+		
 		if (old.exists())
 			try { FileUtils.copyFile(old, file, true); }
 			catch (IOException e) {}

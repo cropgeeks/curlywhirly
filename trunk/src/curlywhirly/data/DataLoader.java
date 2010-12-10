@@ -51,6 +51,7 @@ public class DataLoader
 	public void loadData(File file)
 	{
 		DataSet dataSet = null;
+		frame.dataLoaded = false;
 		
 		//load the data from file
 		try
@@ -59,24 +60,36 @@ public class DataLoader
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return;
 		}
 
+		System.out.println("data loaded successfully");
+		
 		//set up the new dataset and make a new scene graph
 		//normalize first
 		//this sets the data up so that each axis is normalized to between -1 and 1 and the data fills the whole range
 		DataNormalizer.normalizeDataSet(dataSet);
 		frame.dataSet = dataSet;
+				
+		//deal with the combo boxes
+		if(frame.dataLoaded)
+			frame.controlPanel.resetComboBoxes();
+		else
+			frame.controlPanel.addComboModels();
+
+		//make a new scene graph
 		frame.canvas3D.createSceneGraph(true);
 
 		//do the rest of the set up
+		frame.controlPanel.getTabbedPane().removeAll();
 		frame.controlPanel.setUpCategoryLists();
-		frame.controlPanel.resetComboBoxes();
-		frame.dataLoaded = true;
+		
 		frame.statusBar.setDefaultText();
 		frame.repaint();
+		
+		//flag the fact we have data loaded
+		frame.dataLoaded = true;
 	}
 	
 	
@@ -86,7 +99,7 @@ public class DataLoader
 	// imports the data from file in the specified location
 	public DataSet getDataFromFile(File file) throws IOException
 	{
-		System.out.println("DataLoader.getDataFromFile()");
+		System.out.println("\n\n============loading new dataset: "+ file.getName());
 		
 		DataSet dataSet = new DataSet();
 		
@@ -274,7 +287,7 @@ public class DataLoader
 			throw new IOException(message);
 		}
 		
-		System.out.println("data loaded successfully");
+
 		
 		return dataSet;
 	}

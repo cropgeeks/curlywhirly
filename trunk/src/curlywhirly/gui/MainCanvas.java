@@ -54,7 +54,7 @@ public class MainCanvas extends Canvas3D
 	Background background;
 
 	// arrays that hold the sphere (point) objects and the corresponding category strings
-	ArrayList<DataSphere> allDataSpheres = new ArrayList<DataSphere>();
+	ArrayList<DataSphere> allDataSpheres = null;
 	String[] categories;
 
 	public Vector<Category> selectorListItems;
@@ -130,6 +130,13 @@ public class MainCanvas extends Canvas3D
 	//colour the spheres by category
 	public void colourSpheres()
 	{
+		//find out which category scheme is getting used at the moment and retrieve the appropriate value from the data entry object
+		int categorySchemeIndex =  CurlyWhirly.dataSet.classificationSchemes.indexOf(currentClassificationScheme);	
+		
+//		System.out.println("dataSet = " + CurlyWhirly.dataSet.name);
+//		System.out.println("currentClassificationScheme = " + currentClassificationScheme.name);
+//		System.out.println("categorySchemeIndex = " + categorySchemeIndex);
+		
 		try
 		{
 			// default colour to flag colour related problems
@@ -140,9 +147,7 @@ public class MainCanvas extends Canvas3D
 			{
 				Shape3D shape3d = dataSphere.getShape();
 				Material mat = new Material();
-				
-				//find out which category scheme is getting used at the moment and retrieve the appropriate value from the data entry object
-				int categorySchemeIndex =  CurlyWhirly.dataSet.classificationSchemes.indexOf(currentClassificationScheme);				
+
 				Category category = dataSphere.dataEntry.categories.get(categorySchemeIndex);
 
 				if (category != null)
@@ -256,11 +261,6 @@ public class MainCanvas extends Canvas3D
 				
 				// add the whole Object to the root
 				objRoot.addChild(wholeObj);
-				
-//				System.out.println("bounds = "+ wholeObj.getBounds());
-//				System.out.println("getScreen3D().getPhysicalScreenWidth() = " + getScreen3D().getPhysicalScreenWidth());
-//				System.out.println("getScreen3D().getPhysicalScreenHeight() = " + getScreen3D().getPhysicalScreenHeight());
-				
 				
 				// now add behaviours
 				// rotation
@@ -402,10 +402,9 @@ public class MainCanvas extends Canvas3D
 	// ---------------------------------------------------------------------------------------------------------------------
 
 	//update the current scene graph with new settings
-	public void updateGraph()
+	public void updateGraph(boolean makeNewSpheres)
 	{
-		System.out.println("updating graph");
-		
+
 		List selectedCategories = null;
 		if (selectedObjects != null && selectedObjects.length > 0)
 		{
@@ -434,7 +433,8 @@ public class MainCanvas extends Canvas3D
 			}
 		}
 
-		makeSpheres();
+		if(makeNewSpheres)
+			makeSpheres();
 		colourSpheres();
 		makeAxisLabels();
 	}
@@ -487,6 +487,8 @@ public class MainCanvas extends Canvas3D
 		if (allSpheresBG != null)
 			allSpheresBG.detach();
 
+		allDataSpheres = new ArrayList<DataSphere>();
+		
 		// this group takes all the sphere objects
 		allSpheresBG = new BranchGroup();
 		allSpheresBG.setCapability(BranchGroup.ALLOW_DETACH);
@@ -495,8 +497,6 @@ public class MainCanvas extends Canvas3D
 		// make up the spheres that represent the data points
 		Vector3f vec = new Vector3f();
 		Transform3D translate = new Transform3D();
-//		allSpheres = new Shape3D[dataSet.numEntries];
-//		categories = new String[dataSet.numEntries];
 
 		// for each entry in the dataset
 		for (DataEntry dataEntry : CurlyWhirly.dataSet.dataEntries)
