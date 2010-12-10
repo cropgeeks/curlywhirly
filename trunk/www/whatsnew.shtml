@@ -14,10 +14,26 @@
 
 <!--#include virtual="header.shtml" -->
 
-
-<h2>New in the current release:</h2>
 <p>
-- NEW: Movie recording. Users can now capture a full revolution of the graph about the y axis by using the movie capture option, save the resulting movie as an avi (raw RGB format) file, and then e.g. embed this into a Powerpoint presentation or similar. With your data loaded, just go to File -> Capture movie... and then follow the instructions in the dialog. </p>
+<h2>Version 1.10.12.10</h2>
+<ul>
+<li>Drag and drop support for file opening</li>
+<li>Store annotation URLs and automatically fire up web browser with this when data points are clicked</li>
+<li>Visualization of multi-category datasets </li>
+<li>Open files from the command line (allows file extension associations)</li>
+</ul>
+</p>
+
+
+<p>
+<h2>Version 1.09.05.13</h2>
+<ul>
+<li>Movie recording. Users can now capture a full revolution of the graph about the y axis by using the movie capture option, 
+save the resulting movie as an avi (raw RGB format) file, and then e.g. embed this into a Powerpoint presentation or similar. 
+With your data loaded, just go to File -> Capture movie... and then follow the instructions in the dialog. </li>
+</ul>
+</p>
+
 
 <!--#include virtual="footer.html" -->
 

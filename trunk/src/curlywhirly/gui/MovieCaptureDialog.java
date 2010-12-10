@@ -315,7 +315,6 @@ public class MovieCaptureDialog extends javax.swing.JDialog implements ChangeLis
 		
 	}
 	
-	@Override
 	public void stateChanged(ChangeEvent arg0)
 	{
 		updateFileFileSize();
