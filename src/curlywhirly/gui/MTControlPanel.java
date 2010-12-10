@@ -16,7 +16,7 @@ import javax.swing.event.*;
 import curlywhirly.data.*;
 import scri.commons.gui.*;
 
-public class MTControlPanel extends javax.swing.JPanel implements ActionListener, ListSelectionListener
+public class MTControlPanel extends javax.swing.JPanel implements ActionListener, ListSelectionListener, ChangeListener
 {
 	
 	// ==========================================vars============================================
@@ -25,7 +25,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 	CurlyWhirly frame;
 	private Vector<String> categories;
 	Vector<Category> listItems;
-	HashMap<JList, ClassificationScheme> selectorListsLookup = new HashMap<JList, ClassificationScheme>();
+	HashMap<JList, ClassificationScheme> selectorListsLookup;
 	
 	// ==========================================c'tor============================================
 	
@@ -40,22 +40,29 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		
 		//add a single blank tab for now until we have loaded data
 		categoryTabbedPane.addTab("Categories", null);
+		
+		//first set up a change listener on the tabbed pane so we can switch between classification schemes
+		// Register a change listener
+		categoryTabbedPane.addChangeListener(this);
 	}
 	
 	// ==========================================methods============================================
 	
-	private void addComboModels()
+	public void addComboModels()
 	{
+		System.out.println("addComboModels()");
 		// set the data headers as the model for the combo boxes that allow selection of variables
 		xCombo.setModel(new DefaultComboBoxModel(frame.dataSet.dataHeaders));
 		yCombo.setModel(new DefaultComboBoxModel(frame.dataSet.dataHeaders));
 		zCombo.setModel(new DefaultComboBoxModel(frame.dataSet.dataHeaders));
+		
+		 resetComboBoxes();
 	}
 	
+	// --------------------------------------------------------------------------------------------------------------------------------------------------
+	
 	public void resetComboBoxes()
-	{
-		addComboModels();
-		
+	{		
 		// set the combos to display the currently selected index of the variables they display
 		xCombo.setSelectedIndex(0);
 		yCombo.setSelectedIndex(1);
@@ -64,50 +71,61 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
 	
+	// This method is called whenever the selected tab changes
+	public void stateChanged(ChangeEvent evt)
+	{
+		System.out.println("tabbed pane stateChanged");
+		
+		JTabbedPane pane = (JTabbedPane) evt.getSource();
+		
+		// Get current tab
+		int selectedIndex = pane.getSelectedIndex();
+		if (selectedIndex != -1)
+		{
+			String selectedTabName = pane.getTitleAt(selectedIndex);
+			//find the corresponding classification scheme and select it
+			ClassificationScheme selectedScheme = CurlyWhirly.dataSet.categorizationSchemesLookup.get(selectedTabName);
+			if(selectedScheme != null)
+				CurlyWhirly.canvas3D.currentClassificationScheme = selectedScheme;
+		}
+		//clear everything that is currently selected
+				if(CurlyWhirly.dataLoaded)
+					clearAllCategorySelections();
+	}
+	
+	
+	// --------------------------------------------------------------------------------------------------------------------------------------------------
+	
 	public void setUpCategoryLists()
 	{
-		//remove the blank tab we add at the start
-		categoryTabbedPane.remove(0);
+		System.out.println("setting up JLists for dataset " + CurlyWhirly.dataSet.name);
 		
-		//first set up a change listener on the tabbed pane so we can switch between classification schemes
-		// Register a change listener
-		categoryTabbedPane.addChangeListener(new ChangeListener()
-		{
-			// This method is called whenever the selected tab changes
-			public void stateChanged(ChangeEvent evt)
-			{
-				JTabbedPane pane = (JTabbedPane) evt.getSource();
-				
-				// Get current tab
-				int selectedIndex = pane.getSelectedIndex();
-				if (selectedIndex != -1)
-				{
-					String selectedTabName = pane.getTitleAt(selectedIndex);
-					//find the corresponding classification scheme and select it
-					ClassificationScheme selectedScheme = CurlyWhirly.dataSet.categorizationSchemesLookup.get(selectedTabName);
-					if(selectedScheme != null)
-						CurlyWhirly.canvas3D.currentClassificationScheme = selectedScheme;
-				}
-				//clear everything that is currently selected
-				clearAllCategorySelections();
-			}
-		});
+		selectorListsLookup = new HashMap<JList, ClassificationScheme>();	
 		
 		//make a new JList for each classification scheme
+		
+//		System.out.println("num classification schemes = " + CurlyWhirly.dataSet.classificationSchemes.size());
+		
 		for (ClassificationScheme scheme : CurlyWhirly.dataSet.classificationSchemes)
 		{
+//			System.out.println("scheme = " + scheme.name);
+			
 			// get the list items' names and sort them
 			Vector<String> listItems = new Vector<String>();
 			for (Category category : scheme.categories)
+			{
 				listItems.add(category.name);
+//				System.out.println("adding category "+ category.name);
+			}
 			Collections.sort(listItems);
 			
 			// table for selecting categories 
 			JList selectorList = new JList();
 			selectorListsLookup.put(selectorList, scheme);
 			
-			//now add the JList to the tabbed pane
-			categoryTabbedPane.addTab(scheme.name, selectorList);
+			//now add the JList to the tabbed pane (in its own scrollpane)
+			JScrollPane scrollPane = new JScrollPane(selectorList);
+			categoryTabbedPane.addTab(scheme.name, scrollPane);
 			categoryTabbedPane.revalidate();
 			
 			//set the data on the list
@@ -117,11 +135,58 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		}
 	}
 	
+	// --------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	class ColorListRenderer extends DefaultListCellRenderer
+	{
+		
+		// Set the attributes of the class and return a reference
+		public Component getListCellRendererComponent(JList list, Object o, int i, boolean iss, boolean chf)
+		{
+			super.getListCellRendererComponent(list, o, i, iss, chf);
+			
+			String categoryName = (String)o;	
+//			System.out.println("categoryName = " + categoryName);
+			//retrieve the appropriate category object from the current classification scheme
+			ClassificationScheme scheme = selectorListsLookup.get(list);
+//			if(scheme == null)
+//				return null;
+			Category category = scheme.getCategoryByName(categoryName);
+			
+			// Set the text
+			setText(category.name);
+			
+			// Set the icon
+			BufferedImage image = new BufferedImage(20, 10, BufferedImage.TYPE_INT_RGB);
+			Graphics2D g = image.createGraphics();
+			
+//			Color c1 = category.colour.get().brighter();
+//			Color c2 = category.colour.get().darker();
+			g.setPaint(category.colour.get());
+//			g.setPaint(new GradientPaint(0, 0, c1, 20, 10, c2));
+			g.fillRect(0, 0, 20, 10);
+			g.setColor(Color.black);
+			g.drawRect(0, 0, 20, 10);
+			g.dispose();
+			
+			setIcon(new ImageIcon(image));
+			
+			return this;
+		}
+		
+		public Insets getInsets(Insets i)
+		{
+			return new Insets(0, 3, 0, 0);
+		}
+	}
+	
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
-
+	
 	public void valueChanged(ListSelectionEvent e)
 	{
+		System.out.println("valueChanged");
+		
 		if (e.getValueIsAdjusting())
 			return;
 		
@@ -132,7 +197,8 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		Object[] selectedObjects = selectorList.getSelectedValues();
 		frame.canvas3D.selectedObjects = selectedObjects;
 		frame.canvas3D.highlightAllCategories = false;
-		frame.canvas3D.updateGraph();
+		System.out.println("updating graph from valueChanged(ListSelectionEvent e)");
+		frame.canvas3D.updateGraph(false);
 		
 	}
 	
@@ -141,6 +207,8 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 	
 	public void actionPerformed(ActionEvent e)
 	{
+		System.out.println("actionPerformed");
+		
 		if (e.getSource() == xCombo && e.getActionCommand().equals("comboBoxChanged"))
 		{
 			int index = xCombo.getSelectedIndex();
@@ -161,7 +229,8 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		if (frame.dataLoaded)
 		{
 			frame.canvas3D.highlightAllCategories = true;
-			frame.canvas3D.updateGraph();
+			System.out.println("updating graph from actionPerformed()");
+			frame.canvas3D.updateGraph(true);
 		}
 	}
 	
@@ -216,7 +285,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		clearAllCategorySelections();
 	}
 	
-
+	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	private void clearAllCategorySelections()
@@ -224,51 +293,12 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		for(JList jList : selectorListsLookup.keySet())
 			jList.clearSelection();
 		frame.canvas3D.highlightAllCategories = true;
-		frame.canvas3D.updateGraph();
+		System.out.println("updating graph from clearAllCategorySelections()");
+		frame.canvas3D.updateGraph(false);
 	}
-
-
-	// --------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	class ColorListRenderer extends DefaultListCellRenderer
-	{
-		
-		// Set the attributes of the class and return a reference
-		public Component getListCellRendererComponent(JList list, Object o, int i, boolean iss, boolean chf)
-		{
-			super.getListCellRendererComponent(list, o, i, iss, chf);
-			
-			String categoryName = (String)o;		
-			//retrieve the appropriate category object from the current classification scheme
-			ClassificationScheme scheme = selectorListsLookup.get(list);
-			Category category = scheme.getCategoryByName(categoryName);
-			
-			// Set the text
-			setText(category.name);
-			
-			// Set the icon
-			BufferedImage image = new BufferedImage(20, 10, BufferedImage.TYPE_INT_RGB);
-			Graphics2D g = image.createGraphics();
-			
-			Color c1 = category.colour.get().brighter();
-			Color c2 = category.colour.get().darker();
-			
-			g.setPaint(new GradientPaint(0, 0, c1, 20, 10, c2));
-			g.fillRect(0, 0, 20, 10);
-			g.setColor(Color.black);
-			g.drawRect(0, 0, 20, 10);
-			g.dispose();
-			
-			setIcon(new ImageIcon(image));
-			
-			return this;
-		}
-		
-		public Insets getInsets(Insets i)
-		{
-			return new Insets(0, 3, 0, 0);
-		}
-	}
+	
+	
 	
 	//GEN-BEGIN:initComponents
 	// <editor-fold defaultstate="collapsed" desc="Generated Code">
@@ -393,7 +423,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Select background colour:"));
 		
 		bgCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[]
-		{ "black", "dark grey", "light grey", "white" }));
+		                                                                 { "black", "dark grey", "light grey", "white" }));
 		bgCombo.addActionListener(new java.awt.event.ActionListener()
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -436,7 +466,10 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 	private javax.swing.JComboBox yCombo;
 	private javax.swing.JComboBox zCombo;
 	// End of variables declaration//GEN-END:variables
-
-
+	
+	public  javax.swing.JTabbedPane getTabbedPane()
+	{
+		return categoryTabbedPane;
+	}
 	
 }
