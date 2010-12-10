@@ -18,7 +18,7 @@
 <h2>Download CurlyWhirly</h2>
 
 <p>The most recent release of CurlyWhirly is:
-<b>1.09.02.05</b> (5th February 2009).</p>
+<b>1.10.12.10</b> (10th December 2010).</p>
 
 <p>Please use the links below to download the CurlyWhirly installer most suitable
 for your operating system. CurlyWhirly is currently available for:</p>
@@ -29,7 +29,7 @@ for your operating system. CurlyWhirly is currently available for:</p>
 	<td><img src="images/icon_windows.gif" alt="Windows"></td>
 	<td>
 		<a href="installers/curlywhirly_windows_installer.exe">
-		Microsoft Windows</a> (22.2MB)
+		Microsoft Windows</a> (23MB)
 	</td>
 </tr>
 <tr>
@@ -37,7 +37,7 @@ for your operating system. CurlyWhirly is currently available for:</p>
 	<td><img src="images/icon_osx.gif" alt="OS X"></td>
 	<td>
 		<a href="installers/curlywhirly_macos_installer.dmg">
-		Apple Mac OS X</a> (6.25MB)
+		Apple Mac OS X</a> (7MB)
 	</td>
 </tr>
 <tr>
@@ -45,7 +45,7 @@ for your operating system. CurlyWhirly is currently available for:</p>
 	<td><img src="images/icon_linux.gif" alt="Linux"></td>
 	<td>
 		<a href="installers/curlywhirly_linux_installer.sh">
-		Linux</a> (21.8MB)
+		Linux</a> (26MB)
 	</td>
 </tr>
 <tr>
@@ -53,14 +53,14 @@ for your operating system. CurlyWhirly is currently available for:</p>
 	<td><img src="images/icon_solaris.gif" alt="Solaris"></td>
 	<td>
 		<a href="installers/curlywhirly_solaris_installer.sh">
-		Solaris (sparc)</a> (28.6MB)
+		Solaris (sparc)</a> (31MB)
 	</td>
 </tr>
 </table>
 
 <p>Follow the instructions provided by the graphical installer to install CurlyWhirly.</p>
 
-<p>CurlyWhirly is developed on Windows XP SP3 (32bit), and gets additional regular
+<p>CurlyWhirly is developed on Windows 7 (64bit), and gets additional regular
 testing on OS X 10.5.5 (64bit), Ubuntu Linux 7.10 (32bit), and Centos 5.2
 (32bit).</p>
 
