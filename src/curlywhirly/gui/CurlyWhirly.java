@@ -20,7 +20,9 @@ public class CurlyWhirly extends JFrame
 
 	public static DataSet dataSet;
 	public static MainCanvas canvas3D;
+	
 	public int controlPanelWidth = 200;
+
 	public static MTControlPanel controlPanel;
 	static JCheckBox instructionsCheckBox;
 	public static boolean dataLoaded = false;
@@ -41,6 +43,8 @@ public class CurlyWhirly extends JFrame
 	// Optional path to a file to be loaded when app opens
 	public static String initialFile = null;
 	public static boolean dragAndDropDataLoad = false;
+	
+	public static CurlyWhirly curlyWhirly = null;
 
 	
 	//==========================================================
@@ -64,7 +68,7 @@ public class CurlyWhirly extends JFrame
 			e.printStackTrace();
 		}
 
-		CurlyWhirly curlyWhirly = new CurlyWhirly();
+		curlyWhirly = new CurlyWhirly();
 		dataLoader = new DataLoader(curlyWhirly);
 	}
 
@@ -90,7 +94,7 @@ public class CurlyWhirly extends JFrame
 		int scrnH = SwingUtils.getVirtualScreenDimension().height;
 
 		// Determine where on screen to display
-		if (Preferences.isFirstRun || Preferences.guiWinMainX > (scrnW-50) || Preferences.guiWinMainY > (scrnH-50))
+		if (Preferences.isFirstRun)
 			setLocationRelativeTo(null);
 		else
 			setLocation(Preferences.guiWinMainX, Preferences.guiWinMainY);
@@ -142,6 +146,13 @@ public class CurlyWhirly extends JFrame
 				else
 					Preferences.guiWinMainMaximized = true;
 			}
+			
+			public void componentMoved(ComponentEvent e)
+			{
+				Preferences.guiWinMainX = getLocation().x;
+				Preferences.guiWinMainY = getLocation().y;
+			}
+			
 		});
 
 		frameListener = new FrameListener(this);
@@ -149,6 +160,10 @@ public class CurlyWhirly extends JFrame
 		addComponentListener(frameListener);
 
 		setVisible(true);
+		
+		//start a thread that fades in a label on the canvas prompting the user to open a file
+//		CanvasLabelFadeInThread t = new CanvasLabelFadeInThread(canvas3D);
+//		t.start();
 	}
 
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -166,20 +181,25 @@ public class CurlyWhirly extends JFrame
 	private void setupComponents()
 	{
 		//workaround for the 3D drawing problem with Swing menus
-//		JPopupMenu.setDefaultLightWeightPopupEnabled( false );
+		JPopupMenu.setDefaultLightWeightPopupEnabled( false );
+		ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
+		ToolTipManager.sharedInstance().setInitialDelay(100);
 
 		// side panel
 		controlPanel = new MTControlPanel(this);
+		controlPanel.setPreferredSize(new Dimension(controlPanelWidth, Preferences.guiWinMainHeight));
 		
 		// instantiate the canvas here rather than in the data load method
 		// we want to be able to recycle it when we load another dataset over the top of the current one
 		canvas3D = new MainCanvas(this);
+		canvas3D.setPreferredSize(new Dimension((Preferences.guiWinMainWidth-controlPanelWidth), Preferences.guiWinMainHeight));
 
-		// main panel
-		JPanel mainPanel = new JPanel(new BorderLayout());
-		mainPanel.add(controlPanel, BorderLayout.WEST);
-		mainPanel.add(canvas3D, BorderLayout.CENTER);
-		canvas3D.setPreferredSize(new Dimension(600, 600));
+		// main comp is split pane with control panel on the left and canvas on the right
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controlPanel, canvas3D);
+		splitPane.setOneTouchExpandable(true);
+		this.getContentPane().add(splitPane);
+
+		//in the absence of data this creates an empty scene graph and we then paint a label onto the canvas that prompts the user to open a file
 		canvas3D.createSceneGraph(false);
 
 		// menu bar
@@ -190,9 +210,6 @@ public class CurlyWhirly extends JFrame
 		statusBar = new StatusBar();
 		getContentPane().add(statusBar, java.awt.BorderLayout.SOUTH);
 
-		this.getContentPane().add(mainPanel);
-		
-		
 		//drag and drop support
 		FileDropAdapter dropAdapter = new FileDropAdapter(this);
 		setDropTarget(new DropTarget(this, dropAdapter));
@@ -207,7 +224,8 @@ public class CurlyWhirly extends JFrame
 
 		// This is the file we really want
 		File file = new File(fldr, "curlywhirly.xml");
-		System.out.println("writing prefs to " + file.getAbsolutePath());
+//		System.out.println("prefs file = " + file.getAbsolutePath());
+
 		// So if it exists, just use it
 		if (file.exists())
 			return file;

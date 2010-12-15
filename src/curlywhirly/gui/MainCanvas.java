@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 import javax.media.j3d.*;
+import javax.swing.*;
 import javax.vecmath.*;
 import com.sun.j3d.utils.geometry.*;
 import com.sun.j3d.utils.pickfast.behaviors.*;
@@ -108,7 +109,9 @@ public class MainCanvas extends Canvas3D
 	
 	//the categorization scheme we are currently using
 	public ClassificationScheme currentClassificationScheme;
-
+	
+	//the font colour used for the "Open file" label
+	public Color openFileLabelColour = Color.DARK_GRAY;
 
 
 	// ==================================c'tor=============================
@@ -123,9 +126,22 @@ public class MainCanvas extends Canvas3D
 		//this is for detecting key events
 		addKeyListener(new CanvasKeyListener(this));
 		setFocusable(true);
+		
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------
+	
+	public Dimension getPreferredSize()
+	{
+		return new Dimension(0,0);
+	}
+	
+	public Dimension getMinimumSize()
+	{
+		return new Dimension(0,0);
+	}
+	
+	
 
 	//colour the spheres by category
 	public void colourSpheres()
@@ -292,7 +308,6 @@ public class MainCanvas extends Canvas3D
 			}
 			else
 			{
-				System.out.println("creating scene graph without data");
 				stopRenderer();
 			}
 		}
@@ -708,20 +723,21 @@ public class MainCanvas extends Canvas3D
 		super.paint(g);
 
 		Graphics2D g2 = (Graphics2D)g;
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		
+		//if we don't have data loaded we just want to display a grey background and a label prompting the user to open a file	
+		//label stuff
+		Font font = (new Font("SANS_SERIF", Font.PLAIN, 18));	
+		g2.setFont(font);
+		FontMetrics fm = getFontMetrics(font);
+		String label = "Open a data file to start";
+		int stringWidth = fm.stringWidth(label);
+		int x = (getWidth()/2) - (stringWidth/2);
+		int y = getHeight()/2;	
 
 		if(!frame.dataLoaded)
-		{
-			//if we don't have data loaded we just want to display a grey background and a label prompting the user to open a file
-//			setBackground(CurlyWhirly.controlPanel.getBackground());
-			g2.setColor(Color.DARK_GRAY);			
-			Font font = (new Font("SANS_SERIF", Font.PLAIN, 18));	
-			g2.setFont(font);
-			FontMetrics fm = getFontMetrics(font);
-			String label = "Open a data file to start";
-			int stringWidth = fm.stringWidth(label);
-			int x = (getWidth()/2) - (stringWidth/2);
-			int y = getHeight()/2;	
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		{			
+			g2.setColor(openFileLabelColour);						
 			g2.drawString(label, x, y);
 		}
 

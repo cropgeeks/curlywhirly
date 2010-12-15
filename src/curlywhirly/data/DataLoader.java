@@ -65,7 +65,7 @@ public class DataLoader
 			return;
 		}
 
-		System.out.println("data loaded successfully");
+//		System.out.println("data loaded successfully");
 		
 		//set up the new dataset and make a new scene graph
 		//normalize first
@@ -83,8 +83,9 @@ public class DataLoader
 		frame.canvas3D.createSceneGraph(true);
 
 		//do the rest of the set up
-		frame.controlPanel.getTabbedPane().removeAll();
+//		frame.controlPanel.getTabbedPane().removeAll();
 		frame.controlPanel.setUpCategoryLists();
+//		frame.controlPanel.getSchemeSelectorCombo().setModel(null);		
 		
 		frame.statusBar.setDefaultText();
 		frame.repaint();
@@ -100,7 +101,7 @@ public class DataLoader
 	// imports the data from file in the specified location
 	public DataSet getDataFromFile(File file) throws IOException
 	{
-		System.out.println("\n\n============loading new dataset: "+ file.getName());
+//		System.out.println("\n\n============loading new dataset: "+ file.getName());
 		
 		DataSet dataSet = new DataSet();
 		
@@ -137,16 +138,19 @@ public class DataLoader
 			//iterate over headers and check how many category schemes we have 
 			for (int i = 0; i < headers.length; i++)
 			{
-				if(headers[i].startsWith(categoryHeaderPrefix))
+				//check for any columns that start with the defined categories prefix, and allow for cases where there are quotes around the headers
+				if(headers[i].startsWith(categoryHeaderPrefix) || headers[i].startsWith("\"" + categoryHeaderPrefix))
 				{			
 					noCategoryHeaders = false;
 					
 					ClassificationScheme scheme = new ClassificationScheme();
-					scheme.name = headers[i].substring(categoryHeaderPrefix.length());
+					if(headers[i].startsWith("\"" + categoryHeaderPrefix))
+						scheme.name = headers[i].substring((categoryHeaderPrefix.length()+1));
+					else
+						scheme.name = headers[i].substring(categoryHeaderPrefix.length());
 					dataSet.classificationSchemes.add(scheme);
 					dataSet.categorizationSchemesLookup.put(scheme.name, scheme);
-
-					System.out.println("new categorization scheme found: " + scheme.name);
+//					System.out.println("new categorization scheme found: " + scheme.name);
 				}
 			}
 			
@@ -172,6 +176,7 @@ public class DataLoader
 			// rest of headers are data column headers except for first one after the category ones
 			//that column contains the labels
 			numDataColumns = headers.length - (dataSet.classificationSchemes.size() +1);
+//			System.out.println("numDataColumns = " + numDataColumns);
 			for (int i = 0; i < numDataColumns; i++)
 			{
 				String header = headers[i + (dataSet.classificationSchemes.size() +1)];
@@ -189,6 +194,7 @@ public class DataLoader
 			lines = sb.toString().split("\n");
 			
 			int numCategorySchemes = dataSet.classificationSchemes.size();
+//			System.out.println("numCategorySchemes = " + numCategorySchemes);
 			
 			//for each row in the dataset
 			for (int i = 0; i < numEntries; i++)
@@ -268,12 +274,15 @@ public class DataLoader
 			//now that all the data is parsed we can associate colours with each of the categories
 			//for each category scheme we have 
 			for (ClassificationScheme scheme : dataSet.classificationSchemes)
+			{
 				scheme.assignColoursToCategories();
+				scheme.makeNamesVector();
+			}
 
 			//now choose the first categorizationscheme as the one that is currently selected
 			//the user can switch to another one later if they so wish
 			CurlyWhirly.canvas3D.currentClassificationScheme = dataSet.classificationSchemes.get(0);			
-			System.out.println("setting current category scheme to " + CurlyWhirly.canvas3D.currentClassificationScheme.name + " from dataset " + dataSet.name);
+//			System.out.println("setting current category scheme to " + CurlyWhirly.canvas3D.currentClassificationScheme.name + " from dataset " + dataSet.name);
 		}
 		catch (Exception e)
 		{
@@ -287,9 +296,7 @@ public class DataLoader
 			e.printStackTrace();
 			throw new IOException(message);
 		}
-		
 
-		
 		return dataSet;
 	}
 	
