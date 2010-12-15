@@ -1,22 +1,15 @@
 feature additions:
 
-- multiple category scheme handling: have users select pairs of categories from the different schemes to make single "compound" category which is then assigned a colour and the spheres are updated accordingly
 - 64-bit Windows installer
-- window position/size tracking to preferences
-- increase exposure on web -- add keywords to web pages etc
-- make data points clickable and point them at a URL with annotation info
-- change point size
 
 
 Michael Moeller's list:
 - Continuous spinning in different directions without having to change the axis assignment.
 - an option to centre the image
-- ability to choose colours and different symbols (+ size)
+- ability to choose different symbols (+ size)
 - labelling individuals or all points from within the GUI
 
 
 bug fixes:
 
 - fix exceptions from the user pre-playing with the controls with no data loaded
-- does not start under Windows 7 -- needs 64-bit dll (and possibly more?)
-- not all data is visible when spinning (reproducible with barley data)

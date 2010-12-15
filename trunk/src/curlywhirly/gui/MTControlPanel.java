@@ -13,10 +13,11 @@ import java.util.*;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.vecmath.*;
 import curlywhirly.data.*;
 import scri.commons.gui.*;
 
-public class MTControlPanel extends javax.swing.JPanel implements ActionListener, ListSelectionListener, ChangeListener
+public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 {
 	
 	// ==========================================vars============================================
@@ -25,7 +26,8 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 	CurlyWhirly frame;
 	private Vector<String> categories;
 	Vector<Category> listItems;
-	HashMap<JList, ClassificationScheme> selectorListsLookup;
+	
+	//	HashMap<JList, ClassificationScheme> selectorListsLookup;
 	
 	// ==========================================c'tor============================================
 	
@@ -38,31 +40,53 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		if (SystemUtils.isMacOS())
 			jLabel4.setText("<html>Click to select. Use CMD+click for multiple selections.");
 		
-		//add a single blank tab for now until we have loaded data
-		categoryTabbedPane.addTab("Categories", null);
-		
-		//first set up a change listener on the tabbed pane so we can switch between classification schemes
-		// Register a change listener
-		categoryTabbedPane.addChangeListener(this);
+		addMouseAdapterToSelectorList();
 	}
 	
 	// ==========================================methods============================================
 	
+	public void addMouseAdapterToSelectorList()
+	{
+		selectorList.addMouseListener(new MouseAdapter()
+		{
+			public void mouseClicked(MouseEvent me)
+			{
+				Object ob[] = selectorList.getSelectedValues();
+				if (ob.length > 1)
+					return;
+				if (me.getClickCount() == 2)
+				{
+					String selectedValue = (String) ob[0];
+					//					System.out.println("double click on " + selectedValue);
+					//retrieve the related Category object
+					Category category = CurlyWhirly.canvas3D.currentClassificationScheme.getCategoryByName(selectedValue);
+					
+					// fire up a colour chooser
+					Color newColor = JColorChooser.showDialog(CurlyWhirly.curlyWhirly, "Choose color for category", category.colour.get());
+					if (newColor != null)
+					{
+						category.colour = new Color3f(newColor);
+						CurlyWhirly.canvas3D.updateGraph(false);
+					}
+				}
+			}
+		});
+	}
+	
 	public void addComboModels()
 	{
-		System.out.println("addComboModels()");
 		// set the data headers as the model for the combo boxes that allow selection of variables
 		xCombo.setModel(new DefaultComboBoxModel(frame.dataSet.dataHeaders));
 		yCombo.setModel(new DefaultComboBoxModel(frame.dataSet.dataHeaders));
 		zCombo.setModel(new DefaultComboBoxModel(frame.dataSet.dataHeaders));
 		
-		 resetComboBoxes();
+		resetComboBoxes();
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	public void resetComboBoxes()
-	{		
+	{
 		// set the combos to display the currently selected index of the variables they display
 		xCombo.setSelectedIndex(0);
 		yCombo.setSelectedIndex(1);
@@ -71,67 +95,26 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	// This method is called whenever the selected tab changes
-	public void stateChanged(ChangeEvent evt)
-	{
-		System.out.println("tabbed pane stateChanged");
-		
-		JTabbedPane pane = (JTabbedPane) evt.getSource();
-		
-		// Get current tab
-		int selectedIndex = pane.getSelectedIndex();
-		if (selectedIndex != -1)
-		{
-			String selectedTabName = pane.getTitleAt(selectedIndex);
-			//find the corresponding classification scheme and select it
-			ClassificationScheme selectedScheme = CurlyWhirly.dataSet.categorizationSchemesLookup.get(selectedTabName);
-			if(selectedScheme != null)
-				CurlyWhirly.canvas3D.currentClassificationScheme = selectedScheme;
-		}
-		//clear everything that is currently selected
-				if(CurlyWhirly.dataLoaded)
-					clearAllCategorySelections();
-	}
-	
-	
-	// --------------------------------------------------------------------------------------------------------------------------------------------------
-	
 	public void setUpCategoryLists()
 	{
-		System.out.println("setting up JLists for dataset " + CurlyWhirly.dataSet.name);
-		
-		selectorListsLookup = new HashMap<JList, ClassificationScheme>();	
-		
-		//make a new JList for each classification scheme
-		
-//		System.out.println("num classification schemes = " + CurlyWhirly.dataSet.classificationSchemes.size());
-		
+		//make a vector of all the classification schemes' names
+		Vector<String> schemeNames = new Vector<String>();
 		for (ClassificationScheme scheme : CurlyWhirly.dataSet.classificationSchemes)
+			schemeNames.add(scheme.name);
+		
+		//sort it and set it as the current model for the combo
+		Collections.sort(schemeNames, new CaseInsensitiveComparator());
+		schemeSelectorCombo.setModel(new DefaultComboBoxModel(schemeNames));
+		schemeSelectorCombo.setSelectedIndex(0);
+		String selectedSchemeName = (String) schemeSelectorCombo.getSelectedItem();
+		schemeSelectorCombo.setToolTipText(selectedSchemeName);
+	}
+	
+	class CaseInsensitiveComparator implements Comparator<String>
+	{
+		public int compare(String strA, String strB)
 		{
-//			System.out.println("scheme = " + scheme.name);
-			
-			// get the list items' names and sort them
-			Vector<String> listItems = new Vector<String>();
-			for (Category category : scheme.categories)
-			{
-				listItems.add(category.name);
-//				System.out.println("adding category "+ category.name);
-			}
-			Collections.sort(listItems);
-			
-			// table for selecting categories 
-			JList selectorList = new JList();
-			selectorListsLookup.put(selectorList, scheme);
-			
-			//now add the JList to the tabbed pane (in its own scrollpane)
-			JScrollPane scrollPane = new JScrollPane(selectorList);
-			categoryTabbedPane.addTab(scheme.name, scrollPane);
-			categoryTabbedPane.revalidate();
-			
-			//set the data on the list
-			selectorList.setListData(listItems);
-			selectorList.addListSelectionListener(this);
-			selectorList.setCellRenderer(new ColorListRenderer());
+			return strA.compareToIgnoreCase(strB);
 		}
 	}
 	
@@ -145,13 +128,12 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		{
 			super.getListCellRendererComponent(list, o, i, iss, chf);
 			
-			String categoryName = (String)o;	
-//			System.out.println("categoryName = " + categoryName);
+			String categoryName = (String) o;
 			//retrieve the appropriate category object from the current classification scheme
-			ClassificationScheme scheme = selectorListsLookup.get(list);
-//			if(scheme == null)
-//				return null;
-			Category category = scheme.getCategoryByName(categoryName);
+			String selectedSchemeName = (String) schemeSelectorCombo.getSelectedItem();
+			//find the corresponding classification scheme and select it
+			ClassificationScheme selectedScheme = CurlyWhirly.dataSet.categorizationSchemesLookup.get(selectedSchemeName);
+			Category category = selectedScheme.getCategoryByName(categoryName);
 			
 			// Set the text
 			setText(category.name);
@@ -159,11 +141,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 			// Set the icon
 			BufferedImage image = new BufferedImage(20, 10, BufferedImage.TYPE_INT_RGB);
 			Graphics2D g = image.createGraphics();
-			
-//			Color c1 = category.colour.get().brighter();
-//			Color c2 = category.colour.get().darker();
 			g.setPaint(category.colour.get());
-//			g.setPaint(new GradientPaint(0, 0, c1, 20, 10, c2));
 			g.fillRect(0, 0, 20, 10);
 			g.setColor(Color.black);
 			g.drawRect(0, 0, 20, 10);
@@ -180,34 +158,10 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		}
 	}
 	
-	
-	// --------------------------------------------------------------------------------------------------------------------------------------------------
-	
-	public void valueChanged(ListSelectionEvent e)
-	{
-		System.out.println("valueChanged");
-		
-		if (e.getValueIsAdjusting())
-			return;
-		
-		JList selectorList = (JList)e.getSource();
-		
-		if (selectorList.getSelectedValues().length == 0)
-			return;
-		Object[] selectedObjects = selectorList.getSelectedValues();
-		frame.canvas3D.selectedObjects = selectedObjects;
-		frame.canvas3D.highlightAllCategories = false;
-		System.out.println("updating graph from valueChanged(ListSelectionEvent e)");
-		frame.canvas3D.updateGraph(false);
-		
-	}
-	
-	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	public void actionPerformed(ActionEvent e)
 	{
-		System.out.println("actionPerformed");
 		
 		if (e.getSource() == xCombo && e.getActionCommand().equals("comboBoxChanged"))
 		{
@@ -229,7 +183,6 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		if (frame.dataLoaded)
 		{
 			frame.canvas3D.highlightAllCategories = true;
-			System.out.println("updating graph from actionPerformed()");
 			frame.canvas3D.updateGraph(true);
 		}
 	}
@@ -285,20 +238,14 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		clearAllCategorySelections();
 	}
 	
-	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	private void clearAllCategorySelections()
 	{
-		for(JList jList : selectorListsLookup.keySet())
-			jList.clearSelection();
+		selectorList.clearSelection();
 		frame.canvas3D.highlightAllCategories = true;
-		System.out.println("updating graph from clearAllCategorySelections()");
 		frame.canvas3D.updateGraph(false);
 	}
-	
-	
-	
 	
 	//GEN-BEGIN:initComponents
 	// <editor-fold defaultstate="collapsed" desc="Generated Code">
@@ -321,7 +268,9 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		jPanel2 = new javax.swing.JPanel();
 		resetColoursButton = new javax.swing.JButton();
 		jLabel4 = new javax.swing.JLabel();
-		categoryTabbedPane = new javax.swing.JTabbedPane();
+		jScrollPane1 = new javax.swing.JScrollPane();
+		selectorList = new javax.swing.JList();
+		schemeSelectorCombo = new javax.swing.JComboBox();
 		jPanel3 = new javax.swing.JPanel();
 		bgCombo = new javax.swing.JComboBox();
 		
@@ -399,10 +348,10 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		
 		org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
 		jPanel1.setLayout(jPanel1Layout);
-		jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jPanel1Layout.createSequentialGroup().addContainerGap().add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup().add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jLabel1).add(jLabel2).add(jLabel3)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(zCombo, 0, 135, Short.MAX_VALUE).add(yCombo, 0, 135, Short.MAX_VALUE).add(xCombo, 0, 135, Short.MAX_VALUE))).add(jLabel7)).addContainerGap()).add(jPanel1Layout.createSequentialGroup().add(32, 32, 32).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING).add(org.jdesktop.layout.GroupLayout.LEADING, spinSpeedSlider, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1Layout.createSequentialGroup().add(jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jLabel6)).add(org.jdesktop.layout.GroupLayout.LEADING, spinButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, resetViewButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)).add(34, 34, 34)));
+		jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jPanel1Layout.createSequentialGroup().addContainerGap().add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup().add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jLabel1).add(jLabel2).add(jLabel3)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(zCombo, 0, 131, Short.MAX_VALUE).add(yCombo, 0, 131, Short.MAX_VALUE).add(xCombo, 0, 131, Short.MAX_VALUE))).add(jLabel7)).addContainerGap()).add(jPanel1Layout.createSequentialGroup().add(32, 32, 32).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING).add(org.jdesktop.layout.GroupLayout.LEADING, spinSpeedSlider, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1Layout.createSequentialGroup().add(jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jLabel6)).add(org.jdesktop.layout.GroupLayout.LEADING, spinButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, resetViewButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)).add(34, 34, 34)));
 		jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jPanel1Layout.createSequentialGroup().add(jLabel7).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel1).add(xCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel2).add(yCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel3).add(zCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).add(18, 18, 18).add(resetViewButton).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(spinButton).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel5).add(jLabel6)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(spinSpeedSlider, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)));
 		
-		jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Select categories:"));
+		jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Select a category scheme:"));
 		
 		resetColoursButton.setText("Reset selection");
 		resetColoursButton.addActionListener(new java.awt.event.ActionListener()
@@ -413,17 +362,37 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 			}
 		});
 		
-		jLabel4.setText("<html>Click to select. Use CTRL+click for multiple selections.");
+		jLabel4.setText("<html>Single-click to select a category (multiple categories : CTRL+click) : ");
+		
+		selectorList.setModel(new DefaultComboBoxModel());
+		selectorList.addListSelectionListener(new javax.swing.event.ListSelectionListener()
+		{
+			public void valueChanged(javax.swing.event.ListSelectionEvent evt)
+			{
+				selectorListValueChanged(evt);
+			}
+		});
+		jScrollPane1.setViewportView(selectorList);
+		
+		schemeSelectorCombo.setModel(new javax.swing.DefaultComboBoxModel());
+		schemeSelectorCombo.setToolTipText("");
+		schemeSelectorCombo.addActionListener(new java.awt.event.ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				schemeSelectorComboActionPerformed(evt);
+			}
+		});
 		
 		org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
 		jPanel2.setLayout(jPanel2Layout);
-		jPanel2Layout.setHorizontalGroup(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup().addContainerGap().add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING).add(org.jdesktop.layout.GroupLayout.LEADING, categoryTabbedPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.CENTER, resetColoursButton).add(org.jdesktop.layout.GroupLayout.LEADING, jLabel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)).addContainerGap()));
-		jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup().add(jLabel4).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(categoryTabbedPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE).addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED).add(resetColoursButton).addContainerGap()));
+		jPanel2Layout.setHorizontalGroup(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup().addContainerGap().add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING).add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.CENTER, resetColoursButton).add(org.jdesktop.layout.GroupLayout.LEADING, schemeSelectorCombo, 0, 169, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, jLabel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)).addContainerGap()));
+		jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup().add(schemeSelectorCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jLabel4).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE).addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED).add(resetColoursButton).addContainerGap()));
 		
 		jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Select background colour:"));
 		
 		bgCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[]
-		                                                                 { "black", "dark grey", "light grey", "white" }));
+		{ "black", "dark grey", "light grey", "white" }));
 		bgCombo.addActionListener(new java.awt.event.ActionListener()
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -434,7 +403,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		
 		org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
 		jPanel3.setLayout(jPanel3Layout);
-		jPanel3Layout.setHorizontalGroup(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup().addContainerGap().add(bgCombo, 0, 173, Short.MAX_VALUE).addContainerGap()));
+		jPanel3Layout.setHorizontalGroup(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup().addContainerGap().add(bgCombo, 0, 169, Short.MAX_VALUE).addContainerGap()));
 		jPanel3Layout.setVerticalGroup(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup().addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(bgCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addContainerGap()));
 		
 		org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
@@ -444,10 +413,51 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 	}// </editor-fold>
 	//GEN-END:initComponents
 	
+	private void selectorListValueChanged(javax.swing.event.ListSelectionEvent evt)
+	{
+		
+		if (evt.getValueIsAdjusting())
+			return;
+		
+		JList selectorList = (JList) evt.getSource();
+		
+		if (selectorList.getSelectedValues().length == 0)
+			return;
+		Object[] selectedObjects = selectorList.getSelectedValues();
+		frame.canvas3D.selectedObjects = selectedObjects;
+		frame.canvas3D.highlightAllCategories = false;
+		frame.canvas3D.updateGraph(false);
+	}
+	
+	private void schemeSelectorComboActionPerformed(java.awt.event.ActionEvent evt)
+	{
+		
+		// Get current selection
+		String selectedSchemeName = (String) schemeSelectorCombo.getSelectedItem();
+		if (selectedSchemeName != null)
+		{
+			//find the corresponding classification scheme and select it
+			ClassificationScheme selectedScheme = CurlyWhirly.dataSet.categorizationSchemesLookup.get(selectedSchemeName);
+			if (selectedScheme != null)
+				CurlyWhirly.canvas3D.currentClassificationScheme = selectedScheme;
+			
+			//update the data model of the selector list
+			selectorList.setListData(selectedScheme.categoryNamesVec);
+			
+			//update the tool tip text
+			schemeSelectorCombo.setToolTipText(selectedSchemeName);
+			
+			//add custom cell renderers
+			selectorList.setCellRenderer(new ColorListRenderer());
+		}
+		//clear everything that is currently selected
+		if (CurlyWhirly.dataLoaded)
+			clearAllCategorySelections();
+	}
+	
 	//GEN-BEGIN:variables
 	// Variables declaration - do not modify
 	private javax.swing.JComboBox bgCombo;
-	private javax.swing.JTabbedPane categoryTabbedPane;
 	private javax.swing.JLabel jLabel1;
 	private javax.swing.JLabel jLabel2;
 	private javax.swing.JLabel jLabel3;
@@ -458,18 +468,22 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 	private javax.swing.JPanel jPanel1;
 	private javax.swing.JPanel jPanel2;
 	private javax.swing.JPanel jPanel3;
+	private javax.swing.JScrollPane jScrollPane1;
 	private javax.swing.JButton resetColoursButton;
 	private javax.swing.JButton resetViewButton;
+	private javax.swing.JComboBox schemeSelectorCombo;
+	private javax.swing.JList selectorList;
 	private javax.swing.JButton spinButton;
 	private javax.swing.JSlider spinSpeedSlider;
 	private javax.swing.JComboBox xCombo;
 	private javax.swing.JComboBox yCombo;
 	private javax.swing.JComboBox zCombo;
+	
 	// End of variables declaration//GEN-END:variables
 	
-	public  javax.swing.JTabbedPane getTabbedPane()
+	public javax.swing.JComboBox getSchemeSelectorCombo()
 	{
-		return categoryTabbedPane;
+		return schemeSelectorCombo;
 	}
 	
 }

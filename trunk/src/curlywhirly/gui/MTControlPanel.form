@@ -64,9 +64,9 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="zCombo" alignment="0" pref="135" max="32767" attributes="0"/>
-                              <Component id="yCombo" alignment="0" pref="135" max="32767" attributes="0"/>
-                              <Component id="xCombo" alignment="0" pref="135" max="32767" attributes="0"/>
+                              <Component id="zCombo" alignment="0" pref="131" max="32767" attributes="0"/>
+                              <Component id="yCombo" alignment="0" pref="131" max="32767" attributes="0"/>
+                              <Component id="xCombo" alignment="0" pref="131" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -76,14 +76,14 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="spinSpeedSlider" alignment="0" pref="131" max="32767" attributes="1"/>
+                      <Component id="spinSpeedSlider" alignment="0" pref="127" max="32767" attributes="1"/>
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="jLabel5" pref="80" max="32767" attributes="0"/>
+                          <Component id="jLabel5" pref="76" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="spinButton" alignment="0" pref="131" max="32767" attributes="3"/>
-                      <Component id="resetViewButton" alignment="0" pref="131" max="32767" attributes="2"/>
+                      <Component id="spinButton" alignment="0" max="32767" attributes="3"/>
+                      <Component id="resetViewButton" alignment="0" pref="127" max="32767" attributes="2"/>
                   </Group>
                   <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
               </Group>
@@ -222,7 +222,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Select categories:"/>
+            <TitledBorder title="Select a category scheme:"/>
           </Border>
         </Property>
       </Properties>
@@ -233,9 +233,10 @@
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="categoryTabbedPane" alignment="0" pref="173" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" alignment="0" pref="169" max="32767" attributes="0"/>
                       <Component id="resetColoursButton" alignment="2" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel4" alignment="0" pref="173" max="32767" attributes="0"/>
+                      <Component id="schemeSelectorCombo" alignment="0" pref="169" max="32767" attributes="0"/>
+                      <Component id="jLabel4" alignment="0" pref="169" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -244,9 +245,11 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
+                  <Component id="schemeSelectorCombo" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="categoryTabbedPane" pref="134" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="78" max="32767" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="resetColoursButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -265,13 +268,39 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">
           <Properties>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;Click to select. Use CTRL+click for multiple selections."/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;Single-click to select a category (multiple categories : CTRL+click) : "/>
           </Properties>
         </Component>
-        <Container class="javax.swing.JTabbedPane" name="categoryTabbedPane">
+        <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+          <AuxValues>
+            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+          </AuxValues>
 
-          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
+          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+          <SubComponents>
+            <Component class="javax.swing.JList" name="selectorList">
+              <Properties>
+                <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="new DefaultComboBoxModel() " type="code"/>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="selectorListValueChanged"/>
+              </Events>
+            </Component>
+          </SubComponents>
         </Container>
+        <Component class="javax.swing.JComboBox" name="schemeSelectorCombo">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new javax.swing.DefaultComboBoxModel()" type="code"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value=""/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="schemeSelectorComboActionPerformed"/>
+          </Events>
+        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel3">
@@ -288,7 +317,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="bgCombo" pref="173" max="32767" attributes="0"/>
+                  <Component id="bgCombo" pref="169" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>

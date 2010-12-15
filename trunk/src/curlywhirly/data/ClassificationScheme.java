@@ -9,7 +9,11 @@ public class ClassificationScheme
 {
 	public String name;
 	public ArrayList<Category> categories = new ArrayList<Category>();	
+	public Vector<String> categoryNamesVec = null;
 	
+	
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
+		
 
 	public Category getCategoryByName(String categoryName)
 	{
@@ -24,6 +28,17 @@ public class ClassificationScheme
 		return null;
 	}
 	
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
+		
+	public void makeNamesVector()
+	{
+		categoryNamesVec = new Vector<String>();
+		for (Category category : categories)
+		{
+			categoryNamesVec.add(category.name);
+		}
+		Collections.sort(categoryNamesVec);
+	}
 	
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	
