@@ -122,6 +122,7 @@ public class MouseClickBehavior extends Behavior
 											if(CurlyWhirly.dataAnnotationURL != null)
 											{
 												url = CurlyWhirly.dataAnnotationURL + dataEntryLabel;
+//												System.out.println("opening URL " + url);
 												GUIUtils.visitURL(url);
 											}
 										}

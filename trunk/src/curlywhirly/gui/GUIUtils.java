@@ -38,6 +38,12 @@ public class GUIUtils
 			else
 				visitURL5(html);
 		}
+		catch(URISyntaxException use)
+		{
+			String message = "Illegal character in URL " + html + "\nPlease correct your data and try again.";
+			TaskDialog.initialize(CurlyWhirly.curlyWhirly, "URL error");
+			TaskDialog.error(message, "Close");
+		}
 		catch (Exception e)
 		{
 			e.printStackTrace();

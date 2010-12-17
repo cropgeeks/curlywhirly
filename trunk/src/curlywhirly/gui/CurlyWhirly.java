@@ -30,7 +30,7 @@ public class CurlyWhirly extends JFrame
 	private static File prefsFile = getPrefsFile();
 	public static Preferences prefs = new Preferences();
 	public StatusBar statusBar;
-	public MenuBar menuBar;
+	public static MenuBar menuBar;
 
 	public static MovieCaptureThread currentMovieCaptureThread = null;
 
@@ -183,7 +183,7 @@ public class CurlyWhirly extends JFrame
 		//workaround for the 3D drawing problem with Swing menus
 		JPopupMenu.setDefaultLightWeightPopupEnabled( false );
 		ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
-		ToolTipManager.sharedInstance().setInitialDelay(100);
+		ToolTipManager.sharedInstance().setInitialDelay(0);
 
 		// side panel
 		controlPanel = new MTControlPanel(this);
