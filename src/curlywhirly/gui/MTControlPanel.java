@@ -13,6 +13,7 @@ import java.util.*;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.plaf.basic.*;
 import javax.vecmath.*;
 import curlywhirly.data.*;
 import scri.commons.gui.*;
@@ -41,6 +42,11 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 			jLabel4.setText("<html>Click to select. Use CMD+click for multiple selections.");
 		
 		addMouseAdapterToSelectorList();
+		
+		if(Preferences.showMouseOverLabels)
+			showLabelsCheckBox.setSelected(true);
+		else
+			showLabelsCheckBox.setSelected(false);
 	}
 	
 	// ==========================================methods============================================
@@ -108,7 +114,38 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		schemeSelectorCombo.setSelectedIndex(0);
 		String selectedSchemeName = (String) schemeSelectorCombo.getSelectedItem();
 		schemeSelectorCombo.setToolTipText(selectedSchemeName);
+		
+		//set a custom renderer on this combo box so we can see tooltips for each item on the drop-down list
+		schemeSelectorCombo.setRenderer(new ComboBoxWithToolTipsRenderer());
 	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	class ComboBoxWithToolTipsRenderer extends BasicComboBoxRenderer
+	{
+		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+		{
+			if (isSelected)
+			{
+				setBackground(list.getSelectionBackground());
+				setForeground(list.getSelectionForeground());
+				if (-1 < index)
+				{
+					list.setToolTipText((String) list.getSelectedValue());
+				}
+			}
+			else
+			{
+				setBackground(list.getBackground());
+				setForeground(list.getForeground());
+			}
+			setFont(list.getFont());
+			setText((value == null) ? "" : value.toString());
+			return this;
+		}
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	class CaseInsensitiveComparator implements Comparator<String>
 	{
@@ -265,6 +302,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		jLabel6 = new javax.swing.JLabel();
 		spinSpeedSlider = new javax.swing.JSlider();
 		jLabel7 = new javax.swing.JLabel();
+		showLabelsCheckBox = new javax.swing.JCheckBox();
 		jPanel2 = new javax.swing.JPanel();
 		resetColoursButton = new javax.swing.JButton();
 		jLabel4 = new javax.swing.JLabel();
@@ -346,10 +384,19 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		
 		jLabel7.setText("Data to display:");
 		
+		showLabelsCheckBox.setText("Show labels on mouseover");
+		showLabelsCheckBox.addActionListener(new java.awt.event.ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				showLabelsCheckBoxActionPerformed(evt);
+			}
+		});
+		
 		org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
 		jPanel1.setLayout(jPanel1Layout);
-		jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jPanel1Layout.createSequentialGroup().addContainerGap().add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup().add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jLabel1).add(jLabel2).add(jLabel3)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(zCombo, 0, 131, Short.MAX_VALUE).add(yCombo, 0, 131, Short.MAX_VALUE).add(xCombo, 0, 131, Short.MAX_VALUE))).add(jLabel7)).addContainerGap()).add(jPanel1Layout.createSequentialGroup().add(32, 32, 32).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING).add(org.jdesktop.layout.GroupLayout.LEADING, spinSpeedSlider, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1Layout.createSequentialGroup().add(jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jLabel6)).add(org.jdesktop.layout.GroupLayout.LEADING, spinButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, resetViewButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)).add(34, 34, 34)));
-		jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jPanel1Layout.createSequentialGroup().add(jLabel7).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel1).add(xCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel2).add(yCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel3).add(zCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).add(18, 18, 18).add(resetViewButton).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(spinButton).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel5).add(jLabel6)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(spinSpeedSlider, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)));
+		jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jPanel1Layout.createSequentialGroup().add(32, 32, 32).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING).add(org.jdesktop.layout.GroupLayout.LEADING, spinSpeedSlider, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1Layout.createSequentialGroup().add(jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jLabel6)).add(org.jdesktop.layout.GroupLayout.LEADING, spinButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, resetViewButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)).add(34, 34, 34)).add(jPanel1Layout.createSequentialGroup().addContainerGap().add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup().add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jLabel1).add(jLabel2).add(jLabel3)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(zCombo, 0, 131, Short.MAX_VALUE).add(yCombo, 0, 131, Short.MAX_VALUE).add(xCombo, 0, 131, Short.MAX_VALUE))).add(jLabel7).add(showLabelsCheckBox, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)).addContainerGap()));
+		jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jPanel1Layout.createSequentialGroup().add(jLabel7).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel1).add(xCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel2).add(yCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel3).add(zCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).add(18, 18, 18).add(resetViewButton).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(spinButton).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel5).add(jLabel6)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(spinSpeedSlider, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(showLabelsCheckBox).addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 		
 		jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Select a category scheme:"));
 		
@@ -387,7 +434,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
 		jPanel2.setLayout(jPanel2Layout);
 		jPanel2Layout.setHorizontalGroup(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup().addContainerGap().add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING).add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.CENTER, resetColoursButton).add(org.jdesktop.layout.GroupLayout.LEADING, schemeSelectorCombo, 0, 169, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, jLabel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)).addContainerGap()));
-		jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup().add(schemeSelectorCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jLabel4).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE).addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED).add(resetColoursButton).addContainerGap()));
+		jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup().add(schemeSelectorCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jLabel4).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE).addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED).add(resetColoursButton).addContainerGap()));
 		
 		jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Select background colour:"));
 		
@@ -412,6 +459,14 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		layout.setVerticalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(layout.createSequentialGroup().addContainerGap().add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addContainerGap()));
 	}// </editor-fold>
 	//GEN-END:initComponents
+	
+	private void showLabelsCheckBoxActionPerformed(java.awt.event.ActionEvent evt)
+	{
+		if(showLabelsCheckBox.isSelected())
+			Preferences.showMouseOverLabels = true;
+		else
+			Preferences.showMouseOverLabels = false;
+	}
 	
 	private void selectorListValueChanged(javax.swing.event.ListSelectionEvent evt)
 	{
@@ -473,6 +528,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 	private javax.swing.JButton resetViewButton;
 	private javax.swing.JComboBox schemeSelectorCombo;
 	private javax.swing.JList selectorList;
+	private javax.swing.JCheckBox showLabelsCheckBox;
 	private javax.swing.JButton spinButton;
 	private javax.swing.JSlider spinSpeedSlider;
 	private javax.swing.JComboBox xCombo;

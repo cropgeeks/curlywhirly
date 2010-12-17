@@ -73,6 +73,7 @@ public class URLEntryForm extends javax.swing.JDialog
 		if (url != null)
 		{
 			CurlyWhirly.dataAnnotationURL = url;
+			dataURLTextField.setText(url);
 			//close the window
 			setVisible(false);
 		}

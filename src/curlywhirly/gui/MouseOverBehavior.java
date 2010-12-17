@@ -81,6 +81,7 @@ public class MouseOverBehavior extends Behavior
 					{
 						int x = ((MouseEvent) event[ii]).getX();
 						int y = ((MouseEvent) event[ii]).getY();
+
 						pickCanvas.setShapeLocation(x, y);
 						
 						pickResult = pickCanvas.pickClosest();
@@ -102,7 +103,9 @@ public class MouseOverBehavior extends Behavior
 							// if this is the object picked last
 							if (isObjectSelectedBefore)
 							{
-								// do nothing
+								CurlyWhirly.canvas3D.mouseOverX = x;
+								CurlyWhirly.canvas3D.mouseOverY = y;
+								CurlyWhirly.canvas3D.repaint();
 							}
 							else
 							{
@@ -118,6 +121,14 @@ public class MouseOverBehavior extends Behavior
 										if(frame.currentMovieCaptureThread == null)
 										{
 											frame.statusBar.setMessage(" Point selected: " + mName);
+											
+											//set the appropriate variables on the canvas so we can display a tooltip over the data point
+											CurlyWhirly.canvas3D.isMouseOver = true;
+											CurlyWhirly.canvas3D.mouseOverString = mName;
+											CurlyWhirly.canvas3D.mouseOverX = x;
+											CurlyWhirly.canvas3D.mouseOverY = y;
+											CurlyWhirly.canvas3D.repaint();
+											
 											
 											if (CurlyWhirly.dataAnnotationURL != null)
 											{
@@ -142,12 +153,18 @@ public class MouseOverBehavior extends Behavior
 						// this is executed when no primitive has been picked at all
 						else
 						{
-							if(frame.currentMovieCaptureThread == null)
-							{
-								frame.statusBar.setDefaultText();
-								//show a normal cursor
-								CurlyWhirly.canvas3D.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-							}
+							//do not display a string
+							CurlyWhirly.canvas3D.mouseOverString = null;
+							CurlyWhirly.canvas3D.mouseOverX = -1;
+							CurlyWhirly.canvas3D.mouseOverY = -1;
+							if(CurlyWhirly.canvas3D.isMouseOver)
+								CurlyWhirly.canvas3D.repaint();
+							CurlyWhirly.canvas3D.isMouseOver = false;
+							frame.statusBar.setDefaultText();
+							
+							//show a normal cursor
+							CurlyWhirly.canvas3D.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+							
 							pickedNode = null;
 							isObjectSelectedBefore = false;
 						}

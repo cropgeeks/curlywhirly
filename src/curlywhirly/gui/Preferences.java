@@ -30,4 +30,7 @@ public class Preferences extends XMLPreferences
 	
 	// Is this the first time the program has ever been run (by this user)?
 	public static boolean isFirstRun = true;
+	
+	//this boolean indicates whether we should display data labels on mouseOver 
+	public static boolean showMouseOverLabels = true;
 }
