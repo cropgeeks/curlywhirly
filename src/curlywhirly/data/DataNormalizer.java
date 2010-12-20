@@ -16,7 +16,7 @@ public class DataNormalizer
 	public static DataSet normalizeDataSet(DataSet dataSet)
 	{
 		//for each column of data we have
-		for (int i = 0; i < CurlyWhirly.dataLoader.numDataColumns; i++)
+		for (int i = 0; i < dataSet.numDataColumns; i++)
 		{
 			//first iterate over the variable values to find the maximum value
 			float absoluteMax = 0;

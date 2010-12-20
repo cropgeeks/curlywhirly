@@ -11,44 +11,37 @@ public class DataLoader
 	
 	// ==========================================vars=========================================
 	
-	CurlyWhirly frame;
-
+	CurlyWhirly mainWin = CurlyWhirly.curlyWhirly;
 	
 	boolean errorInHeaders = false;
-	String categoryHeaderPrefix = "categories:";
-	String unclassifiedCategoriesStr = "unclassified";
 	
-	public int numDataColumns;
-	
-	String commentCharacter = "#";
-	String urlString = "URL=";
+	final String categoryHeaderPrefix = "categories:";
+	final String unclassifiedCategoriesStr = "unclassified";		
+	final String commentCharacter = "#";
+	final String urlString = "URL=";
 	
 	
 	ArrayList<String> comments = new ArrayList<String>(); 
 	
-	// ==========================================c'tor=========================================
+	ColumnOrderFormatter columnOrderFormatter;
 	
-	public DataLoader(CurlyWhirly frame)
-	{
-		this.frame = frame;
-	}
 	
 	// ==========================================methods=========================================
-
+	
 	public void loadDataInThread(File file)
 	{
 		//clear view
-		if (frame.canvas3D != null)
-			frame.canvas3D.clearCurrentView();
+		if (mainWin.canvas3D != null)
+			mainWin.canvas3D.clearCurrentView();
 		
 		//start the load in a separate thread
-		DataLoadingDialog dataLoadingDialog = new DataLoadingDialog(frame, true);
-		DataLoadingThread loader = new DataLoadingThread(frame,file,dataLoadingDialog);
+		DataLoadingDialog dataLoadingDialog = new DataLoadingDialog(mainWin, true);
+		DataLoadingThread loader = new DataLoadingThread(mainWin,file,dataLoadingDialog);
 		loader.setName("curlywhirly_dataload");
 		loader.start();
 		
 		//show a dialog with a progress bar
-		dataLoadingDialog.setLocationRelativeTo(frame);
+		dataLoadingDialog.setLocationRelativeTo(mainWin);
 		dataLoadingDialog.setVisible(true);
 		dataLoadingDialog.setModal(false);
 	}
@@ -59,12 +52,12 @@ public class DataLoader
 	{
 		DataSet dataSet = null;
 		CurlyWhirly.dataAnnotationURL = null;
-		frame.dataLoaded = false;
+		mainWin.dataLoaded = false;
 		
 		//load the data from file
 		try
 		{
-			dataSet = getDataFromFile(file);
+			dataSet = parseFile(file);
 			
 			//process the comments
 			processComments();
@@ -74,38 +67,34 @@ public class DataLoader
 			e.printStackTrace();
 			return;
 		}
-
-//		System.out.println("data loaded successfully");
 		
 		//set up the new dataset and make a new scene graph
 		//normalize first
 		//this sets the data up so that each axis is normalized to between -1 and 1 and the data fills the whole range
 		DataNormalizer.normalizeDataSet(dataSet);
-		frame.dataSet = dataSet;
-				
-		//deal with the combo boxes
-		if(frame.dataLoaded)
-			frame.controlPanel.resetComboBoxes();
-		else
-			frame.controlPanel.addComboModels();
-
-		//make a new scene graph
-		frame.canvas3D.createSceneGraph(true);
-
-		//do the rest of the set up
-//		frame.controlPanel.getTabbedPane().removeAll();
-		frame.controlPanel.setUpCategoryLists();
-//		frame.controlPanel.getSchemeSelectorCombo().setModel(null);		
+		mainWin.dataSet = dataSet;
 		
-		frame.statusBar.setDefaultText();
-		frame.repaint();
+		//deal with the combo boxes
+		if(mainWin.dataLoaded)
+			mainWin.controlPanel.resetComboBoxes();
+		else
+			mainWin.controlPanel.addComboModels();
+		
+		//make a new scene graph
+		mainWin.canvas3D.createSceneGraph(true);
+		
+		//do the rest of the set up
+		mainWin.controlPanel.setUpCategoryLists();			
+		mainWin.statusBar.setDefaultText();
+		mainWin.repaint();
 		
 		//flag the fact we have data loaded
-		frame.dataLoaded = true;
+		mainWin.dataLoaded = true;
 	}
 	
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+	
+	
 	private void processComments()
 	{
 		for (String comment : comments)
@@ -126,7 +115,7 @@ public class DataLoader
 	
 	
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+	
 	public String [] readFile(File file)
 	{
 		String[] lines = null;
@@ -155,7 +144,7 @@ public class DataLoader
 		
 		return lines;
 	}
-
+	
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	//check for comment lines in the header
@@ -174,61 +163,164 @@ public class DataLoader
 	
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	private boolean parseHeaders(String [] lines, DataSet dataSet, int commentCount) throws IOException
+	private int getDataFormat(DataSet dataSet, String [] lines, String [] headers)
+	{
+		//iterate over headers and check how many category schemes we have 
+		int numPrefixedCategoryHeaders = 0;
+		for (int i = 0; i < headers.length; i++)
+		{
+			//check for any columns that start with the defined categories prefix, and allow for cases where there are quotes around the headers
+			if(headers[i].startsWith(categoryHeaderPrefix) || headers[i].startsWith("\"" + categoryHeaderPrefix))
+			{			
+				dataSet.noCategoryHeaders = false;
+				numPrefixedCategoryHeaders++;
+			}
+		}
+		
+		DataFormatDetector dataFormatDetector = new DataFormatDetector();
+		int dataFormat = dataFormatDetector.detectDataFormat(dataSet, lines, numPrefixedCategoryHeaders, headers, categoryHeaderPrefix);		
+		System.out.println("dataFormat detected = " + dataFormat);
+		
+		return dataFormat;
+	}
+	
+	
+	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	private void makeClassificationSchemesFromPrefixedColumns(String [] headers, DataSet dataSet)
+	{
+		for (int i = 0; i < headers.length; i++)
+		{
+			//check for any columns that start with the defined categories prefix, and allow for cases where there are quotes around the headers
+			if(headers[i].startsWith(categoryHeaderPrefix) || headers[i].startsWith("\"" + categoryHeaderPrefix))
+			{						
+				String schemeName = null;
+				if(headers[i].startsWith("\"" + categoryHeaderPrefix))
+					schemeName = headers[i].substring((categoryHeaderPrefix.length()+1));
+				else
+					schemeName = headers[i].substring(categoryHeaderPrefix.length());
+				
+				//make a new scheme object
+				makeClassificationScheme(dataSet, schemeName, i);
+			}
+		}
+	}
+	
+	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	private void makeClassificationSchemes(int dataFormat, String [] headers, DataSet dataSet)
+	{
+	
+		switch(dataFormat)
+		{
+			case 1:
+			{
+				//F1:
+				//1. all data present:
+				//Category data --> Labels for individual data points --> Data column 1 --> Data column 2 --> ..... Data column n 
+				//categories:0
+				//labels: 1
+				//data: 2-n
+				//2. No Categories:
+				//blank column --> Labels for individual data points --> Data column 1 --> Data column 2 --> ..... Data column n
+				//categories:0 (but empty)
+				//labels: 1
+				//data: 2-n
+				if(headers[0].equals(""))
+				{
+					dataSet.emptyClassificationScheme = true;
+					makeClassificationScheme(dataSet, unclassifiedCategoriesStr,0);
+				}
+				else
+				{
+					makeClassificationScheme(dataSet, headers[0],0);
+				}	
+				dataSet.numDataColumns = headers.length - (dataSet.classificationSchemes.size() +1);
+				dataSet.dataColumnStart = dataSet.classificationSchemes.size() +1;
+				dataSet.numCategoryColumns = 1;
+			}
+			break;
+//
+			case 2:
+			{
+				//F2: 
+				//1. category cols (prefixed) -> label -> data cols
+				//categories:0-n
+				//labels: categoryCount
+				//data: (categoryCount+1)-n
+				makeClassificationSchemesFromPrefixedColumns(headers, dataSet);
+				dataSet.numDataColumns = headers.length - (dataSet.classificationSchemes.size() +1);
+				dataSet.dataColumnStart = dataSet.classificationSchemes.size() +1;
+				dataSet.numCategoryColumns = dataSet.classificationSchemes.size();
+			}
+			break;
+//
+			case 3:
+			{
+				if(!dataSet.missingCategoryColumn)
+				{
+					//F3:
+					//1. label -> category cols (prefixed) -> data cols
+					//categories:1-n
+					//labels: 0
+					//data: (categoryCount+1)-n
+					makeClassificationSchemesFromPrefixedColumns(headers, dataSet);
+					dataSet.numDataColumns = headers.length - (dataSet.classificationSchemes.size() +1);
+					dataSet.dataColumnStart = dataSet.classificationSchemes.size() +1;
+					dataSet.numCategoryColumns = dataSet.classificationSchemes.size();
+				}
+				//OR:
+				else
+				{
+					//2. label -> data cols
+					//labels: 0
+					//data: 1-n
+					dataSet.emptyClassificationScheme = true;
+					makeClassificationScheme(dataSet, unclassifiedCategoriesStr,0);
+					
+					dataSet.numDataColumns = headers.length - 1;
+					dataSet.dataColumnStart = 1;
+					dataSet.numCategoryColumns = 0;
+				}
+
+			}
+			break;
+		}
+	}
+	
+	
+	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	private void parseHeaders(String [] lines, DataSet dataSet, int commentCount) throws IOException
 	{
 		// parse the header and read the column names
 		String[] headers = lines[commentCount].split("\t");
 		//also keep a tab on all the headers we found (for testing mainly)
 		dataSet.allHeaders = headers;
 		
-		//this flag indicates whether we have a legacy format file with no "categories:" prefix for the category data 
-		boolean noCategoryHeaders = true;
+		int dataFormat = getDataFormat(dataSet, lines, headers);
 		
-		//iterate over headers and check how many category schemes we have 
-		for (int i = 0; i < headers.length; i++)
-		{
-			//check for any columns that start with the defined categories prefix, and allow for cases where there are quotes around the headers
-			if(headers[i].startsWith(categoryHeaderPrefix) || headers[i].startsWith("\"" + categoryHeaderPrefix))
-			{			
-				noCategoryHeaders = false;
-				
-				ClassificationScheme scheme = new ClassificationScheme();
-				if(headers[i].startsWith("\"" + categoryHeaderPrefix))
-					scheme.name = headers[i].substring((categoryHeaderPrefix.length()+1));
-				else
-					scheme.name = headers[i].substring(categoryHeaderPrefix.length());
-				dataSet.classificationSchemes.add(scheme);
-				dataSet.categorizationSchemesLookup.put(scheme.name, scheme);
-//				System.out.println("new categorization scheme found: " + scheme.name);
-			}
-		}
-		
-		boolean singleClassificationScheme = true;
-		if(dataSet.classificationSchemes.size() > 1)
-			singleClassificationScheme = false;
-		
-		//we have a legacy format if we have no categories headers and only a single classification scheme
-		boolean isLegacyData = noCategoryHeaders && singleClassificationScheme;		
-		//the legacy format also supports an empty first column if there are not category data attached
-		//check whether we have this situation
-		// check they are there
-		boolean emptyClassificationScheme = false;
-		if(headers[0].equals(""))
-		{
-			emptyClassificationScheme = true;
-			makeClassificationScheme(dataSet, unclassifiedCategoriesStr);
-		}
-		//also support the case of the missing "categories:" prefix and single classific. scheme in legacy data
-		if(!headers[0].equals("") && isLegacyData)
-			makeClassificationScheme(dataSet, headers[0]);
-	
+		makeClassificationSchemes(dataFormat, headers, dataSet);		
+
 		// rest of headers are data column headers except for first one after the category ones
 		//that column contains the labels
-		numDataColumns = headers.length - (dataSet.classificationSchemes.size() +1);
-//		System.out.println("numDataColumns = " + numDataColumns);
-		for (int i = 0; i < numDataColumns; i++)
+		
+//		if(dataSet.missingCategoryColumn)
+//		{
+//			dataSet.numDataColumns = headers.length - 1;
+//			dataSet.dataColumnStart = 1;
+//		}
+//		else
+//		{
+//			dataSet.numDataColumns = headers.length - (dataSet.classificationSchemes.size() +1);
+//			dataSet.dataColumnStart = dataSet.classificationSchemes.size() +1;
+//		}
+		
+		System.out.println("numDataColumns = " + dataSet.numDataColumns);
+		
+		for (int i = 0; i < dataSet.numDataColumns; i++)
 		{
-			String header = headers[i + (dataSet.classificationSchemes.size() +1)];
+			String header = headers[(i + dataSet.dataColumnStart)];
 			if (header == null || header.trim().equals(""))
 			{
 				errorInHeaders = true;
@@ -236,24 +328,25 @@ public class DataLoader
 			}
 			dataSet.dataHeaders.add(header);
 		}		
-		
-		return emptyClassificationScheme;
+			
+		columnOrderFormatter = new ColumnOrderFormatter();
+		columnOrderFormatter.formatColumnOrders(dataFormat, dataSet);		
 	}
+	
+	
 	
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	private void parseDataEntries(String [] lines, DataSet dataSet, int commentCount , boolean emptyClassificationScheme,int numCategorySchemes) throws IOException
+	private void parseDataEntries(String [] lines, DataSet dataSet, int commentCount, int numCategorySchemes) throws IOException
 	{
 		//for each row in the dataset, starting at the line after the comments and headers
 		// parse the data	
-		int lastLineParsed = 0;
 		int numDataLinesParsed = 0;
 		for (int i = (commentCount+1); i < lines.length; i++)
 		{		
 			numDataLinesParsed++;
 			
 			//parse the line
-			lastLineParsed = i;
 			String[] line = lines[i].split("\t");
 			
 			//create a new data point object and add it to the dataset
@@ -264,15 +357,13 @@ public class DataLoader
 			try
 			{
 				//for each category scheme we have 
-				for (int j = 0; j < dataSet.classificationSchemes.size(); j++)
+				for (ClassificationScheme scheme : dataSet.classificationSchemes)
 				{
-					//retrieve the appropriate scheme
-					ClassificationScheme scheme = dataSet.classificationSchemes.get(j);
-					//extract the value in this data cell
-					String categoryValue = line[j];
+					//extract the value in the appropriate data cell
+					String categoryValue = line[scheme.columnIndex];
 					
 					//this value may be empty if we have a legacy format without category information
-					if(emptyClassificationScheme || categoryValue.equals(""))
+					if(dataSet.emptyClassificationScheme || categoryValue.equals(""))
 						categoryValue = unclassifiedCategoriesStr;
 					
 					//check whether there is a Category object with this name
@@ -290,7 +381,7 @@ public class DataLoader
 				}
 				
 				//this is the label for the data point
-				dataEntry.label = line[numCategorySchemes];
+				dataEntry.label = line[dataSet.labelsColumnIndex];
 			}
 			catch (ArrayIndexOutOfBoundsException aix)
 			{
@@ -298,19 +389,19 @@ public class DataLoader
 				throw new IOException("Empty line ");
 			}
 			// check the data labels are there
-			if (line[1].equals(""))
+			if (dataEntry.label == null)
 			{
 				throw new IOException("Missing data label value");
 			}
 			
+			//parse the columns with the numerical data
 			NumberFormat nf = NumberFormat.getInstance();
-			for (int j = 0; j < numDataColumns; j++)
+			for (Integer j : dataSet.dataColumnIndices)
 			{
 				float value;
 				try
 				{
-					String valueStr = line[j + numCategorySchemes + 1];
-//					System.out.println("parsing value " + valueStr);
+					String valueStr = line[j];
 					value = nf.parse(valueStr).floatValue();
 					dataEntry.dataValues.add(value);
 				}
@@ -328,10 +419,13 @@ public class DataLoader
 	}
 	
 	
+	// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	
 	// imports the data from file in the specified location
-	public DataSet getDataFromFile(File file) throws IOException
+	public DataSet parseFile(File file) throws IOException
 	{
-//		System.out.println("\n\n============loading new dataset: "+ file.getName());
+		//		System.out.println("\n\n============loading new dataset: "+ file.getName());
 		
 		DataSet dataSet = new DataSet();
 		
@@ -355,11 +449,11 @@ public class DataLoader
 			dataSet.numEntries = numEntries;
 			
 			//parse the headers
-			boolean emptyClassificationScheme  = parseHeaders(lines, dataSet, commentCount);
+			parseHeaders(lines, dataSet, commentCount);
 			int numCategorySchemes = dataSet.classificationSchemes.size();
 			
 			// parse the data	
-			parseDataEntries(lines, dataSet, commentCount , emptyClassificationScheme, numCategorySchemes);
+			parseDataEntries(lines, dataSet, commentCount , numCategorySchemes);
 			
 			//now that all the data is parsed we can associate colours with each of the categories
 			//for each category scheme we have 
@@ -368,7 +462,7 @@ public class DataLoader
 				scheme.assignColoursToCategories();
 				scheme.makeNamesVector();
 			}
-
+			
 			//now choose the first categorizationscheme as the one that is currently selected
 			//the user can switch to another one later if they so wish
 			CurlyWhirly.canvas3D.currentClassificationScheme = dataSet.classificationSchemes.get(0);			
@@ -380,20 +474,22 @@ public class DataLoader
 				lineWithError = lastLineParsed+1;
 			
 			String message = "Error in data file on line " + lineWithError + ":\n" + e.getMessage() + " -- please correct your data and try again.";
-			TaskDialog.initialize(frame, "Data error");
-			TaskDialog.info(message, "Close");
+			TaskDialog.initialize(mainWin, "Data error");
+			TaskDialog.error(message, "Close");
 			e.printStackTrace();
 			throw new IOException(message);
 		}
-
+		
 		return dataSet;
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	private void makeClassificationScheme(DataSet dataSet, String name)
+	
+	private void makeClassificationScheme(DataSet dataSet, String name, int columnIndex)
 	{
 		ClassificationScheme scheme = new ClassificationScheme();
 		scheme.name = name;
+		scheme.columnIndex = columnIndex;
 		dataSet.classificationSchemes.add(scheme);
 		dataSet.categorizationSchemesLookup.put(scheme.name, scheme);
 	}

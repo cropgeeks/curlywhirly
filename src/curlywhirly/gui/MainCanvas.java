@@ -428,7 +428,7 @@ public class MainCanvas extends Canvas3D
 	//update the current scene graph with new settings
 	public void updateGraph(boolean makeNewSpheres)
 	{
-		System.out.println("updateGraph");
+//		System.out.println("updateGraph");
 		
 		List selectedCategories = null;
 		if (selectedObjects != null && selectedObjects.length > 0)

@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
 import curlywhirly.controller.*;
+import curlywhirly.data.*;
 import scri.commons.gui.*;
 
 public class MenuBar extends JMenuBar implements ActionListener
@@ -137,6 +138,7 @@ public class MenuBar extends JMenuBar implements ActionListener
 			{
 				Preferences.lastDir = "" + fc.getSelectedFile().getParent();
 
+				CurlyWhirly.dataLoader = new DataLoader();
 				CurlyWhirly.dataLoader.loadDataInThread(fc.getSelectedFile());
 			}
 		}
@@ -144,6 +146,7 @@ public class MenuBar extends JMenuBar implements ActionListener
 		else if (src.equals(exampleDataItem))
 		{
 			// load the example dataset provided with the application
+			CurlyWhirly.dataLoader = new DataLoader();
 			CurlyWhirly.dataLoader.loadDataInThread(new File("data/randomData.txt"));
 		}
 

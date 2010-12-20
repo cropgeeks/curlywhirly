@@ -17,7 +17,7 @@ public class DataEntry
 	public LinkedList<Float> normalizedDataValues = new LinkedList<Float>();
 	
 	//the label to be used for this data point
-	public String label;
+	public String label = null;
 	
 	//the sphere object used to represent this data point
 	public DataSphere dataSphere;
