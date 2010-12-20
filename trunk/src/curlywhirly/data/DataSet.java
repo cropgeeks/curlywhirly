@@ -30,6 +30,23 @@ public class DataSet
 	
 	//this contains the actual entries inthe dataset
 	public LinkedList<DataEntry> dataEntries = new LinkedList<DataEntry>();
+	
+	public int numDataColumns;
+	public int numCategoryColumns;
+	
+	//the legacy format also supports an empty first column if there are not category data attached
+	//checks whether we have this situation
+	boolean emptyClassificationScheme = false;	
+	boolean singleClassificationScheme = false;
+	boolean missingCategoryColumn = false;
+	boolean emptyCategoryColumn = false;
+	//this flag indicates whether we have a legacy format file with no "categories:" prefix for the category data 
+	boolean noCategoryHeaders = true;
+	
+	public int labelsColumnIndex;
+	public LinkedList<Integer> categoryColumnIndices;
+	public LinkedList<Integer> dataColumnIndices;
+	public int dataColumnStart = -1;
 		
 	
 //=======================================================methods==================================	

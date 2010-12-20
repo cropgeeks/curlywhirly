@@ -10,6 +10,7 @@ public class ClassificationScheme
 	public String name;
 	public ArrayList<Category> categories = new ArrayList<Category>();	
 	public Vector<String> categoryNamesVec = null;
+	public int columnIndex = -1;
 	
 	
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------	

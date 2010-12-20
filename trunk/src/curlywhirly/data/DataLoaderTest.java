@@ -9,8 +9,8 @@ public class DataLoaderTest
 		try
 		{
 			File file = new File("data/rubus.txt");		
-			DataLoader loader = new DataLoader(null);		
-			DataSet dataSet = loader.getDataFromFile(file);
+			DataLoader loader = new DataLoader();		
+			DataSet dataSet = loader.parseFile(file);
 			
 			System.out.println("\n\n================printing raw data:");
 			dataSet.listAllData();

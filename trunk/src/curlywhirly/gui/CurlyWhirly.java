@@ -69,7 +69,7 @@ public class CurlyWhirly extends JFrame
 		}
 
 		curlyWhirly = new CurlyWhirly();
-		dataLoader = new DataLoader(curlyWhirly);
+		dataLoader = new DataLoader();
 	}
 
 	CurlyWhirly()
@@ -123,6 +123,7 @@ public class CurlyWhirly extends JFrame
 				// Do we want to open an initial project?
 				if (initialFile != null)
 				{
+					CurlyWhirly.dataLoader = new DataLoader();
 					CurlyWhirly.dataLoader.loadDataInThread(new File(initialFile));
 				}
 			}

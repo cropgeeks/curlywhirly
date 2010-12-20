@@ -25,6 +25,10 @@ public class DataLoadingThread extends Thread
 		//load the actual data
 		frame.dataLoader.loadData(file);
 		
+		//now reset this flag so that user can open another file by different means
+		if(CurlyWhirly.dragAndDropDataLoad)
+			CurlyWhirly.dragAndDropDataLoad = false;
+		
 		//show the progress bar
 		if (dataLoadingDialog != null)
 			dataLoadingDialog.setVisible(false);

@@ -7,6 +7,7 @@ import java.awt.datatransfer.*;
 import java.awt.dnd.*;
 import java.io.*;
 import java.util.*;
+import curlywhirly.data.*;
 
 public class FileDropAdapter extends DropTargetAdapter
 {
@@ -35,10 +36,8 @@ public class FileDropAdapter extends DropTargetAdapter
 
 					//open the file
 					CurlyWhirly.dragAndDropDataLoad = true;
+					CurlyWhirly.dataLoader = new DataLoader();
 					CurlyWhirly.dataLoader.loadDataInThread(new File(list.get(0).toString()));
-					//now reset this flag so that user can open another file by different means
-					CurlyWhirly.dragAndDropDataLoad = false;
-
 
 					dtde.dropComplete(true);
 					return;
