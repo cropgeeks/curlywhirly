@@ -45,6 +45,8 @@ public class CurlyWhirly extends JFrame
 	public static boolean dragAndDropDataLoad = false;
 	
 	public static CurlyWhirly curlyWhirly = null;
+	
+	public static final String titleString = "CurlyWhirly - " + Install4j.VERSION;
 
 	
 	//==========================================================
@@ -86,7 +88,7 @@ public class CurlyWhirly extends JFrame
 		pack();
 
 		// get the GUI set up
-		setTitle("CurlyWhirly - " + Install4j.VERSION);
+		setTitle(titleString);
 		setSize(Preferences.guiWinMainWidth, Preferences.guiWinMainHeight);
 		
 		// Work out the current screen's width and height

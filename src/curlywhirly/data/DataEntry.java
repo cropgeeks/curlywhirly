@@ -22,14 +22,24 @@ public class DataEntry
 	//the sphere object used to represent this data point
 	public DataSphere dataSphere;
 	
-	public void printAsLine()
+	public void printAsLine(boolean normalised)
 	{
 		for(Category category : categories)
-			System.out.println(category.name + "\t");
+			System.out.print(category.name + "\t");
 		
-		System.out.println(label +"\t");
+		System.out.print(label +"\t");
 		
-		for(Float value : dataValues)
-			System.out.println(value + "\t");
+		if(!normalised)
+		{
+			for(Float value : dataValues)
+				System.out.print(value + "\t");
+		}
+		else
+		{
+			for(Float value : normalizedDataValues)
+				System.out.print(value + "\t");
+		}
+		
+		System.out.println();
 	}
 }

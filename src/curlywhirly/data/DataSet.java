@@ -52,7 +52,7 @@ public class DataSet
 //=======================================================methods==================================	
 	
 	//prints all data to stdout in the original order
-	public void listAllData()
+	public void listAllData(boolean normalised)
 	{
 		//print headers
 		System.out.println("dataSetName = " + name);
@@ -63,9 +63,11 @@ public class DataSet
 			System.out.print("\t");
 		}
 		
+		System.out.println();
+		
 		//print data
 		for(DataEntry dataEntry : dataEntries)
-			dataEntry.printAsLine();
+			dataEntry.printAsLine(normalised);
 
 	}
 

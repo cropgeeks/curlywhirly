@@ -68,7 +68,7 @@ public class DataLoader
 			return;
 		}
 		
-		//set up the new dataset and make a new scene graph
+		//set up the new dataset 
 		//normalize first
 		//this sets the data up so that each axis is normalized to between -1 and 1 and the data fills the whole range
 		DataNormalizer.normalizeDataSet(dataSet);
@@ -81,15 +81,20 @@ public class DataLoader
 			mainWin.controlPanel.addComboModels();
 		
 		//make a new scene graph
+		mainWin.canvas3D.highlightAllCategories = true;
 		mainWin.canvas3D.createSceneGraph(true);
 		
 		//do the rest of the set up
+		//set the title of the window to the name of the dataset
+		mainWin.setTitle(mainWin.titleString + "  --  " + dataSet.name);
 		mainWin.controlPanel.setUpCategoryLists();			
 		mainWin.statusBar.setDefaultText();
 		mainWin.repaint();
 		
 		//flag the fact we have data loaded
 		mainWin.dataLoaded = true;
+		
+
 	}
 	
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -301,20 +306,6 @@ public class DataLoader
 		int dataFormat = getDataFormat(dataSet, lines, headers);
 		
 		makeClassificationSchemes(dataFormat, headers, dataSet);		
-
-		// rest of headers are data column headers except for first one after the category ones
-		//that column contains the labels
-		
-//		if(dataSet.missingCategoryColumn)
-//		{
-//			dataSet.numDataColumns = headers.length - 1;
-//			dataSet.dataColumnStart = 1;
-//		}
-//		else
-//		{
-//			dataSet.numDataColumns = headers.length - (dataSet.classificationSchemes.size() +1);
-//			dataSet.dataColumnStart = dataSet.classificationSchemes.size() +1;
-//		}
 		
 		System.out.println("numDataColumns = " + dataSet.numDataColumns);
 		
