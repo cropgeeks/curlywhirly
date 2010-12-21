@@ -71,7 +71,7 @@ public class MainCanvas extends Canvas3D
 	// these default to the first three columns of data in the dataset
 	
 	// this flag is set to true when we want all data points coloured in
-	boolean highlightAllCategories = true;
+	public boolean highlightAllCategories = true;
 	
 	// branch group containing all axis labels
 	BranchGroup allLabelsBG;
@@ -115,11 +115,12 @@ public class MainCanvas extends Canvas3D
 	public Color openFileLabelColour = Color.DARK_GRAY;
 	
 	//a String we draw over a data point when we have moused over it
-	public String mouseOverString = null;
+//	public String mouseOverString = null;
 	//the x and y coords for the current mouse over event
 	public int mouseOverX, mouseOverY;
 	//this boolean keeps tab of whether anything is being moused over or not
 	public boolean isMouseOver = false;
+	public DataSphere mouseOverSphere = null;
 	
 	
 	// ==================================c'tor=============================
@@ -757,6 +758,7 @@ public class MainCanvas extends Canvas3D
 	// ---------------------------------------------------------------------------------------------------------------------
 	
 	// Overriding repaint makes the worst flickering dissapear when we execute the postRender stuff on repaint
+	@Override
 	public void repaint()
 	{
 		Graphics2D g = (Graphics2D) getGraphics();
@@ -769,7 +771,7 @@ public class MainCanvas extends Canvas3D
 	public void postRender()
 	{
 		//do we need to display a mouseover string for a data point
-		if(mouseOverString !=null && Preferences.showMouseOverLabels)
+		if(mouseOverSphere !=null && Preferences.showMouseOverLabels)
 		{		
 			J3DGraphics2D g2 = this.getGraphics2D();
 			
@@ -778,19 +780,19 @@ public class MainCanvas extends Canvas3D
 			Font font = (new Font("SANS_SERIF", Font.PLAIN, fontHeight));	
 			g2.setFont(font);
 			FontMetrics fm = getFontMetrics(font);
-			int stringWidth = fm.stringWidth(mouseOverString);
+			int stringWidth = fm.stringWidth(mouseOverSphere.dataEntry.label);
 			
 			//draw a rounded rectangle as a background for the label
 			float arcSize = fontHeight / 1.5f;
 			int horizontalGap = 3;
 			int verticalGap = 4;
 			RoundRectangle2D.Float backGroundRect = new RoundRectangle2D.Float(mouseOverX - horizontalGap, mouseOverY - fontHeight, stringWidth + horizontalGap * 2, fontHeight + verticalGap, arcSize, arcSize);
-			g2.setColor(new Color(1,0,0, 0.5f));
+			g2.setColor(new Color(1,0,0, 0.6f));
 			g2.fill(backGroundRect);
 			
 			//draw the label
 			g2.setColor(Color.white);
-			g2.drawString(mouseOverString,mouseOverX,mouseOverY);
+			g2.drawString(mouseOverSphere.dataEntry.label,mouseOverX,mouseOverY);
 			
 			//don't flush or we won't see anything drawn
 			g2.flush(false);

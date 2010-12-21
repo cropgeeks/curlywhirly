@@ -112,10 +112,10 @@ public class MouseOverBehavior extends Behavior
 								try
 								{
 									// only do this when we have selected a sphere
-									if (Class.forName("com.sun.j3d.utils.geometry.Sphere").isInstance(pickedNode))
+									if (Class.forName("curlywhirly.gui.DataSphere").isInstance(pickedNode))
 									{
 										// first find out which marker ring (cylinder) has been picked
-										Sphere sphere = (Sphere) pickedNode;
+										DataSphere sphere = (DataSphere) pickedNode;
 										String mName = (String) namesHashT.get(sphere);
 										// display the feature name on the status bar of the frame but only if we are not currently recording a movie
 										if(frame.currentMovieCaptureThread == null)
@@ -124,7 +124,7 @@ public class MouseOverBehavior extends Behavior
 											
 											//set the appropriate variables on the canvas so we can display a tooltip over the data point
 											CurlyWhirly.canvas3D.isMouseOver = true;
-											CurlyWhirly.canvas3D.mouseOverString = mName;
+											CurlyWhirly.canvas3D.mouseOverSphere = sphere;
 											CurlyWhirly.canvas3D.mouseOverX = x;
 											CurlyWhirly.canvas3D.mouseOverY = y;
 											CurlyWhirly.canvas3D.repaint();
@@ -154,7 +154,7 @@ public class MouseOverBehavior extends Behavior
 						else
 						{
 							//do not display a string
-							CurlyWhirly.canvas3D.mouseOverString = null;
+							CurlyWhirly.canvas3D.mouseOverSphere = null;
 							CurlyWhirly.canvas3D.mouseOverX = -1;
 							CurlyWhirly.canvas3D.mouseOverY = -1;
 							if(CurlyWhirly.canvas3D.isMouseOver)
