@@ -1,5 +1,6 @@
 feature additions:
 
+- provide an error message when user loads data with no data point identifiers
 - 64-bit Windows installer
 
 
