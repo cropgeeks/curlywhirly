@@ -115,7 +115,7 @@ public class MainCanvas extends Canvas3D
 	public Color openFileLabelColour = Color.DARK_GRAY;
 	
 	//a String we draw over a data point when we have moused over it
-//	public String mouseOverString = null;
+	//	public String mouseOverString = null;
 	//the x and y coords for the current mouse over event
 	public int mouseOverX, mouseOverY;
 	//this boolean keeps tab of whether anything is being moused over or not
@@ -137,7 +137,7 @@ public class MainCanvas extends Canvas3D
 		setFocusable(true);
 		
 	}
-
+	
 	
 	// ---------------------------------------------------------------------------------------------------------------------
 	
@@ -429,7 +429,7 @@ public class MainCanvas extends Canvas3D
 	//update the current scene graph with new settings
 	public void updateGraph(boolean makeNewSpheres)
 	{
-//		System.out.println("updateGraph");
+		//		System.out.println("updateGraph");
 		
 		List selectedCategories = null;
 		if (selectedObjects != null && selectedObjects.length > 0)
@@ -772,36 +772,90 @@ public class MainCanvas extends Canvas3D
 	{
 		//do we need to display a mouseover string for a data point
 		if(mouseOverSphere !=null && Preferences.showMouseOverLabels)
-		{		
-			J3DGraphics2D g2 = this.getGraphics2D();
-			
-			//font stuff
-			int fontHeight = 12;
-			Font font = (new Font("SANS_SERIF", Font.PLAIN, fontHeight));	
-			g2.setFont(font);
-			FontMetrics fm = getFontMetrics(font);
-			int stringWidth = fm.stringWidth(mouseOverSphere.dataEntry.label);
-			
-			//draw a rounded rectangle as a background for the label
-			float arcSize = fontHeight / 1.5f;
-			int horizontalGap = 3;
-			int verticalGap = 4;
-			RoundRectangle2D.Float backGroundRect = new RoundRectangle2D.Float(mouseOverX - horizontalGap, mouseOverY - fontHeight, stringWidth + horizontalGap * 2, fontHeight + verticalGap, arcSize, arcSize);
-			g2.setColor(new Color(1,0,0, 0.6f));
-			g2.fill(backGroundRect);
-			
-			//draw the label
-			g2.setColor(Color.white);
-			g2.drawString(mouseOverSphere.dataEntry.label,mouseOverX,mouseOverY);
-			
-			//don't flush or we won't see anything drawn
-			g2.flush(false);
-		}
-		
+			drawMouseOverLabel();		
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
+	
+	private void drawMouseOverLabel()
+	{
+		J3DGraphics2D g2 = this.getGraphics2D();
 		
+		int cursorHeight = 20;
+		
+		//the label to display
+		int categoryIndex = CurlyWhirly.dataSet.classificationSchemes.indexOf(CurlyWhirly.canvas3D.currentClassificationScheme);
+		String categoryLabel = "[" + mouseOverSphere.dataEntry.categories.get(categoryIndex).name + "]";
+		String nameLabel = mouseOverSphere.dataEntry.label;
+		
+		//font stuff
+		int fontHeight = 12;
+		Font font = (new Font("SANS_SERIF", Font.PLAIN, fontHeight));	
+		g2.setFont(font);
+		FontMetrics fm = getFontMetrics(font);
+		
+		//work out the width of the longer string	
+		int stringWidthNameLabel = fm.stringWidth(nameLabel);
+		int stringWidthcategoryLabel = fm.stringWidth(categoryLabel);
+		int backGroundWidth = -1;
+		if(stringWidthNameLabel > stringWidthcategoryLabel)
+			backGroundWidth = stringWidthNameLabel;
+		else
+			backGroundWidth = stringWidthcategoryLabel;
+		
+		//coords for a rounded rectangle as a background for the label
+		float arcSize = fontHeight / 1.5f;
+		int horizontalGap = 3;
+		int verticalGap = 4;
+		int rectX = mouseOverX - horizontalGap;
+		int rectY = mouseOverY - fontHeight  - cursorHeight;
+		int rectWidth = backGroundWidth + horizontalGap * 2;
+		int rectHeight = 2*(fontHeight + verticalGap);
+		
+		//work out the label positions
+		//first check where we are with respect to the edges of the canvas
+		int edgeBuffer = 3;
+//		int lhSpace = 
+		int rhSpace = getWidth() - (mouseOverX + rectWidth);
+		int topSpace = mouseOverY - rectHeight - cursorHeight;
+		boolean labelFitsonRight =  rhSpace >= 0;
+		boolean labelFitsAtTop =  topSpace >= 0;
+
+		int labelsX = mouseOverX;
+		int nameLabelsY = mouseOverY - cursorHeight;
+		int categoryLabelsY = mouseOverY+ fontHeight + verticalGap  - cursorHeight;
+		//we want the label to be fully visible so we need to have it abutting to the edges if it would otherwise fall off				
+		if (!labelFitsonRight)
+		{
+			//adjust x value
+			labelsX -= Math.abs(rhSpace)  + edgeBuffer;
+			rectX -= Math.abs(rhSpace) + edgeBuffer;
+		}
+		if(!labelFitsAtTop)
+		{
+			//need to draw it below cursor instead
+			rectY = mouseOverY + verticalGap  + cursorHeight;
+			nameLabelsY = rectY + fontHeight;
+			categoryLabelsY = nameLabelsY	+ fontHeight + verticalGap;		
+		}
+		
+		//draw the background rectangle	
+		RoundRectangle2D.Float backGroundRect = new RoundRectangle2D.Float(rectX, rectY, rectWidth, rectHeight, arcSize, arcSize);
+		g2.setColor(new Color(1,0,0, 0.6f));
+		g2.fill(backGroundRect);
+		
+		//draw the labels		
+		g2.setColor(Color.white);
+		g2.drawString(nameLabel,labelsX,nameLabelsY);
+		g2.drawString(categoryLabel,labelsX,categoryLabelsY);
+		
+		//don't flush or we won't see anything drawn
+		g2.flush(false);
+	}
+	
+	// ---------------------------------------------------------------------------------------------------------------------
+	
+	
 	
 	
 } // end of class

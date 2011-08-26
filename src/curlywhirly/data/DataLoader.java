@@ -184,7 +184,6 @@ public class DataLoader
 		
 		DataFormatDetector dataFormatDetector = new DataFormatDetector();
 		int dataFormat = dataFormatDetector.detectDataFormat(dataSet, lines, numPrefixedCategoryHeaders, headers, categoryHeaderPrefix);		
-		System.out.println("dataFormat detected = " + dataFormat);
 		
 		return dataFormat;
 	}
@@ -306,8 +305,6 @@ public class DataLoader
 		int dataFormat = getDataFormat(dataSet, lines, headers);
 		
 		makeClassificationSchemes(dataFormat, headers, dataSet);		
-		
-		System.out.println("numDataColumns = " + dataSet.numDataColumns);
 		
 		for (int i = 0; i < dataSet.numDataColumns; i++)
 		{
