@@ -20,7 +20,7 @@ public class CurlyWhirly extends JFrame
 
 	public static DataSet dataSet;
 	public static MainCanvas canvas3D;
-	
+
 	public int controlPanelWidth = 200;
 
 	public static MTControlPanel controlPanel;
@@ -35,23 +35,23 @@ public class CurlyWhirly extends JFrame
 	public static MovieCaptureThread currentMovieCaptureThread = null;
 
 	public FrameListener frameListener = null;
-	
+
 	public static DataLoader dataLoader =null;
-	
+
 	public static String dataAnnotationURL = null;
-	
+
 	// Optional path to a file to be loaded when app opens
 	public static String initialFile = null;
 	public static boolean dragAndDropDataLoad = false;
-	
+
 	public static CurlyWhirly curlyWhirly = null;
-	
+
 	public static final String titleString = "CurlyWhirly - " + Install4j.VERSION;
 
-	
+
 	//==========================================================
-	
-	
+
+
 	public static void main(String[] args)
 	{
 		// OS X: This has to be set before anything else
@@ -69,6 +69,8 @@ public class CurlyWhirly extends JFrame
 		{
 			e.printStackTrace();
 		}
+
+		Icons2.initialize("/res/icons", ".png");
 
 		curlyWhirly = new CurlyWhirly();
 		dataLoader = new DataLoader();
@@ -90,7 +92,7 @@ public class CurlyWhirly extends JFrame
 		// get the GUI set up
 		setTitle(titleString);
 		setSize(Preferences.guiWinMainWidth, Preferences.guiWinMainHeight);
-		
+
 		// Work out the current screen's width and height
 		int scrnW = SwingUtils.getVirtualScreenDimension().width;
 		int scrnH = SwingUtils.getVirtualScreenDimension().height;
@@ -104,9 +106,9 @@ public class CurlyWhirly extends JFrame
 		// Maximize the frame if neccassary
 		if (Preferences.guiWinMainMaximized)
 			setExtendedState(Frame.MAXIMIZED_BOTH);
-		
-		setIconImage(new ImageIcon("res/curlywurly_icon32px.png").getImage());
-	
+
+		setIconImage(Icons2.getIcon("curlywurly_icon32px").getImage());
+
 
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -131,8 +133,8 @@ public class CurlyWhirly extends JFrame
 			}
 
 		});
-		
-		
+
+
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e)
@@ -149,13 +151,13 @@ public class CurlyWhirly extends JFrame
 				else
 					Preferences.guiWinMainMaximized = true;
 			}
-			
+
 			public void componentMoved(ComponentEvent e)
 			{
 				Preferences.guiWinMainX = getLocation().x;
 				Preferences.guiWinMainY = getLocation().y;
 			}
-			
+
 		});
 
 		frameListener = new FrameListener(this);
@@ -163,7 +165,7 @@ public class CurlyWhirly extends JFrame
 		addComponentListener(frameListener);
 
 		setVisible(true);
-		
+
 		//start a thread that fades in a label on the canvas prompting the user to open a file
 //		CanvasLabelFadeInThread t = new CanvasLabelFadeInThread(canvas3D);
 //		t.start();
@@ -191,7 +193,7 @@ public class CurlyWhirly extends JFrame
 		// side panel
 		controlPanel = new MTControlPanel(this);
 		controlPanel.setPreferredSize(new Dimension(controlPanelWidth, Preferences.guiWinMainHeight));
-		
+
 		// instantiate the canvas here rather than in the data load method
 		// we want to be able to recycle it when we load another dataset over the top of the current one
 		canvas3D = new MainCanvas(this);
@@ -216,7 +218,7 @@ public class CurlyWhirly extends JFrame
 		//drag and drop support
 		FileDropAdapter dropAdapter = new FileDropAdapter(this);
 		setDropTarget(new DropTarget(this, dropAdapter));
-		
+
 	}
 
 	private static File getPrefsFile()
@@ -235,7 +237,7 @@ public class CurlyWhirly extends JFrame
 
 		// If not, see if the "old" (pre 21/06/2010) file is available
 		File old = new File(System.getProperty("user.home"), ".curlywhirly.xml");
-		
+
 		if (old.exists())
 			try { FileUtils.copyFile(old, file, true); }
 			catch (IOException e) {}
