@@ -738,9 +738,6 @@ public class MainCanvas extends Canvas3D
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		g2.setColor(Color.white);
-		g2.fillRect(0, 0, getWidth(), getHeight());
-
 		//if we don't have data loaded we just want to display a grey background and a label prompting the user to open a file
 		//label stuff
 		Font font = (new Font("SANS_SERIF", Font.PLAIN, 18));
@@ -753,6 +750,9 @@ public class MainCanvas extends Canvas3D
 
 		if(!frame.dataLoaded)
 		{
+			g2.setColor(Color.white);
+			g2.fillRect(0, 0, getWidth(), getHeight());
+
 			g2.setColor(openFileLabelColour);
 			g2.drawString(label, x, y);
 
