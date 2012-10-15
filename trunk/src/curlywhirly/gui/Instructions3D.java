@@ -5,7 +5,7 @@ import java.awt.event.ItemListener;
 
 import javax.swing.JCheckBox;
 
-import scri.commons.gui.TaskDialog;
+import scri.commons.gui.*;
 
 public class Instructions3D  implements ItemListener
 {
@@ -19,12 +19,11 @@ public class Instructions3D  implements ItemListener
 
 	public void show3DInstructions(boolean useCheckbox)
 	{
-		instructionsCheckBox = new JCheckBox("Hide this message in the future");
+		instructionsCheckBox = new JCheckBox(RB.getString("gui.Instructions3D.checkbox"));
 		instructionsCheckBox.addItemListener(this);
-		String message = "Controls for the 3D graph: Left-click + drag to spin," +
-				" middle-click (or Alt) + drag to zoom.";
-		String label = "Close";
-		
+		String message = RB.getString("gui.Instructions3D.instructions");
+		String label = RB.getString("text.close");
+
 		if (useCheckbox)
 			TaskDialog.info(message, label, instructionsCheckBox);
 		else

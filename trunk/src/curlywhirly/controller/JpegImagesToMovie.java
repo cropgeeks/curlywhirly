@@ -217,14 +217,18 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 
 		try
 		{
+			if (true)
+				throw new Exception();
+
 			dsink = Manager.createDataSink(ds, outML);
 			dsink.open();
 		}
 		catch (Exception e)
 		{
 			movieFile.delete();
-			movieAssembleDialog.getAssembleLabel().setText("Movie assembly failed");
-			TaskDialog.error("Error: movie cannot be created -- please check a file by the same name is not currently open", "Close");
+			movieAssembleDialog.setVisible(false);
+			TaskDialog.error(RB.getString("controller.JpegImagesToMovie.error"),
+				RB.getString("text.close"));
 			System.err.println("Cannot create the DataSink: " + e);
 			return null;
 		}

@@ -37,6 +37,18 @@ public class MovieCaptureDialog extends javax.swing.JDialog implements ChangeLis
 		super(frame, modal);
 		initComponents();
 
+		jPanel1.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.MovieCaptureDialog.jPanel1.title")));
+		RB.setText(jLabel1, "gui.MovieCaptureDialog.jLabel1");
+		RB.setText(jLabel2, "gui.MovieCaptureDialog.jLabel2");
+		RB.setText(jLabel3, "gui.MovieCaptureDialog.jLabel3");
+		RB.setText(radioButtonSlow, "gui.MovieCaptureDialog.radioButtonSlow");
+		RB.setText(radioButtonMedium, "gui.MovieCaptureDialog.radioButtonMedium");
+		RB.setText(radioButtonFast, "gui.MovieCaptureDialog.radioButtonFast");
+		RB.setText(browseButton, "text.browse");
+		RB.setText(jLabel4, "gui.MovieCaptureDialog.jLabel4");
+		RB.setText(jLabel5, "gui.MovieCaptureDialog.jLabel5");
+		RB.setText(captureMovieButton, "gui.MovieCaptureDialog.captureMovieButton");
+
 		this.frame = frame;
 
 		fc = new JFileChooser(System.getProperty("user.home"));
@@ -242,7 +254,7 @@ public class MovieCaptureDialog extends javax.swing.JDialog implements ChangeLis
 
 			if (movieFile.exists())
 			{
-				String warningMessage = "This will overwrite the existing file. Are you sure you want to proceed?";
+				String warningMessage = RB.getString("gui.MovieCaptureDialog.overwriteWarning");
 				if (JOptionPane.showConfirmDialog(this, warningMessage) == JOptionPane.YES_OPTION)
 				{
 					//remove existing file
@@ -263,7 +275,8 @@ public class MovieCaptureDialog extends javax.swing.JDialog implements ChangeLis
 			{
 				savedFileTF.setText("");
 				captureMovieButton.setEnabled(false);
-				TaskDialog.error("Error: existing file could not be overwritten -- delete existing file or save file under different name", "Close");
+				TaskDialog.error(RB.getString("gui.MovieCaptureDialog.overwriteError"),
+					RB.getString("text.close"));
 			}
 			else
 			{
@@ -286,12 +299,13 @@ public class MovieCaptureDialog extends javax.swing.JDialog implements ChangeLis
 		if (movieFile != null)
 		{
 			frame.frameListener.windowMoved = false;
-			frame.statusBar.setMessage("Capturing movie -- press Esc to abort");
+			frame.statusBar.setMessage(RB.getString("gui.MovieCaptureDialog.captureMessage"));
 			new MovieCaptureThread(frame, movieFile, frameRate, rotationTime).start();
 		}
 		else
 		{
-			TaskDialog.error("No output file specified", "Close");
+			TaskDialog.error(RB.getString("gui.MovieCaptureDialog.outputFileError"),
+				RB.getString("text.close"));
 			//show this dialog again
 			setVisible(true);
 		}

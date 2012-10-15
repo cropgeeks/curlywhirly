@@ -6,6 +6,10 @@
 
 package curlywhirly.gui;
 
+import javax.swing.*;
+
+import scri.commons.gui.*;
+
 /**
  *
  * @author  __USER__
@@ -18,6 +22,10 @@ public class URLEntryForm extends javax.swing.JDialog
 	{
 		super(parent, modal);
 		initComponents();
+
+		jPanel1.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.URLEntryForm.jPanel1.title")));
+		RB.setText(saveButton, "gui.URLEntryForm.saveButton");
+		RB.setText(cancelButton, "text.cancel");
 	}
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

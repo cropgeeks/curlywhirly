@@ -6,6 +6,8 @@
 
 package curlywhirly.gui;
 
+import scri.commons.gui.*;
+
 /**
  *
  * @author  __USER__
@@ -18,6 +20,8 @@ public class DataLoadingDialog extends javax.swing.JDialog
 	{
 		super(parent, modal);
 		initComponents();
+		
+		RB.setText(jLabel1, "gui.DataLoadingDialog.jLabel1");
 	}
 
 	/** This method is called from within the constructor to
