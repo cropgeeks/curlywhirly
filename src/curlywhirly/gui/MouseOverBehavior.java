@@ -16,58 +16,60 @@ import com.sun.j3d.utils.geometry.Sphere;
 import com.sun.j3d.utils.picking.PickCanvas;
 import com.sun.j3d.utils.picking.PickResult;
 
+import scri.commons.gui.*;
+
 /**
  * Behaviour class that listens for mouseover on marker rings (cylinders) and highlights these in a different colour as well as pops up a label next to them
- * 
+ *
  * @author Micha Bayer, Scottish Crop Research Institute
  */
 public class MouseOverBehavior extends Behavior
 {
-	
+
 	// =======================================vars==============================
-	
+
 	private PickCanvas pickCanvas;
 	private PickResult pickResult;
-	
+
 	private Primitive pickedNode;
 	private boolean isObjectSelectedBefore = false;
 	private Primitive lastPickedNode = null;
 	private BranchGroup objRoot;
-	
+
 	public HashMap namesHashT = null;
-	
+
 	MainCanvas canvas;
 	CurlyWhirly frame;
-	
+
 	// ========================================c'tor============================
-	
+
 	public MouseOverBehavior(CurlyWhirly frame, HashMap _namesHashT, BranchGroup _objRoot, float sphereSize)
 	{
 		this.namesHashT = _namesHashT;
 		this.objRoot = _objRoot;
 		this.canvas = frame.canvas3D;
 		this.frame = frame;
-		
+
 		pickCanvas = new PickCanvas(canvas, objRoot);
 		pickCanvas.setTolerance(sphereSize*2);
 		pickCanvas.setMode(PickCanvas.GEOMETRY_INTERSECT_INFO);
 	}
-	
+
 	// ===========================================methods============================
-	
+
 	public void initialize()
 	{
-		wakeupOn(new WakeupOnAWTEvent(MouseEvent.MOUSE_MOVED));		
+		wakeupOn(new WakeupOnAWTEvent(MouseEvent.MOUSE_MOVED));
 	}
-	
+
 	// ------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	public void processStimulus(Enumeration criteria)
 	{
 		WakeupCriterion wakeup;
 		AWTEvent[] event;
 		int eventId;
-		
+
 		while (criteria.hasMoreElements())
 		{
 			wakeup = (WakeupCriterion) criteria.nextElement();
@@ -83,13 +85,13 @@ public class MouseOverBehavior extends Behavior
 						int y = ((MouseEvent) event[ii]).getY();
 
 						pickCanvas.setShapeLocation(x, y);
-						
+
 						pickResult = pickCanvas.pickClosest();
-						
+
 						if (pickResult != null && pickResult.getNode(PickResult.PRIMITIVE) != null)
 						{
 							pickedNode = ((Primitive) pickResult.getNode(PickResult.PRIMITIVE));
-							
+
 							// check whether this is the same object as before or not
 							if (lastPickedNode != null)
 							{
@@ -99,7 +101,7 @@ public class MouseOverBehavior extends Behavior
 									isObjectSelectedBefore = false;
 								}
 							}
-							
+
 							// if this is the object picked last
 							if (isObjectSelectedBefore)
 							{
@@ -120,16 +122,16 @@ public class MouseOverBehavior extends Behavior
 										// display the feature name on the status bar of the frame but only if we are not currently recording a movie
 										if(frame.currentMovieCaptureThread == null)
 										{
-											frame.statusBar.setMessage(" Point selected: " + mName);
-											
+											frame.statusBar.setMessage(RB.format("gui.MouseOverBehavior.pointSelected", mName));
+
 											//set the appropriate variables on the canvas so we can display a tooltip over the data point
 											CurlyWhirly.canvas3D.isMouseOver = true;
 											CurlyWhirly.canvas3D.mouseOverSphere = sphere;
 											CurlyWhirly.canvas3D.mouseOverX = x;
 											CurlyWhirly.canvas3D.mouseOverY = y;
 											CurlyWhirly.canvas3D.repaint();
-											
-											
+
+
 											if (CurlyWhirly.dataAnnotationURL != null)
 											{
 												CurlyWhirly.canvas3D.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -161,10 +163,10 @@ public class MouseOverBehavior extends Behavior
 								CurlyWhirly.canvas3D.repaint();
 							CurlyWhirly.canvas3D.isMouseOver = false;
 							frame.statusBar.setDefaultText();
-							
+
 							//show a normal cursor
 							CurlyWhirly.canvas3D.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-							
+
 							pickedNode = null;
 							isObjectSelectedBefore = false;
 						}
@@ -174,6 +176,6 @@ public class MouseOverBehavior extends Behavior
 		}
 		wakeupOn(new WakeupOnAWTEvent(MouseEvent.MOUSE_MOVED));
 	}
-	
+
 	// ------------------------------------------------------------------------------------------------------------------------------------------
 }// end class

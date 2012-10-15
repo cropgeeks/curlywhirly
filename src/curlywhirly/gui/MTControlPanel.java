@@ -38,6 +38,34 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		initComponents();
 		this.frame = frame;
 
+		// Top panel components
+		jPanel3.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.MTControlPanel.jPanel3.title")));
+
+		bgCombo.setModel(new DefaultComboBoxModel<String>(new String[] {
+			RB.getString("gui.MTControlPanel.black"),
+			RB.getString("gui.MTControlPanel.darkGrey"),
+			RB.getString("gui.MTControlPanel.lightGrey"),
+			RB.getString("gui.MTControlPanel.white") }));
+
+		// Middle panel components
+		jPanel1.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.MTControlPanel.jPanel1.title")));
+
+		RB.setText(jLabel7, "gui.MTControlPanel.jLabel7");
+		RB.setText(jLabel1, "gui.MTControlPanel.jLabel1");
+		RB.setText(jLabel2, "gui.MTControlPanel.jLabel2");
+		RB.setText(jLabel3, "gui.MTControlPanel.jLabel3");
+		RB.setText(resetViewButton, "gui.MTControlPanel.resetViewButton");
+		RB.setText(spinButton, "gui.MTControlPanel.spinButton");
+		RB.setText(jLabel5, "gui.MTControlPanel.jLabel5");
+		RB.setText(jLabel6, "gui.MTControlPanel.jLabel6");
+		RB.setText(showLabelsCheckBox, "gui.MTControlPanel.showLabelsCheckBox");
+
+		// Bottom panel components
+		jPanel2.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.MTControlPanel.jPanel2.title")));
+		RB.setText(jLabel4, "gui.MTControlPanel.jLabel4");
+		RB.setText(resetColoursButton, "gui.MTControlPanel.resetColoursButton");
+
+
 		if (SystemUtils.isMacOS())
 			jLabel4.setText("<html>Click to select. Use CMD+click for multiple selections.");
 
@@ -481,7 +509,7 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(resetColoursButton)
                 .addContainerGap())
@@ -489,7 +517,6 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Select background colour:"));
 
-        bgCombo.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] { "black", "dark grey", "light grey", "white" }));
         bgCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bgComboActionPerformed(evt);

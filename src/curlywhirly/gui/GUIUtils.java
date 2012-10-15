@@ -40,9 +40,8 @@ public class GUIUtils
 		}
 		catch(URISyntaxException use)
 		{
-			String message = "Illegal character in URL " + html + "\nPlease correct your data and try again.";
-			TaskDialog.initialize(CurlyWhirly.curlyWhirly, "URL error");
-			TaskDialog.error(message, "Close");
+			String message = RB.format("gui.GUIUtils.urlError", html);
+			TaskDialog.error(message, RB.getString("text.close"));
 		}
 		catch (Exception e)
 		{
@@ -72,8 +71,8 @@ public class GUIUtils
 
 		openURL.invoke(null, new Object[] {html});
 	}
-	
-	
+
+
 	public static void cancelMovieCapture()
 	{
 		//cancel any ongoing movie capture thread
@@ -82,6 +81,6 @@ public class GUIUtils
 		CurlyWhirly.canvas3D.resetOriginalView();
 		CurlyWhirly.canvas3D.repaint();
 	}
-	
-	
+
+
 }

@@ -72,6 +72,8 @@ public class CurlyWhirly extends JFrame
 
 		Icons2.initialize("/res/icons", ".png");
 
+		RB.initialize(Preferences.localeText, "res.text.curlywhirly");
+
 		curlyWhirly = new CurlyWhirly();
 		dataLoader = new DataLoader();
 	}
@@ -79,7 +81,7 @@ public class CurlyWhirly extends JFrame
 	CurlyWhirly()
 	{
 		//this initializes all the task dialog instances
-		TaskDialog.initialize(this, "CurlyWhirly");
+		TaskDialog.initialize(this, RB.getString("gui.CurlyWhirly.title"));
 
 		if (SystemUtils.isMacOS())
 			handleOSXStupidities();
@@ -90,7 +92,7 @@ public class CurlyWhirly extends JFrame
 		pack();
 
 		// get the GUI set up
-		setTitle(titleString);
+		setTitle(RB.getString("gui.CurlyWhirly.title") + " - " + Install4j.VERSION);
 		setSize(Preferences.guiWinMainWidth, Preferences.guiWinMainHeight);
 
 		// Work out the current screen's width and height

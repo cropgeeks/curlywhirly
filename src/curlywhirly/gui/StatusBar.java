@@ -4,12 +4,13 @@ import java.awt.*;
 
 import javax.swing.*;
 
+import scri.commons.gui.*;
+
 public class StatusBar extends JPanel
 {
-	public final String DEFAULT_TEXT = " Position the mouse over a point to see its label.";
 	JLabel label;
 	public JProgressBar progressBar;
-	
+
 	public StatusBar()
 	{
 		super(new BorderLayout());
@@ -23,19 +24,19 @@ public class StatusBar extends JPanel
 		add(progressBar,BorderLayout.CENTER);
 		add(label, BorderLayout.WEST);
 		progressBar.setVisible(false);
-		
-		setMessage(" Ready");
+
+		setMessage(RB.getString("gui.StatusBar.ready"));
 		setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 
 	}
-	
+
 	public void setMessage(String message)
 	{
 		label.setText(" " + message);
 	}
-	
+
 	public void setDefaultText()
 	{
-		label.setText(DEFAULT_TEXT);
+		setMessage(RB.getString("gui.StatusBar.default"));
 	}
 }

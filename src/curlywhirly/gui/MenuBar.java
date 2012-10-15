@@ -43,26 +43,26 @@ public class MenuBar extends JMenuBar implements ActionListener
 
 		// //////////////////////////////////////
 		// the File Menu
-		JMenu fileMenu = new JMenu("File");
-		fileMenu.setMnemonic(KeyEvent.VK_F);
+		JMenu fileMenu = new JMenu("");
+		RB.setText(fileMenu, "gui.MenuBar.file");
 		this.add(fileMenu);
 
 		// the Open File item
-		openFileItem = new JMenuItem("Open data...");
+		openFileItem = new JMenuItem("");
+		RB.setText(openFileItem, "gui.MenuBar.fileOpenFile");
 		openFileItem.addActionListener(this);
-		openFileItem.setMnemonic(KeyEvent.VK_O);
 		openFileItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, menuShortcut));
 		fileMenu.add(openFileItem);
 
 		// the example data import item
-		exampleDataItem = new JMenuItem("Load example data");
-		exampleDataItem.setMnemonic(KeyEvent.VK_L);
+		exampleDataItem = new JMenuItem("");
+		RB.setText(exampleDataItem, "gui.MenuBar.fileExampleData");
 		exampleDataItem.addActionListener(this);
 		fileMenu.add(exampleDataItem);
-		
+
 		//the item for configuring data URLs
-		dataURLItem = new JMenuItem("Annotation URL...");
-		dataURLItem.setMnemonic(KeyEvent.VK_A);
+		dataURLItem = new JMenuItem("");
+		RB.setText(dataURLItem, "gui.MenuBar.fileDataURL");
 		dataURLItem.addActionListener(this);
 		fileMenu.add(dataURLItem);
 
@@ -70,15 +70,15 @@ public class MenuBar extends JMenuBar implements ActionListener
 		fileMenu.addSeparator();
 
 		// the save view item
-		saveItem = new JMenuItem("Capture screenshot");
-		saveItem.setMnemonic(KeyEvent.VK_C);
+		saveItem = new JMenuItem("");
+		RB.setText(saveItem, "gui.MenuBar.fileSave");
 		saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, menuShortcut));
 		saveItem.addActionListener(this);
 		fileMenu.add(saveItem);
-		
+
 		// the movie item
-		movieItem = new JMenuItem("Capture movie...");
-		movieItem.setMnemonic(KeyEvent.VK_M);
+		movieItem = new JMenuItem("");
+		RB.setText(movieItem, "gui.MenuBar.fileMovie");
 		movieItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, menuShortcut));
 		movieItem.addActionListener(this);
 		fileMenu.add(movieItem);
@@ -87,8 +87,8 @@ public class MenuBar extends JMenuBar implements ActionListener
 		fileMenu.addSeparator();
 
 		// the Exit item
-		exitItem = new JMenuItem("Exit");
-		exitItem.setMnemonic(KeyEvent.VK_X);
+		exitItem = new JMenuItem("");
+		RB.setText(exitItem, "gui.MenuBar.fileExit");
 		exitItem.addActionListener(this);
 		// We don't add this option to OS X as it is auto-added by Apple
 		if (SystemUtils.isMacOS() == false)
@@ -96,28 +96,28 @@ public class MenuBar extends JMenuBar implements ActionListener
 
 		// ////////////////////////////////////////////////////////////////////////////////
 		// the Help Menu
-		JMenu helpMenu = new JMenu("Help");
-		helpMenu.setMnemonic(KeyEvent.VK_H);
+		JMenu helpMenu = new JMenu("");
+		RB.setText(helpMenu, "gui.MenuBar.help");
 		this.add(helpMenu);
 
 		// the help item
-		helpItem = new JMenuItem("Online help");
+		helpItem = new JMenuItem("");
+		RB.setText(helpItem, "gui.MenuBar.helpHelp");
 		helpItem.addActionListener(this);
-		helpItem.setMnemonic(KeyEvent.VK_O);
 		helpItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
 		helpMenu.add(helpItem);
 
 		helpCtrlItem = new JMenuItem("Controls summary");
+		RB.setText(helpCtrlItem, "gui.MenuBar.helpCtrl");
 		helpCtrlItem.addActionListener(this);
-		helpCtrlItem.setMnemonic(KeyEvent.VK_C);
 		helpMenu.add(helpCtrlItem);
 
 		// separator
 		helpMenu.addSeparator();
 
 		// the about item
-		aboutItem = new JMenuItem("About CurlyWhirly");
-		aboutItem.setMnemonic(KeyEvent.VK_A);
+		aboutItem = new JMenuItem("");
+		RB.setText(aboutItem, "gui.MenuBar.helpAbout");
 		aboutItem.addActionListener(this);
 		// We don't add this option to OS X as it is auto-added by Apple
 		if (SystemUtils.isMacOS() == false)
@@ -156,7 +156,7 @@ public class MenuBar extends JMenuBar implements ActionListener
 			new ScreenCaptureThread(new File(System.getProperty("user.dir")+System.getProperty("file.separator") +
 							"curlywhirly_screenshot.png"),frame,"png",fc).start();
 		}
-		
+
 		else if (src.equals(movieItem))
 		{
 			movieCaptureDialog.setLocationRelativeTo(frame);
@@ -165,7 +165,7 @@ public class MenuBar extends JMenuBar implements ActionListener
 			movieCaptureDialog.movieFile = null;
 			movieCaptureDialog.setVisible(true);
 		}
-		
+
 		else if (src.equals(dataURLItem))
 		{
 			urlEntryForm.setLocationRelativeTo(frame);
