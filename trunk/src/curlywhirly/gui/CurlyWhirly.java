@@ -31,6 +31,7 @@ public class CurlyWhirly extends JFrame
 	public static Preferences prefs = new Preferences();
 	public StatusBar statusBar;
 	public static MenuBar menuBar;
+	public static WinMainToolBar toolbar;
 
 	public static MovieCaptureThread currentMovieCaptureThread = null;
 
@@ -192,7 +193,11 @@ public class CurlyWhirly extends JFrame
 		ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
 		ToolTipManager.sharedInstance().setInitialDelay(0);
 
-		// side panel
+		// toolbar
+		toolbar = new WinMainToolBar(this);
+		add(toolbar, BorderLayout.NORTH);
+
+		// control panel
 		controlPanel = new MTControlPanel(this);
 		controlPanel.setPreferredSize(new Dimension(controlPanelWidth, Preferences.guiWinMainHeight));
 
@@ -202,20 +207,21 @@ public class CurlyWhirly extends JFrame
 		canvas3D.setPreferredSize(new Dimension((Preferences.guiWinMainWidth-controlPanelWidth), Preferences.guiWinMainHeight));
 
 		// main comp is split pane with control panel on the left and canvas on the right
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controlPanel, canvas3D);
+//		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controlPanel, canvas3D);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controlPanel, new StartPanel());
 		splitPane.setOneTouchExpandable(true);
-		this.getContentPane().add(splitPane);
+		add(splitPane);
 
 		//in the absence of data this creates an empty scene graph and we then paint a label onto the canvas that prompts the user to open a file
 		canvas3D.createSceneGraph(false);
 
 		// menu bar
-		menuBar = new MenuBar(this);
-		this.setJMenuBar(menuBar);
+//		menuBar = new MenuBar(this);
+//		this.setJMenuBar(menuBar);
 
 		// status bar
 		statusBar = new StatusBar();
-		getContentPane().add(statusBar, java.awt.BorderLayout.SOUTH);
+		add(statusBar, java.awt.BorderLayout.SOUTH);
 
 		//drag and drop support
 		FileDropAdapter dropAdapter = new FileDropAdapter(this);

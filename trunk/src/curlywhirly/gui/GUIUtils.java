@@ -82,5 +82,14 @@ public class GUIUtils
 		CurlyWhirly.canvas3D.repaint();
 	}
 
+	public static void sendFeedback()
+	{
+		try
+		{
+			Desktop desktop = Desktop.getDesktop();
+			desktop.mail(new URI("mailto:curlywhirly@hutton.ac.uk?subject=CurlyWhirly%20Feedback"));
+		}
+		catch (Exception e) { System.out.println(e); }
+	}
 
 }

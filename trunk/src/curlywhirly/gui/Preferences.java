@@ -22,8 +22,8 @@ public class Preferences extends XMLPreferences
 		+ new JFileChooser().getFileSystemView().getDefaultDirectory();
 
 	// The width, height, location and maximized status of the main window
-	public static int guiWinMainWidth = 800;
-	public static int guiWinMainHeight = 700;
+	public static int guiWinMainWidth = 900;
+	public static int guiWinMainHeight = 800;
 	public static int guiWinMainX = 0;
 	public static int guiWinMainY = 0;
 	public static boolean guiWinMainMaximized = false;
