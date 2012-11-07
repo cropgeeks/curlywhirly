@@ -24,7 +24,7 @@ public class MenuBar extends JMenuBar implements ActionListener
 	JMenuItem dataURLItem;
 	CurlyWhirly frame;
 	JFileChooser fc;
-	DataLoadingDialog dataLoadingDialog;
+//	DataLoadingDialog dataLoadingDialog;
 	public MovieCaptureDialog movieCaptureDialog;
 	public URLEntryForm urlEntryForm;
 
