@@ -1,9 +1,10 @@
 package curlywhirly.gui;
 
 import java.awt.event.*;
+
 import scri.commons.gui.*;
 
-public class FrameListener implements ComponentListener,WindowFocusListener
+public class FrameListener implements ComponentListener, WindowFocusListener
 
 {
 

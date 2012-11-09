@@ -3,14 +3,14 @@
 
 package curlywhirly.gui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+import javax.swing.*;
 
 import curlywhirly.controller.*;
 
 import scri.commons.gui.*;
 
-public class StartPanelWelcomeNB extends javax.swing.JPanel implements ActionListener
+public class StartPanelWelcomeNB extends JPanel implements ActionListener
 {
 
     /** Creates new form NBStartWelcomePanel */
@@ -91,6 +91,5 @@ public class StartPanelWelcomeNB extends javax.swing.JPanel implements ActionLis
     private javax.swing.JLabel tabletLabel;
     private scri.commons.gui.matisse.HyperLinkLabel twitterLabel;
     // End of variables declaration//GEN-END:variables
-
 
 }

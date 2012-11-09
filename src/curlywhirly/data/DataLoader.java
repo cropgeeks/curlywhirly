@@ -3,14 +3,13 @@ package curlywhirly.data;
 import java.io.*;
 import java.text.*;
 import java.util.*;
-import curlywhirly.gui.*;
+
 import scri.commons.gui.*;
+
+import curlywhirly.gui.*;
 
 public class DataLoader
 {
-
-	// ==========================================vars=========================================
-
 	CurlyWhirly mainWin = CurlyWhirly.curlyWhirly;
 
 	boolean errorInHeaders = false;
@@ -24,9 +23,6 @@ public class DataLoader
 	ArrayList<String> comments = new ArrayList<String>();
 
 	ColumnOrderFormatter columnOrderFormatter;
-
-
-	// ==========================================methods=========================================
 
 	public void loadDataInThread(File file)
 	{
@@ -45,8 +41,6 @@ public class DataLoader
 		dataLoadingDialog.setVisible(true);
 		dataLoadingDialog.setModal(false);
 	}
-
-	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void loadData(File file)
 	{
@@ -97,9 +91,6 @@ public class DataLoader
 
 	}
 
-	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
 	private void processComments()
 	{
 		for (String comment : comments)
@@ -117,9 +108,6 @@ public class DataLoader
 			}
 		}
 	}
-
-
-	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public String [] readFile(File file)
 	{
@@ -150,8 +138,6 @@ public class DataLoader
 		return lines;
 	}
 
-	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 	//check for comment lines in the header
 	private int parseComments(String [] lines)
 	{
@@ -164,9 +150,6 @@ public class DataLoader
 
 		return commentCount;
 	}
-
-
-	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private int getDataFormat(DataSet dataSet, String [] lines, String [] headers)
 	{
@@ -188,9 +171,6 @@ public class DataLoader
 		return dataFormat;
 	}
 
-
-	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 	private void makeClassificationSchemesFromPrefixedColumns(String [] headers, DataSet dataSet)
 	{
 		for (int i = 0; i < headers.length; i++)
@@ -209,8 +189,6 @@ public class DataLoader
 			}
 		}
 	}
-
-	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private void makeClassificationSchemes(int dataFormat, String [] headers, DataSet dataSet)
 	{
@@ -244,7 +222,6 @@ public class DataLoader
 				dataSet.numCategoryColumns = 1;
 			}
 			break;
-//
 			case 2:
 			{
 				//F2:
@@ -258,7 +235,6 @@ public class DataLoader
 				dataSet.numCategoryColumns = dataSet.classificationSchemes.size();
 			}
 			break;
-//
 			case 3:
 			{
 				if(!dataSet.missingCategoryColumn)
@@ -273,7 +249,6 @@ public class DataLoader
 					dataSet.dataColumnStart = dataSet.classificationSchemes.size() +1;
 					dataSet.numCategoryColumns = dataSet.classificationSchemes.size();
 				}
-				//OR:
 				else
 				{
 					//2. label -> data cols
@@ -291,9 +266,6 @@ public class DataLoader
 			break;
 		}
 	}
-
-
-	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private void parseHeaders(String [] lines, DataSet dataSet, int commentCount) throws IOException
 	{
@@ -320,10 +292,6 @@ public class DataLoader
 		columnOrderFormatter = new ColumnOrderFormatter();
 		columnOrderFormatter.formatColumnOrders(dataFormat, dataSet);
 	}
-
-
-
-	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private void parseDataEntries(String [] lines, DataSet dataSet, int commentCount, int numCategorySchemes) throws IOException
 	{
@@ -406,10 +374,6 @@ public class DataLoader
 		}
 	}
 
-
-	// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
 	// imports the data from file in the specified location
 	public DataSet parseFile(File file) throws IOException
 	{
@@ -470,8 +434,6 @@ public class DataLoader
 		return dataSet;
 	}
 
-	// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 	private void makeClassificationScheme(DataSet dataSet, String name, int columnIndex)
 	{
 		ClassificationScheme scheme = new ClassificationScheme();
@@ -480,8 +442,4 @@ public class DataLoader
 		dataSet.classificationSchemes.add(scheme);
 		dataSet.categorizationSchemesLookup.put(scheme.name, scheme);
 	}
-
-	// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-}// end class
-
+}

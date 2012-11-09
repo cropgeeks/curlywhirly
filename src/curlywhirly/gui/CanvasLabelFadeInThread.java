@@ -5,7 +5,7 @@ import java.awt.*;
 public class CanvasLabelFadeInThread extends Thread
 {
 	MainCanvas mainCanvas = null;
-	
+
 	public CanvasLabelFadeInThread(MainCanvas mainCanvas)
 	{
 		this.mainCanvas = mainCanvas;
@@ -15,7 +15,7 @@ public class CanvasLabelFadeInThread extends Thread
 	{
 		float fontColor = mainCanvas.getBackground().getRed();
 		float step = fontColor / 15f;
-		
+
 		//fade the font to black
 		for (int i = 0; i < 16; i++)
 		{
@@ -29,5 +29,4 @@ public class CanvasLabelFadeInThread extends Thread
 			catch (Exception ex) {}
 		}
 	}
-	
 }

@@ -6,17 +6,16 @@ import java.io.*;
 import javax.imageio.*;
 import javax.media.format.*;
 import javax.media.protocol.*;
-import curlywhirly.gui.*;
+
 import scri.commons.gui.*;
+
+import curlywhirly.gui.*;
 
 /**
  * Thread class for saving screenshots of the canvas
  */
 public class MovieCaptureThread extends Thread
 {
-
-	//===============================vars================================================
-
 	//these parameters are all fixed -- movie and image format etc
 	String movieFileExtension = ".avi";
 	String videoFormatEncoding = VideoFormat.RGB;
@@ -38,8 +37,6 @@ public class MovieCaptureThread extends Thread
 
 	public boolean threadCanceled = false;
 
-	//===============================c'tor================================================
-
 	public MovieCaptureThread(CurlyWhirly frame, File movieFile,int frameRate,int rotationTime)
 	{
 		this.frame = frame;
@@ -49,8 +46,6 @@ public class MovieCaptureThread extends Thread
 		imageDirectory  = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "imageTempDir");
 		imageDirectory.mkdir();
 	}
-
-	//===============================methods================================================
 
 	public void run()
 	{
@@ -136,8 +131,6 @@ public class MovieCaptureThread extends Thread
 		}
 	}
 
-	//--------------------------------------------------------------------------------------------------------------------------
-
 	private void cleanUp()
 	{
 		frame.statusBar.setDefaultText();
@@ -164,6 +157,4 @@ public class MovieCaptureThread extends Thread
 		}
 		return (path.delete());
 	}
-
-	//--------------------------------------------------------------------------------------------------------------------------
 }

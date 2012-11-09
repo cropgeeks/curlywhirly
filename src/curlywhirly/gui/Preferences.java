@@ -1,7 +1,6 @@
 package curlywhirly.gui;
 
-import scri.commons.gui.SystemUtils;
-import scri.commons.gui.XMLPreferences;
+import scri.commons.gui.*;
 
 import javax.swing.*;
 

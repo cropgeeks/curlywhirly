@@ -3,9 +3,12 @@ package curlywhirly.controller;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import scri.commons.gui.*;
+
 import com.install4j.api.launcher.*;
 import com.install4j.api.update.*;
+
+import scri.commons.gui.*;
+
 import curlywhirly.gui.*;
 
 /**
@@ -65,7 +68,7 @@ public class Install4j
 				com.install4j.api.ApplicationRegistry.getApplicationInfoByDir(new File("."));
 
 			VERSION = info.getVersion();
-			
+
 			if (Preferences.lastVersion == null || !Preferences.lastVersion.equals(VERSION))
 				displayUpdate = true;
 

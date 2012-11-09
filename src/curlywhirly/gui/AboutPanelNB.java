@@ -9,11 +9,9 @@ import java.lang.management.*;
 import java.text.*;
 import javax.swing.*;
 
-import scri.commons.gui.*;
-
 import curlywhirly.controller.*;
 
-class AboutPanelNB extends javax.swing.JPanel implements ActionListener
+class AboutPanelNB extends JPanel implements ActionListener
 {
 	public AboutPanelNB()
 	{

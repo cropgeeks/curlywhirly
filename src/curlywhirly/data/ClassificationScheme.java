@@ -1,20 +1,16 @@
 package curlywhirly.data;
 
-import java.io.*;
 import java.util.*;
 import javax.vecmath.*;
+
 import curlywhirly.gui.*;
 
 public class ClassificationScheme
 {
 	public String name;
-	public ArrayList<Category> categories = new ArrayList<Category>();	
+	public ArrayList<Category> categories = new ArrayList<Category>();
 	public Vector<String> categoryNamesVec = null;
 	public int columnIndex = -1;
-	
-	
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-		
 
 	public Category getCategoryByName(String categoryName)
 	{
@@ -25,12 +21,10 @@ public class ClassificationScheme
 				return category;
 			}
 		}
-		
+
 		return null;
 	}
-	
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-		
+
 	public void makeNamesVector()
 	{
 		categoryNamesVec = new Vector<String>();
@@ -40,15 +34,13 @@ public class ClassificationScheme
 		}
 		Collections.sort(categoryNamesVec);
 	}
-	
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-	
+
 	//if we know the number of categories and we can create a colour scheme and apply it
-	public void assignColoursToCategories() 
-	{			
+	public void assignColoursToCategories()
+	{
 //		System.out.println("assigning all colours for scheme " + name);
 //		System.out.println("num categories =  " + categories.size());
-//		
+//
 		try
 		{
 			Color3f[] colours = GUIUtils.generateColours(categories.size());
@@ -63,9 +55,6 @@ public class ClassificationScheme
 		catch (Exception e)
 		{
 			e.printStackTrace();
-		}	
+		}
 	}
-	
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-	
 }

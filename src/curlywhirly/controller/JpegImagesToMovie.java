@@ -1,62 +1,40 @@
 package curlywhirly.controller;
 
-/*
- * @(#)JpegImagesToMovie.java	1.3 01/03/13
- *
- * Copyright (c) 1999-2001 Sun Microsystems, Inc. All Rights Reserved.
- *
- * Sun grants you ("Licensee") a non-exclusive, royalty free, license to use,
- * modify and redistribute this software in source and binary code form,
- * provided that i) this copyright notice and license appear on all copies of
- * the software; and ii) Licensee does not utilize the software in a manner
- * which is disparaging to Sun.
- *
- * This software is provided "AS IS," without a warranty of any kind. ALL
- * EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND WARRANTIES, INCLUDING ANY
- * IMPLIED WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR
- * NON-INFRINGEMENT, ARE HEREBY EXCLUDED. SUN AND ITS LICENSORS SHALL NOT BE
- * LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING
- * OR DISTRIBUTING THE SOFTWARE OR ITS DERIVATIVES. IN NO EVENT WILL SUN OR ITS
- * LICENSORS BE LIABLE FOR ANY LOST REVENUE, PROFIT OR DATA, OR FOR DIRECT,
- * INDIRECT, SPECIAL, CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER
- * CAUSED AND REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF THE USE OF
- * OR INABILITY TO USE SOFTWARE, EVEN IF SUN HAS BEEN ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- *
- * This software is not designed or intended for use in on-line control of
- * aircraft, air traffic, aircraft navigation or aircraft communications; or in
- * the design, construction, operation or maintenance of any nuclear
- * facility. Licensee represents and warrants that it will not use or
- * redistribute the Software for such purposes.
- */
-
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import java.awt.Dimension;
+import java.awt.*;
 import javax.media.*;
 import javax.media.control.*;
 import javax.media.protocol.*;
 import javax.media.datasink.*;
-import javax.media.format.VideoFormat;
-import curlywhirly.gui.*;
+import javax.media.format.*;
+
 import scri.commons.gui.*;
+
+import curlywhirly.gui.*;
 
 /**
  * This program takes a list of JPEG image files and convert them into a QuickTime movie.
  */
 public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 {
+	int canvasWidth;
+	int canvasHeight;
+	int animationTimeSecs;
+	int frameRate;
 
-	// ========================================================vars========================================
+	String videoFormatEncoding;
+	String fileExtension;
+	String contentType;
+	String movieFilePath;
 
-	int canvasWidth, canvasHeight, animationTimeSecs, frameRate;
-	String videoFormatEncoding, fileExtension, contentType,movieFilePath;
-	File imageDirectory, movieFile;
+	File imageDirectory;
+	File movieFile;
+
 	CurlyWhirly frame;
-	MovieAssembleDialog movieAssembleDialog;
 
-	// ========================================================c'tor=======================================
+	MovieAssembleDialog movieAssembleDialog;
 
 	public JpegImagesToMovie(CurlyWhirly frame, String videoFormatEncoding, String contentType, int canvasWidth, int canvasHeight, int animationTimeSecs, int frameRate, File imageDirectory, File movieFile)
 	{
@@ -72,8 +50,6 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 		this.movieFile = movieFile;
 	}
 
-	// ==============================================methods===============================================
-
 	public void writeMovie()
 	{
 		try
@@ -84,11 +60,9 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 
 			// assemble the files in a vector
 			File[] fileArray = imageDirectory.listFiles();
-			Vector<String> inputFiles = new Vector<String>();
+			ArrayList<String> inputFiles = new ArrayList<String>();
 			for (int i = 0; i < fileArray.length; i++)
-			{
 				inputFiles.add(fileArray[i].getAbsolutePath());
-			}
 
 			// Generate the output media locators.
 			MediaLocator oml = new MediaLocator(outputURL);
@@ -106,9 +80,7 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 		}
 	}
 
-	// --------------------------------------------------------------------------------------------------------------------------------------
-
-	public boolean doIt(int width, int height, int frameRate, Vector inFiles, MediaLocator outML)
+	public boolean doIt(int width, int height, int frameRate, ArrayList<String> inFiles, MediaLocator outML)
 	{
 		ImageDataSource ids = new ImageDataSource(width, height, frameRate, inFiles);
 
@@ -361,11 +333,6 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 		return null;
 	}
 
-	// /////////////////////////////////////////////
-	//
-	// Inner classes.
-	// /////////////////////////////////////////////
-
 	/**
 	 * A DataSource to read from a list of JPEG image files and turn that into a stream of JMF buffers. The DataSource is not seekable or positionable.
 	 */
@@ -374,7 +341,7 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 
 		ImageSourceStream streams[];
 
-		ImageDataSource(int width, int height, int frameRate, Vector images)
+		ImageDataSource(int width, int height, int frameRate, ArrayList<String> images)
 		{
 			streams = new ImageSourceStream[1];
 			streams[0] = new ImageSourceStream(width, height, frameRate, images);
@@ -447,7 +414,7 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 	class ImageSourceStream implements PullBufferStream
 	{
 
-		Vector images;
+		ArrayList<String> images;
 		int width, height;
 		VideoFormat format;
 
@@ -458,7 +425,7 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 		float percentIncrement = 0;
 
 
-		public ImageSourceStream(int width, int height, int frameRate, Vector images)
+		public ImageSourceStream(int width, int height, int frameRate, ArrayList<String> images)
 		{
 			this.width = width;
 			this.height = height;
@@ -497,7 +464,7 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 				return;
 			}
 
-			String imageFile = (String) images.elementAt(nextImage);
+			String imageFile = images.get(nextImage);
 			nextImage++;
 
 			int percentComplete = Math.round(percentIncrement*nextImage);

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package curlywhirly.gui;
 
 import java.awt.*;
@@ -11,11 +7,8 @@ import javax.swing.*;
 
 import scri.commons.gui.*;
 
-/**
- *
- * @author imilne
- */
-public class CWUtils {
+public class CWUtils
+{
 
 	public static JPanel getButtonPanel()
 	{

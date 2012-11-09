@@ -5,19 +5,17 @@ import java.awt.dnd.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
-import curlywhirly.controller.*;
-import curlywhirly.data.*;
 
 import apple.dts.samplecode.osxadapter.*;
 
 import scri.commons.file.*;
 import scri.commons.gui.*;
 
+import curlywhirly.controller.*;
+import curlywhirly.data.*;
+
 public class CurlyWhirly extends JFrame
 {
-
-	// ===================================================vars =================================================
-
 	public static DataSet dataSet;
 	public static MainCanvas canvas3D;
 
@@ -48,9 +46,6 @@ public class CurlyWhirly extends JFrame
 	public static CurlyWhirly curlyWhirly = null;
 
 	public static final String titleString = "CurlyWhirly - " + Install4j.VERSION;
-
-
-	//==========================================================
 
 
 	public static void main(String[] args)
@@ -95,10 +90,6 @@ public class CurlyWhirly extends JFrame
 		// get the GUI set up
 		setTitle(RB.getString("gui.CurlyWhirly.title") + " - " + Install4j.VERSION);
 		setSize(Preferences.guiWinMainWidth, Preferences.guiWinMainHeight);
-
-		// Work out the current screen's width and height
-		int scrnW = SwingUtils.getVirtualScreenDimension().width;
-		int scrnH = SwingUtils.getVirtualScreenDimension().height;
 
 		// Determine where on screen to display
 		if (Preferences.isFirstRun)
@@ -174,17 +165,11 @@ public class CurlyWhirly extends JFrame
 //		t.start();
 	}
 
-	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 	void shutdown()
 	{
 		prefs.savePreferences(prefsFile, Preferences.class);
 		System.exit(0);
 	}
-
-
-
-	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private void setupComponents()
 	{
@@ -253,8 +238,6 @@ public class CurlyWhirly extends JFrame
 		return file;
 	}
 
-	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 	// Methods required for better native support on OS X
 
 	private void handleOSXStupidities()
@@ -293,5 +276,4 @@ public class CurlyWhirly extends JFrame
 		return true;
 	}
 
-
-}// end class
+}

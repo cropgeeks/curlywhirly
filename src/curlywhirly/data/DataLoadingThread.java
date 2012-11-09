@@ -2,9 +2,7 @@ package curlywhirly.data;
 
 import java.io.File;
 
-import javax.swing.JFileChooser;
 import curlywhirly.gui.*;
-
 
 public class DataLoadingThread extends Thread
 {
@@ -24,15 +22,15 @@ public class DataLoadingThread extends Thread
 	{
 		//load the actual data
 		frame.dataLoader.loadData(file);
-		
+
 		//now reset this flag so that user can open another file by different means
 		if(CurlyWhirly.dragAndDropDataLoad)
 			CurlyWhirly.dragAndDropDataLoad = false;
-		
+
 		//show the progress bar
 		if (dataLoadingDialog != null)
 			dataLoadingDialog.setVisible(false);
-		
+
 		//display instructions on use of keyboard/mouse controls if needed
 		if (frame.dataLoaded)
 		{
@@ -43,5 +41,4 @@ public class DataLoadingThread extends Thread
 			}
 		}
 	}
-
 }

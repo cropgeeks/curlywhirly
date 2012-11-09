@@ -1,25 +1,15 @@
-/*
- * MovieCaptureDialog.java
- *
- * Created on __DATE__, __TIME__
- */
-
 package curlywhirly.gui;
 
-import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
 import javax.swing.event.*;
+
 import scri.commons.gui.*;
-import com.sun.org.apache.xml.internal.serialize.*;
+
 import curlywhirly.controller.*;
 
-/**
- *
- * @author __USER__
- */
-public class MovieCaptureDialog extends javax.swing.JDialog implements ChangeListener
+public class MovieCaptureDialog extends JDialog implements ChangeListener
 {
 	JFileChooser fc;
 	public File movieFile;
@@ -311,28 +301,7 @@ public class MovieCaptureDialog extends javax.swing.JDialog implements ChangeLis
 		}
 	}
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton browseButton;
-    private javax.swing.JButton cancelButton;
-    private javax.swing.JButton captureMovieButton;
-    private javax.swing.JLabel fileSizeLabel;
-    private javax.swing.JSpinner frameRateSpinner;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JRadioButton radioButtonFast;
-    private javax.swing.JRadioButton radioButtonMedium;
-    private javax.swing.JRadioButton radioButtonSlow;
-    private javax.swing.JTextField savedFileTF;
-    private javax.swing.ButtonGroup spinSpeedButtonGroup;
-    // End of variables declaration//GEN-END:variables
-
-	public static String getExtension(File f)
+		public static String getExtension(File f)
 	{
 		String ext = null;
 		String s = f.getName();
@@ -347,7 +316,7 @@ public class MovieCaptureDialog extends javax.swing.JDialog implements ChangeLis
 
 	public void updateFileFileSize()
 	{
-		int fileSize = 0;
+		int fileSize;
 
 		MainCanvas canvas = CurlyWhirly.canvas3D;
 		int canvasWidth = canvas.getWidth();
@@ -366,8 +335,6 @@ public class MovieCaptureDialog extends javax.swing.JDialog implements ChangeLis
 		fileSize = fileSize / 1024 / 1024;
 		fileSizeLabel.setText(String.valueOf(fileSize));
 	}
-
-	//------------------------------------------------------------------------------------------------------------------
 
 	private class AviFilter extends javax.swing.filechooser.FileFilter
 	{
@@ -415,4 +382,25 @@ public class MovieCaptureDialog extends javax.swing.JDialog implements ChangeLis
 		return savedFileTF;
 	}
 
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton browseButton;
+    private javax.swing.JButton cancelButton;
+    private javax.swing.JButton captureMovieButton;
+    private javax.swing.JLabel fileSizeLabel;
+    private javax.swing.JSpinner frameRateSpinner;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JRadioButton radioButtonFast;
+    private javax.swing.JRadioButton radioButtonMedium;
+    private javax.swing.JRadioButton radioButtonSlow;
+    private javax.swing.JTextField savedFileTF;
+    private javax.swing.ButtonGroup spinSpeedButtonGroup;
+    // End of variables declaration//GEN-END:variables
 }

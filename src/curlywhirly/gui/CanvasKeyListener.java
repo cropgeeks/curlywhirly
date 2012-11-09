@@ -5,12 +5,12 @@ import java.awt.event.*;
 public class CanvasKeyListener implements KeyListener
 {
 	private MainCanvas canvas;
-	
+
 	public CanvasKeyListener(MainCanvas canvas)
 	{
 		this.canvas = canvas;
 	}
-	
+
 	public void keyPressed(KeyEvent e)
 	{
 		//ESC has been pressed
@@ -20,14 +20,13 @@ public class CanvasKeyListener implements KeyListener
 			GUIUtils.cancelMovieCapture();
 		}
 	}
-	
+
 	// not used for now
 	public void keyReleased(KeyEvent e)
 	{
 	}
-	
+
 	public void keyTyped(KeyEvent e)
 	{
 	}
-	
 }

@@ -1,13 +1,11 @@
 package curlywhirly.gui;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-
-import javax.swing.JCheckBox;
+import java.awt.event.*;
+import javax.swing.*;
 
 import scri.commons.gui.*;
 
-public class Instructions3D  implements ItemListener
+public class Instructions3D implements ItemListener
 {
 	CurlyWhirly frame;
 	JCheckBox instructionsCheckBox;

@@ -1,20 +1,10 @@
-/*
- * URLEntryForm.java
- *
- * Created on __DATE__, __TIME__
- */
-
 package curlywhirly.gui;
 
 import javax.swing.*;
 
 import scri.commons.gui.*;
 
-/**
- *
- * @author  __USER__
- */
-public class URLEntryForm extends javax.swing.JDialog
+public class URLEntryForm extends JDialog
 {
 
 	/** Creates new form URLEntryForm */
@@ -26,6 +16,57 @@ public class URLEntryForm extends javax.swing.JDialog
 		jPanel1.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.URLEntryForm.jPanel1.title")));
 		RB.setText(saveButton, "gui.URLEntryForm.saveButton");
 		RB.setText(cancelButton, "text.cancel");
+	}
+
+	private void saveButtonActionPerformed(java.awt.event.ActionEvent evt)
+	{
+		//get the text entered
+		String url = dataURLTextField.getText();
+		if (url != null)
+		{
+			CurlyWhirly.dataAnnotationURL = url;
+			dataURLTextField.setText(url);
+			//close the window
+			setVisible(false);
+		}
+
+	}
+
+	private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt)
+	{
+		setVisible(false);
+	}
+
+	/**
+	 * @param args the command line arguments
+	 */
+	public static void main(String args[])
+	{
+		java.awt.EventQueue.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				URLEntryForm dialog = new URLEntryForm(new javax.swing.JFrame(), true);
+				dialog.addWindowListener(new java.awt.event.WindowAdapter()
+				{
+					public void windowClosing(java.awt.event.WindowEvent e)
+					{
+						System.exit(0);
+					}
+				});
+				dialog.setVisible(true);
+			}
+		});
+	}
+
+	public JTextField getDataURLTextField()
+	{
+		return dataURLTextField;
+	}
+
+	public JButton getSaveButton()
+	{
+		return saveButton;
 	}
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -100,62 +141,11 @@ public class URLEntryForm extends javax.swing.JDialog
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-	private void saveButtonActionPerformed(java.awt.event.ActionEvent evt)
-	{
-		//get the text entered
-		String url = dataURLTextField.getText();
-		if (url != null)
-		{
-			CurlyWhirly.dataAnnotationURL = url;
-			dataURLTextField.setText(url);
-			//close the window
-			setVisible(false);
-		}
-
-	}
-
-	private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt)
-	{
-		setVisible(false);
-	}
-
-	/**
-	 * @param args the command line arguments
-	 */
-	public static void main(String args[])
-	{
-		java.awt.EventQueue.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				URLEntryForm dialog = new URLEntryForm(new javax.swing.JFrame(), true);
-				dialog.addWindowListener(new java.awt.event.WindowAdapter()
-				{
-					public void windowClosing(java.awt.event.WindowEvent e)
-					{
-						System.exit(0);
-					}
-				});
-				dialog.setVisible(true);
-			}
-		});
-	}
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
     private javax.swing.JTextField dataURLTextField;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton saveButton;
     // End of variables declaration//GEN-END:variables
-
-	public javax.swing.JTextField getDataURLTextField()
-	{
-		return dataURLTextField;
-	}
-
-	public javax.swing.JButton getSaveButton()
-	{
-		return saveButton;
-	}
 
 }

@@ -1,9 +1,3 @@
-/*
- * MTControlPanel.java
- *
- * Created on __DATE__, __TIME__
- */
-
 package curlywhirly.gui;
 
 import java.awt.*;
@@ -12,25 +6,17 @@ import java.awt.image.*;
 import java.util.*;
 import java.util.List;
 import javax.swing.*;
-import javax.swing.event.*;
 import javax.swing.plaf.basic.*;
 import javax.vecmath.*;
-import curlywhirly.data.*;
+
 import scri.commons.gui.*;
 
-public class MTControlPanel extends javax.swing.JPanel implements ActionListener
+import curlywhirly.data.*;
+
+public class MTControlPanel extends JPanel implements ActionListener
 {
-
-	// ==========================================vars============================================
-
-	private int[] indexes;
 	CurlyWhirly frame;
-	private Vector<String> categories;
-	Vector<Category> listItems;
-
-	//	HashMap<JList, ClassificationScheme> selectorListsLookup;
-
-	// ==========================================c'tor============================================
+	ArrayList<Category> listItems;
 
 	/** Creates new form MTControlPanel */
 	public MTControlPanel(CurlyWhirly frame)
@@ -77,8 +63,6 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 			showLabelsCheckBox.setSelected(false);
 	}
 
-	// ==========================================methods============================================
-
 	public void addMouseAdapterToSelectorList()
 	{
 		selectorList.addMouseListener(new MouseAdapter()
@@ -117,8 +101,6 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		resetComboBoxes();
 	}
 
-	// --------------------------------------------------------------------------------------------------------------------------------------------------
-
 	public void resetComboBoxes()
 	{
 		// set the combos to display the currently selected index of the variables they display
@@ -126,8 +108,6 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		yCombo.setSelectedIndex(1);
 		zCombo.setSelectedIndex(2);
 	}
-
-	// --------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void setUpCategoryLists()
 	{
@@ -140,14 +120,11 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		Collections.sort(schemeNames, new CaseInsensitiveComparator());
 		schemeSelectorCombo.setModel(new DefaultComboBoxModel<String>(schemeNames));
 		schemeSelectorCombo.setSelectedIndex(0);
-		String selectedSchemeName = (String) schemeSelectorCombo.getSelectedItem();
 //		schemeSelectorCombo.setToolTipText(selectedSchemeName);
 
 		//set a custom renderer on this combo box so we can see tooltips for each item on the drop-down list
 //		schemeSelectorCombo.setRenderer(new ComboBoxWithToolTipsRenderer());
 	}
-
-	// --------------------------------------------------------------------------------------------------------------------------------------------------
 
 	class ComboBoxWithToolTipsRenderer extends BasicComboBoxRenderer
 	{
@@ -173,8 +150,6 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		}
 	}
 
-	// --------------------------------------------------------------------------------------------------------------------------------------------------
-
 	class CaseInsensitiveComparator implements Comparator<String>
 	{
 		public int compare(String strA, String strB)
@@ -182,8 +157,6 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 			return strA.compareToIgnoreCase(strB);
 		}
 	}
-
-	// --------------------------------------------------------------------------------------------------------------------------------------------------
 
 	class ColorListRenderer extends DefaultListCellRenderer
 	{
@@ -223,8 +196,6 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		}
 	}
 
-	// --------------------------------------------------------------------------------------------------------------------------------------------------
-
 	public void actionPerformed(ActionEvent e)
 	{
 
@@ -252,8 +223,6 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		}
 	}
 
-	// --------------------------------------------------------------------------------------------------------------------------------------------------
-
 	private void bgComboActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		int bgColour = bgCombo.getSelectedIndex();
@@ -261,14 +230,10 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 
 	}
 
-	// --------------------------------------------------------------------------------------------------------------------------------------------------
-
 	private void resetViewButtonActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		frame.canvas3D.resetOriginalView();
 	}
-
-	// --------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private void spinButtonActionPerformed(java.awt.event.ActionEvent evt)
 	{
@@ -284,8 +249,6 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		}
 	}
 
-	// --------------------------------------------------------------------------------------------------------------------------------------------------
-
 	private void spinSpeedSliderStateChanged(javax.swing.event.ChangeEvent evt)
 	{
 		JSlider source = (JSlider) evt.getSource();
@@ -296,14 +259,10 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 		}
 	}
 
-	// --------------------------------------------------------------------------------------------------------------------------------------------------
-
 	private void resetColoursButtonActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		clearAllCategorySelections();
 	}
-
-	// --------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private void clearAllCategorySelections()
 	{
@@ -597,7 +556,6 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 
 	private void schemeSelectorComboActionPerformed(java.awt.event.ActionEvent evt)
 	{
-
 		// Get current selection
 		String selectedSchemeName = (String) schemeSelectorCombo.getSelectedItem();
 		if (selectedSchemeName != null)
@@ -650,5 +608,4 @@ public class MTControlPanel extends javax.swing.JPanel implements ActionListener
 	{
 		return schemeSelectorCombo;
 	}
-
 }

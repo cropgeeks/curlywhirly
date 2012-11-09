@@ -1,33 +1,21 @@
 package curlywhirly.gui;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.util.Enumeration;
-import java.util.HashMap;
+import java.awt.event.*;
+import java.util.*;
 
-import javax.media.j3d.Behavior;
-import javax.media.j3d.BranchGroup;
-import javax.media.j3d.CapabilityNotSetException;
-import javax.media.j3d.WakeupCriterion;
-import javax.media.j3d.WakeupOnAWTEvent;
+import javax.media.j3d.*;
 
-import com.sun.j3d.utils.geometry.Primitive;
-import com.sun.j3d.utils.geometry.Sphere;
-import com.sun.j3d.utils.picking.PickCanvas;
-import com.sun.j3d.utils.picking.PickResult;
+import com.sun.j3d.utils.geometry.*;
+import com.sun.j3d.utils.picking.*;
 
 import scri.commons.gui.*;
 
 /**
  * Behaviour class that listens for mouseover on marker rings (cylinders) and highlights these in a different colour as well as pops up a label next to them
- *
- * @author Micha Bayer, Scottish Crop Research Institute
  */
 public class MouseOverBehavior extends Behavior
 {
-
-	// =======================================vars==============================
-
 	private PickCanvas pickCanvas;
 	private PickResult pickResult;
 
@@ -36,17 +24,15 @@ public class MouseOverBehavior extends Behavior
 	private Primitive lastPickedNode = null;
 	private BranchGroup objRoot;
 
-	public HashMap namesHashT = null;
+	public HashMap<Sphere, String> namesHashT = null;
 
 	MainCanvas canvas;
 	CurlyWhirly frame;
 
-	// ========================================c'tor============================
-
-	public MouseOverBehavior(CurlyWhirly frame, HashMap _namesHashT, BranchGroup _objRoot, float sphereSize)
+	public MouseOverBehavior(CurlyWhirly frame, HashMap<Sphere, String> namesHashT, BranchGroup objRoot, float sphereSize)
 	{
-		this.namesHashT = _namesHashT;
-		this.objRoot = _objRoot;
+		this.namesHashT = namesHashT;
+		this.objRoot = objRoot;
 		this.canvas = frame.canvas3D;
 		this.frame = frame;
 
@@ -55,14 +41,10 @@ public class MouseOverBehavior extends Behavior
 		pickCanvas.setMode(PickCanvas.GEOMETRY_INTERSECT_INFO);
 	}
 
-	// ===========================================methods============================
-
 	public void initialize()
 	{
 		wakeupOn(new WakeupOnAWTEvent(MouseEvent.MOUSE_MOVED));
 	}
-
-	// ------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void processStimulus(Enumeration criteria)
 	{
@@ -118,7 +100,7 @@ public class MouseOverBehavior extends Behavior
 									{
 										// first find out which marker ring (cylinder) has been picked
 										DataSphere sphere = (DataSphere) pickedNode;
-										String mName = (String) namesHashT.get(sphere);
+										String mName = namesHashT.get(sphere);
 										// display the feature name on the status bar of the frame but only if we are not currently recording a movie
 										if(frame.currentMovieCaptureThread == null)
 										{
@@ -176,6 +158,4 @@ public class MouseOverBehavior extends Behavior
 		}
 		wakeupOn(new WakeupOnAWTEvent(MouseEvent.MOUSE_MOVED));
 	}
-
-	// ------------------------------------------------------------------------------------------------------------------------------------------
-}// end class
+}
