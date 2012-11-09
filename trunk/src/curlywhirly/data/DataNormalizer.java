@@ -1,17 +1,10 @@
 package curlywhirly.data;
 
-import java.util.*;
-import curlywhirly.gui.*;
-
 public class DataNormalizer
 {
-	
-	
 	// scaling factor to multiply the data with so that everything is normalized to be between 1 and -1
 	float scalingFactor;
-	
-	//================================================methods=======================================
-	
+
 	//divide the data by a scaling factor so that everything is normalized to be between 1 and -1
 	public static DataSet normalizeDataSet(DataSet dataSet)
 	{
@@ -31,27 +24,24 @@ public class DataNormalizer
 					absoluteMin = value;
 			}
 
-			//then we need to work out a scaling factor by which to multiply the data so that they get normalized to between -1 and 1 
+			//then we need to work out a scaling factor by which to multiply the data so that they get normalized to between -1 and 1
 			float scalingFactor = 0;
 			if (absoluteMax > Math.abs(absoluteMin))
 				scalingFactor = absoluteMax;
 			else
 				scalingFactor = Math.abs(absoluteMin);
-			
+
 			for (DataEntry dataEntry : dataSet.dataEntries)
 			{
 				float value = dataEntry.dataValues.get(i);
 				float normalizedValue = value/scalingFactor;
-				//store this 
+				//store this
 				dataEntry.normalizedDataValues.add(normalizedValue);
 			}
-		
+
 		}
 
 		return dataSet;
 	}
-	
-	// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
-	
-}//end class
+
+}

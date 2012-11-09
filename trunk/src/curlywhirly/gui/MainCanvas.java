@@ -7,21 +7,15 @@ import java.util.List;
 import javax.media.j3d.*;
 import javax.swing.*;
 import javax.vecmath.*;
+
 import com.sun.j3d.utils.geometry.*;
 import com.sun.j3d.utils.pickfast.behaviors.*;
 import com.sun.j3d.utils.universe.*;
+
 import curlywhirly.data.*;
 
-/**
- * @author Micha Bayer, Scottish Crop Research Institute
- *
- * A 3D graph viewing Canvas
- */
 public class MainCanvas extends Canvas3D
 {
-
-	// ==================================vars=============================
-
 	// variables to adjust manually for now
 	int boundsSize = 1000;
 	public float viewPointZCoord = 4;
@@ -59,7 +53,7 @@ public class MainCanvas extends Canvas3D
 	ArrayList<DataSphere> allDataSpheres = null;
 	String[] categories;
 
-	public Vector<Category> selectorListItems;
+	public ArrayList<Category> selectorListItems;
 	public Object[] selectedObjects;
 
 	// the index of the float array in the above vector which is currently selected for display on the x axis
@@ -122,9 +116,6 @@ public class MainCanvas extends Canvas3D
 	public boolean isMouseOver = false;
 	public DataSphere mouseOverSphere = null;
 
-
-	// ==================================c'tor=============================
-
 	public MainCanvas(CurlyWhirly frame)
 	{
 		super(getGraphicsConfig());
@@ -138,9 +129,6 @@ public class MainCanvas extends Canvas3D
 
 	}
 
-
-	// ---------------------------------------------------------------------------------------------------------------------
-
 	public Dimension getPreferredSize()
 	{
 		return new Dimension(0,0);
@@ -150,8 +138,6 @@ public class MainCanvas extends Canvas3D
 	{
 		return new Dimension(0,0);
 	}
-
-
 
 	//colour the spheres by category
 	public void colourSpheres()
@@ -198,8 +184,6 @@ public class MainCanvas extends Canvas3D
 		}
 	}
 
-	// ---------------------------------------------------------------------------------------------------------------------
-
 	//works out relative sizes required for the system
 	public void calculateSizes()
 	{
@@ -214,8 +198,6 @@ public class MainCanvas extends Canvas3D
 		viewPointZCoord = 4;
 
 	}
-
-	// ---------------------------------------------------------------------------------------------------------------------
 
 	//sets up ambient and directional light
 	private void setUpLights()
@@ -234,8 +216,6 @@ public class MainCanvas extends Canvas3D
 		lgt1.setInfluencingBounds(bounds);
 		objRoot.addChild(lgt1);
 	}
-
-	// ---------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Creates a scene graph and returns it in the shape of a single BranchGroup object
@@ -328,8 +308,6 @@ public class MainCanvas extends Canvas3D
 
 	}
 
-	// ---------------------------------------------------------------------------------------------------------------------
-
 	// this allows us to set the camera view point
 	public void setViewPoint()
 	{
@@ -345,8 +323,6 @@ public class MainCanvas extends Canvas3D
 		vpTrans.setTransform(t3d);
 	}
 
-	// ---------------------------------------------------------------------------------------------------------------------
-
 	//restores the initial zoom factor and viewing angle
 	public void resetOriginalView()
 	{
@@ -356,8 +332,6 @@ public class MainCanvas extends Canvas3D
 		wholeObj.setTransform(trans);
 		setViewPoint();
 	}
-
-	// ---------------------------------------------------------------------------------------------------------------------
 
 	//puts the graph into an indefinite spin
 	public void spin()
@@ -381,8 +355,6 @@ public class MainCanvas extends Canvas3D
 		objRoot.addChild(rotatorGroup);
 	}
 
-	// ---------------------------------------------------------------------------------------------------------------------
-
 	public void rotateGraph(float degrees)
 	{
 		//a transform for rotating the graph about the y axis
@@ -391,16 +363,12 @@ public class MainCanvas extends Canvas3D
 		wholeObj.setTransform(yRotationTransform);
 	}
 
-	// ---------------------------------------------------------------------------------------------------------------------
-
 	//stop the graph from spinning
 	public void stopSpinning()
 	{
 		isGraphSpinning = false;
 		rotatorGroup.detach();
 	}
-
-	// ---------------------------------------------------------------------------------------------------------------------
 
 	//sets the spin speed
 	public void setSpinSpeed(long speed)
@@ -415,16 +383,12 @@ public class MainCanvas extends Canvas3D
 		spinSpeed = speed * 1000;
 	}
 
-	// ---------------------------------------------------------------------------------------------------------------------
-
 	//get rid of the current scene graph
 	public void clearCurrentView()
 	{
 		if (objRoot != null)
 			objRoot.detach();
 	}
-
-	// ---------------------------------------------------------------------------------------------------------------------
 
 	//update the current scene graph with new settings
 	public void updateGraph(boolean makeNewSpheres)
@@ -465,8 +429,6 @@ public class MainCanvas extends Canvas3D
 		makeAxisLabels();
 	}
 
-	// ---------------------------------------------------------------------------------------------------------------------
-
 	//sticks a label on each of the 3 axes
 	private void makeAxisLabels()
 	{
@@ -504,7 +466,6 @@ public class MainCanvas extends Canvas3D
 
 	}
 
-	// ---------------------------------------------------------------------------------------------------------------------
 	/**
 	 *sets up all the sphere (data point) objects
 	 */
@@ -557,9 +518,6 @@ public class MainCanvas extends Canvas3D
 			mouseOverBehaviour.namesHashT = spheresMap;
 	}
 
-
-	// ---------------------------------------------------------------------------------------------------------------------
-
 	//creates pointy tips for the axes
 	private void placeCone(Vector3f position, TransformGroup wholeObj, float radius, float height, char axis)
 	{
@@ -590,8 +548,6 @@ public class MainCanvas extends Canvas3D
 		wholeObj.addChild(tg);
 	}
 
-	// ---------------------------------------------------------------------------------------------------------------------
-
 	//darws the lines that make up the coordinate system
 	private void drawCoordinateSystem()
 	{
@@ -606,14 +562,10 @@ public class MainCanvas extends Canvas3D
 		float arrowHeadRadius = 0.01f;
 
 		// line start and end points
-		float[] lineStart = new float[]
-		                              { 0, 0, 0 };
-		float[] lineEndX = new float[]
-		                             { axisLength, 0, 0 };
-		float[] lineEndY = new float[]
-		                             { 0, axisLength, 0 };
-		float[] lineEndZ = new float[]
-		                             { 0, 0, axisLength };
+		float[] lineStart = new float[] { 0, 0, 0 };
+		float[] lineEndX = new float[] { axisLength, 0, 0 };
+		float[] lineEndY = new float[] { 0, axisLength, 0 };
+		float[] lineEndZ = new float[] { 0, 0, axisLength };
 
 		// x positive axis
 		// line start point
@@ -675,8 +627,6 @@ public class MainCanvas extends Canvas3D
 		wholeObj.addChild(s3d);
 	}
 
-	// ---------------------------------------------------------------------------------------------------------------------
-
 	//adds a mutable background to the scene
 	public void addBackground()
 	{
@@ -685,8 +635,6 @@ public class MainCanvas extends Canvas3D
 		background.setApplicationBounds(bounds);
 		objRoot.addChild(background);
 	}
-
-	// ---------------------------------------------------------------------------------------------------------------------
 
 	//changes the background colour
 	public void setBackgroundColour(int newColour)
@@ -711,8 +659,6 @@ public class MainCanvas extends Canvas3D
 			background.setColor(bgColour);
 	}
 
-	// ---------------------------------------------------------------------------------------------------------------------
-
 	// get a nice graphics config
 	private static GraphicsConfiguration getGraphicsConfig()
 	{
@@ -725,8 +671,6 @@ public class MainCanvas extends Canvas3D
 						template);
 		return gcfg;
 	}
-
-	// ---------------------------------------------------------------------------------------------------------------------
 
 	ImageIcon ABOUT = Icons2.getIcon("ABOUT-ALL");
 
@@ -763,9 +707,6 @@ public class MainCanvas extends Canvas3D
 		}
 	}
 
-
-	// ---------------------------------------------------------------------------------------------------------------------
-
 	// Overriding repaint makes the worst flickering dissapear when we execute the postRender stuff on repaint
 	@Override
 	public void repaint()
@@ -774,8 +715,6 @@ public class MainCanvas extends Canvas3D
 		paint(g);
 	}
 
-	// ---------------------------------------------------------------------------------------------------------------------
-
 	@Override
 	public void postRender()
 	{
@@ -783,8 +722,6 @@ public class MainCanvas extends Canvas3D
 		if(mouseOverSphere !=null && Preferences.showMouseOverLabels)
 			drawMouseOverLabel();
 	}
-
-	// ---------------------------------------------------------------------------------------------------------------------
 
 	private void drawMouseOverLabel()
 	{
@@ -806,7 +743,7 @@ public class MainCanvas extends Canvas3D
 		//work out the width of the longer string
 		int stringWidthNameLabel = fm.stringWidth(nameLabel);
 		int stringWidthcategoryLabel = fm.stringWidth(categoryLabel);
-		int backGroundWidth = -1;
+		int backGroundWidth;
 		if(stringWidthNameLabel > stringWidthcategoryLabel)
 			backGroundWidth = stringWidthNameLabel;
 		else
@@ -861,11 +798,4 @@ public class MainCanvas extends Canvas3D
 		//don't flush or we won't see anything drawn
 		g2.flush(false);
 	}
-
-	// ---------------------------------------------------------------------------------------------------------------------
-
-
-
-
-} // end of class
-
+}

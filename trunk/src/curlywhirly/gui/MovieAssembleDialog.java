@@ -1,18 +1,10 @@
-/*
- * MovieAssembleDialog.java
- *
- * Created on __DATE__, __TIME__
- */
-
 package curlywhirly.gui;
+
+import javax.swing.*;
 
 import scri.commons.gui.*;
 
-/**
- *
- * @author  __USER__
- */
-public class MovieAssembleDialog extends javax.swing.JDialog
+public class MovieAssembleDialog extends JDialog
 {
 
 	/** Creates new form MovieAssembleDialog */
@@ -20,7 +12,7 @@ public class MovieAssembleDialog extends javax.swing.JDialog
 	{
 		super(parent, modal);
 		initComponents();
-		
+
 		RB.setText(assembleLabel, "gui.MovieAssembleDialog.assembleLabel");
 	}
 
@@ -143,5 +135,4 @@ public class MovieAssembleDialog extends javax.swing.JDialog
 	{
 		return closeButton;
 	}
-
 }

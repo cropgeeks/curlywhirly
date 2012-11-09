@@ -4,11 +4,10 @@ import java.util.*;
 
 public class DataFormatDetector
 {
-	
 	public int detectDataFormat(DataSet dataSet, String [] lines, int numPrefixedCategoryHeaders, String [] headers, String categoryHeaderPrefix)
 	{
-		int dataFormat = -1;
-		
+		int dataFormat;
+
 		//if categories prefixes found -> f2/f3
 		if(numPrefixedCategoryHeaders > 0)
 		{
@@ -30,7 +29,7 @@ public class DataFormatDetector
 			//else test for redundancy in column 0
 			else
 			{
-				//if this is redundant -> f1 and has category data in col 0 
+				//if this is redundant -> f1 and has category data in col 0
 				boolean col0Redundancy = columnHasRedundantData(0, lines);
 
 				if(col0Redundancy)
@@ -42,12 +41,10 @@ public class DataFormatDetector
 				}
 			}
 		}
-		
+
 		return dataFormat;
 	}
-	
-	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	private static boolean columnHasRedundantData(int columnIndex, String [] lines)
 	{
 		//parse all the lines and store the value from tokens[0] on each line
@@ -65,11 +62,8 @@ public class DataFormatDetector
 			{
 				return true;
 			}
-		}	
+		}
 
 		return false;
 	}
-	
-	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
 }

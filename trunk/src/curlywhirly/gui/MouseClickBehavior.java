@@ -1,73 +1,55 @@
 package curlywhirly.gui;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.util.Enumeration;
-import java.util.HashMap;
+import java.awt.event.*;
+import java.util.*;
 
-import javax.media.j3d.Behavior;
-import javax.media.j3d.BranchGroup;
-import javax.media.j3d.CapabilityNotSetException;
-import javax.media.j3d.WakeupCriterion;
-import javax.media.j3d.WakeupOnAWTEvent;
+import javax.media.j3d.*;
 
-import com.sun.j3d.utils.geometry.Primitive;
-import com.sun.j3d.utils.geometry.Sphere;
-import com.sun.j3d.utils.picking.PickCanvas;
-import com.sun.j3d.utils.picking.PickResult;
+import com.sun.j3d.utils.geometry.*;
+import com.sun.j3d.utils.picking.*;
 
 /**
  * Behaviour class that listens for mouseover on marker rings (cylinders) and highlights these in a different colour as well as pops up a label next to them
- * 
- * @author Micha Bayer, Scottish Crop Research Institute
  */
 public class MouseClickBehavior extends Behavior
 {
-	
-	// =======================================vars==============================
-	
 	private PickCanvas pickCanvas;
 	private PickResult pickResult;
-	
+
 	private Primitive pickedNode;
 	private boolean isObjectSelectedBefore = false;
 	private Primitive lastPickedNode = null;
 	private BranchGroup objRoot;
-	
-	public HashMap namesHashT = null;
-	
+
+	public HashMap<Sphere, String> namesHashT = null;
+
 	MainCanvas canvas;
 	CurlyWhirly frame;
-	
-	// ========================================c'tor============================
-	
-	public MouseClickBehavior(CurlyWhirly frame, HashMap _namesHashT, BranchGroup _objRoot, float sphereSize)
+
+	public MouseClickBehavior(CurlyWhirly frame, HashMap<Sphere, String> namesHashT, BranchGroup objRoot, float sphereSize)
 	{
-		this.namesHashT = _namesHashT;
-		this.objRoot = _objRoot;
+		this.namesHashT = namesHashT;
+		this.objRoot = objRoot;
 		this.canvas = frame.canvas3D;
 		this.frame = frame;
-		
+
 		pickCanvas = new PickCanvas(canvas, objRoot);
 		pickCanvas.setTolerance(sphereSize*2);
 		pickCanvas.setMode(PickCanvas.GEOMETRY_INTERSECT_INFO);
 	}
-	
-	// ===========================================methods============================
-	
+
 	public void initialize()
 	{
-		wakeupOn(new WakeupOnAWTEvent(MouseEvent.MOUSE_CLICKED));		
+		wakeupOn(new WakeupOnAWTEvent(MouseEvent.MOUSE_CLICKED));
 	}
-	
-	// ------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	public void processStimulus(Enumeration criteria)
 	{
 		WakeupCriterion wakeup;
 		AWTEvent[] event;
 		int eventId;
-		
+
 		while (criteria.hasMoreElements())
 		{
 			wakeup = (WakeupCriterion) criteria.nextElement();
@@ -82,13 +64,13 @@ public class MouseClickBehavior extends Behavior
 						int x = ((MouseEvent) event[ii]).getX();
 						int y = ((MouseEvent) event[ii]).getY();
 						pickCanvas.setShapeLocation(x, y);
-						
+
 						pickResult = pickCanvas.pickClosest();
-						
+
 						if (pickResult != null && pickResult.getNode(PickResult.PRIMITIVE) != null)
 						{
 							pickedNode = ((Primitive) pickResult.getNode(PickResult.PRIMITIVE));
-							
+
 							// check whether this is the same object as before or not
 							if (lastPickedNode != null)
 							{
@@ -98,7 +80,7 @@ public class MouseClickBehavior extends Behavior
 									isObjectSelectedBefore = false;
 								}
 							}
-							
+
 							// if this is the object picked last
 							if (isObjectSelectedBefore)
 							{
@@ -112,16 +94,15 @@ public class MouseClickBehavior extends Behavior
 									if (Class.forName("com.sun.j3d.utils.geometry.Sphere").isInstance(pickedNode))
 									{
 										// first find out which marker ring (cylinder) has been picked
-										Sphere sphere = (Sphere) pickedNode;								
+										Sphere sphere = (Sphere) pickedNode;
 										// display the feature name on the status bar of the frame but only if we are not currently recording a movie
 										if(frame.currentMovieCaptureThread == null)
 										{
 											String dataEntryLabel = ((DataSphere)sphere).dataEntry.label;
 											//now we can open a web browser with the stored URL and the current label as a parameter
-											String url = null;
 											if(CurlyWhirly.dataAnnotationURL != null)
 											{
-												url = CurlyWhirly.dataAnnotationURL + dataEntryLabel;
+												String url = CurlyWhirly.dataAnnotationURL + dataEntryLabel;
 //												System.out.println("opening URL " + url);
 												GUIUtils.visitURL(url);
 											}
@@ -155,6 +136,4 @@ public class MouseClickBehavior extends Behavior
 		}
 		wakeupOn(new WakeupOnAWTEvent(MouseEvent.MOUSE_CLICKED));
 	}
-	
-	// ------------------------------------------------------------------------------------------------------------------------------------------
-}// end class
+}

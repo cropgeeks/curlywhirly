@@ -1,18 +1,10 @@
-/*
- * DataLoadingDialog.java
- *
- * Created on __DATE__, __TIME__
- */
-
 package curlywhirly.gui;
+
+import javax.swing.*;
 
 import scri.commons.gui.*;
 
-/**
- *
- * @author  __USER__
- */
-public class DataLoadingDialog extends javax.swing.JDialog
+public class DataLoadingDialog extends JDialog
 {
 
 	/** Creates new form DataLoadingDialog */
@@ -20,7 +12,7 @@ public class DataLoadingDialog extends javax.swing.JDialog
 	{
 		super(parent, modal);
 		initComponents();
-		
+
 		RB.setText(jLabel1, "gui.DataLoadingDialog.jLabel1");
 	}
 

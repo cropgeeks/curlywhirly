@@ -9,8 +9,6 @@ import scri.commons.gui.*;
 
 public class GUIUtils
 {
-	// ---------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Returns an array of colours the length of numColours
 	 */
@@ -27,7 +25,6 @@ public class GUIUtils
 		}
 		return colours;
 	}
-	// ---------------------------------------------------------------------------------------------------------------------
 
 	public static void visitURL(String html)
 	{
@@ -72,7 +69,6 @@ public class GUIUtils
 		openURL.invoke(null, new Object[] {html});
 	}
 
-
 	public static void cancelMovieCapture()
 	{
 		//cancel any ongoing movie capture thread
@@ -91,5 +87,4 @@ public class GUIUtils
 		}
 		catch (Exception e) { System.out.println(e); }
 	}
-
 }

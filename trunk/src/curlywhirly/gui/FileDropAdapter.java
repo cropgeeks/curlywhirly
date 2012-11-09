@@ -7,6 +7,7 @@ import java.awt.datatransfer.*;
 import java.awt.dnd.*;
 import java.io.*;
 import java.util.*;
+
 import curlywhirly.data.*;
 
 public class FileDropAdapter extends DropTargetAdapter

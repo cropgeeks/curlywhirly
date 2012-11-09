@@ -1,7 +1,6 @@
 package curlywhirly.gui;
 
 import java.awt.*;
-
 import javax.swing.*;
 
 import scri.commons.gui.*;

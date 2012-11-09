@@ -1,17 +1,13 @@
 package curlywhirly.controller;
 
 
-import java.awt.AWTException;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Robot;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.image.*;
+import java.io.*;
 
-import javax.imageio.ImageIO;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
+import javax.imageio.*;
+import javax.swing.*;
+
 import curlywhirly.gui.*;
 
 /**
@@ -23,8 +19,8 @@ public class ScreenCaptureThread extends Thread
 	CurlyWhirly frame;
 	String fileType;
 	JFileChooser fileChooser;
-	
-	
+
+
 	public ScreenCaptureThread(File outfile, CurlyWhirly frame,String fileType, JFileChooser fileChooser)
 	{
 		this.outfile = outfile;
@@ -32,12 +28,12 @@ public class ScreenCaptureThread extends Thread
 		this.fileType = fileType;
 		this.fileChooser = fileChooser;
 	}
-	
+
 	//take a screenshot of the canvas only
 	public void run()
-	{		
+	{
 		MainCanvas canvas = frame.canvas3D;
-		canvas.setVisible(true);				
+		canvas.setVisible(true);
 		Robot robot =null;
 		try
 		{
@@ -47,8 +43,7 @@ public class ScreenCaptureThread extends Thread
 		{
 			e1.printStackTrace();
 		}
-		
-		
+
 		//take a screenshot of the canvas only
 		Point p = canvas.getLocationOnScreen();
 		int width = canvas.getWidth();
@@ -59,15 +54,11 @@ public class ScreenCaptureThread extends Thread
 		try
 		{
 			ImageIO.write(img, fileType, outfile);
-			JOptionPane.showMessageDialog(frame, "saved image to file " + outfile.getAbsolutePath());	
+			JOptionPane.showMessageDialog(frame, "saved image to file " + outfile.getAbsolutePath());
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
-		
-		
 	}
-	
-	
 }

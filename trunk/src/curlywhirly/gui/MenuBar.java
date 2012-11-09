@@ -4,9 +4,11 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
+
+import scri.commons.gui.*;
+
 import curlywhirly.controller.*;
 import curlywhirly.data.*;
-import scri.commons.gui.*;
 
 public class MenuBar extends JMenuBar implements ActionListener
 {
@@ -41,7 +43,6 @@ public class MenuBar extends JMenuBar implements ActionListener
 		// this enables swing components to be drawn on top of the 3D canvas
 		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 
-		// //////////////////////////////////////
 		// the File Menu
 		JMenu fileMenu = new JMenu("");
 		RB.setText(fileMenu, "gui.MenuBar.file");
@@ -94,7 +95,6 @@ public class MenuBar extends JMenuBar implements ActionListener
 		if (SystemUtils.isMacOS() == false)
 			fileMenu.add(exitItem);
 
-		// ////////////////////////////////////////////////////////////////////////////////
 		// the Help Menu
 		JMenu helpMenu = new JMenu("");
 		RB.setText(helpMenu, "gui.MenuBar.help");
@@ -198,7 +198,4 @@ public class MenuBar extends JMenuBar implements ActionListener
 		}
 
 	}
-
-//-------------------------------------------------------------------------------------------------------------------------------------
-
 }
