@@ -29,7 +29,7 @@ public class FrameListener implements ComponentListener, WindowFocusListener
 		if(frame.currentMovieCaptureThread != null && !windowMoved)
 		{
 			GUIUtils.cancelMovieCapture();
-			TaskDialog.error(RB.getString("gui.FrameListener.error"), RB.getString("text.close"));
+			TaskDialog.error(RB.getString("gui.FrameListener.error"), RB.getString("gui.text.close"));
 		}
 		windowMoved = true;
 	}
@@ -42,7 +42,7 @@ public class FrameListener implements ComponentListener, WindowFocusListener
 		if(frame.currentMovieCaptureThread != null)
 		{
 			GUIUtils.cancelMovieCapture();
-			TaskDialog.error(RB.getString("gui.FrameListener.error"), RB.getString("text.close"));
+			TaskDialog.error(RB.getString("gui.FrameListener.error"), RB.getString("gui.text.close"));
 		}
 	}
 

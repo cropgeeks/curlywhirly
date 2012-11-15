@@ -719,7 +719,7 @@ public class MainCanvas extends Canvas3D
 	public void postRender()
 	{
 		//do we need to display a mouseover string for a data point
-		if(mouseOverSphere !=null && Preferences.showMouseOverLabels)
+		if(mouseOverSphere !=null && Prefs.showMouseOverLabels)
 			drawMouseOverLabel();
 	}
 

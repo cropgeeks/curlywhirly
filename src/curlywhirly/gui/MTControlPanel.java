@@ -57,7 +57,7 @@ public class MTControlPanel extends JPanel implements ActionListener
 
 		addMouseAdapterToSelectorList();
 
-		if (Preferences.showMouseOverLabels)
+		if (Prefs.showMouseOverLabels)
 			showLabelsCheckBox.setSelected(true);
 		else
 			showLabelsCheckBox.setSelected(false);
@@ -527,9 +527,9 @@ public class MTControlPanel extends JPanel implements ActionListener
 	private void showLabelsCheckBoxActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		if (showLabelsCheckBox.isSelected())
-			Preferences.showMouseOverLabels = true;
+			Prefs.showMouseOverLabels = true;
 		else
-			Preferences.showMouseOverLabels = false;
+			Prefs.showMouseOverLabels = false;
 	}
 
 	private void selectorListValueChanged(javax.swing.event.ListSelectionEvent evt)

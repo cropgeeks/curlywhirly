@@ -34,7 +34,7 @@ public class MovieCaptureDialog extends JDialog implements ChangeListener
 		RB.setText(radioButtonSlow, "gui.MovieCaptureDialog.radioButtonSlow");
 		RB.setText(radioButtonMedium, "gui.MovieCaptureDialog.radioButtonMedium");
 		RB.setText(radioButtonFast, "gui.MovieCaptureDialog.radioButtonFast");
-		RB.setText(browseButton, "text.browse");
+		RB.setText(browseButton, "gui.text.browse");
 		RB.setText(jLabel4, "gui.MovieCaptureDialog.jLabel4");
 		RB.setText(jLabel5, "gui.MovieCaptureDialog.jLabel5");
 		RB.setText(captureMovieButton, "gui.MovieCaptureDialog.captureMovieButton");
@@ -266,7 +266,7 @@ public class MovieCaptureDialog extends JDialog implements ChangeListener
 				savedFileTF.setText("");
 				captureMovieButton.setEnabled(false);
 				TaskDialog.error(RB.getString("gui.MovieCaptureDialog.overwriteError"),
-					RB.getString("text.close"));
+					RB.getString("gui.text.close"));
 			}
 			else
 			{
@@ -295,7 +295,7 @@ public class MovieCaptureDialog extends JDialog implements ChangeListener
 		else
 		{
 			TaskDialog.error(RB.getString("gui.MovieCaptureDialog.outputFileError"),
-				RB.getString("text.close"));
+				RB.getString("gui.text.close"));
 			//show this dialog again
 			setVisible(true);
 		}

@@ -122,7 +122,7 @@ public class MovieCaptureThread extends Thread
 			e.printStackTrace();
 			String message = e.getMessage();
 			TaskDialog.error(RB.format("controller.MovieCaptureThread.error", e.getMessage()),
-				RB.getString("text.close"));
+				RB.getString("gui.text.close"));
 		}
 		finally
 		{

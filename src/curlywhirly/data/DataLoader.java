@@ -426,7 +426,7 @@ public class DataLoader
 				lineWithError = lastLineParsed+1;
 
 			String message = RB.format("data.DataLoader.error", lineWithError, e.getMessage());
-			TaskDialog.error(message, RB.getString("text.close"));
+			TaskDialog.error(message, RB.getString("gui.text.close"));
 			e.printStackTrace();
 			throw new IOException(message);
 		}
