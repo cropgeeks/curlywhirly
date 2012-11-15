@@ -26,7 +26,7 @@ public class CurlyWhirly extends JFrame
 	public static boolean dataLoaded = false;
 
 	private static File prefsFile = getPrefsFile();
-	public static Preferences prefs = new Preferences();
+	public static Prefs prefs = new Prefs();
 	public StatusBar statusBar;
 	public static MenuBar menuBar;
 	public static WinMainToolBar toolbar;
@@ -56,7 +56,7 @@ public class CurlyWhirly extends JFrame
 		try
 		{
 			// preferences
-			prefs.loadPreferences(prefsFile, Preferences.class);
+			prefs.loadPreferences(prefsFile, Prefs.class);
 
 			// Set System L&F
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -68,7 +68,7 @@ public class CurlyWhirly extends JFrame
 
 		Icons2.initialize("/res/icons", ".png");
 
-		RB.initialize(Preferences.localeText, "res.text.curlywhirly");
+		RB.initialize(Prefs.localeText, "res.text.curlywhirly");
 
 		curlyWhirly = new CurlyWhirly();
 		dataLoader = new DataLoader();
@@ -89,16 +89,16 @@ public class CurlyWhirly extends JFrame
 
 		// get the GUI set up
 		setTitle(RB.getString("gui.CurlyWhirly.title") + " - " + Install4j.VERSION);
-		setSize(Preferences.guiWinMainWidth, Preferences.guiWinMainHeight);
+		setSize(Prefs.guiWinMainWidth, Prefs.guiWinMainHeight);
 
 		// Determine where on screen to display
-		if (Preferences.isFirstRun)
+		if (Prefs.isFirstRun)
 			setLocationRelativeTo(null);
 		else
-			setLocation(Preferences.guiWinMainX, Preferences.guiWinMainY);
+			setLocation(Prefs.guiWinMainX, Prefs.guiWinMainY);
 
 		// Maximize the frame if neccassary
-		if (Preferences.guiWinMainMaximized)
+		if (Prefs.guiWinMainMaximized)
 			setExtendedState(Frame.MAXIMIZED_BOTH);
 
 		setIconImage(Icons2.getIcon("curlywurly_icon32px").getImage());
@@ -111,7 +111,7 @@ public class CurlyWhirly extends JFrame
 			@Override
 			public void windowClosing(WindowEvent e)
 			{
-				Preferences.isFirstRun = false;
+				Prefs.isFirstRun = false;
 				shutdown();
 			}
 
@@ -135,21 +135,21 @@ public class CurlyWhirly extends JFrame
 			{
 				if (getExtendedState() != Frame.MAXIMIZED_BOTH)
 				{
-					Preferences.guiWinMainWidth  = getSize().width;
-					Preferences.guiWinMainHeight = getSize().height;
-					Preferences.guiWinMainX = getLocation().x;
-					Preferences.guiWinMainY = getLocation().y;
+					Prefs.guiWinMainWidth  = getSize().width;
+					Prefs.guiWinMainHeight = getSize().height;
+					Prefs.guiWinMainX = getLocation().x;
+					Prefs.guiWinMainY = getLocation().y;
 
-					Preferences.guiWinMainMaximized = false;
+					Prefs.guiWinMainMaximized = false;
 				}
 				else
-					Preferences.guiWinMainMaximized = true;
+					Prefs.guiWinMainMaximized = true;
 			}
 
 			public void componentMoved(ComponentEvent e)
 			{
-				Preferences.guiWinMainX = getLocation().x;
-				Preferences.guiWinMainY = getLocation().y;
+				Prefs.guiWinMainX = getLocation().x;
+				Prefs.guiWinMainY = getLocation().y;
 			}
 
 		});
@@ -167,7 +167,7 @@ public class CurlyWhirly extends JFrame
 
 	void shutdown()
 	{
-		prefs.savePreferences(prefsFile, Preferences.class);
+		prefs.savePreferences(prefsFile, Prefs.class);
 		System.exit(0);
 	}
 
@@ -184,16 +184,16 @@ public class CurlyWhirly extends JFrame
 
 		// control panel
 		controlPanel = new MTControlPanel(this);
-		controlPanel.setPreferredSize(new Dimension(controlPanelWidth, Preferences.guiWinMainHeight));
+		controlPanel.setPreferredSize(new Dimension(controlPanelWidth, Prefs.guiWinMainHeight));
 
 		// instantiate the canvas here rather than in the data load method
 		// we want to be able to recycle it when we load another dataset over the top of the current one
 		canvas3D = new MainCanvas(this);
-		canvas3D.setPreferredSize(new Dimension((Preferences.guiWinMainWidth-controlPanelWidth), Preferences.guiWinMainHeight));
+		canvas3D.setPreferredSize(new Dimension((Prefs.guiWinMainWidth-controlPanelWidth), Prefs.guiWinMainHeight));
 
 		// main comp is split pane with control panel on the left and canvas on the right
-//		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controlPanel, canvas3D);
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controlPanel, new StartPanel());
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controlPanel, canvas3D);
+//		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controlPanel, new StartPanel());
 		splitPane.setOneTouchExpandable(true);
 		add(splitPane);
 

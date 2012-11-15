@@ -34,7 +34,7 @@ public class DataLoadingThread extends Thread
 		//display instructions on use of keyboard/mouse controls if needed
 		if (frame.dataLoaded)
 		{
-			if (Preferences.show3DControlInstructions)
+			if (Prefs.show3DControlInstructions)
 			{
 				Instructions3D instr = new Instructions3D(frame);
 				instr.show3DInstructions(true);

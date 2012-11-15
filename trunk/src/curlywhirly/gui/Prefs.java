@@ -1,13 +1,17 @@
 package curlywhirly.gui;
 
+import curlywhirly.controller.*;
+
 import scri.commons.gui.*;
 
 import javax.swing.*;
 
-public class Preferences extends XMLPreferences
+public class Prefs extends XMLPreferences
 {
 	//the number of the last version released
 	public static String lastVersion = null;
+
+	public static boolean isSCRIUser = false;
 
 	// Unique Curlywhirly ID for this user
 	public static String curlywhirlyID = SystemUtils.createGUID(32);
@@ -35,4 +39,7 @@ public class Preferences extends XMLPreferences
 
 	// Display localised text in...
 	public static String localeText = "auto";
+
+	// When to check for updates
+	public static int guiUpdateSchedule = Install4j.STARTUP;
 }

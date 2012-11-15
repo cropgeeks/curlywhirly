@@ -200,7 +200,7 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 			movieFile.delete();
 			movieAssembleDialog.setVisible(false);
 			TaskDialog.error(RB.getString("controller.JpegImagesToMovie.error"),
-				RB.getString("text.close"));
+				RB.getString("gui.text.close"));
 			System.err.println("Cannot create the DataSink: " + e);
 			return null;
 		}

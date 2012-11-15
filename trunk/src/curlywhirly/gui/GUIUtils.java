@@ -6,6 +6,7 @@ import java.net.*;
 import javax.vecmath.Color3f;
 
 import scri.commons.gui.*;
+import javax.swing.JPanel;
 
 public class GUIUtils
 {
@@ -38,7 +39,7 @@ public class GUIUtils
 		catch(URISyntaxException use)
 		{
 			String message = RB.format("gui.GUIUtils.urlError", html);
-			TaskDialog.error(message, RB.getString("text.close"));
+			TaskDialog.error(message, RB.getString("gui.text.close"));
 		}
 		catch (Exception e)
 		{
@@ -86,5 +87,18 @@ public class GUIUtils
 			desktop.mail(new URI("mailto:curlywhirly@hutton.ac.uk?subject=CurlyWhirly%20Feedback"));
 		}
 		catch (Exception e) { System.out.println(e); }
+	}
+
+	/*
+	 * @param panel the panel to apply the effect to
+	 * @param opague if the panel should be opague or not on OS X
+	 */
+	public static void setPanelColor(JPanel panel, boolean opagueOnOSX)
+	{
+		if (SystemUtils.isMacOS() == false)
+			panel.setBackground(Color.white);
+
+		else
+			panel.setOpaque(opagueOnOSX);
 	}
 }

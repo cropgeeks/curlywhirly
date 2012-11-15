@@ -20,7 +20,7 @@ public class Instructions3D implements ItemListener
 		instructionsCheckBox = new JCheckBox(RB.getString("gui.Instructions3D.checkbox"));
 		instructionsCheckBox.addItemListener(this);
 		String message = RB.getString("gui.Instructions3D.instructions");
-		String label = RB.getString("text.close");
+		String label = RB.getString("gui.text.close");
 
 		if (useCheckbox)
 			TaskDialog.info(message, label, instructionsCheckBox);

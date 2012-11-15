@@ -131,12 +131,12 @@ public class MenuBar extends JMenuBar implements ActionListener
 		if (src.equals(openFileItem))
 		{
 			// file chooser
-			fc = new JFileChooser(Preferences.lastDir);
+			fc = new JFileChooser(Prefs.lastDir);
 
 			int returnVal = fc.showOpenDialog(frame);
 			if (returnVal == JFileChooser.APPROVE_OPTION)
 			{
-				Preferences.lastDir = "" + fc.getSelectedFile().getParent();
+				Prefs.lastDir = "" + fc.getSelectedFile().getParent();
 
 				CurlyWhirly.dataLoader = new DataLoader();
 				CurlyWhirly.dataLoader.loadDataInThread(fc.getSelectedFile());
