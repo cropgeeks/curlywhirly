@@ -17,6 +17,8 @@ class WinMainToolBar extends JToolBar implements ActionListener
 
 	private JButton open;
 	private JButton sample;
+	private JButton reset;
+	private JToggleButton spin;
 	private JButton screenshot;
 	private JButton movie;
 	private JButton prefs;
@@ -37,6 +39,16 @@ class WinMainToolBar extends JToolBar implements ActionListener
 		sample = (JButton) getButton(false, null,
 			RB.getString("gui.WinMainToolBar.sampleTT"),
 			Icons2.getIcon("SAMPLE"));
+
+		reset = (JButton) getButton(false,
+			RB.getString("gui.WinMainToolBar.reset"),
+			RB.getString("gui.WinMainToolBar.resetTT"),
+			Icons2.getIcon("RESET"));
+
+		spin = (JToggleButton) getButton(true,
+			RB.getString("gui.WinMainToolBar.spin"),
+			RB.getString("gui.WinMainToolBar.spinTT"),
+			Icons2.getIcon("SPIN"));
 
 		screenshot = (JButton) getButton(false,
 			RB.getString("gui.WinMainToolBar.screenshot"),
@@ -64,6 +76,8 @@ class WinMainToolBar extends JToolBar implements ActionListener
 		add(open);
 		add(sample);
 		addSeparator();
+		add(reset);
+		add(spin);
 		add(screenshot);
 		add(movie);
 		addSeparator();
@@ -98,6 +112,19 @@ class WinMainToolBar extends JToolBar implements ActionListener
 			// load the example dataset provided with the application
 			CurlyWhirly.dataLoader = new DataLoader();
 			CurlyWhirly.dataLoader.loadDataInThread(new File("data/randomData.txt"));
+		}
+
+		else if (src.equals(reset))
+		{
+			frame.canvas3D.resetOriginalView();
+		}
+
+		else if (src.equals(spin))
+		{
+			if (spin.isSelected())
+				frame.canvas3D.spin();
+			else
+				frame.canvas3D.stopSpinning();
 		}
 
 		else if (src.equals(screenshot))
