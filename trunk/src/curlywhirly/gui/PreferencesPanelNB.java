@@ -12,15 +12,20 @@ import scri.commons.gui.*;
 
 class PreferencesPanelNB extends JPanel
 {
+	private CurlyWhirly frame;
+	
 	private DefaultComboBoxModel<String> displayModel;
 	private DefaultComboBoxModel<String> updateModel;
 
-    public PreferencesPanelNB()
+    public PreferencesPanelNB(CurlyWhirly frame)
     {
+		this.frame = frame;
+		
         initComponents();
 
         GUIUtils.setPanelColor(this, false);
         GUIUtils.setPanelColor(generalPanel, false);
+		GUIUtils.setPanelColor(otherPanel, false);
 
 		// Interface settings
 		generalPanel.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.PreferencesPanelNB.generalPanelTitle")));
@@ -44,6 +49,18 @@ class PreferencesPanelNB extends JPanel
         updateModel.addElement(RB.getString("gui.PreferencesPanelNB.updateMonthly"));
         updateCombo.setModel(updateModel);
         updateCombo.setSelectedIndex(Prefs.guiUpdateSchedule);
+		
+		
+		// Other settings
+		otherPanel.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.PreferencesPanelNB.otherPanelTitle")));
+		
+		RB.setText(colorLabel, "gui.PreferencesPanelNB.colorLabel");
+		colorCombo.setModel(new DefaultComboBoxModel<String>(new String[] {
+			RB.getString("gui.PreferencesPanelNB.black"),
+			RB.getString("gui.PreferencesPanelNB.darkGrey"),
+			RB.getString("gui.PreferencesPanelNB.lightGrey"),
+			RB.getString("gui.PreferencesPanelNB.white") }));
+		colorCombo.setSelectedIndex(Prefs.guiGraphBackground);
 	}
 
     private int getLocaleIndex()
@@ -66,6 +83,10 @@ class PreferencesPanelNB extends JPanel
 		}
 
 		Prefs.guiUpdateSchedule = updateCombo.getSelectedIndex();
+		
+		// Colour options:
+		Prefs.guiGraphBackground = colorCombo.getSelectedIndex();
+		frame.canvas3D.setBackgroundColour(Prefs.guiGraphBackground);
 	}
 
     /** This method is called from within the constructor to
@@ -81,6 +102,9 @@ class PreferencesPanelNB extends JPanel
         updateCombo = new javax.swing.JComboBox<String>();
         displayLabel = new javax.swing.JLabel();
         updateLabel = new javax.swing.JLabel();
+        otherPanel = new javax.swing.JPanel();
+        colorLabel = new javax.swing.JLabel();
+        colorCombo = new javax.swing.JComboBox<String>();
 
         generalPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("General options (restart to apply):"));
 
@@ -99,10 +123,10 @@ class PreferencesPanelNB extends JPanel
                 .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(displayLabel)
                     .addComponent(updateLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(displayCombo, 0, 217, Short.MAX_VALUE)
-                    .addComponent(updateCombo, 0, 217, Short.MAX_VALUE))
+                    .addComponent(updateCombo, 0, 195, Short.MAX_VALUE)
+                    .addComponent(displayCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         generalPanelLayout.setVerticalGroup(
@@ -119,13 +143,41 @@ class PreferencesPanelNB extends JPanel
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        otherPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Other options:"));
+
+        colorLabel.setLabelFor(colorCombo);
+        colorLabel.setText("Graph background colour:");
+
+        javax.swing.GroupLayout otherPanelLayout = new javax.swing.GroupLayout(otherPanel);
+        otherPanel.setLayout(otherPanelLayout);
+        otherPanelLayout.setHorizontalGroup(
+            otherPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(otherPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(colorLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(colorCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        otherPanelLayout.setVerticalGroup(
+            otherPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(otherPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(otherPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(colorLabel)
+                    .addComponent(colorCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(generalPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(generalPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(otherPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -133,14 +185,19 @@ class PreferencesPanelNB extends JPanel
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(generalPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(105, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(otherPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> colorCombo;
+    private javax.swing.JLabel colorLabel;
     private javax.swing.JComboBox<String> displayCombo;
     private javax.swing.JLabel displayLabel;
     private javax.swing.JPanel generalPanel;
+    private javax.swing.JPanel otherPanel;
     private javax.swing.JComboBox<String> updateCombo;
     private javax.swing.JLabel updateLabel;
     // End of variables declaration//GEN-END:variables
