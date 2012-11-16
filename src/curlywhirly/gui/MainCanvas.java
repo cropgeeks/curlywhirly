@@ -121,7 +121,7 @@ public class MainCanvas extends Canvas3D
 		super(getGraphicsConfig());
 		this.frame = frame;
 		su = new SimpleUniverse(this);
-		setBackground(CurlyWhirly.controlPanel.getBackground());
+		setBackgroundColour(Prefs.guiGraphBackground);
 
 		//this is for detecting key events
 		addKeyListener(new CanvasKeyListener(this));

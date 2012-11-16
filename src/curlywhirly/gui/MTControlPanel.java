@@ -24,15 +24,6 @@ public class MTControlPanel extends JPanel implements ActionListener
 		initComponents();
 		this.frame = frame;
 
-		// Top panel components
-		jPanel3.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.MTControlPanel.jPanel3.title")));
-
-		bgCombo.setModel(new DefaultComboBoxModel<String>(new String[] {
-			RB.getString("gui.MTControlPanel.black"),
-			RB.getString("gui.MTControlPanel.darkGrey"),
-			RB.getString("gui.MTControlPanel.lightGrey"),
-			RB.getString("gui.MTControlPanel.white") }));
-
 		// Middle panel components
 		jPanel1.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.MTControlPanel.jPanel1.title")));
 
@@ -223,13 +214,6 @@ public class MTControlPanel extends JPanel implements ActionListener
 		}
 	}
 
-	private void bgComboActionPerformed(java.awt.event.ActionEvent evt)
-	{
-		int bgColour = bgCombo.getSelectedIndex();
-		frame.canvas3D.setBackgroundColour(bgColour);
-
-	}
-
 	private void resetViewButtonActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		frame.canvas3D.resetOriginalView();
@@ -294,8 +278,6 @@ public class MTControlPanel extends JPanel implements ActionListener
         jScrollPane1 = new javax.swing.JScrollPane();
         selectorList = new javax.swing.JList<String>();
         schemeSelectorCombo = new javax.swing.JComboBox<String>();
-        jPanel3 = new javax.swing.JPanel();
-        bgCombo = new javax.swing.JComboBox<String>();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Display controls:"));
 
@@ -457,7 +439,7 @@ public class MTControlPanel extends JPanel implements ActionListener
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
                     .addComponent(resetColoursButton, javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(schemeSelectorCombo, javax.swing.GroupLayout.Alignment.LEADING, 0, 169, Short.MAX_VALUE)
+                    .addComponent(schemeSelectorCombo, javax.swing.GroupLayout.Alignment.LEADING, 0, 173, Short.MAX_VALUE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -468,34 +450,9 @@ public class MTControlPanel extends JPanel implements ActionListener
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(resetColoursButton)
-                .addContainerGap())
-        );
-
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Select background colour:"));
-
-        bgCombo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bgComboActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(bgCombo, 0, 169, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(bgCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -506,17 +463,14 @@ public class MTControlPanel extends JPanel implements ActionListener
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -580,7 +534,6 @@ public class MTControlPanel extends JPanel implements ActionListener
 	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> bgCombo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -590,7 +543,6 @@ public class MTControlPanel extends JPanel implements ActionListener
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton resetColoursButton;
     private javax.swing.JButton resetViewButton;

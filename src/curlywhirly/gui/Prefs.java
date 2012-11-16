@@ -42,4 +42,7 @@ public class Prefs extends XMLPreferences
 
 	// When to check for updates
 	public static int guiUpdateSchedule = Install4j.STARTUP;
+
+	// Graph background color
+	public static int guiGraphBackground = 0;
 }
