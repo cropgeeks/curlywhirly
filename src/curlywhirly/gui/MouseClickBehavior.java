@@ -8,6 +8,7 @@ import javax.media.j3d.*;
 
 import com.sun.j3d.utils.geometry.*;
 import com.sun.j3d.utils.picking.*;
+import java.net.URLEncoder;
 
 /**
  * Behaviour class that listens for mouseover on marker rings (cylinders) and highlights these in a different colour as well as pops up a label next to them
@@ -102,9 +103,21 @@ public class MouseClickBehavior extends Behavior
 											//now we can open a web browser with the stored URL and the current label as a parameter
 											if(CurlyWhirly.dataAnnotationURL != null)
 											{
-												String url = CurlyWhirly.dataAnnotationURL + dataEntryLabel;
-//												System.out.println("opening URL " + url);
-												GUIUtils.visitURL(url);
+												try
+												{
+													String objName = URLEncoder.encode(dataEntryLabel, "UTF-8");
+													String url = CurlyWhirly.dataAnnotationURL.replace("$DATA", objName);
+													if (url.indexOf("?") == -1)
+														url += "?application=curlywhirly";
+													else
+														url += "&application=curlywhirly";
+
+													GUIUtils.visitURL(url);
+												}
+												catch (Exception e)
+												{
+													e.printStackTrace();
+												}
 											}
 										}
 									}
