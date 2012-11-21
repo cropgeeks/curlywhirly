@@ -17,7 +17,6 @@ public class DataLoader
 	final String categoryHeaderPrefix = "categories:";
 	final String unclassifiedCategoriesStr = "unclassified";
 	final String commentCharacter = "#";
-	final String urlString = "URL=";
 
 
 	ArrayList<String> comments = new ArrayList<String>();
@@ -95,16 +94,23 @@ public class DataLoader
 	{
 		for (String comment : comments)
 		{
-			//check for a data annotation URL
-			if(comment.startsWith((commentCharacter+urlString)))
+			try
 			{
-				String url = comment.substring((commentCharacter.length() + urlString.length()));
-				//trim it in case there are any whitespace etc chars
-				url = url.trim();
-				//store this as the system wide url for this dataset
-				CurlyWhirly.dataAnnotationURL = url;
-				//and update the dialog box for the URLs in case the user wants to change it
-				CurlyWhirly.menuBar.urlEntryForm.getDataURLTextField().setText(url);
+				String key = comment.substring(1, comment.indexOf("=")).trim();
+				String value = comment.substring(comment.indexOf("=")+1).trim();
+
+				// cwDatabaseSearch = a URL for querying line information
+				if (key.equals("cwDatabaseSearch"))
+				{
+					CurlyWhirly.dataAnnotationURL = value;
+
+					//and update the dialog box for the URLs in case the user wants to change it
+//					CurlyWhirly.menuBar.urlEntryForm.getDataURLTextField().setText(value);
+				}
+			}
+			catch (Exception e)
+			{
+				System.out.println("Invalid header: " + comment);
 			}
 		}
 	}
