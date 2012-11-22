@@ -36,6 +36,15 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 
 	MovieAssembleDialog movieAssembleDialog;
 
+	// These class variables were defined within the body of the class
+
+	Object waitFileSync = new Object();
+	boolean fileDone = false;
+	boolean fileSuccess = true;
+
+	Object waitSync = new Object();
+	boolean stateTransitionOK = true;
+
 	public JpegImagesToMovie(CurlyWhirly frame, String videoFormatEncoding, String contentType, int canvasWidth, int canvasHeight, int animationTimeSecs, int frameRate, File imageDirectory, File movieFile)
 	{
 		this.frame = frame;
@@ -54,7 +63,6 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 	{
 		try
 		{
-
 			// this is where we will write the movie
 			URL outputURL = movieFile.toURI().toURL();
 
@@ -189,9 +197,6 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 
 		try
 		{
-			if (true)
-				throw new Exception();
-
 			dsink = Manager.createDataSink(ds, outML);
 			dsink.open();
 		}
@@ -207,9 +212,6 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 
 		return dsink;
 	}
-
-	Object waitSync = new Object();
-	boolean stateTransitionOK = true;
 
 	/**
 	 * Block until the processor has transitioned to the given state. Return false if the transition failed.
@@ -258,10 +260,6 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 			evt.getSourceController().close();
 		}
 	}
-
-	Object waitFileSync = new Object();
-	boolean fileDone = false;
-	boolean fileSuccess = true;
 
 	/**
 	 * Block until file writing is done.
@@ -312,7 +310,6 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 	 */
 	static MediaLocator createMediaLocator(String url)
 	{
-
 		MediaLocator ml;
 
 		if (url.indexOf(":") > 0 && (ml = new MediaLocator(url)) != null)
@@ -338,13 +335,11 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 	 */
 	class ImageDataSource extends PullBufferDataSource
 	{
-
-		ImageSourceStream streams[];
+		ImageSourceStream stream;
 
 		ImageDataSource(int width, int height, int frameRate, ArrayList<String> images)
 		{
-			streams = new ImageSourceStream[1];
-			streams[0] = new ImageSourceStream(width, height, frameRate, images);
+			stream = new ImageSourceStream(width, height, frameRate, images);
 		}
 
 		public void setLocator(MediaLocator source)
@@ -385,7 +380,7 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 		 */
 		public PullBufferStream[] getStreams()
 		{
-			return streams;
+			return new PullBufferStream[] { stream };
 		}
 
 		/**
@@ -413,7 +408,6 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 	 */
 	class ImageSourceStream implements PullBufferStream
 	{
-
 		ArrayList<String> images;
 		int width, height;
 		VideoFormat format;
@@ -423,7 +417,6 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 
 		long seqNo = 1;
 		float percentIncrement = 0;
-
 
 		public ImageSourceStream(int width, int height, int frameRate, ArrayList<String> images)
 		{

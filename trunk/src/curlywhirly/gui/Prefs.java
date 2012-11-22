@@ -4,8 +4,6 @@ import curlywhirly.controller.*;
 
 import scri.commons.gui.*;
 
-import javax.swing.*;
-
 public class Prefs extends XMLPreferences
 {
 	//the number of the last version released
@@ -21,8 +19,7 @@ public class Prefs extends XMLPreferences
 
 	// last "looked at" location when file browsing
 	// (default location to user's home, my documents, etc...)
-	public static String lastDir = ""
-		+ new JFileChooser().getFileSystemView().getDefaultDirectory();
+	public static String guiCurrentDir = "";
 
 	// The width, height, location and maximized status of the main window
 	public static int guiWinMainWidth = 900;
@@ -45,4 +42,7 @@ public class Prefs extends XMLPreferences
 
 	// Graph background color
 	public static int guiGraphBackground = 0;
+
+	public static int guiMovieCaptureFrameRate = 30;
+	public static int guiMovieCaptureSpinSpeedIndex = 1;
 }

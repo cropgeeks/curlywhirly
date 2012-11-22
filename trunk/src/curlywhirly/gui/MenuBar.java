@@ -27,13 +27,11 @@ public class MenuBar extends JMenuBar implements ActionListener
 	CurlyWhirly frame;
 	JFileChooser fc;
 //	DataLoadingDialog dataLoadingDialog;
-	public MovieCaptureDialog movieCaptureDialog;
 	public URLEntryForm urlEntryForm;
 
 	public MenuBar(CurlyWhirly frame)
 	{
 		this.frame = frame;
-		movieCaptureDialog = new MovieCaptureDialog(frame,true);
 		urlEntryForm = new URLEntryForm(frame, true);
 		init();
 	}
@@ -131,12 +129,12 @@ public class MenuBar extends JMenuBar implements ActionListener
 		if (src.equals(openFileItem))
 		{
 			// file chooser
-			fc = new JFileChooser(Prefs.lastDir);
+			fc = new JFileChooser(Prefs.guiCurrentDir);
 
 			int returnVal = fc.showOpenDialog(frame);
 			if (returnVal == JFileChooser.APPROVE_OPTION)
 			{
-				Prefs.lastDir = "" + fc.getSelectedFile().getParent();
+				Prefs.guiCurrentDir = "" + fc.getSelectedFile().getParent();
 
 				CurlyWhirly.dataLoader = new DataLoader();
 				CurlyWhirly.dataLoader.loadDataInThread(fc.getSelectedFile());
@@ -156,16 +154,7 @@ public class MenuBar extends JMenuBar implements ActionListener
 			new ScreenCaptureThread(new File(System.getProperty("user.dir")+System.getProperty("file.separator") +
 							"curlywhirly_screenshot.png"),frame,"png",fc).start();
 		}
-
-		else if (src.equals(movieItem))
-		{
-			movieCaptureDialog.setLocationRelativeTo(frame);
-			movieCaptureDialog.updateFileFileSize();
-			movieCaptureDialog.getSavedFileTF().setText("");
-			movieCaptureDialog.movieFile = null;
-			movieCaptureDialog.setVisible(true);
-		}
-
+		
 		else if (src.equals(dataURLItem))
 		{
 			urlEntryForm.setLocationRelativeTo(frame);
