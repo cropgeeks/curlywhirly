@@ -34,40 +34,40 @@ class WinMainToolBar extends JToolBar implements ActionListener
 		open = (JButton) getButton(false,
 			RB.getString("gui.WinMainToolBar.open"),
 			RB.getString("gui.WinMainToolBar.openTT"),
-			Icons2.getIcon("OPEN"));
+			Icons.getIcon("OPEN"));
 
 		sample = (JButton) getButton(false, null,
 			RB.getString("gui.WinMainToolBar.sampleTT"),
-			Icons2.getIcon("SAMPLE"));
+			Icons.getIcon("SAMPLE"));
 
 		reset = (JButton) getButton(false,
 			RB.getString("gui.WinMainToolBar.reset"),
 			RB.getString("gui.WinMainToolBar.resetTT"),
-			Icons2.getIcon("RESET"));
+			Icons.getIcon("RESET"));
 
 		spin = (JToggleButton) getButton(true,
 			RB.getString("gui.WinMainToolBar.spin"),
 			RB.getString("gui.WinMainToolBar.spinTT"),
-			Icons2.getIcon("SPIN"));
+			Icons.getIcon("SPIN"));
 
 		screenshot = (JButton) getButton(false,
 			RB.getString("gui.WinMainToolBar.screenshot"),
 			RB.getString("gui.WinMainToolBar.screenshotTT"),
-			Icons2.getIcon("SCREENSHOT"));
+			Icons.getIcon("SCREENSHOT"));
 
 		movie = (JButton) getButton(false,
 			RB.getString("gui.WinMainToolBar.movie"),
 			RB.getString("gui.WinMainToolBar.movieTT"),
-			Icons2.getIcon("MOVIE"));
+			Icons.getIcon("MOVIE"));
 
 		prefs = (JButton) getButton(false,
 			RB.getString("gui.WinMainToolBar.prefs"),
 			RB.getString("gui.WinMainToolBar.prefsTT"),
-			Icons2.getIcon("PREFS"));
+			Icons.getIcon("PREFS"));
 
 		about = (JButton) getButton(false, null,
 			RB.getString("gui.WinMainToolBar.aboutTT"),
-			Icons2.getIcon("HELP"));
+			Icons.getIcon("HELP"));
 
 
 		if (SystemUtils.isMacOS() == false)

@@ -11,6 +11,8 @@ import javax.swing.*;
 
 import curlywhirly.controller.*;
 
+import scri.commons.gui.*;
+
 class AboutPanelNB extends JPanel implements ActionListener
 {
 	public AboutPanelNB()
@@ -35,9 +37,9 @@ class AboutPanelNB extends JPanel implements ActionListener
 		localeLabel.setText("Current locale: " + java.util.Locale.getDefault());
 
 		jhiIcon.setText("");
-		jhiIcon.setIcon(Icons2.getIcon("ABOUT"));
+		jhiIcon.setIcon(Icons.getIcon("ABOUT"));
 		cimmytIcon.setText("");
-		cimmytIcon.setIcon(Icons2.getIcon("ABOUT-MASAGRO"));
+		cimmytIcon.setIcon(Icons.getIcon("ABOUT-MASAGRO"));
 	}
 
 	private void initWebStuff()

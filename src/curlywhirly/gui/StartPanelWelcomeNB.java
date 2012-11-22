@@ -24,8 +24,8 @@ public class StartPanelWelcomeNB extends JPanel implements ActionListener
 		feedbackLabel.setText(RB.getString("gui.NBStartWelcomePanel.panel.feedback"));
 		twitterLabel.setText(RB.getString("gui.NBStartWelcomePanel.panel.twitter"));
 
-		feedbackLabel.setIcon(Icons2.getIcon("FEEDBACK"));
-		twitterLabel.setIcon(Icons2.getIcon("TWITTER"));
+		feedbackLabel.setIcon(Icons.getIcon("FEEDBACK"));
+		twitterLabel.setIcon(Icons.getIcon("TWITTER"));
 		feedbackLabel.addActionListener(this);
 		twitterLabel.addActionListener(this);
     }

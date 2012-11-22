@@ -61,7 +61,7 @@ class StartPanel extends JPanel
 
 	private static class LogoPanel extends JPanel
 	{
-		private static ImageIcon logo = Icons2.getIcon("HUTTONLARGE");
+		private static ImageIcon logo = Icons.getIcon("HUTTONLARGE");
 
 		LogoPanel(LayoutManager lm)
 		{
