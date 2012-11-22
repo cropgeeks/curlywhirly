@@ -66,8 +66,7 @@ public class CurlyWhirly extends JFrame
 			e.printStackTrace();
 		}
 
-		Icons2.initialize("/res/icons", ".png");
-
+		Icons.initialize("/res/icons", ".png");
 		RB.initialize(Prefs.localeText, "res.text.curlywhirly");
 
 		curlyWhirly = new CurlyWhirly();
@@ -101,7 +100,7 @@ public class CurlyWhirly extends JFrame
 		if (Prefs.guiWinMainMaximized)
 			setExtendedState(Frame.MAXIMIZED_BOTH);
 
-		setIconImage(Icons2.getIcon("curlywurly_icon32px").getImage());
+		setIconImage(Icons.getIcon("curlywurly_icon32px").getImage());
 
 
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);

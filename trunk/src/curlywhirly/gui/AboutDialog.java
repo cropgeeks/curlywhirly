@@ -61,7 +61,7 @@ public class AboutDialog extends JDialog implements ActionListener
 		AvatarPanel()
 		{
 			setBackground(Color.white);
-			add(new JLabel(Icons2.getIcon("AVATARS")));
+			add(new JLabel(Icons.getIcon("AVATARS")));
 
 			addMouseMotionListener(new MouseMotionAdapter()
 			{

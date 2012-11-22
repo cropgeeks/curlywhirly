@@ -14,6 +14,8 @@ import com.sun.j3d.utils.universe.*;
 
 import curlywhirly.data.*;
 
+import scri.commons.gui.*;
+
 public class MainCanvas extends Canvas3D
 {
 	// variables to adjust manually for now
@@ -115,6 +117,8 @@ public class MainCanvas extends Canvas3D
 	//this boolean keeps tab of whether anything is being moused over or not
 	public boolean isMouseOver = false;
 	public DataSphere mouseOverSphere = null;
+
+	ImageIcon ABOUT = Icons.getIcon("ABOUT-ALL");
 
 	public MainCanvas(CurlyWhirly frame)
 	{
@@ -671,8 +675,6 @@ public class MainCanvas extends Canvas3D
 						template);
 		return gcfg;
 	}
-
-	ImageIcon ABOUT = Icons2.getIcon("ABOUT-ALL");
 
 	@Override
 	public void paint(Graphics g)
