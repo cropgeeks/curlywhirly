@@ -95,12 +95,12 @@ class WinMainToolBar extends JToolBar implements ActionListener
 		if (src.equals(open))
 		{
 			// file chooser
-			JFileChooser fc = new JFileChooser(Prefs.lastDir);
+			JFileChooser fc = new JFileChooser(Prefs.guiCurrentDir);
 
 			int returnVal = fc.showOpenDialog(frame);
 			if (returnVal == JFileChooser.APPROVE_OPTION)
 			{
-				Prefs.lastDir = "" + fc.getSelectedFile().getParent();
+				Prefs.guiCurrentDir = "" + fc.getSelectedFile().getParent();
 
 				CurlyWhirly.dataLoader = new DataLoader();
 				CurlyWhirly.dataLoader.loadDataInThread(fc.getSelectedFile());
@@ -135,14 +135,7 @@ class WinMainToolBar extends JToolBar implements ActionListener
 		}
 
 		else if (src.equals(movie))
-		{
-			MovieCaptureDialog dialog = new MovieCaptureDialog(frame, true);
-			dialog.setLocationRelativeTo(frame);
-			dialog.updateFileFileSize();
-			dialog.getSavedFileTF().setText("");
-			dialog.movieFile = null;
-			dialog.setVisible(true);
-		}
+			new MovieCaptureDialog(frame);
 
 		else if (src.equals(prefs))
 		{

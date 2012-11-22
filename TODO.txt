@@ -41,3 +41,6 @@ MTControlPanel								selectorListValueChanged						It just needs looking at...
 MainCanvas									Left explicit import							Import collision on java.awt.list and java.util.list.
 MainCanvas									updateGraph										Raw List (selectedCategories) and selectedObjects is an Object[].
 MovieAssembleDialog							main 											Shouldn't really have a main.
+
+
+MovieCaptureDialog							captureMovie()									Refactor so that Movie isn't being captured from within the dialog.
