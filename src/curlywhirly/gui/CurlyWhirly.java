@@ -53,6 +53,15 @@ public class CurlyWhirly extends JFrame
 		// OS X: This has to be set before anything else
 		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "CurlyWhirly");
 
+		// Some handy debug output...
+		System.out.println("CurlyWhirly " + Install4j.getVersion() + " on "
+			+ System.getProperty("os.name")	+ " (" + System.getProperty("os.arch") + ")");
+		System.out.println("Using " + prefsFile);
+		java.util.Map vuMap = javax.media.j3d.VirtualUniverse.getProperties();
+		System.out.println("Runtime Java Version = " + System.getProperty("java.version"));
+		System.out.println("Java 3D version = " + vuMap.get("j3d.version"));
+		System.out.println("Renderer = " + vuMap.get("j3d.renderer") + "\n");
+
 		try
 		{
 			// preferences

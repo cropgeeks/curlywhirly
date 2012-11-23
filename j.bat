@@ -1,6 +1,6 @@
 @ECHO OFF
 
-SET PATH=system;%PATH%;
+SET PATH=system\windows_x86;%PATH%;
 
 SET LIBS=lib\
 SET LIBS=%LIBS%;lib\gluegen-rt.jar

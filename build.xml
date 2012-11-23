@@ -41,7 +41,7 @@
 				<exclude name="**/*Test.class"/>
 			</fileset>
 			<manifest>
-				<attribute name="Main-Class" value="graphviewer3d.gui.GraphViewerFrame"/>
+				<attribute name="Main-Class" value="curlywhirly.gui.CurlyWhirly"/>
 				<attribute name="Class-Path"
 					value="gluegen-rt.jar
 						i4jruntime.jar
