@@ -63,12 +63,10 @@ class AboutPanelNB extends JPanel implements ActionListener
 
 	public void actionPerformed(ActionEvent e)
 	{
-		final String flapHTML = "http://bioinf.hutton.ac.uk/flapjack";
+		final String curlyHTML = "http://bioinf.hutton.ac.uk/curlywhirly";
 
 		if(e.getSource() == webLabel)
-		{
-			CWUtils.visitURL(flapHTML);
-		}
+			CWUtils.visitURL(curlyHTML);
 	}
 
     /** This method is called from within the constructor to
