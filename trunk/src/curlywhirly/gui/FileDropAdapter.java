@@ -46,6 +46,8 @@ public class FileDropAdapter extends DropTargetAdapter
 			}
 
 			dtde.dropComplete(true);
+			Actions.openedData();
+			winMain.controlPanel.toggleEnabled(true);
 		}
 		catch (Exception e) {}
 	}

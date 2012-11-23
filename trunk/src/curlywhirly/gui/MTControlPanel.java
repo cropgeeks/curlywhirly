@@ -50,6 +50,8 @@ public class MTControlPanel extends JPanel implements ActionListener
 			showLabelsCheckBox.setSelected(true);
 		else
 			showLabelsCheckBox.setSelected(false);
+
+		toggleEnabled(false);
 	}
 
 	public void addMouseAdapterToSelectorList()
@@ -490,6 +492,32 @@ public class MTControlPanel extends JPanel implements ActionListener
 			clearAllCategorySelections();
 	}
 
+	public javax.swing.JComboBox getSchemeSelectorCombo()
+	{
+		return schemeSelectorCombo;
+	}
+
+	void toggleEnabled(boolean enabled)
+	{
+		jLabel1.setEnabled(enabled);
+		jLabel2.setEnabled(enabled);
+		jLabel3.setEnabled(enabled);
+		jLabel4.setEnabled(enabled);
+		jLabel5.setEnabled(enabled);
+		jLabel6.setEnabled(enabled);
+		jLabel7.setEnabled(enabled);
+		jPanel1.setEnabled(enabled);
+		jPanel2.setEnabled(enabled);
+		resetColoursButton.setEnabled(enabled);
+		schemeSelectorCombo.setEnabled(enabled);
+		selectorList.setEnabled(enabled);
+		showLabelsCheckBox.setEnabled(enabled);
+		spinSpeedSlider.setEnabled(enabled);
+		xCombo.setEnabled(enabled);
+		yCombo.setEnabled(enabled);
+		zCombo.setEnabled(enabled);
+	}
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -511,8 +539,4 @@ public class MTControlPanel extends JPanel implements ActionListener
     private javax.swing.JComboBox<String> zCombo;
     // End of variables declaration//GEN-END:variables
 
-	public javax.swing.JComboBox getSchemeSelectorCombo()
-	{
-		return schemeSelectorCombo;
-	}
 }

@@ -1,7 +1,6 @@
 package curlywhirly.gui;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
 
@@ -10,7 +9,7 @@ import curlywhirly.data.*;
 
 import scri.commons.gui.*;
 
-class WinMainToolBar extends JToolBar implements ActionListener
+class WinMainToolBar extends JToolBar
 {
 	private CurlyWhirly frame;
 	private DataLoadingDialog dataLoadingDialog;
@@ -31,43 +30,45 @@ class WinMainToolBar extends JToolBar implements ActionListener
 		setFloatable(false);
 //		setBorderPainted(false);
 
+		new Actions(frame);
+
 		open = (JButton) getButton(false,
 			RB.getString("gui.WinMainToolBar.open"),
 			RB.getString("gui.WinMainToolBar.openTT"),
-			Icons.getIcon("OPEN"));
+			Icons.getIcon("OPEN"), Actions.fileOpen);
 
 		sample = (JButton) getButton(false, null,
 			RB.getString("gui.WinMainToolBar.sampleTT"),
-			Icons.getIcon("SAMPLE"));
+			Icons.getIcon("SAMPLE"), Actions.fileSample);
 
 		reset = (JButton) getButton(false,
 			RB.getString("gui.WinMainToolBar.reset"),
 			RB.getString("gui.WinMainToolBar.resetTT"),
-			Icons.getIcon("RESET"));
+			Icons.getIcon("RESET"), Actions.reset);
 
 		spin = (JToggleButton) getButton(true,
 			RB.getString("gui.WinMainToolBar.spin"),
 			RB.getString("gui.WinMainToolBar.spinTT"),
-			Icons.getIcon("SPIN"));
+			Icons.getIcon("SPIN"), Actions.spin);
 
 		screenshot = (JButton) getButton(false,
 			RB.getString("gui.WinMainToolBar.screenshot"),
 			RB.getString("gui.WinMainToolBar.screenshotTT"),
-			Icons.getIcon("SCREENSHOT"));
+			Icons.getIcon("SCREENSHOT"), Actions.screenshot);
 
 		movie = (JButton) getButton(false,
 			RB.getString("gui.WinMainToolBar.movie"),
 			RB.getString("gui.WinMainToolBar.movieTT"),
-			Icons.getIcon("MOVIE"));
+			Icons.getIcon("MOVIE"), Actions.captureMovie);
 
 		prefs = (JButton) getButton(false,
 			RB.getString("gui.WinMainToolBar.prefs"),
 			RB.getString("gui.WinMainToolBar.prefsTT"),
-			Icons.getIcon("PREFS"));
+			Icons.getIcon("PREFS"), Actions.showPrefs);
 
 		about = (JButton) getButton(false, null,
 			RB.getString("gui.WinMainToolBar.aboutTT"),
-			Icons.getIcon("HELP"));
+			Icons.getIcon("HELP"), Actions.showAbout);
 
 
 		if (SystemUtils.isMacOS() == false)
@@ -88,76 +89,107 @@ class WinMainToolBar extends JToolBar implements ActionListener
 		add(new JLabel(" "));
 	}
 
-	public void actionPerformed(ActionEvent e)
+	void open()
 	{
-		Object src = e.getSource();
+		// file chooser
+		JFileChooser fc = new JFileChooser(Prefs.guiCurrentDir);
 
-		if (src.equals(open))
+		int returnVal = fc.showOpenDialog(frame);
+		if (returnVal == JFileChooser.APPROVE_OPTION)
 		{
-			// file chooser
-			JFileChooser fc = new JFileChooser(Prefs.guiCurrentDir);
+			Prefs.guiCurrentDir = "" + fc.getSelectedFile().getParent();
 
-			int returnVal = fc.showOpenDialog(frame);
-			if (returnVal == JFileChooser.APPROVE_OPTION)
-			{
-				Prefs.guiCurrentDir = "" + fc.getSelectedFile().getParent();
-
-				CurlyWhirly.dataLoader = new DataLoader();
-				CurlyWhirly.dataLoader.loadDataInThread(fc.getSelectedFile());
-			}
-		}
-
-		else if (src.equals(sample))
-		{
-			// load the example dataset provided with the application
 			CurlyWhirly.dataLoader = new DataLoader();
-			CurlyWhirly.dataLoader.loadDataInThread(new File("data/randomData.txt"));
+			CurlyWhirly.dataLoader.loadDataInThread(fc.getSelectedFile());
+			Actions.openedData();
+			frame.controlPanel.toggleEnabled(true);
 		}
+	}
 
-		else if (src.equals(reset))
-		{
-			frame.canvas3D.resetOriginalView();
-		}
+	void openSample()
+	{
+		// load the example dataset provided with the application
+		CurlyWhirly.dataLoader = new DataLoader();
+		CurlyWhirly.dataLoader.loadDataInThread(new File("data/randomData.txt"));
+		Actions.openedData();
+		frame.controlPanel.toggleEnabled(true);
+	}
 
-		else if (src.equals(spin))
-		{
-			if (spin.isSelected())
-				frame.canvas3D.spin();
-			else
-				frame.canvas3D.stopSpinning();
-		}
+	void reset()
+	{
+		frame.canvas3D.resetOriginalView();
+	}
 
-		else if (src.equals(screenshot))
-		{
-			//save the canvas to this file
-			new ScreenCaptureThread(new File(System.getProperty("user.dir")+System.getProperty("file.separator") +
-				"curlywhirly_screenshot.png"),frame,"png",new JFileChooser()).start();
-		}
+	void spin()
+	{
+		if (spin.isSelected())
+			frame.canvas3D.spin();
+		else
+			frame.canvas3D.stopSpinning();
+	}
 
-		else if (src.equals(movie))
-			new MovieCaptureDialog(frame);
+	void screenshot()
+	{
+		//save the canvas to this file
+		new ScreenCaptureThread(new File(System.getProperty("user.dir")+System.getProperty("file.separator") +
+			"curlywhirly_screenshot.png"),frame,"png",new JFileChooser()).start();
+	}
 
-		else if (src.equals(prefs))
-		{
-			PreferencesDialog dialog = new PreferencesDialog(frame);
-		}
+	void captureMovie()
+	{
+		new MovieCaptureDialog(frame);
+	}
 
-		else if (src.equals(about))
-		{
-			new AboutDialog(frame, true);
-		}
+	void showPrefs()
+	{
+		PreferencesDialog dialog = new PreferencesDialog(frame);
+	}
+
+	void showAbout()
+	{
+		new AboutDialog(frame, true);
 	}
 
 	// Utility method to help create the buttons. Sets their text, tooltip, and
 	// icon, as well as adding actionListener, defining margings, etc.
-	AbstractButton getButton(boolean toggle, String title, String tt, ImageIcon icon)
+//	AbstractButton getButton(boolean toggle, String title, String tt, ImageIcon icon)
+//	{
+//		AbstractButton button = null;
+//
+//		if (toggle)
+//			button = new JToggleButton();
+//		else
+//			button = new JButton();
+//
+//		button.setText(title != null ? title : "");
+//		button.setToolTipText(tt);
+//		button.setIcon(icon);
+//		button.setFocusPainted(false);
+//		button.setFocusable(false);
+//		button.setMargin(new Insets(2, 1, 2, 1));
+//		button.addActionListener(this);
+//
+//		if (SystemUtils.isMacOS())
+//		{
+//			button.putClientProperty("JButton.buttonType", "bevel");
+//			button.setMargin(new Insets(-2, -1, -2, -1));
+//		}
+//
+//		return button;
+//	}
+
+
+	// Utility method to help create the buttons. Sets their text, tooltip, and
+	// icon, as well as adding actionListener, defining margings, etc.
+	public static AbstractButton getButton(boolean toggle, String title,
+			String tt, ImageIcon icon, Action a)
 	{
 		AbstractButton button = null;
 
 		if (toggle)
-			button = new JToggleButton();
+			button = new JToggleButton(a);
 		else
-			button = new JButton();
+			button = new JButton(a);
 
 		button.setText(title != null ? title : "");
 		button.setToolTipText(tt);
@@ -165,7 +197,6 @@ class WinMainToolBar extends JToolBar implements ActionListener
 		button.setFocusPainted(false);
 		button.setFocusable(false);
 		button.setMargin(new Insets(2, 1, 2, 1));
-		button.addActionListener(this);
 
 		if (SystemUtils.isMacOS())
 		{
