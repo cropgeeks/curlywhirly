@@ -1,27 +1,18 @@
 <project name="CurlyWhirly" default="compile" basedir=".">
 
 	<property name="src" location="src"/>
-	<property name="classes" location="classes"/>
-	<property name="lib" location="lib"/>
 	<property name="res" location="res"/>
-	<property name="curlywhirly.jar" value="curlywhirly.jar"/>
+	<property name="lib" location="lib"/>
+	<property name="classes" location="classes"/>
+
+	<property name="curlywhirly.jar" value="${lib}/curlywhirly.jar"/>
 
 	<target name="init">
-		<mkdir dir="${classes}"/>
-	</target>
-
-	<target name="clean">
-		<delete includeemptydirs="true">
-			<fileset dir="${classes}" includes="**/*"/>
-			<fileset file="${curlywhirly.jar}"/>
-		</delete>
 	</target>
 
 	<path id="project.classpath">
-		<fileset dir="${lib}">
-			<include name="**/*.jar"/>
-			<exclude name="**/${curlywhirly.jar}"/>
-		</fileset>
+		<pathelement path="${classes}"/>
+		<fileset dir="${lib}"/>
 	</path>
 
 	<target name="compile" depends="init">
@@ -32,12 +23,36 @@
 		</javac>
 	</target>
 
+	<target name="clean">
+		<delete includeemptydirs="true">
+			<fileset dir="${classes}" includes="**/*"/>
+			<fileset file="${curlywhirly.jar}"/>
+		</delete>
+	</target>
+
 	<target name="jar" depends="clean, compile">
+		<condition property="i4j.version" value="x.xx.xx.xx">
+			<equals arg1="${i4j.version}" arg2="${i4j.version}"/>
+		</condition>
+
 		<jar jarfile="${curlywhirly.jar}">
-			<fileset dir="${classes}"/>
 			<zipfileset dir="${res}" prefix="res"/>
+			<fileset dir="${classes}">
+				<exclude name="**/*Test.class"/>
+			</fileset>
 			<manifest>
 				<attribute name="Main-Class" value="graphviewer3d.gui.GraphViewerFrame"/>
+				<attribute name="Class-Path"
+					value="gluegen-rt.jar
+						i4jruntime.jar
+						j3dcore.jar
+						j3dutils.jar
+						jmf.jar
+						jogl.jar
+						scri-commons.jar
+						osxadapter.jar
+						vecmath.jar"/>
+				<attribute name="Implementation-Version" value="${i4j.version}"/>
 			</manifest>
 		</jar>
 	</target>
@@ -66,7 +81,5 @@
 		           winKeystorePassword="${password}"
 		           macKeystorePassword="${password}"/>
 	</target>
-
-
 
 </project>
