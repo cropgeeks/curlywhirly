@@ -122,6 +122,8 @@ public class CurlyWhirly extends JFrame
 				{
 					CurlyWhirly.dataLoader = new DataLoader();
 					CurlyWhirly.dataLoader.loadDataInThread(new File(initialFile));
+					Actions.openedData();
+					controlPanel.toggleEnabled(true);
 				}
 			}
 
