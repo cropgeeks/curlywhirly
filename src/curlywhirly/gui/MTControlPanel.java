@@ -25,24 +25,24 @@ public class MTControlPanel extends JPanel implements ActionListener
 		this.frame = frame;
 
 		// Middle panel components
-		jPanel1.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.MTControlPanel.jPanel1.title")));
+//		jPanel1.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.MTControlPanel.jPanel1.title")));
 
 		RB.setText(jLabel7, "gui.MTControlPanel.jLabel7");
 		RB.setText(jLabel1, "gui.MTControlPanel.jLabel1");
 		RB.setText(jLabel2, "gui.MTControlPanel.jLabel2");
 		RB.setText(jLabel3, "gui.MTControlPanel.jLabel3");
-		RB.setText(jLabel5, "gui.MTControlPanel.jLabel5");
-		RB.setText(jLabel6, "gui.MTControlPanel.jLabel6");
+//		RB.setText(jLabel5, "gui.MTControlPanel.jLabel5");
+//		RB.setText(jLabel6, "gui.MTControlPanel.jLabel6");
 		RB.setText(showLabelsCheckBox, "gui.MTControlPanel.showLabelsCheckBox");
 
 		// Bottom panel components
-		jPanel2.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.MTControlPanel.jPanel2.title")));
-		RB.setText(jLabel4, "gui.MTControlPanel.jLabel4");
+//		jPanel2.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.MTControlPanel.jPanel2.title")));
+//		RB.setText(jLabel4, "gui.MTControlPanel.jLabel4");
 		RB.setText(resetColoursButton, "gui.MTControlPanel.resetColoursButton");
 
 
-		if (SystemUtils.isMacOS())
-			jLabel4.setText("<html>Click to select. Use CMD+click for multiple selections.");
+//		if (SystemUtils.isMacOS())
+//			jLabel4.setText("<html>Click to select. Use CMD+click for multiple selections.");
 
 		addMouseAdapterToSelectorList();
 
@@ -239,28 +239,25 @@ public class MTControlPanel extends JPanel implements ActionListener
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        xCombo = new javax.swing.JComboBox<String>();
         jLabel2 = new javax.swing.JLabel();
+        xCombo = new javax.swing.JComboBox<String>();
         yCombo = new javax.swing.JComboBox<String>();
         jLabel3 = new javax.swing.JLabel();
         zCombo = new javax.swing.JComboBox<String>();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        spinSpeedSlider = new javax.swing.JSlider();
-        jLabel7 = new javax.swing.JLabel();
         showLabelsCheckBox = new javax.swing.JCheckBox();
-        jPanel2 = new javax.swing.JPanel();
-        resetColoursButton = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        schemeSelectorCombo = new javax.swing.JComboBox<String>();
         jScrollPane1 = new javax.swing.JScrollPane();
         selectorList = new javax.swing.JList<String>();
-        schemeSelectorCombo = new javax.swing.JComboBox<String>();
+        resetColoursButton = new javax.swing.JButton();
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Display controls:"));
+        jLabel7.setText("Data to display:");
 
         jLabel1.setText("x-axis:");
+
+        jLabel2.setText("y-axis:");
 
         xCombo.setBorder(null);
         xCombo.addActionListener(new java.awt.event.ActionListener() {
@@ -268,8 +265,6 @@ public class MTControlPanel extends JPanel implements ActionListener
                 MTControlPanel.this.actionPerformed(evt);
             }
         });
-
-        jLabel2.setText("y-axis:");
 
         yCombo.setBorder(null);
         yCombo.addActionListener(new java.awt.event.ActionListener() {
@@ -287,20 +282,6 @@ public class MTControlPanel extends JPanel implements ActionListener
             }
         });
 
-        jLabel5.setText("slow spin");
-
-        jLabel6.setText("fast spin");
-        jLabel6.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        jLabel6.setInheritsPopupMenu(false);
-
-        spinSpeedSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                spinSpeedSliderStateChanged(evt);
-            }
-        });
-
-        jLabel7.setText("Data to display:");
-
         showLabelsCheckBox.setText("Show labels on mouseover");
         showLabelsCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -308,73 +289,13 @@ public class MTControlPanel extends JPanel implements ActionListener
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(zCombo, 0, 136, Short.MAX_VALUE)
-                            .addComponent(yCombo, 0, 131, Short.MAX_VALUE)
-                            .addComponent(xCombo, 0, 131, Short.MAX_VALUE)))
-                    .addComponent(jLabel7)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(spinSpeedSlider, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel6)))
-                        .addGap(24, 24, 24))
-                    .addComponent(showLabelsCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(xCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(yCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(zCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spinSpeedSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(showLabelsCheckBox)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jLabel8.setText("Category scheme:");
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Select a category scheme:"));
-
-        resetColoursButton.setText("Reset selection");
-        resetColoursButton.addActionListener(new java.awt.event.ActionListener() {
+        schemeSelectorCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                resetColoursButtonActionPerformed(evt);
+                schemeSelectorComboActionPerformed(evt);
             }
         });
-
-        jLabel4.setText("<html>Single-click to select a category (multiple categories : CTRL+click) : ");
 
         selectorList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -383,37 +304,12 @@ public class MTControlPanel extends JPanel implements ActionListener
         });
         jScrollPane1.setViewportView(selectorList);
 
-        schemeSelectorCombo.addActionListener(new java.awt.event.ActionListener() {
+        resetColoursButton.setText("Reset selection");
+        resetColoursButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                schemeSelectorComboActionPerformed(evt);
+                resetColoursButtonActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
-                    .addComponent(resetColoursButton, javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(schemeSelectorCombo, javax.swing.GroupLayout.Alignment.LEADING, 0, 173, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addComponent(schemeSelectorCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(resetColoursButton)
-                .addContainerGap())
-        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -422,17 +318,55 @@ public class MTControlPanel extends JPanel implements ActionListener
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(yCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(zCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(xCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(showLabelsCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(schemeSelectorCombo, 0, 205, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8)
+                            .addComponent(resetColoursButton))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabel1)
+                    .addComponent(xCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabel2)
+                    .addComponent(yCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabel3)
+                    .addComponent(zCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(showLabelsCheckBox)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(schemeSelectorCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(resetColoursButton)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -502,17 +436,17 @@ public class MTControlPanel extends JPanel implements ActionListener
 		jLabel1.setEnabled(enabled);
 		jLabel2.setEnabled(enabled);
 		jLabel3.setEnabled(enabled);
-		jLabel4.setEnabled(enabled);
-		jLabel5.setEnabled(enabled);
-		jLabel6.setEnabled(enabled);
+//		jLabel4.setEnabled(enabled);
+//		jLabel5.setEnabled(enabled);
+//		jLabel6.setEnabled(enabled);
 		jLabel7.setEnabled(enabled);
-		jPanel1.setEnabled(enabled);
-		jPanel2.setEnabled(enabled);
+//		jPanel1.setEnabled(enabled);
+//		jPanel2.setEnabled(enabled);
 		resetColoursButton.setEnabled(enabled);
 		schemeSelectorCombo.setEnabled(enabled);
 		selectorList.setEnabled(enabled);
 		showLabelsCheckBox.setEnabled(enabled);
-		spinSpeedSlider.setEnabled(enabled);
+//		spinSpeedSlider.setEnabled(enabled);
 		xCombo.setEnabled(enabled);
 		yCombo.setEnabled(enabled);
 		zCombo.setEnabled(enabled);
@@ -522,18 +456,13 @@ public class MTControlPanel extends JPanel implements ActionListener
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton resetColoursButton;
     private javax.swing.JComboBox<String> schemeSelectorCombo;
     private javax.swing.JList<String> selectorList;
     private javax.swing.JCheckBox showLabelsCheckBox;
-    private javax.swing.JSlider spinSpeedSlider;
     private javax.swing.JComboBox<String> xCombo;
     private javax.swing.JComboBox<String> yCombo;
     private javax.swing.JComboBox<String> zCombo;

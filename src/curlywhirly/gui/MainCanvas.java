@@ -676,46 +676,6 @@ public class MainCanvas extends Canvas3D
 		return gcfg;
 	}
 
-	@Override
-	public void paint(Graphics g)
-	{
-		super.paint(g);
-
-		Graphics2D g2 = (Graphics2D)g;
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-		//if we don't have data loaded we just want to display a grey background and a label prompting the user to open a file
-		//label stuff
-		Font font = (new Font("SANS_SERIF", Font.PLAIN, 18));
-		g2.setFont(font);
-		FontMetrics fm = getFontMetrics(font);
-		String label = "Open a data file to start";
-		int stringWidth = fm.stringWidth(label);
-		int x = (getWidth()/2) - (stringWidth/2);
-		int y = getHeight()/2;
-
-		if(!frame.dataLoaded)
-		{
-			g2.setColor(Color.white);
-			g2.fillRect(0, 0, getWidth(), getHeight());
-
-			g2.setColor(openFileLabelColour);
-			g2.drawString(label, x, y);
-
-			int imgW = ABOUT.getIconWidth();
-			int canW = getWidth();
-
-			g2.drawImage(ABOUT.getImage(), (canW/2)-(imgW/2), getHeight()-100, null);
-		}
-	}
-
-	// Overriding repaint makes the worst flickering dissapear when we execute the postRender stuff on repaint
-	@Override
-	public void repaint()
-	{
-		Graphics2D g = (Graphics2D) getGraphics();
-		paint(g);
-	}
 
 	@Override
 	public void postRender()
