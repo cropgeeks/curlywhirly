@@ -1,9 +1,11 @@
 package curlywhirly.gui;
 
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
 import scri.commons.gui.*;
+import scri.commons.gui.matisse.*;
 
 class StartPanel extends JPanel
 {
@@ -12,7 +14,7 @@ class StartPanel extends JPanel
 		setBorder(BorderFactory.createLineBorder(new Color(119, 126, 143), 3));
 		setLayout(new BorderLayout());
 
-		JPanel logoPanel = new LogoPanel(new BorderLayout(0, 0));
+		JPanel panel = new LogoPanel(new BorderLayout(0, 0));
 
 		JPanel welcomePanel = new JPanel(new BorderLayout());
 		welcomePanel.setOpaque(false);
@@ -41,22 +43,57 @@ class StartPanel extends JPanel
 		pubPanel.add(new TitlePanel3(
 			RB.getString("gui.NBStartPublicationPanel.title")), BorderLayout.NORTH);
 		pubPanel.add(new StartPanelPublicationNB());
-
+*/
 		JPanel huttonPanel = new JPanel(new BorderLayout());
 		huttonPanel.setOpaque(false);
-		huttonPanel.add(pubPanel);
-		huttonPanel.add(getHuttonLabel(), BorderLayout.EAST);
+//		huttonPanel.add(pubPanel);
+		JPanel logoPanel = new JPanel(new BorderLayout(5, 0));
+		logoPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 15));
+		logoPanel.setOpaque(false);
+		logoPanel.add(getHuttonLabel(), BorderLayout.WEST);
+		logoPanel.add(getCIMMYTLabel(), BorderLayout.EAST);
+		huttonPanel.add(logoPanel, BorderLayout.EAST);
 
-		JPanel centrePanel = new JPanel(new GridLayout(1, 2, 0, 0));
-		centrePanel.setOpaque(false);
-		centrePanel.add(filePanel);
-		centrePanel.add(helpPanel);
-*/
-		logoPanel.add(welcomePanel, BorderLayout.NORTH);
-//		logoPanel.add(centrePanel, BorderLayout.CENTER);
-//		logoPanel.add(huttonPanel, BorderLayout.SOUTH);
+//		JPanel centrePanel = new JPanel(new GridLayout(1, 2, 0, 0));
+//		centrePanel.setOpaque(false);
+//		centrePanel.add(filePanel);
+//		centrePanel.add(helpPanel);
 
-		add(logoPanel);
+		panel.add(welcomePanel, BorderLayout.NORTH);
+//		panel.add(centrePanel, BorderLayout.CENTER);
+		panel.add(huttonPanel, BorderLayout.SOUTH);
+
+		add(panel);
+	}
+
+	private static JLabel getHuttonLabel()
+	{
+		HyperLinkLabel huttonLabel = new HyperLinkLabel();
+		huttonLabel.setIcon(Icons.getIcon("HUTTON"));
+		huttonLabel.setBorder(BorderFactory.createEmptyBorder(65, 10, 0, 10));
+
+		huttonLabel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GUIUtils.visitURL("http://www.hutton.ac.uk");
+			}
+		});
+
+		return huttonLabel;
+	}
+
+	private static JLabel getCIMMYTLabel()
+	{
+		HyperLinkLabel huttonLabel = new HyperLinkLabel();
+		huttonLabel.setIcon(Icons.getIcon("MASAGRO"));
+		huttonLabel.setBorder(BorderFactory.createEmptyBorder(65, 0, 0, 10));
+
+		huttonLabel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GUIUtils.visitURL("http://masagro.cimmyt.org");
+			}
+		});
+
+		return huttonLabel;
 	}
 
 	private static class LogoPanel extends JPanel

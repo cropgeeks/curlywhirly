@@ -118,7 +118,6 @@ public class MainCanvas extends Canvas3D
 	public boolean isMouseOver = false;
 	public DataSphere mouseOverSphere = null;
 
-	ImageIcon ABOUT = Icons.getIcon("ABOUT-ALL");
 
 	public MainCanvas(CurlyWhirly frame)
 	{
