@@ -89,7 +89,7 @@ public class MouseOverBehavior extends Behavior
 							{
 								CurlyWhirly.canvas3D.mouseOverX = x;
 								CurlyWhirly.canvas3D.mouseOverY = y;
-								CurlyWhirly.canvas3D.repaint();
+//								CurlyWhirly.canvas3D.repaint();
 							}
 							else
 							{
@@ -111,7 +111,7 @@ public class MouseOverBehavior extends Behavior
 											CurlyWhirly.canvas3D.mouseOverSphere = sphere;
 											CurlyWhirly.canvas3D.mouseOverX = x;
 											CurlyWhirly.canvas3D.mouseOverY = y;
-											CurlyWhirly.canvas3D.repaint();
+//											CurlyWhirly.canvas3D.repaint();
 
 
 											if (CurlyWhirly.dataAnnotationURL != null)
@@ -141,8 +141,8 @@ public class MouseOverBehavior extends Behavior
 							CurlyWhirly.canvas3D.mouseOverSphere = null;
 							CurlyWhirly.canvas3D.mouseOverX = -1;
 							CurlyWhirly.canvas3D.mouseOverY = -1;
-							if(CurlyWhirly.canvas3D.isMouseOver)
-								CurlyWhirly.canvas3D.repaint();
+//							if(CurlyWhirly.canvas3D.isMouseOver)
+//								CurlyWhirly.canvas3D.repaint();
 							CurlyWhirly.canvas3D.isMouseOver = false;
 							frame.statusBar.setDefaultText();
 

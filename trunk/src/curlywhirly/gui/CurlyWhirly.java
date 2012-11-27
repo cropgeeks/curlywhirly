@@ -18,6 +18,8 @@ public class CurlyWhirly extends JFrame
 {
 	public static DataSet dataSet;
 	public static MainCanvas canvas3D;
+	public static StartPanel startPanel;
+	public JSplitPane splitPane;
 
 	public int controlPanelWidth = 200;
 
@@ -89,6 +91,17 @@ public class CurlyWhirly extends JFrame
 
 		if (SystemUtils.isMacOS())
 			handleOSXStupidities();
+
+		// And use Nimbus for all non-Apple systems
+		else
+		{
+			try {
+
+			Nimbus.customizeNimbus();
+			}
+			catch (Exception e) {}
+//			winKey = RB.getString("gui.text.ctrl");
+		}
 
 		Install4j.doStartUpCheck();
 
@@ -201,18 +214,15 @@ public class CurlyWhirly extends JFrame
 		canvas3D = new MainCanvas(this);
 		canvas3D.setPreferredSize(new Dimension((Prefs.guiWinMainWidth-controlPanelWidth), Prefs.guiWinMainHeight));
 
+		startPanel = new StartPanel();
+
 		// main comp is split pane with control panel on the left and canvas on the right
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controlPanel, canvas3D);
-//		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controlPanel, new StartPanel());
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controlPanel, startPanel);
 		splitPane.setOneTouchExpandable(true);
 		add(splitPane);
 
 		//in the absence of data this creates an empty scene graph and we then paint a label onto the canvas that prompts the user to open a file
 		canvas3D.createSceneGraph(false);
-
-		// menu bar
-//		menuBar = new MenuBar(this);
-//		this.setJMenuBar(menuBar);
 
 		// status bar
 		statusBar = new StatusBar();
@@ -221,7 +231,6 @@ public class CurlyWhirly extends JFrame
 		//drag and drop support
 		FileDropAdapter dropAdapter = new FileDropAdapter(this);
 		setDropTarget(new DropTarget(this, dropAdapter));
-
 	}
 
 	private static File getPrefsFile()

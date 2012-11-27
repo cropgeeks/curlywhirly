@@ -23,6 +23,8 @@ class WinMainToolBar extends JToolBar
 	private JButton prefs;
 	private JButton about;
 
+	private JSlider slider;
+
 	WinMainToolBar(CurlyWhirly frame)
 	{
 		this.frame = frame;
@@ -71,6 +73,16 @@ class WinMainToolBar extends JToolBar
 			Icons.getIcon("HELP"), Actions.showAbout);
 
 
+		slider = new JSlider(0, 100, 50) {
+			public Dimension getMaximumSize() {
+				return new Dimension(150, getPreferredSize().height);
+			}
+		};
+
+
+		JPanel panel = new JPanel(new BorderLayout(0, 0));
+//		panel.add(slider);
+
 		if (SystemUtils.isMacOS() == false)
 			add(new JLabel(" "));
 
@@ -79,6 +91,7 @@ class WinMainToolBar extends JToolBar
 		addSeparator();
 		add(reset);
 		add(spin);
+		add(slider);
 		add(screenshot);
 		add(movie);
 		addSeparator();

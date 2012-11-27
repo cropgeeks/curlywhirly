@@ -82,12 +82,11 @@ public class DataLoader
 		mainWin.setTitle(mainWin.titleString + "  --  " + dataSet.name);
 		mainWin.controlPanel.setUpCategoryLists();
 		mainWin.statusBar.setDefaultText();
+		mainWin.splitPane.setRightComponent(mainWin.canvas3D);
 		mainWin.repaint();
 
 		//flag the fact we have data loaded
 		mainWin.dataLoaded = true;
-
-
 	}
 
 	private void processComments()
