@@ -60,13 +60,12 @@ public class MTControlPanel extends JPanel implements ActionListener
 		{
 			public void mouseClicked(MouseEvent me)
 			{
-				List<String> list = selectorList.getSelectedValuesList();
-				if (list.size() > 1)
+				if (selectorList.getSelectedIndices().length > 1)
 					return;
 				if (me.getClickCount() == 2)
 				{
 					String selectedValue = selectorList.getSelectedValue();
-					//					System.out.println("double click on " + selectedValue);
+//					System.out.println("double click on " + selectedValue);
 					//retrieve the related Category object
 					Category category = CurlyWhirly.canvas3D.currentClassificationScheme.getCategoryByName(selectedValue);
 
