@@ -87,6 +87,9 @@ public class DataLoader
 
 		//flag the fact we have data loaded
 		mainWin.dataLoaded = true;
+
+		Actions.openedData();
+		mainWin.controlPanel.toggleEnabled(true);
 	}
 
 	private void processComments()

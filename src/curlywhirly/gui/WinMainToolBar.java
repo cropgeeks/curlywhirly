@@ -114,8 +114,6 @@ class WinMainToolBar extends JToolBar
 
 			CurlyWhirly.dataLoader = new DataLoader();
 			CurlyWhirly.dataLoader.loadDataInThread(fc.getSelectedFile());
-			Actions.openedData();
-			frame.controlPanel.toggleEnabled(true);
 		}
 	}
 
@@ -124,8 +122,6 @@ class WinMainToolBar extends JToolBar
 		// load the example dataset provided with the application
 		CurlyWhirly.dataLoader = new DataLoader();
 		CurlyWhirly.dataLoader.loadDataInThread(new File("data/randomData.txt"));
-		Actions.openedData();
-		frame.controlPanel.toggleEnabled(true);
 	}
 
 	void reset()
