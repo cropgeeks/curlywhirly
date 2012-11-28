@@ -23,7 +23,7 @@ class WinMainToolBar extends JToolBar
 	private JButton prefs;
 	private JButton about;
 
-	private JSlider slider;
+	static JSlider slider;
 
 	WinMainToolBar(CurlyWhirly frame)
 	{
@@ -31,6 +31,12 @@ class WinMainToolBar extends JToolBar
 
 		setFloatable(false);
 //		setBorderPainted(false);
+
+		slider = new JSlider(0, 100, 50) {
+			public Dimension getMaximumSize() {
+				return new Dimension(100, getPreferredSize().height);
+			}
+		};
 
 		new Actions(frame);
 
@@ -73,16 +79,6 @@ class WinMainToolBar extends JToolBar
 			Icons.getIcon("HELP"), Actions.showAbout);
 
 
-		slider = new JSlider(0, 100, 50) {
-			public Dimension getMaximumSize() {
-				return new Dimension(150, getPreferredSize().height);
-			}
-		};
-
-
-		JPanel panel = new JPanel(new BorderLayout(0, 0));
-//		panel.add(slider);
-
 		if (SystemUtils.isMacOS() == false)
 			add(new JLabel(" "));
 
@@ -92,6 +88,7 @@ class WinMainToolBar extends JToolBar
 		add(reset);
 		add(spin);
 		add(slider);
+		addSeparator();
 		add(screenshot);
 		add(movie);
 		addSeparator();
@@ -131,10 +128,14 @@ class WinMainToolBar extends JToolBar
 
 	void spin()
 	{
+		// Start or stop the spinning
 		if (spin.isSelected())
 			frame.canvas3D.spin();
 		else
 			frame.canvas3D.stopSpinning();
+
+		// And enabled/disable the speed slider based on the state
+		WinMainToolBar.slider.setEnabled(spin.isSelected());
 	}
 
 	void screenshot()

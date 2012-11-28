@@ -2,6 +2,7 @@ package curlywhirly.gui;
 
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.event.*;
 
 import scri.commons.gui.*;
 
@@ -87,6 +88,19 @@ public class Actions
 				winMain.toolbar.showAbout();
 			}
 		};
+
+		final JSlider slider = WinMainToolBar.slider;
+
+		slider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent evt)
+			{
+				if (!slider.getValueIsAdjusting())
+				{
+					int speed = slider.getValue();
+					winMain.canvas3D.setSpinSpeed(speed);
+				}
+			}
+		});
 	}
 
 	public static void openedNoData()
@@ -95,6 +109,7 @@ public class Actions
 		fileSample.setEnabled(true);
 		reset.setEnabled(false);
 		spin.setEnabled(false);
+		WinMainToolBar.slider.setEnabled(false);
 		screenshot.setEnabled(false);
 		captureMovie.setEnabled(false);
 		showPrefs.setEnabled(true);
@@ -107,6 +122,7 @@ public class Actions
 		fileSample.setEnabled(true);
 		reset.setEnabled(true);
 		spin.setEnabled(true);
+//		WinMainToolBar.slider.setEnabled(true);
 		screenshot.setEnabled(true);
 		captureMovie.setEnabled(true);
 		showPrefs.setEnabled(true);
