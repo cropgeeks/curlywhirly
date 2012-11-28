@@ -430,7 +430,7 @@ public class MTControlPanel extends JPanel implements ActionListener
 		return schemeSelectorCombo;
 	}
 
-	void toggleEnabled(boolean enabled)
+	public void toggleEnabled(boolean enabled)
 	{
 		jLabel1.setEnabled(enabled);
 		jLabel2.setEnabled(enabled);
