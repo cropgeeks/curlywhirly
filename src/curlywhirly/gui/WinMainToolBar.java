@@ -35,9 +35,10 @@ class WinMainToolBar extends JToolBar
 
 		slider = new JSlider(0, 100, 50) {
 			public Dimension getMaximumSize() {
-				return new Dimension(100, getPreferredSize().height);
+				return new Dimension(175, getPreferredSize().height);
 			}
 		};
+		slider.setToolTipText(RB.getString("gui.WinMainToolBar.sliderTT"));
 
 		new Actions(frame);
 
