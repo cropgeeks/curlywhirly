@@ -3,6 +3,7 @@
 	<property name="src" location="src"/>
 	<property name="res" location="res"/>
 	<property name="lib" location="lib"/>
+	<property name="data" location="data"/>
 	<property name="classes" location="classes"/>
 
 	<property name="curlywhirly.jar" value="${lib}/curlywhirly.jar"/>
@@ -37,6 +38,9 @@
 
 		<jar jarfile="${curlywhirly.jar}">
 			<zipfileset dir="${res}" prefix="res"/>
+			<zipfileset dir="${data}" prefix="data">
+				<include name="randomData.txt"/>
+			</zipfileset>
 			<fileset dir="${classes}">
 				<exclude name="**/*Test.class"/>
 			</fileset>
