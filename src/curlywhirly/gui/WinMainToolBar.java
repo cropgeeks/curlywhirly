@@ -8,6 +8,7 @@ import curlywhirly.controller.*;
 import curlywhirly.data.*;
 
 import scri.commons.gui.*;
+import scri.commons.file.FileUtils;
 
 class WinMainToolBar extends JToolBar
 {
@@ -116,9 +117,22 @@ class WinMainToolBar extends JToolBar
 
 	void openSample()
 	{
+		File dir = SystemUtils.getTempUserDirectory("scri-curlywhirly");
+		File sample = new File(dir, "sample.txt");
+
+		try
+		{
+			FileUtils.writeFile(sample, getClass().getResourceAsStream("/data/randomData.txt"));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return;
+		}
+
 		// load the example dataset provided with the application
 		CurlyWhirly.dataLoader = new DataLoader();
-		CurlyWhirly.dataLoader.loadDataInThread(new File("data/randomData.txt"));
+		CurlyWhirly.dataLoader.loadDataInThread(sample);
 	}
 
 	void reset()
