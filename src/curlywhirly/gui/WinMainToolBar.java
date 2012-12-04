@@ -3,6 +3,7 @@ package curlywhirly.gui;
 import java.awt.*;
 import java.io.*;
 import javax.swing.*;
+import javax.swing.filechooser.*;
 
 import curlywhirly.controller.*;
 import curlywhirly.data.*;
@@ -25,6 +26,8 @@ class WinMainToolBar extends JToolBar
 	private JButton about;
 
 	static JSlider slider;
+
+	private File imageFile;
 
 	WinMainToolBar(CurlyWhirly frame)
 	{
@@ -155,9 +158,34 @@ class WinMainToolBar extends JToolBar
 
 	void screenshot()
 	{
-		//save the canvas to this file
-		new ScreenCaptureThread(new File(System.getProperty("user.dir")+System.getProperty("file.separator") +
-			"curlywhirly_screenshot.png"),frame,"png",new JFileChooser()).start();
+		if (promptForFilename())
+		{
+			ImageExporter exporter = new ImageExporter(imageFile, frame);
+
+			ProgressDialog dialog = new ProgressDialog(exporter,
+				RB.format("gui.WinMainToolBar.screenshot.title"),
+				RB.format("gui.WinMainToolBar.screenshot.label"),
+				frame);
+
+			// If the operation failed or was cancelled...
+			if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
+			{
+				if (dialog.getResult() == ProgressDialog.JOB_FAILED)
+				{
+					dialog.getException().printStackTrace();
+					TaskDialog.error(
+						RB.format("gui.WinMainToolBar.screenshot.exception",
+						dialog.getException().getMessage()),
+						RB.getString("gui.text.close"));
+				}
+
+				return;
+			}
+
+			TaskDialog.showFileOpen(
+				RB.format("gui.WinMainToolBar.screenshot.success", imageFile),
+				TaskDialog.INF, imageFile);
+		}
 	}
 
 	void captureMovie()
@@ -230,5 +258,21 @@ class WinMainToolBar extends JToolBar
 		}
 
 		return button;
+	}
+
+	private boolean promptForFilename()
+	{
+		File basename = new File(Prefs.guiCurrentDir, "Image.png");
+
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+			RB.getString("other.Filters.png"), "png");
+
+		String filename = CWUtils.getSaveFilename(
+			RB.getString("gui.WinMainToolBar.saveDialog"), basename, filter);
+
+		if (filename != null)
+			imageFile = new File(filename);
+
+		return imageFile != null;
 	}
 }
