@@ -151,10 +151,10 @@ public class MenuBar extends JMenuBar implements ActionListener
 		else if (src.equals(saveItem))
 		{
 			//save the canvas to this file
-			new ScreenCaptureThread(new File(System.getProperty("user.dir")+System.getProperty("file.separator") +
-							"curlywhirly_screenshot.png"),frame,"png",fc).start();
+//			new ImageExporter(new File(System.getProperty("user.dir")+System.getProperty("file.separator") +
+//							"curlywhirly_screenshot.png"),frame,"png",fc).start();
 		}
-		
+
 		else if (src.equals(dataURLItem))
 		{
 			urlEntryForm.setLocationRelativeTo(frame);
