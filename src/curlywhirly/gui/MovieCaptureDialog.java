@@ -36,7 +36,7 @@ public class MovieCaptureDialog extends JDialog implements ActionListener, Chang
 
 		this.winMain = winMain;
 
-		add(nbPanel = new MovieCapturePanelNB(winMain, this));
+		add(nbPanel = new MovieCapturePanelNB(winMain, this), BorderLayout.CENTER);
 		add(createButtons(), BorderLayout.SOUTH);
 
 		getRootPane().setDefaultButton(bCancel);

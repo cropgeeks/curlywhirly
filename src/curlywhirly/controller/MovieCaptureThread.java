@@ -5,6 +5,7 @@ import java.awt.image.*;
 import java.io.*;
 import javax.imageio.*;
 import javax.media.format.*;
+import javax.media.j3d.*;
 import javax.media.protocol.*;
 
 import scri.commons.gui.*;
@@ -43,7 +44,7 @@ public class MovieCaptureThread extends Thread
 		this.movieFile = movieFile;
 		this.frameRate = frameRate;
 		this.rotationTime = rotationTime;
-		imageDirectory  = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "imageTempDir");
+		imageDirectory = new File(Prefs.cacheFolder + System.getProperty("file.separator") + "imageTempDir");
 		imageDirectory.mkdir();
 	}
 
@@ -55,17 +56,11 @@ public class MovieCaptureThread extends Thread
 			frame.canvas3D.requestFocusInWindow();
 			frame.setAlwaysOnTop(true);
 
-			//wait to make sure the calling dialog is no longer visible
-			try{Thread.sleep(500);}catch(InterruptedException x){}
-
 			//set up the screen capture robot
 			MainCanvas canvas = CurlyWhirly.canvas3D;
-			Robot robot  = new Robot();
-			robot.setAutoWaitForIdle(true);
-			Point p = canvas.getLocationOnScreen();
+
 			int canvasWidth = canvas.getWidth();
 			int canvasHeight = canvas.getHeight();
-			Rectangle screenRect = new Rectangle((int) p.getX(), (int) p.getY(), canvasWidth, canvasHeight);
 
 			//get the canvas ready
 			canvas.resetOriginalView();
@@ -76,7 +71,7 @@ public class MovieCaptureThread extends Thread
 
 			//work out the number of degrees required for each step of the rotation
 			float degrees = 0;
-			float degreesIncrement =  (360*numRotations)/(float)totalNumFrames;
+			float degreesIncrement = (360 * numRotations) / (float) totalNumFrames;
 
 			frame.statusBar.progressBar.setVisible(true);
 
@@ -90,29 +85,44 @@ public class MovieCaptureThread extends Thread
 					return;
 				}
 
-				//increment the degrees rotation
-				degrees = degrees + degreesIncrement;
+				outputScreenshot(canvas, i);
 
-				//rotate by a given number of degrees
+				// Rotate by a given number of degrees
+				degrees += degreesIncrement;
 				canvas.rotateGraph(degrees);
-
-				//take a screenshot and write it to disk
-				BufferedImage image = robot.createScreenCapture(screenRect);
-				String fileName =  "img" + new java.text.DecimalFormat("000000").format(i) + imageFileExtension;
-				File imageFile = new File(imageDirectory, fileName);
-				ImageIO.write(image, fileType, imageFile);
 
 				//update progress bar
 				int progressPercent = Math.round((i/(float)totalNumFrames)*100);
 				frame.statusBar.progressBar.setValue(progressPercent);
-
-				try{Thread.sleep(300);}catch(InterruptedException x){}
 			}
 
 			//now string images together into a movie
 			JpegImagesToMovie imageToMovie = new JpegImagesToMovie(frame, videoFormatEncoding, contentType, canvasWidth,
 							canvasHeight,  animationTimeSecs,  frameRate, imageDirectory, movieFile);
-			imageToMovie.writeMovie();
+
+			ProgressDialog dialog = new ProgressDialog(imageToMovie,
+				RB.format("controller.MovieCaptureThread.movieAssembly.title"),
+				RB.format("controller.MovieCaptureThread.movieAssembly.label"),
+				frame);
+
+			// If the operation failed or was cancelled...
+			if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
+			{
+				if (dialog.getResult() == ProgressDialog.JOB_FAILED)
+				{
+					dialog.getException().printStackTrace();
+					TaskDialog.error(
+						RB.format("controller.MovieCaptureThread.movieAssembly.exception",
+						dialog.getException().getMessage()),
+						RB.getString("gui.text.close"));
+				}
+
+				return;
+			}
+
+			TaskDialog.showFileOpen(
+				RB.format("controller.MovieCaptureThread.movieAssembly.success", movieFile),
+				TaskDialog.INF, movieFile);
 
 			//remove all files in temp dir
 			boolean allDeleted = deleteDirectory(imageDirectory);
@@ -146,15 +156,42 @@ public class MovieCaptureThread extends Thread
 			for (int i = 0; i < files.length; i++)
 			{
 				if (files[i].isDirectory())
-				{
 					deleteDirectory(files[i]);
-				}
 				else
-				{
 					files[i].delete();
-				}
 			}
 		}
 		return (path.delete());
+	}
+
+	private void outputScreenshot(MainCanvas canvas, int fileNo)
+		throws IOException
+	{
+		BufferedImage image = getScreenShot(canvas);
+		String fileName =  "img" + new java.text.DecimalFormat("000000").format(fileNo) + imageFileExtension;
+		File imageFile = new File(imageDirectory, fileName);
+		ImageIO.write(image, fileType, imageFile);
+	}
+
+	private BufferedImage getScreenShot(Canvas3D canvas3d)
+	{
+		GraphicsContext3D context = canvas3d.getGraphicsContext3D();
+		Dimension dimension = canvas3d.getSize();
+
+		ImageComponent2D image = new ImageComponent2D(ImageComponent.FORMAT_RGB,
+			dimension.width, dimension.height);
+
+		javax.media.j3d.Raster ras = new javax.media.j3d.Raster();
+		ras.setType(javax.media.j3d.Raster.RASTER_COLOR);
+		ras.setCapability(javax.media.j3d.Raster.ALLOW_IMAGE_READ);
+		ras.setCapability(javax.media.j3d.Raster.ALLOW_IMAGE_WRITE);
+
+		ras.setSize(dimension);
+		ras.setImage(image);
+
+		context.readRaster(ras);
+		BufferedImage img = ras.getImage().getImage();
+
+		return img;
 	}
 }

@@ -17,7 +17,7 @@ import curlywhirly.gui.*;
 /**
  * This program takes a list of JPEG image files and convert them into a QuickTime movie.
  */
-public class JpegImagesToMovie implements ControllerListener, DataSinkListener
+public class JpegImagesToMovie extends SimpleJob implements ControllerListener, DataSinkListener
 {
 	int canvasWidth;
 	int canvasHeight;
@@ -34,8 +34,6 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 
 	CurlyWhirly frame;
 
-	MovieAssembleDialog movieAssembleDialog;
-
 	// These class variables were defined within the body of the class
 
 	Object waitFileSync = new Object();
@@ -48,7 +46,6 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 	public JpegImagesToMovie(CurlyWhirly frame, String videoFormatEncoding, String contentType, int canvasWidth, int canvasHeight, int animationTimeSecs, int frameRate, File imageDirectory, File movieFile)
 	{
 		this.frame = frame;
-		movieAssembleDialog = new MovieAssembleDialog(frame, false);
 		this.videoFormatEncoding = videoFormatEncoding;
 		this.contentType = contentType;
 		this.canvasWidth = canvasWidth;
@@ -59,7 +56,9 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 		this.movieFile = movieFile;
 	}
 
-	public void writeMovie()
+	@Override
+	public void runJob(int index)
+			throws Exception
 	{
 		try
 		{
@@ -72,23 +71,23 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 			for (int i = 0; i < fileArray.length; i++)
 				inputFiles.add(fileArray[i].getAbsolutePath());
 
+			// The listFiles method gives no guarantee of file order
+			Collections.sort(inputFiles);
+
+			maximum = inputFiles.size();
+
 			// Generate the output media locators.
 			MediaLocator oml = new MediaLocator(outputURL);
-			doIt(canvasWidth, canvasHeight, frameRate, inputFiles, oml);
-
-			movieAssembleDialog.getAssembleLabel().setText("Movie assembly complete");
-			movieAssembleDialog.getCloseButton().setEnabled(true);
-			movieAssembleDialog.requestFocus();
+			assembleMovie(canvasWidth, canvasHeight, frameRate, inputFiles, oml);
 		}
 		catch (Exception e)
 		{
-			frame.currentMovieCaptureThread.movieFile.delete();
-			movieAssembleDialog.getAssembleLabel().setText("Movie assembly failed");
+			movieFile.delete();
 			e.printStackTrace();
 		}
 	}
 
-	public boolean doIt(int width, int height, int frameRate, ArrayList<String> inFiles, MediaLocator outML)
+	public boolean assembleMovie(int width, int height, int frameRate, ArrayList<String> inFiles, MediaLocator outML)
 	{
 		ImageDataSource ids = new ImageDataSource(width, height, frameRate, inFiles);
 
@@ -203,7 +202,7 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 		catch (Exception e)
 		{
 			movieFile.delete();
-			movieAssembleDialog.setVisible(false);
+//			movieAssembleDialog.setVisible(false);
 			TaskDialog.error(RB.getString("controller.JpegImagesToMovie.error"),
 				RB.getString("gui.text.close"));
 			System.err.println("Cannot create the DataSink: " + e);
@@ -425,11 +424,6 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 			this.images = images;
 
 			format = new VideoFormat(videoFormatEncoding, new Dimension(width, height), Format.NOT_SPECIFIED, Format.byteArray, (float) frameRate);
-
-			//progress monitor
-			percentIncrement = 100.0f/(float)images.size();
-			movieAssembleDialog.setLocationRelativeTo(frame);
-			movieAssembleDialog.setVisible(true);
 		}
 
 		/**
@@ -460,9 +454,9 @@ public class JpegImagesToMovie implements ControllerListener, DataSinkListener
 			String imageFile = images.get(nextImage);
 			nextImage++;
 
-			int percentComplete = Math.round(percentIncrement*nextImage);
+			progress = nextImage;
 			//update progress monitor
-			movieAssembleDialog.getProgressBar().setValue(percentComplete);
+//			movieAssembleDialog.getProgressBar().setValue(percentComplete);
 
 			// Open a random access file for the next image.
 			RandomAccessFile raFile;

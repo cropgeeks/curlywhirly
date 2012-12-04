@@ -30,7 +30,8 @@ public class MovieCapturePanelNB extends JPanel
 		spinSpeedCombo.addItem(RB.getString("gui.MovieCaptureDialog.radioButtonMedium"));
 		spinSpeedCombo.addItem(RB.getString("gui.MovieCaptureDialog.radioButtonFast"));
 		spinSpeedCombo.setSelectedIndex(Prefs.guiMovieCaptureSpinSpeedIndex);
-		RB.setText(warningLabel, "gui.MovieCaptureDialog.warning");
+		RB.setText(fileSizeLabel, "gui.MovieCaptureDialog.fileSizeLabel");
+		RB.setText(warningLabel, "gui.MovieCaptureDialog.warningLabel");
 
 		frameRateSpinner.setModel(new SpinnerNumberModel(Prefs.guiMovieCaptureFrameRate, 1, 60, 1));
 
@@ -54,6 +55,7 @@ public class MovieCapturePanelNB extends JPanel
         frameRateLabel = new javax.swing.JLabel();
         spinSpeedCombo = new javax.swing.JComboBox<String>();
         warningPanel = new javax.swing.JPanel();
+        fileSizeLabel = new javax.swing.JLabel();
         warningLabel = new javax.swing.JLabel();
 
         settingsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Capture settings:"));
@@ -84,7 +86,7 @@ public class MovieCapturePanelNB extends JPanel
                 .addGap(29, 29, 29)
                 .addComponent(spinSpeedLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spinSpeedCombo, 0, 124, Short.MAX_VALUE)
+                .addComponent(spinSpeedCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         settingsPanelLayout.setVerticalGroup(
@@ -101,7 +103,9 @@ public class MovieCapturePanelNB extends JPanel
 
         warningPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Estimated file size (MB): 0"));
 
-        warningLabel.setText("<html>To reduce the size of the movie file, try reducing one or more of the following: window size, frame rate, graph spin speed. <br><br><b>Please note: during the capture process, do not resize or move the window.</b></html>");
+        fileSizeLabel.setText("Decrease the window size, frame rate, or spin speed to produce a smaller file.");
+
+        warningLabel.setText("During the capture process, ensure you do not resize or move the window.");
 
         javax.swing.GroupLayout warningPanelLayout = new javax.swing.GroupLayout(warningPanel);
         warningPanel.setLayout(warningPanelLayout);
@@ -109,12 +113,19 @@ public class MovieCapturePanelNB extends JPanel
             warningPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(warningPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(warningLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(warningPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(fileSizeLabel)
+                    .addComponent(warningLabel))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         warningPanelLayout.setVerticalGroup(
             warningPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(warningLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE)
+            .addGroup(warningPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(fileSizeLabel)
+                .addGap(18, 18, 18)
+                .addComponent(warningLabel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -125,7 +136,7 @@ public class MovieCapturePanelNB extends JPanel
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(settingsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(warningPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(warningPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -146,6 +157,7 @@ public class MovieCapturePanelNB extends JPanel
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    javax.swing.JLabel fileSizeLabel;
     javax.swing.JLabel frameRateLabel;
     javax.swing.JSpinner frameRateSpinner;
     javax.swing.JPanel settingsPanel;
