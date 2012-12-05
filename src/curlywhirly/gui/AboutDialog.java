@@ -14,6 +14,7 @@ public class AboutDialog extends JDialog implements ActionListener
 	private JButton bClose;
 
 	private AboutPanelNB nbPanel;
+	private AboutLicencePanelNB licencePanel = new AboutLicencePanelNB();
 
 	public AboutDialog(java.awt.Frame parent, boolean modal)
 	{
@@ -24,8 +25,9 @@ public class AboutDialog extends JDialog implements ActionListener
 		AvatarPanel avatars = new AvatarPanel();
 
 		JTabbedPane tabs = new JTabbedPane();
-		tabs.add("About CurlyWhirly", nbPanel);
-		tabs.add("Information \u0026 Computational Sciences", avatars);
+		tabs.add(RB.getString("gui.AboutDialog.tab1"), nbPanel);
+		tabs.add(RB.getString("gui.AboutDialog.tab2"), licencePanel);
+		tabs.add(RB.format("gui.AboutDialog.tab3", "\u0026"), avatars);
 
 		add(tabs);
 		add(createButtons(), BorderLayout.SOUTH);
