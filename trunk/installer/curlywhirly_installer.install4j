@@ -29,6 +29,7 @@
     <mountPoints>
       <mountPoint id="18" root="" location="lib" mode="755" />
       <mountPoint id="576" root="" location="system" mode="755" />
+      <mountPoint id="777" root="" location="docs" mode="755" />
       <mountPoint id="679" root="678" location="Library" mode="755" />
       <mountPoint id="680" root="678" location="Library/Java" mode="755" />
       <mountPoint id="681" root="678" location="Library/Java/Extensions" mode="755" />
@@ -40,6 +41,9 @@
         </exclude>
       </dirEntry>
       <dirEntry mountPoint="576" file="../system" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="system" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="777" file="./licence" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="" excludeSuffixes=".svn" dirMode="755" overrideDirMode="false">
         <exclude />
       </dirEntry>
       <fileEntry mountPoint="681" file="../lib/vecmath.jar" overwriteMode="1" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="true" overrideUninstallMode="false" />

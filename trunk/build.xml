@@ -38,6 +38,7 @@
 
 		<jar jarfile="${curlywhirly.jar}">
 			<zipfileset dir="${res}" prefix="res"/>
+			<zipfileset dir="installer/licence" prefix="installer/licence"/>
 			<zipfileset dir="${data}" prefix="data">
 				<include name="randomData.txt"/>
 			</zipfileset>
