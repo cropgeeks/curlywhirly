@@ -24,6 +24,7 @@ public class MovieCapturePanelNB extends JPanel
 		warningPanel.setBackground(Color.WHITE);
 
 		settingsPanel.setBorder(new TitledBorder(RB.getString("gui.MovieCaptureDialog.settingsPanelTitle")));
+		warningPanel.setBorder(new TitledBorder(RB.getString("gui.MovieCaptureDialog.warningPanelTitle")));
 		RB.setText(frameRateLabel, "gui.MovieCaptureDialog.frameRate");
 		RB.setText(spinSpeedLabel, "gui.MovieCaptureDialog.spinSpeed");
 		spinSpeedCombo.addItem(RB.getString("gui.MovieCaptureDialog.radioButtonSlow"));
@@ -54,6 +55,7 @@ public class MovieCapturePanelNB extends JPanel
         spinSpeedLabel = new javax.swing.JLabel();
         frameRateLabel = new javax.swing.JLabel();
         spinSpeedCombo = new javax.swing.JComboBox<String>();
+        sizeLabel = new javax.swing.JLabel();
         warningPanel = new javax.swing.JPanel();
         fileSizeLabel = new javax.swing.JLabel();
         warningLabel = new javax.swing.JLabel();
@@ -74,19 +76,26 @@ public class MovieCapturePanelNB extends JPanel
             }
         });
 
+        sizeLabel.setText("Estimated file size: 0 MB");
+
         javax.swing.GroupLayout settingsPanelLayout = new javax.swing.GroupLayout(settingsPanel);
         settingsPanel.setLayout(settingsPanelLayout);
         settingsPanelLayout.setHorizontalGroup(
             settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(settingsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(frameRateLabel)
-                .addGap(4, 4, 4)
-                .addComponent(frameRateSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
-                .addComponent(spinSpeedLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spinSpeedCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(settingsPanelLayout.createSequentialGroup()
+                        .addComponent(frameRateLabel)
+                        .addGap(4, 4, 4)
+                        .addComponent(frameRateSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
+                        .addComponent(spinSpeedLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(spinSpeedCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(settingsPanelLayout.createSequentialGroup()
+                        .addComponent(sizeLabel)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         settingsPanelLayout.setVerticalGroup(
@@ -98,10 +107,12 @@ public class MovieCapturePanelNB extends JPanel
                     .addComponent(frameRateSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(spinSpeedCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(spinSpeedLabel))
+                .addGap(18, 18, 18)
+                .addComponent(sizeLabel)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        warningPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Estimated file size (MB): 0"));
+        warningPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Notes:"));
 
         fileSizeLabel.setText("Decrease the window size, frame rate, or spin speed to produce a smaller file.");
 
@@ -161,6 +172,7 @@ public class MovieCapturePanelNB extends JPanel
     javax.swing.JLabel frameRateLabel;
     javax.swing.JSpinner frameRateSpinner;
     javax.swing.JPanel settingsPanel;
+    javax.swing.JLabel sizeLabel;
     javax.swing.JComboBox<String> spinSpeedCombo;
     javax.swing.JLabel spinSpeedLabel;
     javax.swing.JLabel warningLabel;

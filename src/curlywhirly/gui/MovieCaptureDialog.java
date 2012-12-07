@@ -74,7 +74,7 @@ public class MovieCaptureDialog extends JDialog implements ActionListener, Chang
 
 		// Calculate file size in megabytes
 		int fileSize = (bytesPerFrame * totalNumFrames) / 1024 / 1024;
-		nbPanel.warningPanel.setBorder(new TitledBorder(RB.format("gui.MovieCaptureDialog.warningPanelTitle", fileSize)));
+		nbPanel.sizeLabel.setText(RB.format("gui.MovieCaptureDialog.sizeLabel", fileSize));
 	}
 
 	private void captureMovie()
