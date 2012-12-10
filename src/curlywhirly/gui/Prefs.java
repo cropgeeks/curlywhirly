@@ -1,5 +1,8 @@
 package curlywhirly.gui;
 
+import java.io.*;
+import java.util.*;
+
 import curlywhirly.controller.*;
 
 import scri.commons.gui.*;
@@ -49,4 +52,26 @@ public class Prefs extends XMLPreferences
 	// The local working directory for disk caching
 	public static String cacheFolder =
 		SystemUtils.getTempUserDirectory("jhi-curlywhirly").getPath();
+
+	// A list of previously accessed documents
+	public static String[] guiRecentDocs = new String[10];
+
+	// Updates the array of recently accessed documents so that 'document' is
+	// the first element, even if it has been accessed previously
+	public static void setRecentDocument(File file)
+	{
+		// Convert the array of files back into a single string
+		String mostRecent = file.getPath();
+
+		LinkedList<String> list = new LinkedList<String>();
+		list.addAll(Arrays.asList(guiRecentDocs));
+
+		if (list.contains(mostRecent))
+			list.remove(mostRecent);
+
+		list.addFirst(mostRecent);
+
+		for (int i = 0; i < guiRecentDocs.length; i++)
+			guiRecentDocs[i] = list.get(i);
+	}
 }
