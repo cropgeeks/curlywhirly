@@ -111,11 +111,19 @@ class WinMainToolBar extends JToolBar
 
 		int returnVal = fc.showOpenDialog(frame);
 		if (returnVal == JFileChooser.APPROVE_OPTION)
+			openFile(fc.getSelectedFile());
+	}
+
+	void openFile(File file)
+	{
+		if (file == null)
+			open();
+		else
 		{
-			Prefs.guiCurrentDir = "" + fc.getSelectedFile().getParent();
+			Prefs.guiCurrentDir = "" + file.getParent();
 
 			CurlyWhirly.dataLoader = new DataLoader();
-			CurlyWhirly.dataLoader.loadDataInThread(fc.getSelectedFile());
+			CurlyWhirly.dataLoader.loadDataInThread(file);
 		}
 	}
 

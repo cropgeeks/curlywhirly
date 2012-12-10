@@ -90,6 +90,7 @@ public class DataLoader
 
 		Actions.openedData();
 		mainWin.controlPanel.toggleEnabled(true);
+		Prefs.setRecentDocument(file);
 	}
 
 	private void processComments()

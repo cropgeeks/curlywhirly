@@ -23,14 +23,14 @@ class StartPanel extends JPanel
 			RB.getString("gui.NBStartWelcomePanel.title")), BorderLayout.NORTH);
 		welcomePanel.add(new StartPanelWelcomeNB());
 
-/*		JPanel filePanel = new JPanel(new BorderLayout());
+		JPanel filePanel = new JPanel(new BorderLayout());
 		filePanel.setOpaque(false);
 		filePanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 		filePanel.add(new TitlePanel3(
 			RB.getString("gui.NBStartFilePanel.title")), BorderLayout.NORTH);
 		filePanel.add(new StartPanelFileNB());
 
-		JPanel helpPanel = new JPanel(new BorderLayout());
+/*		JPanel helpPanel = new JPanel(new BorderLayout());
 		helpPanel.setOpaque(false);
 		helpPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 		helpPanel.add(new TitlePanel3(
@@ -54,13 +54,13 @@ class StartPanel extends JPanel
 		logoPanel.add(getCIMMYTLabel(), BorderLayout.EAST);
 		huttonPanel.add(logoPanel, BorderLayout.EAST);
 
-//		JPanel centrePanel = new JPanel(new GridLayout(1, 2, 0, 0));
-//		centrePanel.setOpaque(false);
-//		centrePanel.add(filePanel);
+		JPanel centrePanel = new JPanel(new GridLayout(1, 2, 0, 0));
+		centrePanel.setOpaque(false);
+		centrePanel.add(filePanel);
 //		centrePanel.add(helpPanel);
 
 		panel.add(welcomePanel, BorderLayout.NORTH);
-//		panel.add(centrePanel, BorderLayout.CENTER);
+		panel.add(centrePanel, BorderLayout.CENTER);
 		panel.add(huttonPanel, BorderLayout.SOUTH);
 
 		add(panel);
