@@ -96,6 +96,9 @@ public class StartPanelFileNB extends JPanel implements ActionListener
 //
 		if (e.getSource() == importLabel)
 			CurlyWhirly.toolbar.openFile(null);
+
+		if (e.getSource() == sampleLabel)
+			CurlyWhirly.toolbar.openSample();
 //
 		for (int i = 0; i < labels.length; i++)
 			if (e.getSource() == labels[i])
