@@ -15,6 +15,7 @@ public class AboutDialog extends JDialog implements ActionListener
 
 	private AboutPanelNB nbPanel;
 	private AboutLicencePanelNB licencePanel = new AboutLicencePanelNB();
+	private AboutHelpPanelNB helpPanel = new AboutHelpPanelNB();
 
 	public AboutDialog(java.awt.Frame parent, boolean modal)
 	{
@@ -28,6 +29,7 @@ public class AboutDialog extends JDialog implements ActionListener
 		tabs.add(RB.getString("gui.AboutDialog.tab1"), nbPanel);
 		tabs.add(RB.getString("gui.AboutDialog.tab2"), licencePanel);
 		tabs.add(RB.format("gui.AboutDialog.tab3", "\u0026"), avatars);
+		tabs.add(RB.getString("gui.AboutDialog.tab4"), helpPanel);
 
 		add(tabs);
 		add(createButtons(), BorderLayout.SOUTH);
@@ -37,7 +39,7 @@ public class AboutDialog extends JDialog implements ActionListener
 
 		pack();
 		setLocationRelativeTo(parent);
-		setTitle("About CurlyWhirly");
+		setTitle(RB.getString("gui.AboutDialog.title"));
 		setResizable(false);
 		setVisible(true);
 	}
