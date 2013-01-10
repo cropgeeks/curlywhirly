@@ -31,10 +31,12 @@ class AboutPanelNB extends JPanel implements ActionListener
 				- ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed());
 		NumberFormat nf = NumberFormat.getInstance();
 
+		copyrightLabel.setText(RB.format("gui.AboutPanelNB.copyrightLabel", "\u0026"));
+		RB.setText(nameLabel, "gui.AboutPanelNB.nameLabel");
 		versionLabel.setText("CurlyWhirly - " + Install4j.VERSION);
-		javaLabel.setText("Java version: " +  javaVer);
-		memLabel.setText("Memory available to JVM: " + nf.format((long)(freeMem/1024f/1024f)) + "MB");
-		localeLabel.setText("Current locale: " + java.util.Locale.getDefault());
+		javaLabel.setText(RB.format("gui.AboutPanelNB.javaLabel", javaVer));
+		memLabel.setText(RB.format("gui.AboutPanelNB.memLabel", nf.format((long)(freeMem/1024f/1024f)) + " MB"));
+		localeLabel.setText(RB.format("gui.AboutPanelNB.localeLabel", java.util.Locale.getDefault()));
 
 		jhiIcon.setText("");
 		jhiIcon.setIcon(Icons.getIcon("ABOUT"));
@@ -93,7 +95,7 @@ class AboutPanelNB extends JPanel implements ActionListener
         localeLabel.setForeground(java.awt.Color.gray);
         localeLabel.setText("Current Locale:");
 
-        nameLabel.setText("Micha Bayer, Iain Milne, and David Marshall");
+        nameLabel.setText("Micha Bayer, Iain Milne, Paul Shaw, Gordon Stephen and David Marshall");
 
         copyrightLabel.setText("Copyright (C) 2009-2012, Information & Computational Sciences, JHI");
 
@@ -132,7 +134,7 @@ class AboutPanelNB extends JPanel implements ActionListener
                             .addComponent(memLabel)
                             .addComponent(localeLabel)
                             .addComponent(webLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 82, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(iconPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );

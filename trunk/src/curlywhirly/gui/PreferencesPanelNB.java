@@ -13,14 +13,14 @@ import scri.commons.gui.*;
 class PreferencesPanelNB extends JPanel
 {
 	private CurlyWhirly frame;
-	
+
 	private DefaultComboBoxModel<String> displayModel;
 	private DefaultComboBoxModel<String> updateModel;
 
     public PreferencesPanelNB(CurlyWhirly frame)
     {
 		this.frame = frame;
-		
+
         initComponents();
 
         GUIUtils.setPanelColor(this, false);
@@ -35,6 +35,8 @@ class PreferencesPanelNB extends JPanel
         displayModel.addElement(RB.getString("gui.PreferencesPanelNB.auto"));
         displayModel.addElement(RB.getString("gui.PreferencesPanelNB.en_GB"));
         displayModel.addElement(RB.getString("gui.PreferencesPanelNB.en_US"));
+        displayModel.addElement(RB.getString("gui.PreferencesPanelNB.de_DE"));
+        displayModel.addElement(RB.getString("gui.PreferencesPanelNB.es_MX"));
         displayCombo.setModel(displayModel);
 		displayCombo.setSelectedIndex(getLocaleIndex());
 
@@ -49,11 +51,11 @@ class PreferencesPanelNB extends JPanel
         updateModel.addElement(RB.getString("gui.PreferencesPanelNB.updateMonthly"));
         updateCombo.setModel(updateModel);
         updateCombo.setSelectedIndex(Prefs.guiUpdateSchedule);
-		
-		
+
+
 		// Other settings
 		otherPanel.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.PreferencesPanelNB.otherPanelTitle")));
-		
+
 		RB.setText(colorLabel, "gui.PreferencesPanelNB.colorLabel");
 		colorCombo.setModel(new DefaultComboBoxModel<String>(new String[] {
 			RB.getString("gui.PreferencesPanelNB.black"),
@@ -69,6 +71,10 @@ class PreferencesPanelNB extends JPanel
 			return 1;
 		else if (Prefs.localeText.equals("en_US"))
 			return 2;
+		else if (Prefs.localeText.equals("de_DE"))
+			return 3;
+		else if (Prefs.localeText.equals("es_MX"))
+			return 4;
 		else
 			return 0;
 	}
@@ -79,11 +85,13 @@ class PreferencesPanelNB extends JPanel
 		{
 			case 1:  Prefs.localeText = "en_GB"; break;
 			case 2:  Prefs.localeText = "en_US"; break;
+			case 3:  Prefs.localeText = "de_DE"; break;
+			case 4:  Prefs.localeText = "es_MX"; break;
 			default: Prefs.localeText = "auto";
 		}
 
 		Prefs.guiUpdateSchedule = updateCombo.getSelectedIndex();
-		
+
 		// Colour options:
 		Prefs.guiGraphBackground = colorCombo.getSelectedIndex();
 		frame.canvas3D.setBackgroundColour(Prefs.guiGraphBackground);

@@ -33,6 +33,7 @@ public class MTControlPanel extends JPanel implements ActionListener
 		RB.setText(jLabel3, "gui.MTControlPanel.jLabel3");
 //		RB.setText(jLabel5, "gui.MTControlPanel.jLabel5");
 //		RB.setText(jLabel6, "gui.MTControlPanel.jLabel6");
+		RB.setText(jLabel8, "gui.MTControlPanel.jLabel8");
 		RB.setText(showLabelsCheckBox, "gui.MTControlPanel.showLabelsCheckBox");
 
 		// Bottom panel components
@@ -52,6 +53,8 @@ public class MTControlPanel extends JPanel implements ActionListener
 			showLabelsCheckBox.setSelected(false);
 
 		toggleEnabled(false);
+		
+		showLabelsCheckBox.setVisible(false);
 	}
 
 	public void addMouseAdapterToSelectorList()
