@@ -14,6 +14,9 @@ public class DataLoadingDialog extends JDialog
 		initComponents();
 
 		RB.setText(jLabel1, "gui.DataLoadingDialog.jLabel1");
+		RB.setText(cancelDataLoadButton, "gui.text.cancel");
+
+		setTitle(RB.getString("gui.DataLoadingDialog.title"));
 	}
 
 	/** This method is called from within the constructor to
