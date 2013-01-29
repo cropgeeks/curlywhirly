@@ -29,6 +29,7 @@ public class StartPanelFileNB extends JPanel implements ActionListener
 
 		RB.setText(importLabel, "gui.NBStartFilePanel.importLabel");
 		RB.setText(openLabel, "gui.NBStartFilePanel.openLabel");
+		RB.setText(sampleLabel, "gui.NBStartFilePanel.sampleLabel");
 
 		importLabel.setIcon(Icons.getIcon("OPEN"));
 		importLabel.addActionListener(this);
