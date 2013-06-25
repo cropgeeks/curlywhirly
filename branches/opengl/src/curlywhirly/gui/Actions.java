@@ -97,7 +97,7 @@ public class Actions
 				if (!slider.getValueIsAdjusting())
 				{
 					int speed = slider.getValue();
-					winMain.canvas3D.setSpinSpeed(speed);
+					winMain.getOpenGLPanel().setSpeed(speed);
 				}
 			}
 		});

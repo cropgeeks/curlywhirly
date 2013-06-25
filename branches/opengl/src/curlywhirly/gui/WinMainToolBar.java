@@ -111,7 +111,10 @@ class WinMainToolBar extends JToolBar
 
 		int returnVal = fc.showOpenDialog(frame);
 		if (returnVal == JFileChooser.APPROVE_OPTION)
+		{
+			frame.getOpenGLPanel().stopAnimator();
 			openFile(fc.getSelectedFile());
+		}
 	}
 
 	void openFile(File file)
@@ -132,6 +135,8 @@ class WinMainToolBar extends JToolBar
 		File dir = SystemUtils.getTempUserDirectory("scri-curlywhirly");
 		File sample = new File(dir, "sample.txt");
 
+		frame.getOpenGLPanel().stopAnimator();
+
 		try
 		{
 			FileUtils.writeFile(sample, getClass().getResourceAsStream("/data/randomData.txt"));
@@ -149,50 +154,51 @@ class WinMainToolBar extends JToolBar
 
 	void reset()
 	{
-		frame.canvas3D.resetOriginalView();
+		frame.getOpenGLPanel().reset();
 	}
 
 	void spin()
 	{
 		// Start or stop the spinning
 		if (spin.isSelected())
-			frame.canvas3D.spin();
+			frame.getOpenGLPanel().toggleSpin();
 		else
-			frame.canvas3D.stopSpinning();
+			frame.getOpenGLPanel().toggleSpin();
 
 		// And enabled/disable the speed slider based on the state
-		WinMainToolBar.slider.setEnabled(spin.isSelected());
+		slider.setEnabled(spin.isSelected());
+		frame.getOpenGLPanel().setSpeed(slider.getValue());
 	}
 
 	void screenshot()
 	{
 		if (promptForFilename())
 		{
-			ImageExporter exporter = new ImageExporter(imageFile, frame);
-
-			ProgressDialog dialog = new ProgressDialog(exporter,
-				RB.format("gui.WinMainToolBar.screenshot.title"),
-				RB.format("gui.WinMainToolBar.screenshot.label"),
-				frame);
-
-			// If the operation failed or was cancelled...
-			if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
-			{
-				if (dialog.getResult() == ProgressDialog.JOB_FAILED)
-				{
-					dialog.getException().printStackTrace();
-					TaskDialog.error(
-						RB.format("gui.WinMainToolBar.screenshot.exception",
-						dialog.getException().getMessage()),
-						RB.getString("gui.text.close"));
-				}
-
-				return;
-			}
-
-			TaskDialog.showFileOpen(
-				RB.format("gui.WinMainToolBar.screenshot.success", imageFile),
-				TaskDialog.INF, imageFile);
+//			ImageExporter exporter = new ImageExporter(imageFile, frame);
+//
+//			ProgressDialog dialog = new ProgressDialog(exporter,
+//				RB.format("gui.WinMainToolBar.screenshot.title"),
+//				RB.format("gui.WinMainToolBar.screenshot.label"),
+//				frame);
+//
+//			// If the operation failed or was cancelled...
+//			if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
+//			{
+//				if (dialog.getResult() == ProgressDialog.JOB_FAILED)
+//				{
+//					dialog.getException().printStackTrace();
+//					TaskDialog.error(
+//						RB.format("gui.WinMainToolBar.screenshot.exception",
+//						dialog.getException().getMessage()),
+//						RB.getString("gui.text.close"));
+//				}
+//
+//				return;
+//			}
+//
+//			TaskDialog.showFileOpen(
+//				RB.format("gui.WinMainToolBar.screenshot.success", imageFile),
+//				TaskDialog.INF, imageFile);
 		}
 	}
 

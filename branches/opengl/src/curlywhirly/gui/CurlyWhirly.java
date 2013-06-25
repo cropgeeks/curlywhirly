@@ -1,5 +1,6 @@
 package curlywhirly.gui;
 
+import curlywhirly.gui.viewer.CanvasController;
 import java.awt.*;
 import java.awt.dnd.*;
 import java.awt.event.*;
@@ -13,11 +14,13 @@ import scri.commons.gui.*;
 
 import curlywhirly.controller.*;
 import curlywhirly.data.*;
+import curlywhirly.opengl.*;
 
 public class CurlyWhirly extends JFrame
 {
 	public static DataSet dataSet;
-	public static MainCanvas canvas3D;
+//	public static MainCanvas canvas3D;
+	public static OpenGLPanel canvas3D;
 	public static StartPanel startPanel;
 	public JSplitPane splitPane;
 
@@ -33,7 +36,9 @@ public class CurlyWhirly extends JFrame
 	public static MenuBar menuBar;
 	public static WinMainToolBar toolbar;
 
-	public static MovieCaptureThread currentMovieCaptureThread = null;
+	private CanvasController controller;
+
+//	public static MovieCaptureThread currentMovieCaptureThread = null;
 
 	public FrameListener frameListener = null;
 
@@ -59,10 +64,10 @@ public class CurlyWhirly extends JFrame
 		System.out.println("CurlyWhirly " + Install4j.getVersion() + " on "
 			+ System.getProperty("os.name")	+ " (" + System.getProperty("os.arch") + ")");
 		System.out.println("Using " + prefsFile);
-		java.util.Map vuMap = javax.media.j3d.VirtualUniverse.getProperties();
+//		java.util.Map vuMap = javax.media.j3d.VirtualUniverse.getProperties();
 		System.out.println("Runtime Java Version = " + System.getProperty("java.version"));
-		System.out.println("Java 3D version = " + vuMap.get("j3d.version"));
-		System.out.println("Renderer = " + vuMap.get("j3d.renderer") + "\n");
+//		System.out.println("Java 3D version = " + vuMap.get("j3d.version"));
+//		System.out.println("Renderer = " + vuMap.get("j3d.renderer") + "\n");
 
 		try
 		{
@@ -175,6 +180,8 @@ public class CurlyWhirly extends JFrame
 
 		});
 
+		initialise();
+
 		frameListener = new FrameListener(this);
 		addWindowFocusListener(frameListener);
 		addComponentListener(frameListener);
@@ -184,6 +191,11 @@ public class CurlyWhirly extends JFrame
 		//start a thread that fades in a label on the canvas prompting the user to open a file
 //		CanvasLabelFadeInThread t = new CanvasLabelFadeInThread(canvas3D);
 //		t.start();
+	}
+
+	private void initialise()
+	{
+		controller = new CanvasController(this);
 	}
 
 	void shutdown()
@@ -209,7 +221,8 @@ public class CurlyWhirly extends JFrame
 
 		// instantiate the canvas here rather than in the data load method
 		// we want to be able to recycle it when we load another dataset over the top of the current one
-		canvas3D = new MainCanvas(this);
+//		canvas3D = new MainCanvas(this);
+		canvas3D = new OpenGLPanel(this);
 		canvas3D.setPreferredSize(new Dimension((Prefs.guiWinMainWidth-controlPanelWidth), Prefs.guiWinMainHeight));
 
 		startPanel = new StartPanel();
@@ -220,7 +233,7 @@ public class CurlyWhirly extends JFrame
 		add(splitPane);
 
 		//in the absence of data this creates an empty scene graph and we then paint a label onto the canvas that prompts the user to open a file
-		canvas3D.createSceneGraph(false);
+//		canvas3D.createSceneGraph(false);
 
 		// status bar
 		statusBar = new StatusBar();
@@ -293,4 +306,12 @@ public class CurlyWhirly extends JFrame
 		return true;
 	}
 
+	public CanvasController getCanvasController()
+		{ return controller; }
+
+	public DataSet getDataSet()
+		{ return dataSet; }
+
+	public OpenGLPanel getOpenGLPanel()
+		{ return canvas3D; }
 }

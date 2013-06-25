@@ -4,8 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import java.util.*;
-import java.util.List;
 import javax.swing.*;
+import javax.swing.event.*;
 import javax.swing.plaf.basic.*;
 import javax.vecmath.*;
 
@@ -53,8 +53,10 @@ public class MTControlPanel extends JPanel implements ActionListener
 			showLabelsCheckBox.setSelected(false);
 
 		toggleEnabled(false);
-		
+
 		showLabelsCheckBox.setVisible(false);
+
+		schemeSelectorCombo.addActionListener(this);
 	}
 
 	public void addMouseAdapterToSelectorList()
@@ -70,14 +72,14 @@ public class MTControlPanel extends JPanel implements ActionListener
 					String selectedValue = selectorList.getSelectedValue();
 //					System.out.println("double click on " + selectedValue);
 					//retrieve the related Category object
-					Category category = CurlyWhirly.canvas3D.currentClassificationScheme.getCategoryByName(selectedValue);
+					Category category = frame.getDataSet().currentClassificationScheme.getCategoryByName(selectedValue);
 
 					// fire up a colour chooser
 					Color newColor = JColorChooser.showDialog(CurlyWhirly.curlyWhirly, "Choose color for category", category.colour.get());
 					if (newColor != null)
 					{
 						category.colour = new Color3f(newColor);
-						CurlyWhirly.canvas3D.updateGraph(false);
+//						CurlyWhirly.canvas3D.updateGraph(false);
 					}
 				}
 			}
@@ -86,10 +88,11 @@ public class MTControlPanel extends JPanel implements ActionListener
 
 	public void addComboModels()
 	{
+		Vector<String> dataHeaders = frame.getDataSet().dataHeaders;
 		// set the data headers as the model for the combo boxes that allow selection of variables
-		xCombo.setModel(new DefaultComboBoxModel<String>(frame.dataSet.dataHeaders));
-		yCombo.setModel(new DefaultComboBoxModel<String>(frame.dataSet.dataHeaders));
-		zCombo.setModel(new DefaultComboBoxModel<String>(frame.dataSet.dataHeaders));
+		xCombo.setModel(new DefaultComboBoxModel<String>(dataHeaders));
+		yCombo.setModel(new DefaultComboBoxModel<String>(dataHeaders));
+		zCombo.setModel(new DefaultComboBoxModel<String>(dataHeaders));
 
 		resetComboBoxes();
 	}
@@ -192,28 +195,57 @@ public class MTControlPanel extends JPanel implements ActionListener
 	public void actionPerformed(ActionEvent e)
 	{
 
-		if (e.getSource() == xCombo && e.getActionCommand().equals("comboBoxChanged"))
+		if (e.getSource() == xCombo)
 		{
 			int index = xCombo.getSelectedIndex();
-			frame.canvas3D.currentXIndex = index;
+			frame.getDataSet().setCurrX(index);
 		}
-		if (e.getSource() == yCombo && e.getActionCommand().equals("comboBoxChanged"))
+
+		else if (e.getSource() == yCombo)
 		{
 			int index = yCombo.getSelectedIndex();
-			frame.canvas3D.currentYIndex = index;
+			frame.getDataSet().setCurrY(index);
 		}
-		if (e.getSource() == zCombo && e.getActionCommand().equals("comboBoxChanged"))
+
+		else if (e.getSource() == zCombo)
 		{
 			int index = zCombo.getSelectedIndex();
-			frame.canvas3D.currentZIndex = index;
+			frame.getDataSet().setCurrZ(index);
 		}
+
+		else if (e.getSource() == schemeSelectorCombo)
+			updateSelectedScheme();
 
 		// if we had data loaded already we must now update the graph
 		if (frame.dataLoaded)
 		{
-			frame.canvas3D.highlightAllCategories = true;
-			frame.canvas3D.updateGraph(true);
+//			frame.canvas3D.highlightAllCategories = true;
 		}
+	}
+
+	private void updateSelectedScheme()
+	{
+		// Get current selection
+		String selectedSchemeName = (String) schemeSelectorCombo.getSelectedItem();
+		if (selectedSchemeName != null)
+		{
+			//find the corresponding classification scheme and select it
+			ClassificationScheme selectedScheme = frame.getDataSet().categorizationSchemesLookup.get(selectedSchemeName);
+			if (selectedScheme != null)
+				frame.getDataSet().setCurrentClassificationScheme(selectedScheme);
+
+			//update the data model of the selector list
+			selectorList.setListData(selectedScheme.categoryNamesVec);
+
+			//update the tool tip text
+			schemeSelectorCombo.setToolTipText(selectedSchemeName);
+
+			//add custom cell renderers
+			selectorList.setCellRenderer(new ColorListRenderer());
+		}
+		//clear everything that is currently selected
+		if (CurlyWhirly.dataLoaded)
+			clearAllCategorySelections();
 	}
 
 	private void resetColoursButtonActionPerformed(java.awt.event.ActionEvent evt)
@@ -224,12 +256,12 @@ public class MTControlPanel extends JPanel implements ActionListener
 	private void clearAllCategorySelections()
 	{
 		selectorList.clearSelection();
-		frame.canvas3D.highlightAllCategories = true;
-		frame.canvas3D.updateGraph(false);
+		frame.getDataSet().setHighlightAllCategories(true);
 	}
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jLabel7 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -252,15 +284,19 @@ public class MTControlPanel extends JPanel implements ActionListener
         jLabel2.setText("y-axis:");
 
         xCombo.setBorder(null);
-        xCombo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        xCombo.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 MTControlPanel.this.actionPerformed(evt);
             }
         });
 
         yCombo.setBorder(null);
-        yCombo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        yCombo.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 MTControlPanel.this.actionPerformed(evt);
             }
         });
@@ -268,37 +304,39 @@ public class MTControlPanel extends JPanel implements ActionListener
         jLabel3.setText("z-axis:");
 
         zCombo.setBorder(null);
-        zCombo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        zCombo.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 MTControlPanel.this.actionPerformed(evt);
             }
         });
 
         showLabelsCheckBox.setText("Show labels on mouseover");
-        showLabelsCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        showLabelsCheckBox.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 showLabelsCheckBoxActionPerformed(evt);
             }
         });
 
         jLabel8.setText("Category scheme:");
 
-        schemeSelectorCombo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                schemeSelectorComboActionPerformed(evt);
-            }
-        });
-
-        selectorList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+        selectorList.addListSelectionListener(new javax.swing.event.ListSelectionListener()
+        {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt)
+            {
                 selectorListValueChanged(evt);
             }
         });
         jScrollPane1.setViewportView(selectorList);
 
         resetColoursButton.setText("Reset selection");
-        resetColoursButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        resetColoursButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 resetColoursButtonActionPerformed(evt);
             }
         });
@@ -371,56 +409,21 @@ public class MTControlPanel extends JPanel implements ActionListener
 			Prefs.showMouseOverLabels = false;
 	}
 
-	private void selectorListValueChanged(javax.swing.event.ListSelectionEvent evt)
+	private void selectorListValueChanged(ListSelectionEvent e)
 	{
 
-		if (evt.getValueIsAdjusting())
+		if (e.getValueIsAdjusting())
 			return;
 
-		JList selectorList = (JList) evt.getSource();
+		JList selectorList = (JList) e.getSource();
 
 		if (selectorList.getSelectedIndices().length == 0)
 			return;
 
-		int[] indices = selectorList.getSelectedIndices();
-		Object[] selectedObjects = new Object[indices.length];
-		for (int i = 0; i < indices.length; i++)
-			selectedObjects[i] = selectorList.getModel().getElementAt(indices[i]);
+		ArrayList<String> selectedNames = (ArrayList<String>) selectorList.getSelectedValuesList();
 
-//		Object[] selectedObjects = selectorList.getSelectedValues();
-		frame.canvas3D.selectedObjects = selectedObjects;
-		frame.canvas3D.highlightAllCategories = false;
-		frame.canvas3D.updateGraph(false);
-	}
-
-	private void schemeSelectorComboActionPerformed(java.awt.event.ActionEvent evt)
-	{
-		// Get current selection
-		String selectedSchemeName = (String) schemeSelectorCombo.getSelectedItem();
-		if (selectedSchemeName != null)
-		{
-			//find the corresponding classification scheme and select it
-			ClassificationScheme selectedScheme = CurlyWhirly.dataSet.categorizationSchemesLookup.get(selectedSchemeName);
-			if (selectedScheme != null)
-				CurlyWhirly.canvas3D.currentClassificationScheme = selectedScheme;
-
-			//update the data model of the selector list
-			selectorList.setListData(selectedScheme.categoryNamesVec);
-
-			//update the tool tip text
-//			schemeSelectorCombo.setToolTipText(selectedSchemeName);
-
-			//add custom cell renderers
-			selectorList.setCellRenderer(new ColorListRenderer());
-		}
-		//clear everything that is currently selected
-		if (CurlyWhirly.dataLoaded)
-			clearAllCategorySelections();
-	}
-
-	public javax.swing.JComboBox getSchemeSelectorCombo()
-	{
-		return schemeSelectorCombo;
+		frame.getCanvasController().updateSelected(selectedNames);
+		frame.getDataSet().setHighlightAllCategories(false);
 	}
 
 	public void toggleEnabled(boolean enabled)

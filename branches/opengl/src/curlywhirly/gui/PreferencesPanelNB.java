@@ -94,7 +94,7 @@ class PreferencesPanelNB extends JPanel
 
 		// Colour options:
 		Prefs.guiGraphBackground = colorCombo.getSelectedIndex();
-		frame.canvas3D.setBackgroundColour(Prefs.guiGraphBackground);
+		frame.getCanvasController().setBackgroundColour(Prefs.guiGraphBackground);
 	}
 
     /** This method is called from within the constructor to

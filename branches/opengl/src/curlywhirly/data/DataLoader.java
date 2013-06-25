@@ -26,8 +26,8 @@ public class DataLoader
 	public void loadDataInThread(File file)
 	{
 		//clear view
-		if (mainWin.canvas3D != null)
-			mainWin.canvas3D.clearCurrentView();
+//		if (mainWin.canvas3D != null)
+//			mainWin.canvas3D.clearCurrentView();
 
 		//start the load in a separate thread
 		DataLoadingDialog dataLoadingDialog = new DataLoadingDialog(mainWin, true);
@@ -74,8 +74,8 @@ public class DataLoader
 			mainWin.controlPanel.addComboModels();
 
 		//make a new scene graph
-		mainWin.canvas3D.highlightAllCategories = true;
-		mainWin.canvas3D.createSceneGraph(true);
+//		mainWin.canvas3D.highlightAllCategories = true;
+//		mainWin.canvas3D.createSceneGraph(true);
 
 		//do the rest of the set up
 		//set the title of the window to the name of the dataset
@@ -83,6 +83,7 @@ public class DataLoader
 		mainWin.controlPanel.setUpCategoryLists();
 		mainWin.statusBar.setDefaultText();
 		mainWin.splitPane.setRightComponent(mainWin.canvas3D);
+		mainWin.canvas3D.startAnimator();
 		mainWin.repaint();
 
 		//flag the fact we have data loaded
@@ -426,7 +427,7 @@ public class DataLoader
 
 			//now choose the first categorizationscheme as the one that is currently selected
 			//the user can switch to another one later if they so wish
-			CurlyWhirly.canvas3D.currentClassificationScheme = dataSet.classificationSchemes.get(0);
+			dataSet.setCurrentClassificationScheme(dataSet.classificationSchemes.get(0));
 		}
 		catch (Exception e)
 		{

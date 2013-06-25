@@ -66,25 +66,25 @@ public class MovieCaptureDialog extends JDialog implements ActionListener, Chang
 
 	private void updateFileSize()
 	{
-		MainCanvas canvas = CurlyWhirly.canvas3D;
-		int frameRate = (Integer) nbPanel.frameRateSpinner.getValue();
-
-		int bytesPerFrame = canvas.getWidth() * canvas.getHeight() * 3;
-		int totalNumFrames = frameRate * getSpinSpeed();
-
-		// Calculate file size in megabytes
-		int fileSize = (bytesPerFrame * totalNumFrames) / 1024 / 1024;
-		nbPanel.sizeLabel.setText(RB.format("gui.MovieCaptureDialog.sizeLabel", fileSize));
+//		MainCanvas canvas = CurlyWhirly.canvas3D;
+//		int frameRate = (Integer) nbPanel.frameRateSpinner.getValue();
+//
+//		int bytesPerFrame = canvas.getWidth() * canvas.getHeight() * 3;
+//		int totalNumFrames = frameRate * getSpinSpeed();
+//
+//		// Calculate file size in megabytes
+//		int fileSize = (bytesPerFrame * totalNumFrames) / 1024 / 1024;
+//		nbPanel.sizeLabel.setText(RB.format("gui.MovieCaptureDialog.sizeLabel", fileSize));
 	}
 
 	private void captureMovie()
 	{
-		setVisible(false);
-		int frameRate = (Integer) nbPanel.frameRateSpinner.getValue();
-
-		winMain.frameListener.windowMoved = false;
-		winMain.statusBar.setMessage(RB.getString("gui.MovieCaptureDialog.captureMessage"));
-		new MovieCaptureThread(winMain, movieFile, frameRate, getSpinSpeed()).start();
+//		setVisible(false);
+//		int frameRate = (Integer) nbPanel.frameRateSpinner.getValue();
+//
+//		winMain.frameListener.windowMoved = false;
+//		winMain.statusBar.setMessage(RB.getString("gui.MovieCaptureDialog.captureMessage"));
+//		new MovieCaptureThread(winMain, movieFile, frameRate, getSpinSpeed()).start();
 	}
 
 	private boolean promptForFilename()

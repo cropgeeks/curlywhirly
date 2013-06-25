@@ -1,8 +1,8 @@
 package curlywhirly.data;
 
+import java.awt.*;
 import java.util.*;
-
-import curlywhirly.gui.*;
+import javax.vecmath.*;
 
 public class DataEntry
 {
@@ -18,27 +18,29 @@ public class DataEntry
 	//the label to be used for this data point
 	public String label = null;
 
-	//the sphere object used to represent this data point
-	public DataSphere dataSphere;
-
-	public void printAsLine(boolean normalised)
+	public float[] getPosition(int[] currAxes)
 	{
-		for(Category category : categories)
-			System.out.print(category.name + "\t");
+		float[] indices = new float[3];
+		indices[0] = normalizedDataValues.get(currAxes[0]);
+		indices[1] = normalizedDataValues.get(currAxes[1]);
+		indices[2] = normalizedDataValues.get(currAxes[2]);
 
-		System.out.print(label +"\t");
+		return indices;
+	}
 
-		if(!normalised)
+	public Color3f getColor(int currentCategory, boolean highlightAll)
+	{
+		Category category = categories.get(currentCategory);
+
+		Color3f color = null;
+		if (category != null)
 		{
-			for(Float value : dataValues)
-				System.out.print(value + "\t");
-		}
-		else
-		{
-			for(Float value : normalizedDataValues)
-				System.out.print(value + "\t");
+			if(category.highlight || highlightAll)
+				color = category.colour;
+			else
+				color = new Color3f(Color.DARK_GRAY);
 		}
 
-		System.out.println();
+		return color;
 	}
 }

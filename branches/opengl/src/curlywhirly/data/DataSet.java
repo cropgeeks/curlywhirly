@@ -40,23 +40,50 @@ public class DataSet
 	public ArrayList<Integer> dataColumnIndices;
 	public int dataColumnStart = -1;
 
-	//prints all data to stdout in the original order
-	public void listAllData(boolean normalised)
+	// Default to first three columns of data in the dataset
+	private int currX = 0;
+	private int currY = 1;
+	private int currZ = 2;
+
+	// this flag is set to true when we want all data points coloured in
+	public boolean highlightAllCategories = true;
+
+	//the categorization scheme we are currently using
+	public ClassificationScheme currentClassificationScheme;
+
+	public ClassificationScheme getCurrentClassificationScheme()
+		{ return currentClassificationScheme; }
+
+	public void setCurrentClassificationScheme(ClassificationScheme current)
 	{
-		//print headers
-		System.out.println("dataSetName = " + name);
-
-		for (int i = 0; i < allHeaders.length; i++)
-		{
-			System.out.print(allHeaders[i]);
-			System.out.print("\t");
-		}
-
-		System.out.println();
-
-		//print data
-		for(DataEntry dataEntry : dataEntries)
-			dataEntry.printAsLine(normalised);
-
+		currentClassificationScheme = current;
 	}
+
+	public void setCurrX(int currX)
+	{
+		this.currX = currX;
+	}
+
+	public void setCurrY(int currY)
+	{
+		this.currY = currY;
+	}
+
+	public void setCurrZ(int currZ)
+	{
+		this.currZ = currZ;
+	}
+
+	public int getCategorySchemeIndex()
+	{
+		return classificationSchemes.indexOf(currentClassificationScheme);
+	}
+
+	public int[] getCurrentAxes()
+	{
+		return new int[] { currX, currY, currZ };
+	}
+
+	public void setHighlightAllCategories(boolean highlightAllCategories)
+		{ this.highlightAllCategories = highlightAllCategories; }
 }

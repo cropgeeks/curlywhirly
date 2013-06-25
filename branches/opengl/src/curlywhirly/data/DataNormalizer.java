@@ -12,8 +12,8 @@ public class DataNormalizer
 		for (int i = 0; i < dataSet.numDataColumns; i++)
 		{
 			//first iterate over the variable values to find the maximum value
-			float absoluteMax = 0;
-			float absoluteMin = 0;
+			float absoluteMax = -Float.MAX_VALUE;
+			float absoluteMin = Float.MAX_VALUE;
 			// for each entry in the dataset
 			for (DataEntry dataEntry : dataSet.dataEntries)
 			{
@@ -24,18 +24,11 @@ public class DataNormalizer
 					absoluteMin = value;
 			}
 
-			//then we need to work out a scaling factor by which to multiply the data so that they get normalized to between -1 and 1
-			float scalingFactor = 0;
-			if (absoluteMax > Math.abs(absoluteMin))
-				scalingFactor = absoluteMax;
-			else
-				scalingFactor = Math.abs(absoluteMin);
-
+			// Doe wach value normalize it and store it
 			for (DataEntry dataEntry : dataSet.dataEntries)
 			{
 				float value = dataEntry.dataValues.get(i);
-				float normalizedValue = value/scalingFactor;
-				//store this
+				float normalizedValue = (((value - absoluteMin) * (1 - -1)) / (absoluteMax - absoluteMin)) + -1;
 				dataEntry.normalizedDataValues.add(normalizedValue);
 			}
 
@@ -43,5 +36,4 @@ public class DataNormalizer
 
 		return dataSet;
 	}
-
 }
