@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<link rel="stylesheet" href="stylesheet/styles.css" type="text/css">
+
+<title>Manual</title>
+
+</head>
+<body>
+
+<!--#include virtual="header.shtml" -->
+
+
+<h2>Manual</h2>
+
+<h3>
+	Instructions for use
+	<a name="top"> </a>
+</h3>
+
+<p>
+	Topics:
+	<br>
+	<a href="#dataformats">Data format</a>
+	<br>
+	<a href="#loadingdata">Loading data</a>
+	<br>
+	<a href="#choosingdata">Choosing data to display</a>
+	<br>
+	<a href="#viewcontrols">View controls</a>
+	<br>
+	<a href="#bgcolour">Background colour</a>
+	<br>
+	<a href="#subsets">Highlighting subsets of data</a>
+	<br>
+	<a href="#datapoints">Exploring individual data points</a>
+	<br>
+</p>
+<p>
+</p>
+<h4>
+	Data format
+	<a name="dataformats"></a>
+</h4>
+<p>
+<i>Legacy data format</i>
+<p>
+The minimum requirement for data is that there are at least three data variables available for display. Data
+must be in supplied by the user in a tab-delimited text file, with the column order as follows:
+</p>
+<p>
+
+	Category data --> Labels for individual data points --> Data column 1 --> Data column 2 --> ..... Data column n
+
+</p>
+<p>
+	If your data does not have category information attached to it, the entire first column can be left empty.
+</p>
+<p>
+	There is no limit on the number of data columns but the data in these must obviously be numerical. Columns can
+	be labelled with any label. Make sure there are no extra lines or tabs after the end of the data in either
+	direction.
+</p>
+<i>New multi-category data format</i>
+<p>
+This format is supported from version 1.10.12.10 onwards and supports multiple columns with category information, allowing users
+to categorize their data in different ways. The legacy format is still supported.
+</p>
+<p>
+The basic format is as described above, but category column headers must starts with the prefix 
+"categories:" and there can be an unlimited number of these to the left of the column with the data labels:
+</p>
+<p>
+Category data1 --> category data2 --> .... category data n --> Labels for individual data points --> Data column 1 --> Data column 2 --> ..... Data column n
+</p>
+Thus, the data headers might look something like this:
+<p>
+categories:size --> categories:age --> myLabels --> PCO1 --> PCO2 --> PCO3
+</p>
+<p>
+An <a href="exampleDataCurlyWhirly.txt">example file with multi-category data</a> is available.
+
+</p>
+<a href="#top">Back to top</a>
+
+
+<h4>
+	Loading data
+	<a name="loadingdata"></a>
+</h4>
+Go to File --> Open... and select a file of choice. If you would like to experiment with some example data, go
+to File --> Load example data. This will load a file supplied with the application which contains randomly
+generated data. You can use this to explore the functionality of the application.
+<br>
+<a href="#top">Back to top</a>
+
+
+<h4>
+	Choosing data to display
+	<a name="choosingdata"></a>
+</h4>
+On the left hand control panel, select for each axis from the drop-down menu which variable you would like
+displayed.
+<br>
+<a href="#top">Back to top</a>
+
+
+<h4>
+	View controls
+	<a name="viewcontrols"></a>
+</h4>
+To reorient the graph, click and drag with the left mouse button. To go back to the original viewpoint, click
+the button labelled "Reset Viewpoint".
+<p>
+	To zoom in and out, middle-click and drag or Alt+Left-click and drag.
+	<br>
+	<a href="#top">Back to top</a>
+
+
+</p>
+<h4>
+	Background colour
+	<a name="bgcolour"></a>
+</h4>
+Select this from the drop-down menu at the top of the left hand control panel. Options are light grey, dark
+grey, black and white.
+<br>
+<a href="#top">Back to top</a>
+
+
+<h4>
+	Highlighting subsets of data
+	<a name="subsets"></a>
+</h4>
+You can selectively colour data from one or more categories by clicking on them in the category list panel on
+the bottom left (Ctrl + click to select more than one category). This will grey out all data points except for
+those in the selected categories.
+<p>
+	To show the original colouring again, press the button labelled "Reset Selection".
+	<br>
+	<a href="#top">Back to top</a>
+
+</p>
+<h4>
+	Exploring individual data points
+	<a name="datapoints"></a>
+</h4>
+Position the mouse over a data point and its individual label (as supplied in the data file) will be displayed
+in the status bar at the bottom left corner of the application. 
+
+<p>
+Users can also enter an annotation URL for data points (File -> Annotation URL...) 
+ and this then allows them to click on a data point which results in the default web browser being started up with a URL 
+ constructed by the application. The annotation URL entered by the user needs to be such that the name (label) of the data point 
+ can be appended to it to form a valid URL, for example:
+  </p>
+  <ul>
+<li>URL entered by user: http://rice.plantbiology.msu.edu/cgi-bin/gbrowse/rice/?name=</li> 
+ <li>data point label: LOC_Os10g28230</li> 
+ <li>valid URL constructed by the application: http://rice.plantbiology.msu.edu/cgi-bin/gbrowse/rice/?name=LOC_Os10g28230</li> 
+ </ul>
+<br>
+<a href="#top">Back to top</a>
+
+
+<!--#include virtual="footer.html" -->
+
+</body>
+</html>
