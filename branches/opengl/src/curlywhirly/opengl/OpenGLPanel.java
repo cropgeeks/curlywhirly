@@ -32,7 +32,6 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	// Variables related automatic rotation of the model
 	private boolean autoSpin = false;
-	private float angle = 0f;
 	private float speed = -0.1f;
 
 	private GLU glu;
@@ -43,7 +42,8 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	private float[] matrix = new float[16];
 	private final Object matrixLock = new Object();
 	private Matrix4f autoRot = new Matrix4f();
-	private float[] matRot = new float[16];
+	private Matrix4f combined = new Matrix4f();
+	private float[] combArr = new float[16];
 
 	// An custom made sphere object (faster than gluSphere)
 	private IcoSphere sphere;
@@ -62,6 +62,8 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	private float aspect;
 	boolean doZoom = false;
 
+	private boolean isDragging = false;
+
 	public OpenGLPanel(CurlyWhirly frame)
 	{
 		this.frame = frame;
@@ -74,7 +76,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
         lastRot.setIdentity();
         currRot.setIdentity();
 		autoRot.setIdentity();
-		get(matrix, currRot);
+		combined.setIdentity();
 
 		texRend = new TextRenderer(new Font("MONOSPACED", Font.PLAIN, 12));
 	}
@@ -136,8 +138,6 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	{
 	}
 
-	float[] lRot = new float[16];
-
 	@Override
 	public void display(GLAutoDrawable drawable)
 	{
@@ -145,26 +145,27 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		if (animator.isPaused())
 			return;
 
-		synchronized(matrixLock)
-		{
-//			currRot.mul(autoRot);
-			get(matrix, currRot);
-			get(matRot, autoRot);
-		}
-
 		// Get the graphics context
 		GL2 gl = drawable.getGL().getGL2();
 
-		if (doZoom)
-			zoomPerspective(gl);
+		synchronized(matrixLock)
+		{
+			get(matrix, currRot);
+			get(combArr, combined);
+		}
+
+		zoomPerspective(gl);
 
 		clearColor(gl);
 		// Clear the colour and depth buffers
 		gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		gl.glPushMatrix();
-		gl.glMultMatrixf(matRot, 0);
-		gl.glMultMatrixf(matrix, 0);
+
+		if (isDragging)
+			gl.glMultMatrixf(matrix, 0);
+
+		gl.glMultMatrixf(combArr, 0);
 
 		drawAxes(gl);
 		drawSpheres(gl);
@@ -175,8 +176,14 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 		if (autoSpin)
 		{
-			angle += speed;
-			rotateMatrix(angle);
+			synchronized(matrixLock)
+			{
+				rotateMatrix(speed);
+				// When carrying out automatic rotation we need to multiply the
+				// automatic rotation by our combined rotation and set our
+				// combined rotation to the result of this.
+				combined.mul(autoRot, combined);
+			}
 		}
 	}
 
@@ -204,7 +211,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glMatrixMode(GL_MODELVIEW);
 		gl.glLoadIdentity();
 		// Rotate view so that it looks at the centre of the model
-		gl.glRotatef(30, 0, 1, 0);
+//		gl.glRotatef(30, 0, 1, 0);
 
 		mouseListener.initialiseArcBall(CANVAS_WIDTH, CANVAS_HEIGHT);
 		animator.start();
@@ -214,17 +221,20 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	// (specifically by narrowing and widening the viewing angle)
 	private void zoomPerspective(GL2 gl)
 	{
-		gl.glPushMatrix();
-		// Switch to and update the projection matrix
-		gl.glMatrixMode(GL_PROJECTION);
-		gl.glLoadIdentity();
-		glu.gluPerspective(perspAngle, aspect, 0, 100);
-		glu.gluLookAt(1, 0, 2, 0, 0, 0, 0, 1, 0);
+		if (doZoom)
+		{
+			gl.glPushMatrix();
+			// Switch to and update the projection matrix
+			gl.glMatrixMode(GL_PROJECTION);
+			gl.glLoadIdentity();
+			glu.gluPerspective(perspAngle, aspect, 0, 100);
+			glu.gluLookAt(1, 0, 2, 0, 0, 0, 0, 1, 0);
 
-		// Enable the model-view transform
-		gl.glMatrixMode(GL_MODELVIEW);
-		doZoom = false;
-		gl.glPopMatrix();
+			// Enable the model-view transform
+			gl.glMatrixMode(GL_MODELVIEW);
+			doZoom = false;
+			gl.glPopMatrix();
+		}
 	}
 
 	private void lightScene(GL2 gl2)
@@ -247,11 +257,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	private void drawAxes(GL2 gl)
 	{
-		// Extra push matrix needed to keep axis cones on axes...
 		gl.glPushMatrix();
-
-		gl.glPushMatrix();
-//		gl.glMultMatrixf(matrix, 0);
 
 		// Set material properties.
 		float[] rgba = {0.2f, 1f, 0.2f};
@@ -356,8 +362,6 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		// Scale our unit sphere down to a more manageable scale
 		gl.glScalef(0.005f, 0.005f, 0.005f);
 
-		// Mouse based rotations
-//		gl.glMultMatrixf(matrix, 0);
 		float[] indices = dataEntry.getPosition(frame.getDataSet().getCurrentAxes());
 		// Bring our translations into the correct coordinate space
 		gl.glTranslatef(map(indices[0])*200f, map(indices[1])*200f, map(indices[2])*200f);
@@ -409,9 +413,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 			lastRot.setIdentity();
 			currRot.setIdentity();
 			autoRot.setIdentity();
-			angle = 0;
-//			matrix = new float[16];
-			mouseListener.initialiseArcBall(getWidth(), getHeight());
+			combined.setIdentity();
 		}
 	}
 
@@ -426,16 +428,9 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	public void updateCurrentRotation(Quat4f rotQuat)
 	{
-//		Quat4f auto = new Quat4f();
-
-		// Get rotation as quaternion and multiply by our automatic rotation
-//		autoRot.get(auto);
-//		auto.mul(rotQuat);
-//		rotQuat.mul(auto);
-//		auto.mulInverse(rotQuat);
 		synchronized(matrixLock)
 		{
-			// Convert Quaternion Into Matrix3fT
+			// Convert Quaternion Into Matrix3f
 			currRot.setRotation(rotQuat);
 			// Accumulate Last Rotation Into This One
 			currRot.mul(currRot, lastRot);
@@ -469,6 +464,26 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		autoSpin = !autoSpin;
 	}
 
+	public void toggleDragging()
+	{
+		isDragging = !isDragging;
+	}
+
+	// When the mouse is released froma drag operation we need to carefully
+	// manage the state of our rotation matrices.
+	public void mouseUp()
+	{
+		synchronized (matrixLock)
+		{
+			// Multiply the current mouse rotation matrix by the combined matrix
+			// and store as the new combined matrix (multiply in this order as
+			// our mouse rotations were being applied first while dragging).
+			combined.mul(currRot, combined);
+			// Reset currRot to prevent mouse clicks rotating the model
+			currRot.setIdentity();
+		}
+	}
+
 	public void setClearColor(Color color)
 	{
 		clearColor = color;
@@ -495,7 +510,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	private void viewExtentCube(GL2 gl)
 	{
-		gl.glBegin(GL_QUADS); // of the color cube
+		gl.glBegin(GL_QUADS);
 
 		// Top-face
 		gl.glVertex3f(0.5f, 0.5f, -0.5f);
@@ -533,6 +548,6 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glVertex3f(0.5f, -0.5f, 0.5f);
 		gl.glVertex3f(0.5f, -0.5f, -0.5f);
 
-		gl.glEnd(); // of the color cube
+		gl.glEnd();
 	}
 }

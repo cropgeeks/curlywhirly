@@ -13,9 +13,6 @@ public class CanvasMouseListener extends MouseInputAdapter
 	private OpenGLPanel panel;
 	private ArcBall arcBall;
 
-	// Used to track the startPoint of mouse drags
-	private Point startPoint = null;
-
 	public CanvasMouseListener(OpenGLPanel panel)
 	{
 		this.panel = panel;
@@ -36,7 +33,7 @@ public class CanvasMouseListener extends MouseInputAdapter
 
 	public void startDrag(Point point)
 	{
-		startPoint = point;
+		panel.toggleDragging();
 		// Update Start Vector
 		panel.updateLastRotation();
 		// Prepare For Dragging
@@ -56,7 +53,9 @@ public class CanvasMouseListener extends MouseInputAdapter
 	public void mousePressed(MouseEvent e)
 	{
 		if (SwingUtilities.isLeftMouseButton(e))
+		{
 			startDrag(e.getPoint());
+		}
 	}
 
 	@Override
@@ -64,6 +63,16 @@ public class CanvasMouseListener extends MouseInputAdapter
 	{
 		if (SwingUtilities.isLeftMouseButton(e))
 			drag(e.getPoint());
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e)
+	{
+		if (SwingUtilities.isLeftMouseButton(e))
+		{
+			panel.toggleDragging();
+			panel.mouseUp();
+		}
 	}
 
 	@Override
