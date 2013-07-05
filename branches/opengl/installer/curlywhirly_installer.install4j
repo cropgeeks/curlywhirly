@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="5.1.3" transformSequenceNumber="4">
-  <directoryPresets config="../system/macosx/libjogl_cg.jnilib" />
+<install4j version="5.1.6" transformSequenceNumber="4">
+  <directoryPresets config=".." />
   <application name="CurlyWhirly" distributionSourceDir="" applicationId="7308-4813-7424-6439" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="curlywhirly" publisher="The James Hutton Institute" publisherWeb="http://www.hutton.ac.uk" version="x.xx.xx.xx" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="true" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="true" languageSelectionInPrincipalLanguage="false">
       <principalLanguage id="en" customLocalizationFile="" />
@@ -23,16 +23,10 @@
   </application>
   <files keepModificationTimes="false" missingFilesStrategy="warn" globalExcludeSuffixes="" defaultOverwriteMode="4" defaultUninstallMode="0" launcherOverwriteMode="3" defaultFileMode="644" defaultDirMode="755">
     <filesets />
-    <roots>
-      <root id="678" fileset="" location="${installer:sys.userHome}" />
-    </roots>
+    <roots />
     <mountPoints>
       <mountPoint id="18" root="" location="lib" mode="755" />
-      <mountPoint id="576" root="" location="system" mode="755" />
       <mountPoint id="777" root="" location="docs" mode="755" />
-      <mountPoint id="679" root="678" location="Library" mode="755" />
-      <mountPoint id="680" root="678" location="Library/Java" mode="755" />
-      <mountPoint id="681" root="678" location="Library/Java/Extensions" mode="755" />
     </mountPoints>
     <entries>
       <dirEntry mountPoint="18" file="../lib" overwriteMode="1" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="" excludeSuffixes="" dirMode="755" overrideDirMode="false">
@@ -40,21 +34,9 @@
           <entry location="i4jruntime.jar" fileType="regular" />
         </exclude>
       </dirEntry>
-      <dirEntry mountPoint="576" file="../system" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="system" excludeSuffixes="" dirMode="755" overrideDirMode="false">
-        <exclude />
-      </dirEntry>
       <dirEntry mountPoint="777" file="./licence" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="" excludeSuffixes=".svn" dirMode="755" overrideDirMode="false">
         <exclude />
       </dirEntry>
-      <fileEntry mountPoint="681" file="../lib/vecmath.jar" overwriteMode="1" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="true" overrideUninstallMode="false" />
-      <fileEntry mountPoint="681" file="../lib/jogl.jar" overwriteMode="1" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="true" overrideUninstallMode="false" />
-      <fileEntry mountPoint="681" file="../lib/j3dutils.jar" overwriteMode="1" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="true" overrideUninstallMode="false" />
-      <fileEntry mountPoint="681" file="../lib/j3dcore.jar" overwriteMode="1" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="true" overrideUninstallMode="false" />
-      <fileEntry mountPoint="681" file="../lib/gluegen-rt.jar" overwriteMode="1" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="true" overrideUninstallMode="false" />
-      <fileEntry mountPoint="681" file="../system/macosx/libjogl_cg.jnilib" overwriteMode="1" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="true" overrideUninstallMode="false" />
-      <fileEntry mountPoint="681" file="../system/macosx/libjogl_awt.jnilib" overwriteMode="1" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="true" overrideUninstallMode="false" />
-      <fileEntry mountPoint="681" file="../system/macosx/libjogl.jnilib" overwriteMode="1" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="true" overrideUninstallMode="false" />
-      <fileEntry mountPoint="681" file="../system/macosx/libgluegen-rt.jnilib" overwriteMode="1" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="true" overrideUninstallMode="false" />
     </entries>
     <components />
   </files>
@@ -69,17 +51,11 @@
           <versionLine x="20" y="40" text="version ${compiler:sys.version}" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
         </text>
       </splashScreen>
-      <java mainClass="curlywhirly.gui.CurlyWhirly" vmParameters="-Xmx1024m -Dsun.awt.noerasebackground=true" arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
+      <java mainClass="curlywhirly.gui.CurlyWhirly" vmParameters="-Xmx1024m" arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
         <classPath>
           <archive location="lib/curlywhirly.jar" failOnError="false" />
         </classPath>
-        <nativeLibraryDirectories>
-          <directory name="system/linux_x64" />
-          <directory name="system/linux_x86" />
-          <directory name="system/macosx" />
-          <directory name="system/windows_x64" />
-          <directory name="system/windows_x86" />
-        </nativeLibraryDirectories>
+        <nativeLibraryDirectories />
       </java>
       <includedFiles />
       <unextractableFiles />
@@ -1308,19 +1284,25 @@ if (wizardContext != null) {
     </applications>
   </installerGui>
   <mediaSets>
-    <windows name="Windows x86" id="21" customizedId="" mediaFileName="${compiler:sys.shortName}_windows_x86_${compiler:sys.version}" installDir="CurlyWhirly" overridePrincipalLanguage="false" jreBitType="32" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="windows-x86-1.7.0_09" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="" verifyIntegrity="true">
+    <windows name="Windows x86" id="21" customizedId="" mediaFileName="${compiler:sys.shortName}_windows_x86_${compiler:sys.version}" installDir="CurlyWhirly" overridePrincipalLanguage="false" jreBitType="32" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="windows-x86-1.7.0_21" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="" verifyIntegrity="true">
       <excludedLaunchers />
       <excludedBeans />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
       <exclude>
-        <entry location="lib/gluegen-rt.jar" fileType="regular" />
-        <entry location="lib/jogl.jar" fileType="regular" />
+        <entry location="lib/gluegen-rt-natives-linux-amd64.jar" fileType="regular" />
+        <entry location="lib/gluegen-rt-natives-linux-i586.jar" fileType="regular" />
+        <entry location="lib/gluegen-rt-natives-macosx-universal.jar" fileType="regular" />
+        <entry location="lib/gluegen-rt-natives-windows-amd64.jar" fileType="regular" />
+        <entry location="lib/jogl-all-natives-linux-amd64.jar" fileType="regular" />
+        <entry location="lib/jogl-all-natives-linux-i586.jar" fileType="regular" />
+        <entry location="lib/jogl-all-natives-macosx-universal.jar" fileType="regular" />
+        <entry location="lib/jogl-all-natives-windows-amd64.jar" fileType="regular" />
         <entry location="lib/osxadapter.jar" fileType="regular" />
         <entry location="system/linux_x64" fileType="regular" />
         <entry location="system/linux_x86" fileType="regular" />
         <entry location="system/macosx" fileType="regular" />
         <entry location="system/windows_x64" fileType="regular" />
-        <entry location=".i4j_external_678" fileType="regular" />
+        <entry location="system/windows_x86" fileType="regular" />
       </exclude>
       <variables />
       <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
@@ -1330,19 +1312,25 @@ if (wizardContext != null) {
       <excludedComponents />
       <includedDownloadableComponents />
     </windows>
-    <windows name="Windows x64" id="692" customizedId="" mediaFileName="${compiler:sys.shortName}_windows_x64_${compiler:sys.version}" installDir="CurlyWhirly" overridePrincipalLanguage="false" jreBitType="64" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="windows-amd64-1.7.0_09" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="" verifyIntegrity="true">
+    <windows name="Windows x64" id="692" customizedId="" mediaFileName="${compiler:sys.shortName}_windows_x64_${compiler:sys.version}" installDir="CurlyWhirly" overridePrincipalLanguage="false" jreBitType="64" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="windows-amd64-1.7.0_21" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="" verifyIntegrity="true">
       <excludedLaunchers />
       <excludedBeans />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
       <exclude>
-        <entry location="lib/gluegen-rt.jar" fileType="regular" />
-        <entry location="lib/jogl.jar" fileType="regular" />
+        <entry location="lib/gluegen-rt-natives-linux-amd64.jar" fileType="regular" />
+        <entry location="lib/gluegen-rt-natives-linux-i586.jar" fileType="regular" />
+        <entry location="lib/gluegen-rt-natives-macosx-universal.jar" fileType="regular" />
+        <entry location="lib/gluegen-rt-natives-windows-i586.jar" fileType="regular" />
+        <entry location="lib/jogl-all-natives-linux-amd64.jar" fileType="regular" />
+        <entry location="lib/jogl-all-natives-linux-i586.jar" fileType="regular" />
+        <entry location="lib/jogl-all-natives-macosx-universal.jar" fileType="regular" />
+        <entry location="lib/jogl-all-natives-windows-i586.jar" fileType="regular" />
         <entry location="lib/osxadapter.jar" fileType="regular" />
         <entry location="system/linux_x64" fileType="regular" />
         <entry location="system/linux_x86" fileType="regular" />
         <entry location="system/macosx" fileType="regular" />
+        <entry location="system/windows_x64" fileType="regular" />
         <entry location="system/windows_x86" fileType="regular" />
-        <entry location=".i4j_external_678" fileType="regular" />
       </exclude>
       <variables />
       <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
@@ -1352,14 +1340,18 @@ if (wizardContext != null) {
       <excludedComponents />
       <includedDownloadableComponents />
     </windows>
-    <macos name="Mac OS X Single Bundle" id="131" customizedId="" mediaFileName="" installDir="CurlyWhirly" overridePrincipalLanguage="false" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" appleJre="true" customInstallBaseDir="" contentFilesType="1" downloadURL="" signLaunchers="false" launcherId="20">
+    <macos name="Mac OS X Single Bundle" id="131" customizedId="" mediaFileName="" installDir="CurlyWhirly" overridePrincipalLanguage="false" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="macosx-amd64-1.7.0_21" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" appleJre="false" customInstallBaseDir="" contentFilesType="1" downloadURL="" signLaunchers="false" launcherId="20">
       <excludedBeans />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
       <exclude>
-        <entry location="lib/gluegen-rt.jar" fileType="regular" />
-        <entry location="lib/j3dcore.jar" fileType="regular" />
-        <entry location="lib/j3dutils.jar" fileType="regular" />
-        <entry location="lib/jogl.jar" fileType="regular" />
+        <entry location="lib/gluegen-rt-natives-linux-amd64.jar" fileType="regular" />
+        <entry location="lib/gluegen-rt-natives-linux-i586.jar" fileType="regular" />
+        <entry location="lib/gluegen-rt-natives-windows-amd64.jar" fileType="regular" />
+        <entry location="lib/gluegen-rt-natives-windows-i586.jar" fileType="regular" />
+        <entry location="lib/jogl-all-natives-linux-amd64.jar" fileType="regular" />
+        <entry location="lib/jogl-all-natives-linux-i586.jar" fileType="regular" />
+        <entry location="lib/jogl-all-natives-windows-amd64.jar" fileType="regular" />
+        <entry location="lib/jogl-all-natives-windows-i586.jar" fileType="regular" />
         <entry location="lib/vecmath.jar" fileType="regular" />
         <entry location="system" fileType="regular" />
       </exclude>
@@ -1371,19 +1363,21 @@ if (wizardContext != null) {
       <excludedComponents />
       <includedDownloadableComponents />
     </macos>
-    <unixInstaller name="Linux x86" id="56" customizedId="" mediaFileName="${compiler:sys.shortName}_linux_x86_${compiler:sys.version}" installDir="CurlyWhirly" overridePrincipalLanguage="false" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="linux-x86-1.6.0_35" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="">
+    <unixInstaller name="Linux x86" id="56" customizedId="" mediaFileName="${compiler:sys.shortName}_linux_x86_${compiler:sys.version}" installDir="CurlyWhirly" overridePrincipalLanguage="false" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="linux-x86-1.7.0_21" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="">
       <excludedLaunchers />
       <excludedBeans />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
       <exclude>
-        <entry location="lib/gluegen-rt.jar" fileType="regular" />
-        <entry location="lib/jogl.jar" fileType="regular" />
+        <entry location="lib/gluegen-rt-natives-linux-amd64.jar" fileType="regular" />
+        <entry location="lib/gluegen-rt-natives-macosx-universal.jar" fileType="regular" />
+        <entry location="lib/gluegen-rt-natives-windows-amd64.jar" fileType="regular" />
+        <entry location="lib/gluegen-rt-natives-windows-i586.jar" fileType="regular" />
+        <entry location="lib/jogl-all-natives-linux-amd64.jar" fileType="regular" />
+        <entry location="lib/jogl-all-natives-macosx-universal.jar" fileType="regular" />
+        <entry location="lib/jogl-all-natives-solaris-amd64.jar" fileType="regular" />
+        <entry location="lib/jogl-all-natives-windows-amd64.jar" fileType="regular" />
+        <entry location="lib/jogl-all-natives-windows-i586.jar" fileType="regular" />
         <entry location="lib/osxadapter.jar" fileType="regular" />
-        <entry location="system/linux_x64" fileType="regular" />
-        <entry location="system/macosx" fileType="regular" />
-        <entry location="system/windows_x64" fileType="regular" />
-        <entry location="system/windows_x86" fileType="regular" />
-        <entry location=".i4j_external_678" fileType="regular" />
       </exclude>
       <variables />
       <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
@@ -1396,19 +1390,21 @@ if (wizardContext != null) {
         <content />
       </installerScript>
     </unixInstaller>
-    <unixInstaller name="Linux x64" id="698" customizedId="" mediaFileName="${compiler:sys.shortName}_linux_x64_${compiler:sys.version}" installDir="CurlyWhirly" overridePrincipalLanguage="false" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="linux-amd64-1.6.0_35" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="">
+    <unixInstaller name="Linux x64" id="698" customizedId="" mediaFileName="${compiler:sys.shortName}_linux_x64_${compiler:sys.version}" installDir="CurlyWhirly" overridePrincipalLanguage="false" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="linux-amd64-1.7.0_21" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="">
       <excludedLaunchers />
       <excludedBeans />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
       <exclude>
-        <entry location="lib/gluegen-rt.jar" fileType="regular" />
-        <entry location="lib/jogl.jar" fileType="regular" />
+        <entry location="lib/gluegen-rt-natives-linux-i586.jar" fileType="regular" />
+        <entry location="lib/gluegen-rt-natives-macosx-universal.jar" fileType="regular" />
+        <entry location="lib/gluegen-rt-natives-windows-amd64.jar" fileType="regular" />
+        <entry location="lib/gluegen-rt-natives-windows-i586.jar" fileType="regular" />
+        <entry location="lib/jogl-all-natives-linux-i586.jar" fileType="regular" />
+        <entry location="lib/jogl-all-natives-macosx-universal.jar" fileType="regular" />
+        <entry location="lib/jogl-all-natives-solaris-amd64.jar" fileType="regular" />
+        <entry location="lib/jogl-all-natives-windows-amd64.jar" fileType="regular" />
+        <entry location="lib/jogl-all-natives-windows-i586.jar" fileType="regular" />
         <entry location="lib/osxadapter.jar" fileType="regular" />
-        <entry location="system/linux_x86" fileType="regular" />
-        <entry location="system/macosx" fileType="regular" />
-        <entry location="system/windows_x64" fileType="regular" />
-        <entry location="system/windows_x86" fileType="regular" />
-        <entry location=".i4j_external_678" fileType="regular" />
       </exclude>
       <variables />
       <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">

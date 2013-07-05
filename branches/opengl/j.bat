@@ -8,6 +8,6 @@ SET LIBS=%LIBS%;lib\i4jruntime.jar
 SET LIBS=%LIBS%;lib\jogl-all.jar
 SET LIBS=%LIBS%;lib\scri-commons.jar
 SET LIBS=%LIBS%;lib\osxadapter.jar
-SET LIBS=%LIBS%;lib\vecmath-1.3.1.jar
+SET LIBS=%LIBS%;lib\vecmath.jar
 
 java -Xmx1024m -cp .;classes;%LIBS% curlywhirly.gui.CurlyWhirly %1 %2 %3 %4 %5

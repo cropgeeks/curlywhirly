@@ -14,7 +14,6 @@ import curlywhirly.gui.*;
 import curlywhirly.gui.viewer.*;
 
 import static javax.media.opengl.GL2.*;
-import static javax.media.opengl.fixedfunc.GLPointerFunc.*;
 
 
 // TODO: Check what exactly needs to be done with the animators at various points
@@ -64,6 +63,10 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	private boolean isDragging = false;
 
+	private String glVersion;
+	private String glExtensions;
+	private float versionNo = 0;
+
 	public OpenGLPanel(CurlyWhirly frame)
 	{
 		this.frame = frame;
@@ -88,7 +91,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 			animator.remove(this);
 
 		animator = new FPSAnimator(this, FPS, true);
-//		animator.setUpdateFPSFrames(200, System.out);
+		animator.setUpdateFPSFrames(200, System.out);
 		animator.setPrintExceptions(true);
 		animator.start();
 	}
@@ -109,6 +112,13 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	{
 		// Our basic GL setup configuration
 		GL2 gl = drawable.getGL().getGL2();
+
+		glVersion = gl.glGetString(GL_VERSION);
+		glExtensions = gl.glGetString(GL_EXTENSIONS);
+
+		System.out.println(versionNo);
+		System.out.println(glExtensions);
+
 		glu = new GLU();
 		gl.glClearDepth(1.0f);
 		gl.glEnable(GL_DEPTH_TEST);
@@ -119,6 +129,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
 		gl.glLineWidth(1.0f);
 		gl.setSwapInterval(1);
+		gl.glEnable(GL_RESCALE_NORMAL);
 		gl.glEnable(GL.GL_CULL_FACE);
 
 		// Vertex buffers for our spheres
@@ -204,14 +215,14 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glMatrixMode(GL_PROJECTION);
 		gl.glLoadIdentity();
 		// Field of view, aspect ratio, z plane near, z plane far
-		glu.gluPerspective(perspAngle, aspect, 0, 100);
+		glu.gluPerspective(perspAngle, aspect, 1, 1000);
 		glu.gluLookAt(1, 0, 2, 0, 0, 0, 0, 1, 0);
 
 		// Enable the model-view transform
 		gl.glMatrixMode(GL_MODELVIEW);
 		gl.glLoadIdentity();
 		// Rotate view so that it looks at the centre of the model
-//		gl.glRotatef(30, 0, 1, 0);
+		gl.glRotatef(30, 0, 1, 0);
 
 		mouseListener.initialiseArcBall(CANVAS_WIDTH, CANVAS_HEIGHT);
 		animator.start();
@@ -227,7 +238,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 			// Switch to and update the projection matrix
 			gl.glMatrixMode(GL_PROJECTION);
 			gl.glLoadIdentity();
-			glu.gluPerspective(perspAngle, aspect, 0, 100);
+			glu.gluPerspective(perspAngle, aspect, 1, 1000);
 			glu.gluLookAt(1, 0, 2, 0, 0, 0, 0, 1, 0);
 
 			// Enable the model-view transform
@@ -237,22 +248,20 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		}
 	}
 
-	private void lightScene(GL2 gl2)
+	private void lightScene(GL2 gl)
 	{
 		// Set up lighting
-		float[] lightAmbient = { 0.0f, 0.0f, 0.0f, 1.0f };
-		float[] lightDiffuse = { 1.0f, 1.0f, 1.0f, 1.0f };
-		float[] lightSpecular = { 1.0f, 1.0f, 1.0f, 1.0f };
-		float[] lightPosition = { 1.0f, 1.0f, 1.0f, 1.0f };
+		float[] lightAmbient = {0.4f, 0.4f, 0.4f, 1f};
+		float[] lightSpecular = {0.3f, 0.3f, 0.3f, 1f};
+		float[] lightPosition = { 1, 0.0f, 0, 1.0f };
 
-		gl2.glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient, 0);
-		gl2.glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse, 0);
-		gl2.glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpecular, 0);
-		gl2.glLightfv(GL_LIGHT0, GL_POSITION, lightPosition, 0);
+		gl.glLightfv(GL_LIGHT0, GL_POSITION, lightPosition, 0);
+		gl.glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient, 0);
+		gl.glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpecular, 0);
 
 		// Enable lighting in GL.
-		gl2.glEnable(GL2.GL_LIGHTING);
-		gl2.glEnable(GL2.GL_LIGHT0);
+		gl.glEnable(GL_LIGHTING);
+		gl.glEnable(GL_LIGHT0);
 	}
 
 	private void drawAxes(GL2 gl)
@@ -261,10 +270,10 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 		// Set material properties.
 		float[] rgba = {0.2f, 1f, 0.2f};
-		gl.glMaterialfv(GL.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE, rgba, 0);
-		gl.glMaterialf(GL.GL_FRONT, GL2.GL_SHININESS, 50);
-		gl.glMaterialfv(GL.GL_FRONT, GL2.GL_EMISSION, rgba, 0);
-		gl.glMaterialfv( GL.GL_FRONT, GL2.GL_SPECULAR, rgba, 0);
+		gl.glMaterialfv(GL.GL_FRONT_AND_BACK, GL2.GL_AMBIENT_AND_DIFFUSE, rgba, 0);
+		gl.glMaterialf(GL.GL_FRONT_AND_BACK, GL2.GL_SHININESS, 1);
+//		gl.glMaterialfv(GL.GL_FRONT, GL2.GL_EMISSION, rgba, 0);
+//		gl.glMaterialfv( GL.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, rgba, 0);
 
 		drawAxesLines(gl);
 		drawAxesCones(gl);
@@ -276,7 +285,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	private void drawAxesLines(GL2 gl)
 	{
-		gl.glBegin(GL2.GL_LINES);
+		gl.glBegin(GLES1.GL_LINES);
 		gl.glColor3f(1f, 0, 0);
 
 		// X-axis
@@ -345,10 +354,8 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		{
 			Color3f color = dataEntry.getColor(currentCategory, highlightAll);
 			rgba = new float[] { color.x, color.y, color.z, 1f };
-			gl.glMaterialfv(GL.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE, rgba, 0);
-			gl.glMaterialf(GL.GL_FRONT, GL2.GL_SHININESS, 50);
-			gl.glMaterialfv(GL.GL_FRONT, GL2.GL_EMISSION, rgba, 0);
-			gl.glMaterialfv( GL.GL_FRONT, GL2.GL_SPECULAR, rgba, 0);
+			gl.glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rgba, 0);
+			gl.glMaterialf(GL_FRONT, GL_SHININESS, 128);
 			drawSphere(gl, dataEntry);
 		}
 
@@ -366,12 +373,14 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		// Bring our translations into the correct coordinate space
 		gl.glTranslatef(map(indices[0])*200f, map(indices[1])*200f, map(indices[2])*200f);
 
-		// Draw the triangles using the isosphereIndexBuffer VBO for the
-		// element data (as well as the isosphereVertexBuffer).
+//		// Draw the triangles using the isosphereIndexBuffer VBO for the
+//		// element data (as well as the isosphereVertexBuffer).
 		gl.glDrawElements(GL.GL_TRIANGLES, sphere.indexCount(), GL.GL_UNSIGNED_INT, 0);
 		gl.glPopMatrix();
 	}
 
+	// Our translations are stored in a -1 to 1 range and we want to re-map these
+	// into our -0.5 to 0.5 coordinate space.
 	private float map(float number)
 	{
 		return ((number-(-1f))/(1f-(-1f)) * (0.5f-(-0.5f)) + -0.5f);
@@ -415,6 +424,9 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 			autoRot.setIdentity();
 			combined.setIdentity();
 		}
+
+		perspAngle = 45;
+		doZoom = true;
 	}
 
 	public void updateLastRotation()

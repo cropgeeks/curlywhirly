@@ -17,7 +17,7 @@
 	</path>
 
 	<target name="compile" depends="init">
-		<javac srcdir="${src}" destdir="${classes}" source="6" target="6" debug="true" includeantruntime="false">
+		<javac srcdir="${src}" destdir="${classes}" source="7" target="7" debug="true" includeantruntime="false">
 			<compilerarg value="-Xlint:-options"/>
 			<classpath refid="project.classpath"/>
 			<exclude name="**/package-info.java"/>
@@ -49,11 +49,18 @@
 				<attribute name="Main-Class" value="curlywhirly.gui.CurlyWhirly"/>
 				<attribute name="Class-Path"
 					value="gluegen-rt.jar
+						gluegen-rt-natives-linux-amd64.jar
+						gluegen-rt-natives-linux-i586.jar
+						gluegen-rt-natives-macosx-universal.jar
+						gluegen-rt-natives-windows-amd64.jar
+						gluegen-rt-natives-windows-i586.jar
 						i4jruntime.jar
-						j3dcore.jar
-						j3dutils.jar
-						jmf.jar
-						jogl.jar
+						jogl-all.jar
+						jogl-all-natives-linux-amd64.jar
+						jogl-all-natives-linux-i586.jar
+						jogl-all-natives-macosx-universal.jar
+						jogl-all-natives-windows-amd64.jar
+						jogl-all-natives-windows-i586.jar
 						scri-commons.jar
 						osxadapter.jar
 						vecmath.jar"/>

@@ -1,6 +1,5 @@
 package curlywhirly.gui;
 
-import curlywhirly.gui.viewer.CanvasController;
 import java.awt.*;
 import java.awt.dnd.*;
 import java.awt.event.*;
@@ -14,6 +13,7 @@ import scri.commons.gui.*;
 
 import curlywhirly.controller.*;
 import curlywhirly.data.*;
+import curlywhirly.gui.viewer.*;
 import curlywhirly.opengl.*;
 
 public class CurlyWhirly extends JFrame
