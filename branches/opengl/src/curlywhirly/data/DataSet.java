@@ -45,9 +45,6 @@ public class DataSet
 	private int currY = 1;
 	private int currZ = 2;
 
-	// this flag is set to true when we want all data points coloured in
-	public boolean highlightAllCategories = true;
-
 	//the categorization scheme we are currently using
 	public ClassificationScheme currentClassificationScheme;
 
@@ -83,7 +80,4 @@ public class DataSet
 	{
 		return new int[] { currX, currY, currZ };
 	}
-
-	public void setHighlightAllCategories(boolean highlightAllCategories)
-		{ this.highlightAllCategories = highlightAllCategories; }
 }

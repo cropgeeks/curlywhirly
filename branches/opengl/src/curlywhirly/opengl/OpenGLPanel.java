@@ -64,7 +64,6 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	private boolean isDragging = false;
 
 	private String glVersion;
-	private String glExtensions;
 	private float versionNo = 0;
 
 	public OpenGLPanel(CurlyWhirly frame)
@@ -114,10 +113,8 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		GL2 gl = drawable.getGL().getGL2();
 
 		glVersion = gl.glGetString(GL_VERSION);
-		glExtensions = gl.glGetString(GL_EXTENSIONS);
 
 		System.out.println(versionNo);
-		System.out.println(glExtensions);
 
 		glu = new GLU();
 		gl.glClearDepth(1.0f);
@@ -347,12 +344,12 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		// Color spheres appropriately
 		DataSet dataSet = frame.getDataSet();
 		int currentCategory = dataSet.getCategorySchemeIndex();
-		boolean highlightAll = dataSet.highlightAllCategories;
 
 		float[] rgba;
 		for (DataEntry dataEntry : frame.getDataSet().dataEntries)
 		{
-			Color3f color = dataEntry.getColor(currentCategory, highlightAll);
+//			System.out.println("Higlighted: " + dataEntry.categories.get(currentCategory).highlight);
+			Color3f color = dataEntry.getColor(currentCategory);
 			rgba = new float[] { color.x, color.y, color.z, 1f };
 			gl.glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rgba, 0);
 			gl.glMaterialf(GL_FRONT, GL_SHININESS, 128);

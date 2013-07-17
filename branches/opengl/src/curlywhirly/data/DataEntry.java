@@ -28,14 +28,14 @@ public class DataEntry
 		return indices;
 	}
 
-	public Color3f getColor(int currentCategory, boolean highlightAll)
+	public Color3f getColor(int currentCategory)
 	{
 		Category category = categories.get(currentCategory);
 
 		Color3f color = null;
 		if (category != null)
 		{
-			if(category.highlight || highlightAll)
+			if(category.highlight)
 				color = category.colour;
 			else
 				color = new Color3f(Color.DARK_GRAY);

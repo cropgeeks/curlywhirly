@@ -6,7 +6,6 @@ import java.awt.image.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.plaf.basic.*;
 import javax.vecmath.*;
 
 import scri.commons.gui.*;
@@ -24,63 +23,48 @@ public class MTControlPanel extends JPanel implements ActionListener
 		initComponents();
 		this.frame = frame;
 
-		// Middle panel components
-//		jPanel1.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.MTControlPanel.jPanel1.title")));
-
 		RB.setText(jLabel7, "gui.MTControlPanel.jLabel7");
 		RB.setText(jLabel1, "gui.MTControlPanel.jLabel1");
 		RB.setText(jLabel2, "gui.MTControlPanel.jLabel2");
 		RB.setText(jLabel3, "gui.MTControlPanel.jLabel3");
-//		RB.setText(jLabel5, "gui.MTControlPanel.jLabel5");
-//		RB.setText(jLabel6, "gui.MTControlPanel.jLabel6");
 		RB.setText(jLabel8, "gui.MTControlPanel.jLabel8");
 		RB.setText(showLabelsCheckBox, "gui.MTControlPanel.showLabelsCheckBox");
-
-		// Bottom panel components
-//		jPanel2.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.MTControlPanel.jPanel2.title")));
-//		RB.setText(jLabel4, "gui.MTControlPanel.jLabel4");
-		RB.setText(resetColoursButton, "gui.MTControlPanel.resetColoursButton");
-
-
-//		if (SystemUtils.isMacOS())
-//			jLabel4.setText("<html>Click to select. Use CMD+click for multiple selections.");
+		RB.setText(lblSelectAll, "gui.MTControlPanel.selectAll");
+		RB.setText(lblSelectNone, "gui.MTControlPanel.selectNone");
 
 		addMouseAdapterToSelectorList();
 
-		if (Prefs.showMouseOverLabels)
-			showLabelsCheckBox.setSelected(true);
-		else
-			showLabelsCheckBox.setSelected(false);
+		showLabelsCheckBox.setSelected(Prefs.showMouseOverLabels);
 
 		toggleEnabled(false);
 
 		showLabelsCheckBox.setVisible(false);
 
 		schemeSelectorCombo.addActionListener(this);
+		lblSelectAll.addActionListener(this);
+		lblSelectNone.addActionListener(this);
 	}
 
-	public void addMouseAdapterToSelectorList()
+	private void addMouseAdapterToSelectorList()
 	{
-		selectorList.addMouseListener(new MouseAdapter()
+		categoryList.addMouseListener(new MouseAdapter()
 		{
 			public void mouseClicked(MouseEvent me)
 			{
-				if (selectorList.getSelectedIndices().length > 1)
+				if (categoryList.getSelectedIndices().length > 1)
 					return;
+
 				if (me.getClickCount() == 2)
 				{
-					String selectedValue = selectorList.getSelectedValue();
-//					System.out.println("double click on " + selectedValue);
+					String selectedValue = categoryList.getSelectedValue();
+
 					//retrieve the related Category object
 					Category category = frame.getDataSet().currentClassificationScheme.getCategoryByName(selectedValue);
 
 					// fire up a colour chooser
 					Color newColor = JColorChooser.showDialog(CurlyWhirly.curlyWhirly, "Choose color for category", category.colour.get());
 					if (newColor != null)
-					{
 						category.colour = new Color3f(newColor);
-//						CurlyWhirly.canvas3D.updateGraph(false);
-					}
 				}
 			}
 		});
@@ -113,88 +97,22 @@ public class MTControlPanel extends JPanel implements ActionListener
 			schemeNames.add(scheme.name);
 
 		//sort it and set it as the current model for the combo
-		Collections.sort(schemeNames, new CaseInsensitiveComparator());
+		Collections.sort(schemeNames, String.CASE_INSENSITIVE_ORDER);
 		schemeSelectorCombo.setModel(new DefaultComboBoxModel<String>(schemeNames));
 		schemeSelectorCombo.setSelectedIndex(0);
-//		schemeSelectorCombo.setToolTipText(selectedSchemeName);
 
-		//set a custom renderer on this combo box so we can see tooltips for each item on the drop-down list
-//		schemeSelectorCombo.setRenderer(new ComboBoxWithToolTipsRenderer());
-	}
-
-	class ComboBoxWithToolTipsRenderer extends BasicComboBoxRenderer
-	{
-		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+		// Force this onto the EDT to try to prevent graphical glitch with JList
+		SwingUtilities.invokeLater(new Runnable()
 		{
-			if (isSelected)
+			public void run()
 			{
-				setBackground(list.getSelectionBackground());
-				setForeground(list.getSelectionForeground());
-				if (-1 < index)
-				{
-					list.setToolTipText((String) list.getSelectedValue());
-				}
+				selectAllInCategory();
 			}
-			else
-			{
-				setBackground(list.getBackground());
-				setForeground(list.getForeground());
-			}
-			setFont(list.getFont());
-			setText((value == null) ? "" : value.toString());
-			return this;
-		}
-	}
-
-	class CaseInsensitiveComparator implements Comparator<String>
-	{
-		public int compare(String strA, String strB)
-		{
-			return strA.compareToIgnoreCase(strB);
-		}
-	}
-
-	class ColorListRenderer extends DefaultListCellRenderer
-	{
-
-		// Set the attributes of the class and return a reference
-		public Component getListCellRendererComponent(JList list, Object o, int i, boolean iss, boolean chf)
-		{
-			super.getListCellRendererComponent(list, o, i, iss, chf);
-
-			String categoryName = (String) o;
-			//retrieve the appropriate category object from the current classification scheme
-			String selectedSchemeName = (String) schemeSelectorCombo.getSelectedItem();
-			//find the corresponding classification scheme and select it
-			ClassificationScheme selectedScheme = CurlyWhirly.dataSet.categorizationSchemesLookup.get(selectedSchemeName);
-			Category category = selectedScheme.getCategoryByName(categoryName);
-
-			// Set the text
-			setText(category.name);
-
-			// Set the icon
-			BufferedImage image = new BufferedImage(20, 10, BufferedImage.TYPE_INT_RGB);
-			Graphics2D g = image.createGraphics();
-			g.setPaint(category.colour.get());
-			g.fillRect(0, 0, 20, 10);
-			g.setColor(Color.black);
-			g.drawRect(0, 0, 20, 10);
-			g.dispose();
-
-			setIcon(new ImageIcon(image));
-
-			return this;
-		}
-
-		public Insets getInsets(Insets i)
-		{
-			return new Insets(0, 3, 0, 0);
-		}
+		});
 	}
 
 	public void actionPerformed(ActionEvent e)
 	{
-
 		if (e.getSource() == xCombo)
 		{
 			int index = xCombo.getSelectedIndex();
@@ -216,11 +134,19 @@ public class MTControlPanel extends JPanel implements ActionListener
 		else if (e.getSource() == schemeSelectorCombo)
 			updateSelectedScheme();
 
-		// if we had data loaded already we must now update the graph
-		if (frame.dataLoaded)
-		{
-//			frame.canvas3D.highlightAllCategories = true;
-		}
+		if (e.getSource() == lblSelectAll)
+			selectAllInCategory();
+
+		if (e.getSource() == lblSelectNone)
+			categoryList.clearSelection();
+	}
+
+	public void selectAllInCategory()
+	{
+		int[] indices = new int[categoryList.getModel().getSize()];
+		for (int i=0; i < indices.length; i++)
+			indices[i] = i;
+		categoryList.setSelectedIndices(indices);
 	}
 
 	private void updateSelectedScheme()
@@ -235,28 +161,92 @@ public class MTControlPanel extends JPanel implements ActionListener
 				frame.getDataSet().setCurrentClassificationScheme(selectedScheme);
 
 			//update the data model of the selector list
-			selectorList.setListData(selectedScheme.categoryNamesVec);
+			categoryList.setListData(selectedScheme.categoryNamesVec);
 
 			//update the tool tip text
 			schemeSelectorCombo.setToolTipText(selectedSchemeName);
 
 			//add custom cell renderers
-			selectorList.setCellRenderer(new ColorListRenderer());
+			categoryList.setCellRenderer(new ColorListRenderer());
 		}
+
 		//clear everything that is currently selected
 		if (CurlyWhirly.dataLoaded)
-			clearAllCategorySelections();
+			selectAllInCategory();
 	}
 
-	private void resetColoursButtonActionPerformed(java.awt.event.ActionEvent evt)
+	private void showLabelsCheckBoxActionPerformed(ActionEvent evt)
 	{
-		clearAllCategorySelections();
+		Prefs.showMouseOverLabels = showLabelsCheckBox.isSelected();
 	}
 
-	private void clearAllCategorySelections()
+	private void selectorListValueChanged(ListSelectionEvent e)
 	{
-		selectorList.clearSelection();
-		frame.getDataSet().setHighlightAllCategories(true);
+		if (e.getValueIsAdjusting())
+			return;
+
+		JList selectorList = (JList) e.getSource();
+
+
+		ArrayList<String> selectedNames = new ArrayList<>();
+		if (selectorList.getSelectedIndices().length > 0)
+			selectedNames = (ArrayList<String>) selectorList.getSelectedValuesList();
+
+		frame.getCanvasController().updateSelected(selectedNames);
+	}
+
+	public void toggleEnabled(boolean enabled)
+	{
+		jLabel1.setEnabled(enabled);
+		jLabel2.setEnabled(enabled);
+		jLabel3.setEnabled(enabled);
+		jLabel7.setEnabled(enabled);
+		schemeSelectorCombo.setEnabled(enabled);
+		categoryList.setEnabled(enabled);
+		showLabelsCheckBox.setEnabled(enabled);
+		xCombo.setEnabled(enabled);
+		yCombo.setEnabled(enabled);
+		zCombo.setEnabled(enabled);
+	}
+
+	class ColorListRenderer extends DefaultListCellRenderer
+	{
+
+		// Set the attributes of the class and return a reference
+		public Component getListCellRendererComponent(JList list, Object o, int i, boolean iss, boolean chf)
+		{
+			super.getListCellRendererComponent(list, o, i, iss, chf);
+
+			String categoryName = (String) o;
+			//retrieve the appropriate category object from the current classification scheme
+			String selectedSchemeName = (String) schemeSelectorCombo.getSelectedItem();
+			//find the corresponding classification scheme and select it
+			ClassificationScheme selectedScheme = CurlyWhirly.dataSet.categorizationSchemesLookup.get(selectedSchemeName);
+			Category category = selectedScheme.getCategoryByName(categoryName);
+
+			// Set the text
+			setText(category.name);
+
+			setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.WHITE));
+
+			// Set the icon
+			BufferedImage image = new BufferedImage(20, 10, BufferedImage.TYPE_INT_RGB);
+			Graphics2D g = image.createGraphics();
+			g.setPaint(category.colour.get());
+			g.fillRect(0, 0, 20, 10);
+			g.setColor(Color.black);
+			g.drawRect(0, 0, 20, 10);
+			g.dispose();
+
+			setIcon(new ImageIcon(image));
+
+			return this;
+		}
+
+		public Insets getInsets(Insets i)
+		{
+			return new Insets(0, 3, 0, 0);
+		}
 	}
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -274,8 +264,10 @@ public class MTControlPanel extends JPanel implements ActionListener
         jLabel8 = new javax.swing.JLabel();
         schemeSelectorCombo = new javax.swing.JComboBox<String>();
         jScrollPane1 = new javax.swing.JScrollPane();
-        selectorList = new javax.swing.JList<String>();
-        resetColoursButton = new javax.swing.JButton();
+        categoryList = new javax.swing.JList<String>();
+        lblSelectAll = new scri.commons.gui.matisse.HyperLinkLabel();
+        jLabel4 = new javax.swing.JLabel();
+        lblSelectNone = new scri.commons.gui.matisse.HyperLinkLabel();
 
         jLabel7.setText("Data to display:");
 
@@ -323,23 +315,20 @@ public class MTControlPanel extends JPanel implements ActionListener
 
         jLabel8.setText("Category scheme:");
 
-        selectorList.addListSelectionListener(new javax.swing.event.ListSelectionListener()
+        categoryList.addListSelectionListener(new javax.swing.event.ListSelectionListener()
         {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt)
             {
-                selectorListValueChanged(evt);
+                categoryListValueChanged(evt);
             }
         });
-        jScrollPane1.setViewportView(selectorList);
+        jScrollPane1.setViewportView(categoryList);
 
-        resetColoursButton.setText("Reset selection");
-        resetColoursButton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                resetColoursButtonActionPerformed(evt);
-            }
-        });
+        lblSelectAll.setText("Select all");
+
+        jLabel4.setText("|");
+
+        lblSelectNone.setText("Select none");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -366,7 +355,12 @@ public class MTControlPanel extends JPanel implements ActionListener
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7)
                             .addComponent(jLabel8)
-                            .addComponent(resetColoursButton))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblSelectAll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblSelectNone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -394,69 +388,28 @@ public class MTControlPanel extends JPanel implements ActionListener
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(schemeSelectorCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(resetColoursButton)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblSelectAll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(lblSelectNone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
-	private void showLabelsCheckBoxActionPerformed(java.awt.event.ActionEvent evt)
-	{
-		if (showLabelsCheckBox.isSelected())
-			Prefs.showMouseOverLabels = true;
-		else
-			Prefs.showMouseOverLabels = false;
-	}
-
-	private void selectorListValueChanged(ListSelectionEvent e)
-	{
-
-		if (e.getValueIsAdjusting())
-			return;
-
-		JList selectorList = (JList) e.getSource();
-
-		if (selectorList.getSelectedIndices().length == 0)
-			return;
-
-		ArrayList<String> selectedNames = (ArrayList<String>) selectorList.getSelectedValuesList();
-
-		frame.getCanvasController().updateSelected(selectedNames);
-		frame.getDataSet().setHighlightAllCategories(false);
-	}
-
-	public void toggleEnabled(boolean enabled)
-	{
-		jLabel1.setEnabled(enabled);
-		jLabel2.setEnabled(enabled);
-		jLabel3.setEnabled(enabled);
-//		jLabel4.setEnabled(enabled);
-//		jLabel5.setEnabled(enabled);
-//		jLabel6.setEnabled(enabled);
-		jLabel7.setEnabled(enabled);
-//		jPanel1.setEnabled(enabled);
-//		jPanel2.setEnabled(enabled);
-		resetColoursButton.setEnabled(enabled);
-		schemeSelectorCombo.setEnabled(enabled);
-		selectorList.setEnabled(enabled);
-		showLabelsCheckBox.setEnabled(enabled);
-//		spinSpeedSlider.setEnabled(enabled);
-		xCombo.setEnabled(enabled);
-		yCombo.setEnabled(enabled);
-		zCombo.setEnabled(enabled);
-	}
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JList<String> categoryList;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton resetColoursButton;
+    private scri.commons.gui.matisse.HyperLinkLabel lblSelectAll;
+    private scri.commons.gui.matisse.HyperLinkLabel lblSelectNone;
     private javax.swing.JComboBox<String> schemeSelectorCombo;
-    private javax.swing.JList<String> selectorList;
     private javax.swing.JCheckBox showLabelsCheckBox;
     private javax.swing.JComboBox<String> xCombo;
     private javax.swing.JComboBox<String> yCombo;
