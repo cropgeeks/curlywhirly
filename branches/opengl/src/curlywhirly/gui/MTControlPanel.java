@@ -12,7 +12,7 @@ import scri.commons.gui.*;
 
 import curlywhirly.data.*;
 
-public class MTControlPanel extends JPanel implements ActionListener
+public class MTControlPanel extends JPanel implements ActionListener, ListSelectionListener
 {
 	CurlyWhirly frame;
 	ArrayList<Category> listItems;
@@ -43,6 +43,7 @@ public class MTControlPanel extends JPanel implements ActionListener
 		schemeSelectorCombo.addActionListener(this);
 		lblSelectAll.addActionListener(this);
 		lblSelectNone.addActionListener(this);
+		categoryList.addListSelectionListener(this);
 	}
 
 	private void addMouseAdapterToSelectorList()
@@ -180,21 +181,6 @@ public class MTControlPanel extends JPanel implements ActionListener
 		Prefs.showMouseOverLabels = showLabelsCheckBox.isSelected();
 	}
 
-	private void selectorListValueChanged(ListSelectionEvent e)
-	{
-		if (e.getValueIsAdjusting())
-			return;
-
-		JList selectorList = (JList) e.getSource();
-
-
-		ArrayList<String> selectedNames = new ArrayList<>();
-		if (selectorList.getSelectedIndices().length > 0)
-			selectedNames = (ArrayList<String>) selectorList.getSelectedValuesList();
-
-		frame.getCanvasController().updateSelected(selectedNames);
-	}
-
 	public void toggleEnabled(boolean enabled)
 	{
 		jLabel1.setEnabled(enabled);
@@ -207,6 +193,21 @@ public class MTControlPanel extends JPanel implements ActionListener
 		xCombo.setEnabled(enabled);
 		yCombo.setEnabled(enabled);
 		zCombo.setEnabled(enabled);
+	}
+
+	@Override
+	public void valueChanged(ListSelectionEvent e)
+	{
+		if (e.getValueIsAdjusting())
+			return;
+
+		JList selectorList = (JList) e.getSource();
+
+		ArrayList<String> selectedNames = new ArrayList<>();
+		if (selectorList.getSelectedIndices().length > 0)
+			selectedNames = (ArrayList<String>) selectorList.getSelectedValuesList();
+
+		frame.getCanvasController().updateSelected(selectedNames);
 	}
 
 	class ColorListRenderer extends DefaultListCellRenderer
@@ -315,13 +316,6 @@ public class MTControlPanel extends JPanel implements ActionListener
 
         jLabel8.setText("Category scheme:");
 
-        categoryList.addListSelectionListener(new javax.swing.event.ListSelectionListener()
-        {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt)
-            {
-                categoryListValueChanged(evt);
-            }
-        });
         jScrollPane1.setViewportView(categoryList);
 
         lblSelectAll.setText("Select all");
