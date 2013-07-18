@@ -428,21 +428,27 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	public void updateLastRotation()
 	{
-		// Set Last Static Rotation To Last Dynamic One
-		synchronized(matrixLock)
+		if (!autoSpin)
 		{
-			lastRot.set(currRot);
+			// Set Last Static Rotation To Last Dynamic One
+			synchronized(matrixLock)
+			{
+				lastRot.set(currRot);
+			}
 		}
 	}
 
 	public void updateCurrentRotation(Quat4f rotQuat)
 	{
-		synchronized(matrixLock)
+		if (!autoSpin)
 		{
-			// Convert Quaternion Into Matrix3f
-			currRot.setRotation(rotQuat);
-			// Accumulate Last Rotation Into This One
-			currRot.mul(currRot, lastRot);
+			synchronized(matrixLock)
+			{
+				// Convert Quaternion Into Matrix3f
+				currRot.setRotation(rotQuat);
+				// Accumulate Last Rotation Into This One
+				currRot.mul(currRot, lastRot);
+			}
 		}
 	}
 
