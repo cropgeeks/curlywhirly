@@ -6,6 +6,7 @@ import java.awt.image.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.table.*;
 import javax.vecmath.*;
 
 import scri.commons.gui.*;
@@ -16,6 +17,7 @@ public class MTControlPanel extends JPanel implements ActionListener, ListSelect
 {
 	CurlyWhirly frame;
 	ArrayList<Category> listItems;
+	AbstractTableModel tableModel;
 
 	/** Creates new form MTControlPanel */
 	public MTControlPanel(CurlyWhirly frame)
@@ -112,6 +114,13 @@ public class MTControlPanel extends JPanel implements ActionListener, ListSelect
 		});
 	}
 
+	void updateTableModel()
+	{
+		tableModel = new DataEntryTableModel(CurlyWhirly.dataSet, CurlyWhirly.dataSet.getCurrentClassificationScheme());
+
+		pointTable.setModel(tableModel);
+	}
+
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == xCombo)
@@ -140,6 +149,8 @@ public class MTControlPanel extends JPanel implements ActionListener, ListSelect
 
 		if (e.getSource() == lblSelectNone)
 			categoryList.clearSelection();
+
+		updateTableModel();
 	}
 
 	public void selectAllInCategory()
@@ -148,6 +159,8 @@ public class MTControlPanel extends JPanel implements ActionListener, ListSelect
 		for (int i=0; i < indices.length; i++)
 			indices[i] = i;
 		categoryList.setSelectedIndices(indices);
+
+		updateTableModel();
 	}
 
 	private void updateSelectedScheme()
@@ -193,6 +206,8 @@ public class MTControlPanel extends JPanel implements ActionListener, ListSelect
 		xCombo.setEnabled(enabled);
 		yCombo.setEnabled(enabled);
 		zCombo.setEnabled(enabled);
+		lblSelectAll.setEnabled(enabled);
+		lblSelectNone.setEnabled(enabled);
 	}
 
 	@Override
@@ -201,13 +216,17 @@ public class MTControlPanel extends JPanel implements ActionListener, ListSelect
 		if (e.getValueIsAdjusting())
 			return;
 
-		JList selectorList = (JList) e.getSource();
+		JList<String> selectorList = (JList<String>) e.getSource();
 
 		ArrayList<String> selectedNames = new ArrayList<>();
 		if (selectorList.getSelectedIndices().length > 0)
 			selectedNames = (ArrayList<String>) selectorList.getSelectedValuesList();
 
+//		selectorList.getSelectedIndices();
+
 		frame.getCanvasController().updateSelected(selectedNames);
+
+		updateTableModel();
 	}
 
 	class ColorListRenderer extends DefaultListCellRenderer
@@ -269,6 +288,8 @@ public class MTControlPanel extends JPanel implements ActionListener, ListSelect
         lblSelectAll = new scri.commons.gui.matisse.HyperLinkLabel();
         jLabel4 = new javax.swing.JLabel();
         lblSelectNone = new scri.commons.gui.matisse.HyperLinkLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        pointTable = new javax.swing.JTable();
 
         jLabel7.setText("Data to display:");
 
@@ -324,6 +345,18 @@ public class MTControlPanel extends JPanel implements ActionListener, ListSelect
 
         lblSelectNone.setText("Select none");
 
+        pointTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+
+            },
+            new String []
+            {
+
+            }
+        ));
+        jScrollPane2.setViewportView(pointTable);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -354,7 +387,8 @@ public class MTControlPanel extends JPanel implements ActionListener, ListSelect
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblSelectNone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(lblSelectNone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -388,6 +422,8 @@ public class MTControlPanel extends JPanel implements ActionListener, ListSelect
                     .addComponent(lblSelectAll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
                     .addComponent(lblSelectNone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -401,8 +437,10 @@ public class MTControlPanel extends JPanel implements ActionListener, ListSelect
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private scri.commons.gui.matisse.HyperLinkLabel lblSelectAll;
     private scri.commons.gui.matisse.HyperLinkLabel lblSelectNone;
+    private javax.swing.JTable pointTable;
     private javax.swing.JComboBox<String> schemeSelectorCombo;
     private javax.swing.JCheckBox showLabelsCheckBox;
     private javax.swing.JComboBox<String> xCombo;

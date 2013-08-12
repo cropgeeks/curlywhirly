@@ -56,14 +56,29 @@ public class DataSet
 		currentClassificationScheme = current;
 	}
 
+	public int getCurrX()
+	{
+		return currX;
+	}
+
 	public void setCurrX(int currX)
 	{
 		this.currX = currX;
 	}
 
+	public int getCurrY()
+	{
+		return currY;
+	}
+
 	public void setCurrY(int currY)
 	{
 		this.currY = currY;
+	}
+
+	public int getCurrZ()
+	{
+		return currZ;
 	}
 
 	public void setCurrZ(int currZ)

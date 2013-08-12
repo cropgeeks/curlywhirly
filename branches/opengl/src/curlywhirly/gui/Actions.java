@@ -94,11 +94,8 @@ public class Actions
 		slider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent evt)
 			{
-				if (!slider.getValueIsAdjusting())
-				{
-					int speed = slider.getValue();
-					winMain.getOpenGLPanel().setSpeed(speed);
-				}
+				int speed = slider.getValue();
+				winMain.getOpenGLPanel().setSpeed(speed);
 			}
 		});
 	}

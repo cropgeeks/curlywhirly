@@ -7,8 +7,6 @@ import curlywhirly.data.*;
 import curlywhirly.gui.*;
 import curlywhirly.opengl.*;
 
-import javax.vecmath.*;
-
 public class CanvasController
 {
 	private CurlyWhirly frame;

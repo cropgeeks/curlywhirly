@@ -366,12 +366,15 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		// Scale our unit sphere down to a more manageable scale
 		gl.glScalef(0.005f, 0.005f, 0.005f);
 
+		// Get the position information for each axis so that these can be used
+		// to translate our spheres to the correct location
 		float[] indices = dataEntry.getPosition(frame.getDataSet().getCurrentAxes());
-		// Bring our translations into the correct coordinate space
+		// Bring our translations into the correct coordinate space as we've
+		// scaled each point to 1/200 of its original size.
 		gl.glTranslatef(map(indices[0])*200f, map(indices[1])*200f, map(indices[2])*200f);
 
-//		// Draw the triangles using the isosphereIndexBuffer VBO for the
-//		// element data (as well as the isosphereVertexBuffer).
+		// Draw the triangles using the isosphereIndexBuffer VBO for the
+		// element data (as well as the isosphereVertexBuffer).
 		gl.glDrawElements(GL.GL_TRIANGLES, sphere.indexCount(), GL.GL_UNSIGNED_INT, 0);
 		gl.glPopMatrix();
 	}
