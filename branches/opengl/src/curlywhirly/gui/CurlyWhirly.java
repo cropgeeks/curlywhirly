@@ -11,7 +11,6 @@ import apple.dts.samplecode.osxadapter.*;
 import scri.commons.file.*;
 import scri.commons.gui.*;
 
-import curlywhirly.controller.*;
 import curlywhirly.data.*;
 import curlywhirly.gui.viewer.*;
 import curlywhirly.opengl.*;
@@ -61,7 +60,7 @@ public class CurlyWhirly extends JFrame
 		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "CurlyWhirly");
 
 		// Some handy debug output...
-		System.out.println("CurlyWhirly " + Install4j.getVersion() + " on "
+		System.out.println("CurlyWhirly " + Install4j.getVersion(CurlyWhirly.class) + " on "
 			+ System.getProperty("os.name")	+ " (" + System.getProperty("os.arch") + ")");
 		System.out.println("Using " + prefsFile);
 //		java.util.Map vuMap = javax.media.j3d.VirtualUniverse.getProperties();
@@ -85,8 +84,22 @@ public class CurlyWhirly extends JFrame
 		Icons.initialize("/res/icons", ".png");
 		RB.initialize(Prefs.localeText, "res.text.curlywhirly");
 
+		install4j();
+
 		curlyWhirly = new CurlyWhirly();
 		dataLoader = new DataLoader();
+	}
+
+	// Sets up the install4j environment to check for updates
+	private static void install4j()
+	{
+		Install4j i4j = new Install4j("7308-4813-7424-6439", "281");
+
+		i4j.setUser(Prefs.guiUpdateSchedule, Prefs.curlywhirlyID, 0);
+		i4j.setURLs("http://bioinf.hutton.ac.uk/curlywhirly/installers/updates.xml",
+				    "http://bioinf.hutton.ac.uk/curlywhirly/logs/curlywhirly.pl");
+
+		i4j.doStartUpCheck(CurlyWhirly.class);
 	}
 
 	CurlyWhirly()
@@ -107,8 +120,6 @@ public class CurlyWhirly extends JFrame
 			catch (Exception e) {}
 //			winKey = RB.getString("gui.text.ctrl");
 		}
-
-		Install4j.doStartUpCheck();
 
 		setupComponents();
 		pack();

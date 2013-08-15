@@ -7,7 +7,6 @@ import javax.swing.*;
 
 import scri.commons.gui.*;
 
-import curlywhirly.controller.*;
 import curlywhirly.data.*;
 
 public class MenuBar extends JMenuBar implements ActionListener

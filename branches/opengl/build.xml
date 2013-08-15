@@ -1,5 +1,7 @@
 <project name="CurlyWhirly" default="compile" basedir=".">
 
+	<property file="build.properties" />
+
 	<property name="src" location="src"/>
 	<property name="res" location="res"/>
 	<property name="lib" location="lib"/>
@@ -54,7 +56,6 @@
 						gluegen-rt-natives-macosx-universal.jar
 						gluegen-rt-natives-windows-amd64.jar
 						gluegen-rt-natives-windows-i586.jar
-						i4jruntime.jar
 						jogl-all.jar
 						jogl-all-natives-linux-amd64.jar
 						jogl-all-natives-linux-i586.jar
@@ -73,11 +74,8 @@
 		<input message="Enter the version number:" addproperty="i4j.version"/>
 	</target>
 
-	<target name="install4j" depends="getversion, jar">
-		<input message="Enter the private key password for signing:" addproperty="password">
-    		<handler classname="org.apache.tools.ant.input.SecureInputHandler"/>
-		</input>
 
+	<target name="install4j" depends="getversion, jar">
 		<taskdef name="install4j"
 			classname="com.install4j.Install4JTask"
 			classpath="C:\Program Files\Install4j\bin\ant.jar"/>
@@ -90,8 +88,8 @@
 
 		<install4j projectfile="installer/curlywhirly_installer.install4j"
 		           release="${i4j.version}"
-		           winKeystorePassword="${password}"
-		           macKeystorePassword="${password}"/>
+		           winKeystorePassword="${keystore.password}"
+		           macKeystorePassword="${keystore.password}"/>
 	</target>
 
 </project>

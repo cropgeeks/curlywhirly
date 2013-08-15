@@ -3,8 +3,6 @@ package curlywhirly.gui;
 import java.io.*;
 import java.util.*;
 
-import curlywhirly.controller.*;
-
 import scri.commons.gui.*;
 
 public class Prefs extends XMLPreferences

@@ -10,8 +10,6 @@ import javax.swing.filechooser.*;
 
 import scri.commons.gui.*;
 
-import curlywhirly.controller.*;
-
 public class MovieCaptureDialog extends JDialog implements ActionListener, ChangeListener
 {
 	private JButton bCancel;

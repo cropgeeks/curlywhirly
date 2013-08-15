@@ -5,7 +5,6 @@ import java.io.*;
 import javax.swing.*;
 import javax.swing.filechooser.*;
 
-import curlywhirly.controller.*;
 import curlywhirly.data.*;
 
 import scri.commons.gui.*;
