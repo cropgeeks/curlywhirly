@@ -86,7 +86,7 @@
 			<fileset dir="installer" includes="**/*.dmg"/>
 		</delete>
 
-		<install4j projectfile="installer/curlywhirly_installer.install4j"
+		<install4j projectfile="installer/curlywhirly.install4j"
 		           release="${i4j.version}"
 		           winKeystorePassword="${keystore.password}"
 		           macKeystorePassword="${keystore.password}"/>
