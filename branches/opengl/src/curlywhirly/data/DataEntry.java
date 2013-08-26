@@ -2,7 +2,6 @@ package curlywhirly.data;
 
 import java.awt.*;
 import java.util.*;
-import javax.vecmath.*;
 
 public class DataEntry
 {
@@ -28,19 +27,28 @@ public class DataEntry
 		return indices;
 	}
 
-	public Color3f getColor(int currentCategory)
+	public boolean isSelected()
+	{
+		for (Category category : categories)
+			if (category.isSelected() == false)
+				return false;
+
+		return true;
+	}
+
+	public Color getColour(int currentCategory)
 	{
 		Category category = categories.get(currentCategory);
 
-		Color3f color = null;
+		Color colour = null;
 		if (category != null)
 		{
-			if(category.highlight)
-				color = category.colour;
+			if(isSelected())
+				colour = category.getColour();
 			else
-				color = new Color3f(Color.DARK_GRAY);
+				colour = Color.DARK_GRAY;
 		}
 
-		return color;
+		return colour;
 	}
 }

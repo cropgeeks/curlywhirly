@@ -1,6 +1,6 @@
 package curlywhirly.gui;
 
-import javax.vecmath.Color3f;
+import java.awt.*;
 
 public class GUIUtilsTest
 {
@@ -12,10 +12,10 @@ public class GUIUtilsTest
 		{
 			System.out.println("=====================================");
 			System.out.println("colour scheme " + i);
-			Color3f[] colours = GUIUtils.generateColours(i);
+			Color[] colours = GUIUtils.generateColours(i);
 			for (int j = 0; j < colours.length; j++)
 			{
-				System.out.println("colour " + j + " = " + colours[j].get());
+				System.out.println("colour " + j + " = " + colours[j]);
 			}
 			System.out.println("=====================================");
 		}

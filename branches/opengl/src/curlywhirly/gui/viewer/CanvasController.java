@@ -25,15 +25,10 @@ public class CanvasController
 			return;
 
 		// for each category
-		ArrayList<Category> categories = frame.getDataSet().getCurrentClassificationScheme().categories;
+		ArrayList<Category> categories = frame.getDataSet().getCurrentCategoryGroup().getCategories();
 
 		for (Category category : categories)
-		{
-			if (selected.contains(category.name))
-				category.highlight = true;
-			else
-				category.highlight = false;
-		}
+			category.setSelected(selected.contains(category.getName()));
 	}
 
 		//changes the background colour

@@ -65,13 +65,15 @@ public class DataLoader
 		//normalize first
 		//this sets the data up so that each axis is normalized to between -1 and 1 and the data fills the whole range
 		DataNormalizer.normalizeDataSet(dataSet);
-		mainWin.dataSet = dataSet;
+		mainWin.setDataSet(dataSet);
+		mainWin.getControlPanel().setDataSet(dataSet);
+		mainWin.getDataPanel().setDataSet(dataSet);
 
 		//deal with the combo boxes
 		if(mainWin.dataLoaded)
-			mainWin.controlPanel.resetComboBoxes();
+			mainWin.getControlPanel().resetComboBoxes();
 		else
-			mainWin.controlPanel.addComboModels();
+			mainWin.getControlPanel().addComboModels();
 
 		//make a new scene graph
 //		mainWin.canvas3D.highlightAllCategories = true;
@@ -80,7 +82,7 @@ public class DataLoader
 		//do the rest of the set up
 		//set the title of the window to the name of the dataset
 		mainWin.setTitle(mainWin.titleString + "  --  " + dataSet.name);
-		mainWin.controlPanel.setUpCategoryLists();
+		mainWin.getControlPanel().setUpCategoryLists();
 		mainWin.statusBar.setDefaultText();
 		mainWin.splitPane.setRightComponent(mainWin.canvas3D);
 		mainWin.canvas3D.startAnimator();
@@ -90,7 +92,7 @@ public class DataLoader
 		mainWin.dataLoaded = true;
 
 		Actions.openedData();
-		mainWin.controlPanel.toggleEnabled(true);
+		mainWin.getControlPanel().toggleEnabled(true);
 		Prefs.setRecentDocument(file);
 	}
 
@@ -220,15 +222,15 @@ public class DataLoader
 				//data: 2-n
 				if(headers[0].equals(""))
 				{
-					dataSet.emptyClassificationScheme = true;
+					dataSet.emptyCategoryGroup = true;
 					makeClassificationScheme(dataSet, unclassifiedCategoriesStr,0);
 				}
 				else
 				{
 					makeClassificationScheme(dataSet, headers[0],0);
 				}
-				dataSet.numDataColumns = headers.length - (dataSet.classificationSchemes.size() +1);
-				dataSet.dataColumnStart = dataSet.classificationSchemes.size() +1;
+				dataSet.numDataColumns = headers.length - (dataSet.categoryGroups.size() +1);
+				dataSet.dataColumnStart = dataSet.categoryGroups.size() +1;
 				dataSet.numCategoryColumns = 1;
 			}
 			break;
@@ -240,9 +242,9 @@ public class DataLoader
 				//labels: categoryCount
 				//data: (categoryCount+1)-n
 				makeClassificationSchemesFromPrefixedColumns(headers, dataSet);
-				dataSet.numDataColumns = headers.length - (dataSet.classificationSchemes.size() +1);
-				dataSet.dataColumnStart = dataSet.classificationSchemes.size() +1;
-				dataSet.numCategoryColumns = dataSet.classificationSchemes.size();
+				dataSet.numDataColumns = headers.length - (dataSet.categoryGroups.size() +1);
+				dataSet.dataColumnStart = dataSet.categoryGroups.size() +1;
+				dataSet.numCategoryColumns = dataSet.categoryGroups.size();
 			}
 			break;
 			case 3:
@@ -255,16 +257,16 @@ public class DataLoader
 					//labels: 0
 					//data: (categoryCount+1)-n
 					makeClassificationSchemesFromPrefixedColumns(headers, dataSet);
-					dataSet.numDataColumns = headers.length - (dataSet.classificationSchemes.size() +1);
-					dataSet.dataColumnStart = dataSet.classificationSchemes.size() +1;
-					dataSet.numCategoryColumns = dataSet.classificationSchemes.size();
+					dataSet.numDataColumns = headers.length - (dataSet.categoryGroups.size() +1);
+					dataSet.dataColumnStart = dataSet.categoryGroups.size() +1;
+					dataSet.numCategoryColumns = dataSet.categoryGroups.size();
 				}
 				else
 				{
 					//2. label -> data cols
 					//labels: 0
 					//data: 1-n
-					dataSet.emptyClassificationScheme = true;
+					dataSet.emptyCategoryGroup = true;
 					makeClassificationScheme(dataSet, unclassifiedCategoriesStr,0);
 
 					dataSet.numDataColumns = headers.length - 1;
@@ -323,13 +325,13 @@ public class DataLoader
 			try
 			{
 				//for each category scheme we have
-				for (ClassificationScheme scheme : dataSet.classificationSchemes)
+				for (CategoryGroup scheme : dataSet.categoryGroups)
 				{
 					//extract the value in the appropriate data cell
 					String categoryValue = line[scheme.columnIndex];
 
 					//this value may be empty if we have a legacy format without category information
-					if(dataSet.emptyClassificationScheme || categoryValue.equals(""))
+					if(dataSet.emptyCategoryGroup || categoryValue.equals(""))
 						categoryValue = unclassifiedCategoriesStr;
 
 					//check whether there is a Category object with this name
@@ -338,12 +340,12 @@ public class DataLoader
 					if(category == null)
 					{
 						//make a new one and add it
-						category = new Category();
-						category.name = categoryValue;
-						scheme.categories.add(category);
+						category = new Category(categoryValue, scheme);
+						scheme.addCategory(category);
 					}
 					//set this on the data point
 					dataEntry.categories.add(category);
+					category.addDataEntry(dataEntry);
 				}
 
 				//this is the label for the data point
@@ -412,22 +414,19 @@ public class DataLoader
 
 			//parse the headers
 			parseHeaders(lines, dataSet, commentCount);
-			int numCategorySchemes = dataSet.classificationSchemes.size();
+			int numCategorySchemes = dataSet.categoryGroups.size();
 
 			// parse the data
 			parseDataEntries(lines, dataSet, commentCount , numCategorySchemes);
 
 			//now that all the data is parsed we can associate colours with each of the categories
 			//for each category scheme we have
-			for (ClassificationScheme scheme : dataSet.classificationSchemes)
-			{
+			for (CategoryGroup scheme : dataSet.categoryGroups)
 				scheme.assignColoursToCategories();
-				scheme.makeNamesVector();
-			}
 
 			//now choose the first categorizationscheme as the one that is currently selected
 			//the user can switch to another one later if they so wish
-			dataSet.setCurrentClassificationScheme(dataSet.classificationSchemes.get(0));
+			dataSet.setCurrentCategoryGroup(dataSet.categoryGroups.get(0));
 		}
 		catch (Exception e)
 		{
@@ -446,10 +445,8 @@ public class DataLoader
 
 	private void makeClassificationScheme(DataSet dataSet, String name, int columnIndex)
 	{
-		ClassificationScheme scheme = new ClassificationScheme();
-		scheme.name = name;
+		CategoryGroup scheme = new CategoryGroup(name);
 		scheme.columnIndex = columnIndex;
-		dataSet.classificationSchemes.add(scheme);
-		dataSet.categorizationSchemesLookup.put(scheme.name, scheme);
+		dataSet.categoryGroups.add(scheme);
 	}
 }

@@ -3,7 +3,6 @@ package curlywhirly.gui;
 import java.awt.*;
 import java.lang.reflect.*;
 import java.net.*;
-import javax.vecmath.Color3f;
 
 import scri.commons.gui.*;
 import javax.swing.JPanel;
@@ -13,15 +12,14 @@ public class GUIUtils
 	/**
 	 * Returns an array of colours the length of numColours
 	 */
-	public static Color3f [] generateColours(int numColours)
+	public static Color [] generateColours(int numColours)
 	{
-		Color3f [] colours = new Color3f[numColours];
+		Color [] colours = new Color[numColours];
 		float increment = 1/(float)numColours;
 		float currentHue = 0;
 		for (int i = 0; i < colours.length; i++)
 		{
-			Color col = Color.getHSBColor(currentHue, 1, 1);
-			colours[i] = new Color3f(col);
+			colours[i] = Color.getHSBColor(currentHue, 1, 1);
 			currentHue += increment;
 		}
 		return colours;

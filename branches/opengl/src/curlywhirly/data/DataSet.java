@@ -8,8 +8,7 @@ public class DataSet
 	public String name;
 
 	//the list of categorization schemes that can be applied to the data, and a corresponding name based lookup
-	public ArrayList<ClassificationScheme> classificationSchemes = new ArrayList<ClassificationScheme>();
-	public HashMap<String, ClassificationScheme> categorizationSchemesLookup = new HashMap<String, ClassificationScheme>();
+	public ArrayList<CategoryGroup> categoryGroups = new ArrayList<CategoryGroup>();
 
 	//the headers for all the columns
 	public String[] allHeaders;
@@ -28,8 +27,7 @@ public class DataSet
 
 	//the legacy format also supports an empty first column if there are not category data attached
 	//checks whether we have this situation
-	boolean emptyClassificationScheme = false;
-	boolean singleClassificationScheme = false;
+	boolean emptyCategoryGroup = false;
 	boolean missingCategoryColumn = false;
 	boolean emptyCategoryColumn = false;
 	//this flag indicates whether we have a legacy format file with no "categories:" prefix for the category data
@@ -45,54 +43,42 @@ public class DataSet
 	private int currY = 1;
 	private int currZ = 2;
 
-	//the categorization scheme we are currently using
-	public ClassificationScheme currentClassificationScheme;
-
-	public ClassificationScheme getCurrentClassificationScheme()
-		{ return currentClassificationScheme; }
-
-	public void setCurrentClassificationScheme(ClassificationScheme current)
-	{
-		currentClassificationScheme = current;
-	}
-
-	public int getCurrX()
-	{
-		return currX;
-	}
-
-	public void setCurrX(int currX)
-	{
-		this.currX = currX;
-	}
-
-	public int getCurrY()
-	{
-		return currY;
-	}
-
-	public void setCurrY(int currY)
-	{
-		this.currY = currY;
-	}
-
-	public int getCurrZ()
-	{
-		return currZ;
-	}
-
-	public void setCurrZ(int currZ)
-	{
-		this.currZ = currZ;
-	}
+	public CategoryGroup currentCategoryGroup;
 
 	public int getCategorySchemeIndex()
 	{
-		return classificationSchemes.indexOf(currentClassificationScheme);
+		return categoryGroups.indexOf(currentCategoryGroup);
 	}
 
 	public int[] getCurrentAxes()
 	{
 		return new int[] { currX, currY, currZ };
 	}
+
+	public CategoryGroup getCurrentCategoryGroup()
+		{ return currentCategoryGroup; }
+
+	public void setCurrentCategoryGroup(CategoryGroup current)
+		{ currentCategoryGroup = current; }
+
+	public int getCurrX()
+		{ return currX; }
+
+	public void setCurrX(int currX)
+		{ this.currX = currX; }
+
+	public int getCurrY()
+		{ return currY; }
+
+	public void setCurrY(int currY)
+		{ this.currY = currY; }
+
+	public int getCurrZ()
+		{ return currZ; }
+
+	public void setCurrZ(int currZ)
+		{ this.currZ = currZ; }
+
+	public ArrayList<CategoryGroup> getCategoryGroups()
+		{ return categoryGroups; }
 }

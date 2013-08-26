@@ -26,7 +26,6 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	private static final int FPS = 60;
 	// The animator which updates the display at the desired framerate
 	private static FPSAnimator animator;
-
 	private CurlyWhirly frame;
 
 	// Variables related automatic rotation of the model
@@ -204,6 +203,9 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		height = height == 0 ? 1 : height;
 		aspect = (float)width / height;
 
+		CANVAS_WIDTH = width;
+		CANVAS_HEIGHT = height;
+
 		// Set the view port (display area) to cover the entire window
 		gl.glViewport(0, 0, width, height);
 
@@ -348,9 +350,8 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		float[] rgba;
 		for (DataEntry dataEntry : frame.getDataSet().dataEntries)
 		{
-//			System.out.println("Higlighted: " + dataEntry.categories.get(currentCategory).highlight);
-			Color3f color = dataEntry.getColor(currentCategory);
-			rgba = new float[] { color.x, color.y, color.z, 1f };
+			Color color = dataEntry.getColour(currentCategory);
+			rgba = new float[] { color.getRed()/255f, color.getGreen()/255f, color.getBlue()/255f, 1f };
 			gl.glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rgba, 0);
 			gl.glMaterialf(GL_FRONT, GL_SHININESS, 128);
 			drawSphere(gl, dataEntry);

@@ -17,22 +17,20 @@ import curlywhirly.opengl.*;
 
 public class CurlyWhirly extends JFrame
 {
-	public static DataSet dataSet;
+	private DataSet dataSet;
 //	public static MainCanvas canvas3D;
 	public static OpenGLPanel canvas3D;
-	public static StartPanel startPanel;
+	private StartPanel startPanel;
 	public JSplitPane splitPane;
 
 	public int controlPanelWidth = 200;
 
-	public static MTControlPanel controlPanel;
-	static JCheckBox instructionsCheckBox;
+	private ControlPanel controlPanel;
 	public static boolean dataLoaded = false;
 
 	private static File prefsFile = getPrefsFile();
 	public static Prefs prefs = new Prefs();
 	public StatusBar statusBar;
-	public static MenuBar menuBar;
 	public static WinMainToolBar toolbar;
 
 	private CanvasController controller;
@@ -52,6 +50,9 @@ public class CurlyWhirly extends JFrame
 	public static CurlyWhirly curlyWhirly = null;
 
 	public static final String titleString = "CurlyWhirly - " + Install4j.VERSION;
+
+	private JTabbedPane ctrlTabs;
+	private DataPanel dataPanel;
 
 
 	public static void main(String[] args)
@@ -217,6 +218,8 @@ public class CurlyWhirly extends JFrame
 
 	private void setupComponents()
 	{
+		ctrlTabs = new JTabbedPane();
+
 		//workaround for the 3D drawing problem with Swing menus
 		JPopupMenu.setDefaultLightWeightPopupEnabled( false );
 		ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
@@ -227,8 +230,14 @@ public class CurlyWhirly extends JFrame
 		add(toolbar, BorderLayout.NORTH);
 
 		// control panel
-		controlPanel = new MTControlPanel(this);
+		controlPanel = new ControlPanel(this);
 		controlPanel.setPreferredSize(new Dimension(controlPanelWidth, Prefs.guiWinMainHeight));
+
+		dataPanel = new DataPanel();
+		dataPanel.setPreferredSize(new Dimension(controlPanelWidth, Prefs.guiWinMainHeight));
+
+		ctrlTabs.add("", controlPanel);
+		ctrlTabs.add("", dataPanel);
 
 		// instantiate the canvas here rather than in the data load method
 		// we want to be able to recycle it when we load another dataset over the top of the current one
@@ -239,7 +248,7 @@ public class CurlyWhirly extends JFrame
 		startPanel = new StartPanel();
 
 		// main comp is split pane with control panel on the left and canvas on the right
-		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controlPanel, startPanel);
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, ctrlTabs, startPanel);
 		splitPane.setOneTouchExpandable(true);
 		add(splitPane);
 
@@ -323,6 +332,15 @@ public class CurlyWhirly extends JFrame
 	public DataSet getDataSet()
 		{ return dataSet; }
 
+	public void setDataSet(DataSet dataSet)
+		{ this.dataSet = dataSet; }
+
 	public OpenGLPanel getOpenGLPanel()
 		{ return canvas3D; }
+
+	public ControlPanel getControlPanel()
+		{ return controlPanel; }
+
+	public DataPanel getDataPanel()
+		{ return dataPanel; }
 }
