@@ -75,7 +75,7 @@ class CategoryPanel
 	{
 		int total = 0;
 		int selected = 0;
-		for (Category category : catGroup.getCategories())
+		for (Category category : catGroup)
 		{
 			total += category.getTotal();
 			selected += category.getNoSelected();
@@ -86,7 +86,7 @@ class CategoryPanel
 
 	private JTable createTable()
 	{
-		CategoryTableModel classModel = new CategoryTableModel(catGroup, dataSet);
+		final CategoryTableModel classModel = new CategoryTableModel(catGroup, dataSet);
 		// Add a model listener so that we can update the name panel when
 		// categories are selected and deselected.
 		classModel.addTableModelListener(parent);
@@ -98,7 +98,7 @@ class CategoryPanel
 			@Override
 			public TableCellRenderer getCellRenderer(int row, int col)
 			{
-				TableCellRenderer tcr = CategoryTableModel.getCellRenderer(col);
+				TableCellRenderer tcr = classModel.getCellRenderer(col);
 				return (tcr != null) ? tcr : super.getCellRenderer(row, col);
 			}
 		};
@@ -129,9 +129,12 @@ class CategoryPanel
 					int row = table.getSelectedRow();
 					Category category = (Category) table.getValueAt(row, 2);
 
-					Color newColor = JColorChooser.showDialog(CurlyWhirly.curlyWhirly, RB.getString("gui.CategoryPanel.colourChooser"), category.getColour());
-					if (newColor != null)
-						category.setColour(newColor);
+					if (category != null)
+					{
+						Color newColor = JColorChooser.showDialog(CurlyWhirly.winMain, RB.getString("gui.CategoryPanel.colourChooser"), category.getColor());
+						if (newColor != null)
+							category.setColour(newColor);
+					}
 				}
 			}
 		});

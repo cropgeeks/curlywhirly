@@ -14,12 +14,12 @@ class CategoryGroupPanel implements ActionListener, TableModelListener
 	private ArrayList<CategoryPanel> categoryPanels;
 
 	private DataSet dataSet;
-	private CurlyWhirly curlyWhirly;
+	private WinMain winMain;
 
-	CategoryGroupPanel(CurlyWhirly curlyWhirly, ArrayList<CategoryGroup> schemes, DataSet dataSet)
+	CategoryGroupPanel(WinMain winMain, List<CategoryGroup> schemes, DataSet dataSet)
 	{
 		this.dataSet = dataSet;
-		this.curlyWhirly = curlyWhirly;
+		this.winMain = winMain;
 
 		createControls(schemes);
 
@@ -28,17 +28,17 @@ class CategoryGroupPanel implements ActionListener, TableModelListener
 			bg.getElements().nextElement().setSelected(true);
 
 		if (categoryPanels.size() > 0)
-			dataSet.getCategoryGroups().get(0).setCurrent(true);
+			dataSet.setCurrentCategoryGroup(dataSet.getCategoryGroups().get(0));
 
 		// Collapse all but the first table.
 		for (int i=1; i < categoryPanels.size(); i++)
 			categoryPanels.get(i).setVisible(false);
 
 		// Setup the table in the dataPanel tab.
-		curlyWhirly.getDataPanel().updateTableModel();
+		winMain.getDataPanel().updateTableModel();
 	}
 
-	private void createControls(ArrayList<CategoryGroup> schemes)
+	private void createControls(List<CategoryGroup> schemes)
 	{
 		panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -75,10 +75,10 @@ class CategoryGroupPanel implements ActionListener, TableModelListener
 			// Change the currently selected category group.
 			if (e.getSource() == container.getButton())
 			{
-				dataSet.getCurrentCategoryGroup().setCurrent(false);
+//				dataSet.getCurrentCategoryGroup().setCurrent(false);
 				CategoryGroup catGroup = dataSet.getCategoryGroups().get(i);
 				dataSet.setCurrentCategoryGroup(catGroup);
-				catGroup.setCurrent(true);
+//				catGroup.setCurrent(true);
 				container.setVisible(true);
 				panel.invalidate();
 				panel.repaint();
@@ -99,7 +99,7 @@ class CategoryGroupPanel implements ActionListener, TableModelListener
 		for (CategoryPanel container : categoryPanels)
 			container.updateNamePanel();
 
-		curlyWhirly.getDataPanel().updateTableModel();
+		winMain.getDataPanel().updateTableModel();
 	}
 
 	public JPanel getPanel()

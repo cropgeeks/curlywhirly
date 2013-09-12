@@ -12,14 +12,14 @@ import scri.commons.gui.*;
 
 class PreferencesPanelNB extends JPanel
 {
-	private CurlyWhirly frame;
+	private WinMain winMain;
 
 	private DefaultComboBoxModel<String> displayModel;
 	private DefaultComboBoxModel<String> updateModel;
 
-    public PreferencesPanelNB(CurlyWhirly frame)
+    public PreferencesPanelNB(WinMain winMain)
     {
-		this.frame = frame;
+		this.winMain = winMain;
 
         initComponents();
 
@@ -94,7 +94,7 @@ class PreferencesPanelNB extends JPanel
 
 		// Colour options:
 		Prefs.guiGraphBackground = colorCombo.getSelectedIndex();
-		frame.getCanvasController().setBackgroundColour(Prefs.guiGraphBackground);
+		winMain.getCanvasController().setBackgroundColour(Prefs.guiGraphBackground);
 	}
 
     /** This method is called from within the constructor to

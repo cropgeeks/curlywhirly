@@ -9,19 +9,19 @@ import curlywhirly.data.*;
 
 public class CategoryTableModel extends AbstractTableModel
 {
-	private CategoryGroup scheme;
+	private CategoryGroup group;
 	private DataSet dataSet;
 
 	public CategoryTableModel(CategoryGroup scheme, DataSet dataSet)
 	{
-		this.scheme = scheme;
+		this.group = scheme;
 		this.dataSet = dataSet;
 	}
 
 	@Override
 	public int getRowCount()
 	{
-		return scheme.getCategories().size();
+		return group.size();
 	}
 
 	@Override
@@ -59,11 +59,10 @@ public class CategoryTableModel extends AbstractTableModel
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex)
 	{
-		Category category = scheme.getCategories().get(rowIndex);
+		if (rowIndex < 0)
+			return null;
 
-		boolean gray = scheme != dataSet.getCurrentCategoryGroup();
-
-		Object[] stuff = new Object[] { gray, category.getColour() };
+		Category category = group.get(rowIndex);
 
 		switch (columnIndex)
 		{
@@ -79,7 +78,7 @@ public class CategoryTableModel extends AbstractTableModel
 	@Override
 	public void setValueAt(Object value, int rowIndex, int columnIndex)
 	{
-		Category category = scheme.getCategories().get(rowIndex);
+		Category category = group.get(rowIndex);
 
 		switch (columnIndex)
 		{
@@ -89,7 +88,7 @@ public class CategoryTableModel extends AbstractTableModel
 		}
 	}
 
-	static class ColorListRenderer extends DefaultTableCellRenderer
+	class ColorListRenderer extends DefaultTableCellRenderer
 	{
 		// Set the attributes of the class and return a reference
 		@Override
@@ -105,10 +104,10 @@ public class CategoryTableModel extends AbstractTableModel
 			BufferedImage image = new BufferedImage(20, 10, BufferedImage.TYPE_INT_RGB);
 			Graphics2D g = image.createGraphics();
 
-			Color color = category.getColour();
-			if (category.getCategoryGroup().isCurrent() == false)
+			Color color = category.getColor();
+			if (category.getGroup() != dataSet.getCurrentCategoryGroup())
 			{
-				Color temp = category.getColour();
+				Color temp = category.getColor();
 				int average = (temp.getRed() + temp.getGreen() + temp.getBlue()) / 3;
 				color = new Color(average, average, average);
 			}
@@ -131,7 +130,7 @@ public class CategoryTableModel extends AbstractTableModel
 			{ return new Insets(0, 3, 0, 0); }
 	}
 
-	static TableCellRenderer getCellRenderer(int col)
+	TableCellRenderer getCellRenderer(int col)
 	{
 		switch (col)
 		{

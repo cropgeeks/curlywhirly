@@ -10,13 +10,15 @@ import curlywhirly.data.*;
 
 public class ControlPanel extends JPanel implements ActionListener
 {
-	private CurlyWhirly frame;
 	private DataSet dataSet;
 
-	public ControlPanel(CurlyWhirly frame)
+	private WinMain winMain;
+
+	public ControlPanel(WinMain winMain)
 	{
 		initComponents();
-		this.frame = frame;
+
+		this.winMain = winMain;
 
 		RB.setText(lblAxesTitle, "gui.ControlPanel.axesTitle");
 		RB.setText(lblX, "gui.ControlPanel.lblX");
@@ -29,11 +31,11 @@ public class ControlPanel extends JPanel implements ActionListener
 
 	public void addComboModels()
 	{
-		Vector<String> dataHeaders = dataSet.dataHeaders;
+		String[] axisLabels = dataSet.getAxisLabels();
 		// set the data headers as the model for the combo boxes that allow selection of variables
-		xCombo.setModel(new DefaultComboBoxModel<String>(dataHeaders));
-		yCombo.setModel(new DefaultComboBoxModel<String>(dataHeaders));
-		zCombo.setModel(new DefaultComboBoxModel<String>(dataHeaders));
+		xCombo.setModel(new DefaultComboBoxModel<String>(axisLabels));
+		yCombo.setModel(new DefaultComboBoxModel<String>(axisLabels));
+		zCombo.setModel(new DefaultComboBoxModel<String>(axisLabels));
 
 		resetComboBoxes();
 	}
@@ -49,11 +51,7 @@ public class ControlPanel extends JPanel implements ActionListener
 	public void setUpCategoryLists()
 	{
 		ArrayList<CategoryGroup> schemes = dataSet.getCategoryGroups();
-
-		//sort it and set it as the current model for the combo
-		Collections.sort(schemes);
-
-		CategoryGroupPanel container = new CategoryGroupPanel(frame, schemes, dataSet);
+		CategoryGroupPanel container = new CategoryGroupPanel(winMain, schemes, dataSet);
 
 		categorySP.setViewportView(container.getPanel());
 		categorySP.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);

@@ -8,17 +8,16 @@ import java.awt.dnd.*;
 import java.io.*;
 import java.util.*;
 
-import curlywhirly.data.*;
-
 public class FileDropAdapter extends DropTargetAdapter
 {
-	private final CurlyWhirly winMain;
+	private final WinMain winMain;
 
-	public FileDropAdapter(CurlyWhirly winMain)
+	public FileDropAdapter(WinMain winMain)
 	{
 		this.winMain = winMain;
 	}
 
+	@Override
 	public void drop(DropTargetDropEvent dtde)
 	{
 		Transferable t = dtde.getTransferable();
@@ -35,10 +34,7 @@ public class FileDropAdapter extends DropTargetAdapter
 				{
 					List<?> list = (List<?>) t.getTransferData(dataFlavors[i]);
 
-					//open the file
-					CurlyWhirly.dragAndDropDataLoad = true;
-					CurlyWhirly.dataLoader = new DataLoader();
-					CurlyWhirly.dataLoader.loadDataInThread(new File(list.get(0).toString()));
+					winMain.getToolbarActions().openFile(new File(list.get(0).toString()));
 
 					dtde.dropComplete(true);
 					return;
@@ -47,6 +43,6 @@ public class FileDropAdapter extends DropTargetAdapter
 
 			dtde.dropComplete(true);
 		}
-		catch (Exception e) {}
+		catch (UnsupportedFlavorException | IOException e) {}
 	}
 }

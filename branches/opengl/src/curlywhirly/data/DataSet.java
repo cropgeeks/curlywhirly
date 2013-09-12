@@ -2,83 +2,95 @@ package curlywhirly.data;
 
 import java.util.*;
 
-public class DataSet
+public class DataSet implements Iterable<DataPoint>
 {
-	//a general name for the dataset
-	public String name;
+	private final ArrayList<DataPoint> dataPoints;
+	private final ArrayList<CategoryGroup> categoryGroups;
+	private final String[] axisLabels;
+	private CategoryGroup currentGroup;
 
-	//the list of categorization schemes that can be applied to the data, and a corresponding name based lookup
-	public ArrayList<CategoryGroup> categoryGroups = new ArrayList<CategoryGroup>();
+	private int currX;
+	private int currY;
+	private int currZ;
 
-	//the headers for all the columns
-	public String[] allHeaders;
+	// DB-link/association data
+	private DBAssociation dbAssociation = new DBAssociation();
 
-	//the headers for data columns only
-	public Vector<String> dataHeaders = new Vector<String>();
-
-	//the number of entries in the dataset
-	public int numEntries;
-
-	//this contains the actual entries inthe dataset
-	public ArrayList<DataEntry> dataEntries = new ArrayList<DataEntry>();
-
-	public int numDataColumns;
-	public int numCategoryColumns;
-
-	//the legacy format also supports an empty first column if there are not category data attached
-	//checks whether we have this situation
-	boolean emptyCategoryGroup = false;
-	boolean missingCategoryColumn = false;
-	boolean emptyCategoryColumn = false;
-	//this flag indicates whether we have a legacy format file with no "categories:" prefix for the category data
-	boolean noCategoryHeaders = true;
-
-	public int labelsColumnIndex;
-	public ArrayList<Integer> categoryColumnIndices;
-	public ArrayList<Integer> dataColumnIndices;
-	public int dataColumnStart = -1;
-
-	// Default to first three columns of data in the dataset
-	private int currX = 0;
-	private int currY = 1;
-	private int currZ = 2;
-
-	public CategoryGroup currentCategoryGroup;
-
-	public int getCategorySchemeIndex()
+	public DataSet(ArrayList<DataPoint> dataPoints, ArrayList<CategoryGroup> categoryGroups, String[] axisLabels)
 	{
-		return categoryGroups.indexOf(currentCategoryGroup);
+		this.dataPoints = dataPoints;
+		// The sort ensures CategoryGroups are displayed in alphabetical order
+		Collections.sort(categoryGroups);
+		this.categoryGroups = categoryGroups;
+		this.axisLabels = axisLabels;
+
+		setDefaultAxes(axisLabels.length);
+
+		currentGroup = categoryGroups.get(0);
 	}
+
+	// Adjust the default axes displayed based on the number of axes in the
+	// dataset. If there are 3 or more, display the first 3, otherwise display
+	// as many different axes as is possible. Assumption is made that the first
+	// axis is most important as this is where most of the variation should be
+	// covered by PCO/PCA data.
+	private void setDefaultAxes(int numAxes)
+	{
+		switch (numAxes)
+		{
+			case 1:		currY = 0;
+						currZ = 0;
+						break;
+			case 2:		currZ = 1;
+						break;
+
+			default:	currX = 0;
+						currY = 1;
+						currZ = 2;
+		}
+	}
+
+	@Override
+	public Iterator<DataPoint> iterator()
+	{
+		return dataPoints.iterator();
+	}
+
+	public void setCurrentCategoryGroup(CategoryGroup currentGroup)
+		{ this.currentGroup = currentGroup; }
+
+	public CategoryGroup getCurrentCategoryGroup()
+		{ return currentGroup; }
 
 	public int[] getCurrentAxes()
 	{
 		return new int[] { currX, currY, currZ };
 	}
 
-	public CategoryGroup getCurrentCategoryGroup()
-		{ return currentCategoryGroup; }
-
-	public void setCurrentCategoryGroup(CategoryGroup current)
-		{ currentCategoryGroup = current; }
+	public void setCurrX(int currX)
+		{ this.currX = currX; }
 
 	public int getCurrX()
 		{ return currX; }
 
-	public void setCurrX(int currX)
-		{ this.currX = currX; }
+	public void setCurrY(int currY)
+		{ this.currY = currY; }
 
 	public int getCurrY()
 		{ return currY; }
 
-	public void setCurrY(int currY)
-		{ this.currY = currY; }
+	public void setCurrZ(int currZ)
+		{ this.currZ = currZ; }
 
 	public int getCurrZ()
 		{ return currZ; }
 
-	public void setCurrZ(int currZ)
-		{ this.currZ = currZ; }
-
 	public ArrayList<CategoryGroup> getCategoryGroups()
 		{ return categoryGroups; }
+
+	public String[] getAxisLabels()
+		{ return axisLabels; }
+
+	public DBAssociation getDbAssociation()
+		{ return dbAssociation; }
 }

@@ -24,7 +24,7 @@ public class URLEntryForm extends JDialog
 		String url = dataURLTextField.getText();
 		if (url != null)
 		{
-			CurlyWhirly.dataAnnotationURL = url;
+//			CurlyWhirly.dataAnnotationURL = url;
 			dataURLTextField.setText(url);
 			//close the window
 			setVisible(false);

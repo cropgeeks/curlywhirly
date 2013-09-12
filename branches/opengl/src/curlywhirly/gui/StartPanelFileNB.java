@@ -22,10 +22,14 @@ public class StartPanelFileNB extends JPanel implements ActionListener
 	private String[] filenames = new String[10];
 	private String[] tooltips = new String[10];
 
-	public StartPanelFileNB()
+	private WinMain winMain;
+
+	public StartPanelFileNB(WinMain winMain)
 	{
 		initComponents();
 		setOpaque(false);
+
+		this.winMain = winMain;
 
 		RB.setText(importLabel, "gui.NBStartFilePanel.importLabel");
 		RB.setText(openLabel, "gui.NBStartFilePanel.openLabel");
@@ -91,19 +95,18 @@ public class StartPanelFileNB extends JPanel implements ActionListener
 		}
     }
 
+	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-//		WinMain wm = Tablet.winMain;
-//
 		if (e.getSource() == importLabel)
-			CurlyWhirly.toolbar.openFile(null);
+			winMain.getToolbarActions().open();
 
 		if (e.getSource() == sampleLabel)
-			CurlyWhirly.toolbar.openSample();
+			winMain.getToolbarActions().openSample();
 //
 		for (int i = 0; i < labels.length; i++)
 			if (e.getSource() == labels[i])
-				CurlyWhirly.toolbar.openFile(new File(files[i]));
+				winMain.getToolbarActions().openFile(new File(files[i]));
 	}
 
     /** This method is called from within the constructor to

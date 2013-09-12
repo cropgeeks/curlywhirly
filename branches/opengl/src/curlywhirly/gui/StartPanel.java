@@ -9,7 +9,7 @@ import scri.commons.gui.matisse.*;
 
 class StartPanel extends JPanel
 {
-	StartPanel()
+	StartPanel(WinMain winMain)
 	{
 		setBorder(BorderFactory.createLineBorder(new Color(119, 126, 143), 3));
 		setLayout(new BorderLayout());
@@ -28,7 +28,7 @@ class StartPanel extends JPanel
 		filePanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 		filePanel.add(new TitlePanel3(
 			RB.getString("gui.NBStartFilePanel.title")), BorderLayout.NORTH);
-		filePanel.add(new StartPanelFileNB());
+		filePanel.add(new StartPanelFileNB(winMain));
 
 /*		JPanel helpPanel = new JPanel(new BorderLayout());
 		helpPanel.setOpaque(false);

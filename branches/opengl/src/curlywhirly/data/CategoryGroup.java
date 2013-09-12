@@ -1,46 +1,35 @@
 package curlywhirly.data;
 
-import java.awt.*;
 import java.util.*;
 
-import curlywhirly.gui.*;
-
-public class CategoryGroup implements Comparable<CategoryGroup>
+public class CategoryGroup implements Comparable<CategoryGroup>, Iterable<Category>
 {
-	private String name;
-	private ArrayList<Category> categories;
-	public int columnIndex = -1;
-	private boolean current;
+	// Currently Category group is basically a nice abstraction around what
+	// could be provided via a HashMap<String, ArrayList<Category>>
+	private final String name;
+	private final ArrayList<Category> categories;
 
 	public CategoryGroup(String name)
 	{
 		this.name = name;
 
 		categories = new ArrayList<Category>();
-		current = false;
 	}
 
-	public Category getCategoryByName(String categoryName)
+	public String getName()
+		{ return name; }
+
+	public Category get(int index)
 	{
-		for (Category category : categories)
-			if(categoryName.equals(category.getName()))
-				return category;
-
-		return null;
+		return categories.get(index);
 	}
 
-	//if we know the number of categories and we can create a colour scheme and apply it
-	public void assignColoursToCategories()
+	public int size()
 	{
-//		System.out.println("assigning all colours for scheme " + name);
-//		System.out.println("num categories =  " + categories.size());
-//
-		Color[] colours = GUIUtils.generateColours(categories.size());
-		for (int i=0; i < categories.size(); i++)
-			categories.get(i).setColour(colours[i]);
+		return categories.size();
 	}
 
-	public void addCategory(Category category)
+	public void add(Category category)
 	{
 		categories.add(category);
 	}
@@ -51,15 +40,9 @@ public class CategoryGroup implements Comparable<CategoryGroup>
 		return name.compareTo(o.name);
 	}
 
-	public String getName()
-		{ return name; }
-
-	public ArrayList<Category> getCategories()
-		{ return categories; }
-
-	public boolean isCurrent()
-		{ return current; }
-
-	public void setCurrent(boolean current)
-		{ this.current = current; }
+	@Override
+	public Iterator<Category> iterator()
+	{
+		return categories.iterator();
+	}
 }

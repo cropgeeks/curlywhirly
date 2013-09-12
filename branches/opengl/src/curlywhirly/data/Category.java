@@ -3,77 +3,37 @@ package curlywhirly.data;
 import java.awt.*;
 import java.util.*;
 
-public class Category implements Comparable<Category>
+public class Category
 {
-	private String name;
+	private final String name;
+	private Color color;
 	private boolean selected;
-	private Color colour;
-	private ArrayList<DataEntry> dataEntries;
-	private CategoryGroup catGroup;
+	private CategoryGroup group;
 
-	public Category(String name, CategoryGroup catGroup)
+	private ArrayList<DataPoint> dataPoints;
+
+	public Category(String name, CategoryGroup group)
 	{
 		this.name = name;
-		this.catGroup = catGroup;
+		this.group = group;
+
 		selected = true;
-
-		dataEntries = new ArrayList<DataEntry>();
+		dataPoints = new ArrayList<DataPoint>();
 	}
 
-	public void addDataEntry(DataEntry entry)
-		{ dataEntries.add(entry); }
-
-	@Override
-	public int compareTo(Category o)
-	{
-		return name.compareTo(o.name);
-	}
-
-	public String getName()
-	{
-		return name;
-	}
-
-	public void setName(String name)
-	{
-		this.name = name;
-	}
-
-	public boolean isSelected()
-	{
-		return selected;
-	}
-
-	public void setSelected(boolean selected)
-	{
-		this.selected = selected;
-	}
-
-	public Color getColour()
-	{
-		return colour;
-	}
-
-	public void setColour(Color colour)
-	{
-		this.colour = colour;
-	}
-
+	// getTotal and getNoSelected are used in the reporting of the data points
+	// which are selected on a per category basis.
 	public int getTotal()
-	{
-		return dataEntries.size();
-	}
+		{ return dataPoints.size(); }
 
-	// Returns the number of dataEntries which are considered selected (i.e. the
-	// data entries whose every category is selected
 	public int getNoSelected()
 	{
-		int noSelected = 0;
-		for (DataEntry dataEntry : dataEntries)
-			if (dataEntry.isSelected())
-				noSelected++;
+		int count = 0;
+		for (DataPoint point : dataPoints)
+			if (point.isSelected())
+				count++;
 
-		return noSelected;
+		return count;
 	}
 
 	public String getSelectedText()
@@ -81,9 +41,41 @@ public class Category implements Comparable<Category>
 		return "" + getNoSelected() + "/" + getTotal();
 	}
 
-	public String toString()
+	public String getName()
 		{ return name; }
 
-	public CategoryGroup getCategoryGroup()
-		{ return catGroup; }
+	public void setSelected(boolean selected)
+	{
+		this.selected = selected;
+	}
+
+	public boolean isSelected()
+		{ return selected; }
+
+	public void addDataPoint(DataPoint dataPoint)
+	{
+		dataPoints.add(dataPoint);
+	}
+
+	public void setColour(Color color)
+	{
+		this.color = color;
+	}
+
+	public Color getColor()
+		{ return color; }
+
+	public void setGroup(CategoryGroup group)
+	{
+		this.group = group;
+	}
+
+	public CategoryGroup getGroup()
+		{ return group; }
+
+	@Override
+	public String toString()
+	{
+		return name;
+	}
 }

@@ -1,58 +1,24 @@
 package curlywhirly.gui;
 
-import java.awt.*;
-import java.awt.dnd.*;
 import java.awt.event.*;
 import java.io.*;
-import javax.swing.*;
 
 import apple.dts.samplecode.osxadapter.*;
 
 import scri.commons.file.*;
 import scri.commons.gui.*;
 
-import curlywhirly.data.*;
-import curlywhirly.gui.viewer.*;
-import curlywhirly.opengl.*;
-
-public class CurlyWhirly extends JFrame
+public class CurlyWhirly
 {
-	private DataSet dataSet;
-//	public static MainCanvas canvas3D;
-	public static OpenGLPanel canvas3D;
-	private StartPanel startPanel;
-	public JSplitPane splitPane;
-
-	public int controlPanelWidth = 200;
-
-	private ControlPanel controlPanel;
-	public static boolean dataLoaded = false;
-
 	private static File prefsFile = getPrefsFile();
 	public static Prefs prefs = new Prefs();
-	public StatusBar statusBar;
-	public static WinMainToolBar toolbar;
-
-	private CanvasController controller;
-
-//	public static MovieCaptureThread currentMovieCaptureThread = null;
-
-	public FrameListener frameListener = null;
-
-	public static DataLoader dataLoader =null;
-
-	public static String dataAnnotationURL = null;
 
 	// Optional path to a file to be loaded when app opens
 	public static String initialFile = null;
-	public static boolean dragAndDropDataLoad = false;
 
-	public static CurlyWhirly curlyWhirly = null;
+	public static WinMain winMain;
 
 	public static final String titleString = "CurlyWhirly - " + Install4j.VERSION;
-
-	private JTabbedPane ctrlTabs;
-	private DataPanel dataPanel;
 
 
 	public static void main(String[] args)
@@ -65,30 +31,20 @@ public class CurlyWhirly extends JFrame
 			+ System.getProperty("os.name")	+ " (" + System.getProperty("os.arch") + ")");
 		System.out.println("Using " + prefsFile);
 //		java.util.Map vuMap = javax.media.j3d.VirtualUniverse.getProperties();
-		System.out.println("Runtime Java Version = " + System.getProperty("java.version"));
+//		System.out.println("Runtime Java Version = " + System.getProperty("java.version"));
 //		System.out.println("Java 3D version = " + vuMap.get("j3d.version"));
 //		System.out.println("Renderer = " + vuMap.get("j3d.renderer") + "\n");
 
-		try
-		{
-			// preferences
-			prefs.loadPreferences(prefsFile, Prefs.class);
-
-			// Set System L&F
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+		// preferences
+		prefs.loadPreferences(prefsFile, Prefs.class);
+		prefs.savePreferences(prefsFile, Prefs.class);
 
 		Icons.initialize("/res/icons", ".png");
 		RB.initialize(Prefs.localeText, "res.text.curlywhirly");
 
 		install4j();
 
-		curlyWhirly = new CurlyWhirly();
-		dataLoader = new DataLoader();
+		new CurlyWhirly();
 	}
 
 	// Sets up the install4j environment to check for updates
@@ -105,51 +61,26 @@ public class CurlyWhirly extends JFrame
 
 	CurlyWhirly()
 	{
-		//this initializes all the task dialog instances
-		TaskDialog.initialize(this, RB.getString("gui.CurlyWhirly.title"));
+		try
+		{
+			// Set System L&F
+			Nimbus.customizeNimbus();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 
 		if (SystemUtils.isMacOS())
 			handleOSXStupidities();
 
-		// And use Nimbus for all non-Apple systems
-		else
-		{
-			try {
+		winMain = new WinMain();
 
-			Nimbus.customizeNimbus();
-			}
-			catch (Exception e) {}
-//			winKey = RB.getString("gui.text.ctrl");
-		}
-
-		setupComponents();
-		pack();
-
-		// get the GUI set up
-		setTitle(RB.getString("gui.CurlyWhirly.title") + " - " + Install4j.VERSION);
-		setSize(Prefs.guiWinMainWidth, Prefs.guiWinMainHeight);
-
-		// Determine where on screen to display
-		if (Prefs.isFirstRun)
-			setLocationRelativeTo(null);
-		else
-			setLocation(Prefs.guiWinMainX, Prefs.guiWinMainY);
-
-		// Maximize the frame if neccassary
-		if (Prefs.guiWinMainMaximized)
-			setExtendedState(Frame.MAXIMIZED_BOTH);
-
-		setIconImage(Icons.getIcon("curlywurly_icon32px").getImage());
-
-
-		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-
-		addWindowListener(new WindowAdapter()
+		winMain.addWindowListener(new WindowAdapter()
 		{
 			@Override
 			public void windowClosing(WindowEvent e)
 			{
-				Prefs.isFirstRun = false;
 				shutdown();
 			}
 
@@ -159,110 +90,71 @@ public class CurlyWhirly extends JFrame
 				// Do we want to open an initial project?
 				if (initialFile != null)
 				{
-					CurlyWhirly.dataLoader = new DataLoader();
-					CurlyWhirly.dataLoader.loadDataInThread(new File(initialFile));
+					winMain.getToolbarActions().openFile(prefsFile);
 				}
 			}
 
 		});
 
+		TaskDialog.initialize(winMain, RB.getString("gui.CurlyWhirly.title"));
 
-		addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentResized(ComponentEvent e)
-			{
-				if (getExtendedState() != Frame.MAXIMIZED_BOTH)
-				{
-					Prefs.guiWinMainWidth  = getSize().width;
-					Prefs.guiWinMainHeight = getSize().height;
-					Prefs.guiWinMainX = getLocation().x;
-					Prefs.guiWinMainY = getLocation().y;
-
-					Prefs.guiWinMainMaximized = false;
-				}
-				else
-					Prefs.guiWinMainMaximized = true;
-			}
-
-			public void componentMoved(ComponentEvent e)
-			{
-				Prefs.guiWinMainX = getLocation().x;
-				Prefs.guiWinMainY = getLocation().y;
-			}
-
-		});
-
-		initialise();
-
-		frameListener = new FrameListener(this);
-		addWindowFocusListener(frameListener);
-		addComponentListener(frameListener);
-
-		setVisible(true);
-
-		//start a thread that fades in a label on the canvas prompting the user to open a file
-//		CanvasLabelFadeInThread t = new CanvasLabelFadeInThread(canvas3D);
-//		t.start();
-	}
-
-	private void initialise()
-	{
-		controller = new CanvasController(this);
+		winMain.setVisible(true);
 	}
 
 	void shutdown()
 	{
+		Prefs.isFirstRun = false;
 		prefs.savePreferences(prefsFile, Prefs.class);
 		System.exit(0);
 	}
 
-	private void setupComponents()
-	{
-		ctrlTabs = new JTabbedPane();
-
-		//workaround for the 3D drawing problem with Swing menus
-		JPopupMenu.setDefaultLightWeightPopupEnabled( false );
-		ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
-		ToolTipManager.sharedInstance().setInitialDelay(0);
-
-		// toolbar
-		toolbar = new WinMainToolBar(this);
-		add(toolbar, BorderLayout.NORTH);
-
-		// control panel
-		controlPanel = new ControlPanel(this);
-		controlPanel.setPreferredSize(new Dimension(controlPanelWidth, Prefs.guiWinMainHeight));
-
-		dataPanel = new DataPanel();
-		dataPanel.setPreferredSize(new Dimension(controlPanelWidth, Prefs.guiWinMainHeight));
-
-		ctrlTabs.add("", controlPanel);
-		ctrlTabs.add("", dataPanel);
-
-		// instantiate the canvas here rather than in the data load method
-		// we want to be able to recycle it when we load another dataset over the top of the current one
-//		canvas3D = new MainCanvas(this);
-		canvas3D = new OpenGLPanel(this);
-		canvas3D.setPreferredSize(new Dimension((Prefs.guiWinMainWidth-controlPanelWidth), Prefs.guiWinMainHeight));
-
-		startPanel = new StartPanel();
-
-		// main comp is split pane with control panel on the left and canvas on the right
-		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, ctrlTabs, startPanel);
-		splitPane.setOneTouchExpandable(true);
-		add(splitPane);
-
-		//in the absence of data this creates an empty scene graph and we then paint a label onto the canvas that prompts the user to open a file
-//		canvas3D.createSceneGraph(false);
-
-		// status bar
-		statusBar = new StatusBar();
-		add(statusBar, java.awt.BorderLayout.SOUTH);
-
-		//drag and drop support
-		FileDropAdapter dropAdapter = new FileDropAdapter(this);
-		setDropTarget(new DropTarget(this, dropAdapter));
-	}
+//	private void setupComponents()
+//	{
+//		ctrlTabs = new JTabbedPane();
+//
+//		//workaround for the 3D drawing problem with Swing menus
+//		JPopupMenu.setDefaultLightWeightPopupEnabled( false );
+//		ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
+//		ToolTipManager.sharedInstance().setInitialDelay(0);
+//
+//		// toolbar
+//		toolbar = new WinMainToolBar(this);
+//		add(toolbar, BorderLayout.NORTH);
+//
+//		// control panel
+//		controlPanel = new ControlPanel(this);
+//		controlPanel.setPreferredSize(new Dimension(controlPanelWidth, Prefs.guiWinMainHeight));
+//
+//		dataPanel = new DataPanel();
+//		dataPanel.setPreferredSize(new Dimension(controlPanelWidth, Prefs.guiWinMainHeight));
+//
+//		ctrlTabs.add("", controlPanel);
+//		ctrlTabs.add("", dataPanel);
+//
+//		// instantiate the canvas here rather than in the data load method
+//		// we want to be able to recycle it when we load another dataset over the top of the current one
+////		canvas3D = new MainCanvas(this);
+//		canvas3D = new OpenGLPanel(this);
+//		canvas3D.setPreferredSize(new Dimension((Prefs.guiWinMainWidth-controlPanelWidth), Prefs.guiWinMainHeight));
+//
+//		startPanel = new StartPanel(curlyWhirly);
+//
+//		// main comp is split pane with control panel on the left and canvas on the right
+//		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, ctrlTabs, startPanel);
+//		splitPane.setOneTouchExpandable(true);
+//		add(splitPane);
+//
+//		//in the absence of data this creates an empty scene graph and we then paint a label onto the canvas that prompts the user to open a file
+////		canvas3D.createSceneGraph(false);
+//
+//		// status bar
+//		statusBar = new StatusBar();
+//		add(statusBar, java.awt.BorderLayout.SOUTH);
+//
+//		//drag and drop support
+//		FileDropAdapter dropAdapter = new FileDropAdapter(this);
+//		setDropTarget(new DropTarget(this, dropAdapter));
+//	}
 
 	private static File getPrefsFile()
 	{
@@ -311,12 +203,13 @@ public class CurlyWhirly extends JFrame
 	/** "Preferences" on the OS X system menu. */
 	public void osxPreferences()
 	{
+		new PreferencesDialog();
 	}
 
 	/** "About CurlyWhirly" on the OS X system menu. */
 	public void osxAbout()
 	{
-		new AboutDialog(this, true);
+		new AboutDialog();
 	}
 
 	/** "Quit CurlyWhirly" on the OS X system menu. */
@@ -325,22 +218,4 @@ public class CurlyWhirly extends JFrame
 		shutdown();
 		return true;
 	}
-
-	public CanvasController getCanvasController()
-		{ return controller; }
-
-	public DataSet getDataSet()
-		{ return dataSet; }
-
-	public void setDataSet(DataSet dataSet)
-		{ this.dataSet = dataSet; }
-
-	public OpenGLPanel getOpenGLPanel()
-		{ return canvas3D; }
-
-	public ControlPanel getControlPanel()
-		{ return controlPanel; }
-
-	public DataPanel getDataPanel()
-		{ return dataPanel; }
 }

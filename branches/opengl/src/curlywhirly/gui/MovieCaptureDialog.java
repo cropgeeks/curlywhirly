@@ -15,7 +15,7 @@ public class MovieCaptureDialog extends JDialog implements ActionListener, Chang
 	private JButton bCancel;
 	private JButton bCapture;
 
-	private CurlyWhirly winMain;
+	private WinMain winMain;
 	private MovieCapturePanelNB nbPanel;
 
 	public static final int SPIN_SLOW = 15;
@@ -24,7 +24,7 @@ public class MovieCaptureDialog extends JDialog implements ActionListener, Chang
 
 	private File movieFile;
 
-	public MovieCaptureDialog(CurlyWhirly winMain)
+	public MovieCaptureDialog(WinMain winMain)
 	{
 		super(
 			winMain,
@@ -34,7 +34,7 @@ public class MovieCaptureDialog extends JDialog implements ActionListener, Chang
 
 		this.winMain = winMain;
 
-		add(nbPanel = new MovieCapturePanelNB(winMain, this), BorderLayout.CENTER);
+//		add(nbPanel = new MovieCapturePanelNB(winMain, this), BorderLayout.CENTER);
 		add(createButtons(), BorderLayout.SOUTH);
 
 		getRootPane().setDefaultButton(bCancel);

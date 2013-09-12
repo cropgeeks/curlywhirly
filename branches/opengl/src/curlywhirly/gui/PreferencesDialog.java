@@ -16,11 +16,11 @@ public class PreferencesDialog extends JDialog implements ActionListener
 
 	private PreferencesPanelNB nbPanel;
 
-	public PreferencesDialog(CurlyWhirly frame)
+	public PreferencesDialog()
 	{
-		super(frame, RB.getString("gui.PreferencesDialog.title"), true);
+		super(CurlyWhirly.winMain, RB.getString("gui.PreferencesDialog.title"), true);
 
-		nbPanel = new PreferencesPanelNB(frame);
+		nbPanel = new PreferencesPanelNB(CurlyWhirly.winMain);
 
 		add(nbPanel);
 		add(createButtons(), BorderLayout.SOUTH);
@@ -29,7 +29,7 @@ public class PreferencesDialog extends JDialog implements ActionListener
 		SwingUtils.addCloseHandler(this, bCancel);
 
 		pack();
-		setLocationRelativeTo(frame);
+		setLocationRelativeTo(CurlyWhirly.winMain);
 		setResizable(false);
 		setVisible(true);
 	}

@@ -10,21 +10,20 @@ import scri.commons.gui.*;
 public class DataPanelTableModel extends AbstractTableModel
 {
 	private String[] columnNames;
-	private ArrayList<DataEntry> dataEntries;
+	private ArrayList<DataPoint> dataPoints;
 	private DataSet dataSet;
 
 	DataPanelTableModel(DataSet dataSet, CategoryGroup categoryGroup)
 	{
 		this.dataSet = dataSet;
 
-		dataEntries = new ArrayList<DataEntry>();
-		int categorySchemeIndex =  dataSet.categoryGroups.indexOf(categoryGroup);
-		for (DataEntry dataEntry : dataSet.dataEntries)
+		dataPoints = new ArrayList<DataPoint>();
+		for (DataPoint dataPoint : dataSet)
 		{
-			Category category = dataEntry.categories.get(categorySchemeIndex);
+			Category category = dataPoint.getCategoryForGroup(categoryGroup);
 
-			if (category != null && dataEntry.isSelected())
-				dataEntries.add(dataEntry);
+			if (category != null && dataPoint.isSelected())
+				dataPoints.add(dataPoint);
 		}
 
 		columnNames = new String[] { RB.getString("gui.DataEntryTableModel.headers.name"),
@@ -36,7 +35,7 @@ public class DataPanelTableModel extends AbstractTableModel
 	@Override
 	public int getRowCount()
 	{
-		return dataEntries.size();
+		return dataPoints.size();
 	}
 
 	@Override
@@ -59,16 +58,16 @@ public class DataPanelTableModel extends AbstractTableModel
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex)
 	{
-		DataEntry entry = dataEntries.get(rowIndex);
+		DataPoint point = dataPoints.get(rowIndex);
 
 		// Find out what the currently selected data for each axis is so that we
 		// can pull out the correct data for display in the table.
 		switch (columnIndex)
 		{
-			case 0: return entry.label;
-			case 1: return entry.dataValues.get(dataSet.getCurrX());
-			case 2: return entry.dataValues.get(dataSet.getCurrY());
-			case 3: return entry.dataValues.get(dataSet.getCurrZ());
+			case 0: return point.getName();
+			case 1: return point.getValues().get(dataSet.getCurrX());
+			case 2: return point.getValues().get(dataSet.getCurrY());
+			case 3: return point.getValues().get(dataSet.getCurrZ());
 		}
 
 		return null;

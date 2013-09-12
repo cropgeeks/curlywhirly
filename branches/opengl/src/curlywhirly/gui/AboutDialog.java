@@ -17,9 +17,9 @@ public class AboutDialog extends JDialog implements ActionListener
 	private AboutLicencePanelNB licencePanel = new AboutLicencePanelNB();
 	private AboutHelpPanelNB helpPanel = new AboutHelpPanelNB();
 
-	public AboutDialog(java.awt.Frame parent, boolean modal)
+	public AboutDialog()
 	{
-        super(parent, modal);
+        super(CurlyWhirly.winMain, true);
 
 		nbPanel = new AboutPanelNB();
 
@@ -38,7 +38,7 @@ public class AboutDialog extends JDialog implements ActionListener
 		SwingUtils.addCloseHandler(this, bClose);
 
 		pack();
-		setLocationRelativeTo(parent);
+		setLocationRelativeTo(CurlyWhirly.winMain);
 		setTitle(RB.getString("gui.AboutDialog.title"));
 		setResizable(false);
 		setVisible(true);

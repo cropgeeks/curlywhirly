@@ -26,7 +26,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	private static final int FPS = 60;
 	// The animator which updates the display at the desired framerate
 	private static FPSAnimator animator;
-	private CurlyWhirly frame;
+	private WinMain winMain;
 
 	// Variables related automatic rotation of the model
 	private boolean autoSpin = false;
@@ -65,9 +65,9 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	private String glVersion;
 	private float versionNo = 0;
 
-	public OpenGLPanel(CurlyWhirly frame)
+	public OpenGLPanel(WinMain winMain)
 	{
-		this.frame = frame;
+		this.winMain = winMain;
 
 		addGLEventListener(this);
 
@@ -344,24 +344,24 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glEnableClientState(GL_NORMAL_ARRAY);
 
 		// Color spheres appropriately
-		DataSet dataSet = frame.getDataSet();
-		int currentCategory = dataSet.getCategorySchemeIndex();
+		DataSet dataSet = winMain.getDataSet();
 
 		float[] rgba;
-		for (DataEntry dataEntry : frame.getDataSet().dataEntries)
+		for (DataPoint point : winMain.getDataSet())
 		{
-			Color color = dataEntry.getColour(currentCategory);
+			Color color = point.getColor(dataSet.getCurrentCategoryGroup());
+			// Get each color component into the 0-1 range instead of 0-255
 			rgba = new float[] { color.getRed()/255f, color.getGreen()/255f, color.getBlue()/255f, 1f };
 			gl.glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rgba, 0);
 			gl.glMaterialf(GL_FRONT, GL_SHININESS, 128);
-			drawSphere(gl, dataEntry);
+			drawSphere(gl, point);
 		}
 
 		gl.glDisableClientState(GL_VERTEX_ARRAY);
 		gl.glDisableClientState(GL_NORMAL_ARRAY);
 	}
 
-	private void drawSphere(GL2 gl, DataEntry dataEntry)
+	private void drawSphere(GL2 gl, DataPoint point)
 	{
 		gl.glPushMatrix();
 		// Scale our unit sphere down to a more manageable scale
@@ -369,7 +369,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 		// Get the position information for each axis so that these can be used
 		// to translate our spheres to the correct location
-		float[] indices = dataEntry.getPosition(frame.getDataSet().getCurrentAxes());
+		float[] indices = point.getPosition(winMain.getDataSet().getCurrentAxes());
 		// Bring our translations into the correct coordinate space as we've
 		// scaled each point to 1/200 of its original size.
 		gl.glTranslatef(map(indices[0])*200f, map(indices[1])*200f, map(indices[2])*200f);

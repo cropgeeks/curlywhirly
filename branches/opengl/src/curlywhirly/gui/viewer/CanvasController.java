@@ -1,6 +1,6 @@
 package curlywhirly.gui.viewer;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.*;
 
 import curlywhirly.data.*;
@@ -9,13 +9,13 @@ import curlywhirly.opengl.*;
 
 public class CanvasController
 {
-	private CurlyWhirly frame;
+	private WinMain winMain;
 	private OpenGLPanel panel;
 
-	public CanvasController(CurlyWhirly frame)
+	public CanvasController(WinMain winMain)
 	{
-		this.frame = frame;
-		panel = frame.getOpenGLPanel();
+		this.winMain = winMain;
+		panel = winMain.getOpenGLPanel();
 	}
 
 	//update the current scene graph with new settings
@@ -24,10 +24,7 @@ public class CanvasController
 		if (selected.size() < 0)
 			return;
 
-		// for each category
-		ArrayList<Category> categories = frame.getDataSet().getCurrentCategoryGroup().getCategories();
-
-		for (Category category : categories)
+		for (Category category : winMain.getDataSet().getCurrentCategoryGroup())
 			category.setSelected(selected.contains(category.getName()));
 	}
 

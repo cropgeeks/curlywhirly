@@ -75,7 +75,7 @@ public class CWUtils
 		if (file != null)
 			fc.setSelectedFile(file);
 
-		while (fc.showSaveDialog(CurlyWhirly.curlyWhirly) == JFileChooser.APPROVE_OPTION)
+		while (fc.showSaveDialog(CurlyWhirly.winMain) == JFileChooser.APPROVE_OPTION)
 		{
 			file = fc.getSelectedFile();
 

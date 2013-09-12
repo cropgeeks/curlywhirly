@@ -8,7 +8,7 @@ import scri.commons.gui.*;
 
 public class Actions
 {
-	private CurlyWhirly winMain;
+	private WinMain winMain;
 
 	public static AbstractAction fileOpen;
 	public static AbstractAction fileSample;
@@ -19,7 +19,7 @@ public class Actions
 	public static AbstractAction showPrefs;
 	public static AbstractAction showAbout;
 
-	Actions(CurlyWhirly winMain)
+	Actions(WinMain winMain)
 	{
 		this.winMain = winMain;
 
@@ -43,61 +43,51 @@ public class Actions
 	{
 		fileOpen = new AbstractAction(RB.getString("gui.WinMainToolBar.open"), getIcon("OPEN")) {
 			public void actionPerformed(ActionEvent e) {
-				winMain.toolbar.open();
+				winMain.getToolbarActions().open();
 			}
 		};
 
 		fileSample = new AbstractAction("", getIcon("SAMPLE")) {
 			public void actionPerformed(ActionEvent e) {
-				winMain.toolbar.openSample();
+				winMain.getToolbarActions().openSample();
 			}
 		};
 
 		reset = new AbstractAction(RB.getString("gui.WinMainToolBar.reset"), getIcon("RESET")) {
 			public void actionPerformed(ActionEvent e) {
-				winMain.toolbar.reset();
+				winMain.getToolbarActions().reset();
 			}
 		};
 
 		spin = new AbstractAction(RB.getString("gui.WinMainToolBar.spin"), getIcon("SPIN")) {
 			public void actionPerformed(ActionEvent e) {
-				winMain.toolbar.spin();
+				winMain.getToolbarActions().spin();
 			}
 		};
 
 		screenshot = new AbstractAction(RB.getString("gui.WinMainToolBar.screenshot"), getIcon("SCREENSHOT")) {
 			public void actionPerformed(ActionEvent e) {
-				winMain.toolbar.screenshot();
+//				winMain.getToolbarActions().screenshot();
 			}
 		};
 
 		captureMovie = new AbstractAction(RB.getString("gui.WinMainToolBar.movie"), getIcon("MOVIE")) {
 			public void actionPerformed(ActionEvent e) {
-				winMain.toolbar.captureMovie();
+//				winMain.getToolbarActions().captureMovie();
 			}
 		};
 
 		showPrefs = new AbstractAction(RB.getString("gui.WinMainToolBar.prefs"), getIcon("PREFS")) {
 			public void actionPerformed(ActionEvent e) {
-				winMain.toolbar.showPrefs();
+				winMain.getToolbarActions().showPrefs();
 			}
 		};
 
 		showAbout = new AbstractAction("", getIcon("HELP")) {
 			public void actionPerformed(ActionEvent e) {
-				winMain.toolbar.showAbout();
+				winMain.getToolbarActions().showAbout();
 			}
 		};
-
-		final JSlider slider = WinMainToolBar.slider;
-
-		slider.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent evt)
-			{
-				int speed = slider.getValue();
-				winMain.getOpenGLPanel().setSpeed(speed);
-			}
-		});
 	}
 
 	public static void openedNoData()
@@ -106,7 +96,7 @@ public class Actions
 		fileSample.setEnabled(true);
 		reset.setEnabled(false);
 		spin.setEnabled(false);
-		WinMainToolBar.slider.setEnabled(false);
+//		WinMainToolBar.slider.setEnabled(false);
 		screenshot.setEnabled(false);
 		captureMovie.setEnabled(false);
 		showPrefs.setEnabled(true);
@@ -120,8 +110,8 @@ public class Actions
 		reset.setEnabled(true);
 		spin.setEnabled(true);
 //		WinMainToolBar.slider.setEnabled(true);
-		screenshot.setEnabled(true);
-		captureMovie.setEnabled(true);
+//		screenshot.setEnabled(true);
+//		captureMovie.setEnabled(true);
 		showPrefs.setEnabled(true);
 		showAbout.setEnabled(true);
 	}
