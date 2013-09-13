@@ -11,24 +11,29 @@ import scri.commons.gui.RB;
 public class DataPanel extends JPanel implements ActionListener
 {
 	private DataPanelNB controls;
-	private AbstractTableModel model;
+	private DataPanelTableModel model;
 
 	private DataSet dataSet;
+
+	private TableRowSorter<DataPanelTableModel> sorter;
 
 	DataPanel()
 	{
 		setLayout(new BorderLayout());
-		add(controls = new DataPanelNB(this));
+		controls = new DataPanelNB(this);
+		add(controls);
 
-		model = new DefaultTableModel();
-
-		controls.pointsTable.setModel(model);
+		controls.pointsTable.setModel(new DefaultTableModel());
 	}
 
 	void updateTableModel()
 	{
 		model = new DataPanelTableModel(dataSet, dataSet.getCurrentCategoryGroup());
 		controls.pointsTable.setModel(model);
+
+		sorter = new TableRowSorter<DataPanelTableModel>(model);
+		controls.pointsTable.setRowSorter(sorter);
+
 		controls.lblPoints.setText(RB.format("gui.DataPanel.label", model.getRowCount()));
 	}
 
