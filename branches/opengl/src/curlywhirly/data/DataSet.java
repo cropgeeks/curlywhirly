@@ -67,6 +67,12 @@ public class DataSet implements Iterable<DataPoint>
 		return new int[] { currX, currY, currZ };
 	}
 
+	// Returns the axis labels for the current x, y and z axes.
+	public String[] getCurrentAxisLabels()
+	{
+		return new String[] { axisLabels[currX], axisLabels[currY], axisLabels[currZ] };
+	}
+
 	public void setCurrX(int currX)
 		{ this.currX = currX; }
 

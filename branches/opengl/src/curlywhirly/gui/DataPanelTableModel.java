@@ -26,10 +26,14 @@ public class DataPanelTableModel extends AbstractTableModel
 				dataPoints.add(dataPoint);
 		}
 
+		// Retrieve the axis labels for the current x, y and z axes so that they
+		// can be displayed in the table header.
+		String[] axisLabels = dataSet.getCurrentAxisLabels();
+
 		columnNames = new String[] { RB.getString("gui.DataEntryTableModel.headers.name"),
-									RB.getString("gui.DataEntryTableModel.headers.col1"),
-									RB.getString("gui.DataEntryTableModel.headers.col2"),
-									RB.getString("gui.DataEntryTableModel.headers.col3") };
+									RB.format("gui.DataEntryTableModel.headers.col1", axisLabels[0]),
+									RB.format("gui.DataEntryTableModel.headers.col2", axisLabels[1]),
+									RB.format("gui.DataEntryTableModel.headers.col3", axisLabels[2]) };
 	}
 
 	@Override
@@ -64,7 +68,7 @@ public class DataPanelTableModel extends AbstractTableModel
 		// can pull out the correct data for display in the table.
 		switch (columnIndex)
 		{
-			case 0: return point.getName();
+			case 0: return point;
 			case 1: return point.getValues().get(dataSet.getCurrX());
 			case 2: return point.getValues().get(dataSet.getCurrY());
 			case 3: return point.getValues().get(dataSet.getCurrZ());

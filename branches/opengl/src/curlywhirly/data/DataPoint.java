@@ -70,4 +70,10 @@ public class DataPoint
 	{
 		return categories.get(group);
 	}
+
+	@Override
+	public String toString()
+	{
+		return name;
+	}
 }

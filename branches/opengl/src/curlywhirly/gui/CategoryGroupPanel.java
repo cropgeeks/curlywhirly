@@ -16,7 +16,7 @@ class CategoryGroupPanel implements ActionListener, TableModelListener
 	private DataSet dataSet;
 	private WinMain winMain;
 
-	CategoryGroupPanel(WinMain winMain, List<CategoryGroup> schemes, DataSet dataSet)
+	CategoryGroupPanel(WinMain winMain, ArrayList<CategoryGroup> schemes, DataSet dataSet)
 	{
 		this.dataSet = dataSet;
 		this.winMain = winMain;

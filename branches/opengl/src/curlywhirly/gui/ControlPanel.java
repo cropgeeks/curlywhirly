@@ -64,18 +64,21 @@ public class ControlPanel extends JPanel implements ActionListener
 		{
 			int index = xCombo.getSelectedIndex();
 			dataSet.setCurrX(index);
+			winMain.getDataPanel().updateTableModel();
 		}
 
 		else if (e.getSource() == yCombo)
 		{
 			int index = yCombo.getSelectedIndex();
 			dataSet.setCurrY(index);
+			winMain.getDataPanel().updateTableModel();
 		}
 
 		else if (e.getSource() == zCombo)
 		{
 			int index = zCombo.getSelectedIndex();
 			dataSet.setCurrZ(index);
+			winMain.getDataPanel().updateTableModel();
 		}
 	}
 
