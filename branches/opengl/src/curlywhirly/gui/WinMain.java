@@ -83,7 +83,11 @@ public class WinMain extends JFrame
 		dataPanel.setPreferredSize(new Dimension(controlPanelWidth, Prefs.guiWinMainH));
 
 		ctrlTabs.add("", controlPanel);
+		ctrlTabs.setIconAt(0, Icons.getIcon("CONTROLSTAB"));
+		ctrlTabs.setToolTipTextAt(0, RB.getString("gui.WinMain.controlsTab"));
 		ctrlTabs.add("", dataPanel);
+		ctrlTabs.setIconAt(1, Icons.getIcon("DATATAB"));
+		ctrlTabs.setToolTipTextAt(1, RB.getString("gui.WinMain.dataTab"));
 	}
 
 	private void createCanvas()
