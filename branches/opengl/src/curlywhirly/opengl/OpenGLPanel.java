@@ -1,6 +1,7 @@
 package curlywhirly.opengl;
 
 import java.awt.*;
+import java.awt.image.*;
 import javax.media.opengl.*;
 import javax.media.opengl.awt.*;
 import javax.media.opengl.glu.*;
@@ -62,8 +63,9 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	private boolean isDragging = false;
 
-	private String glVersion;
-	private float versionNo = 0;
+	private AWTGLReadBufferUtil glBufferUtil;
+	private BufferedImage screenShot;
+	private boolean takeScreenshot = false;
 
 	public OpenGLPanel(WinMain winMain)
 	{
@@ -111,10 +113,6 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		// Our basic GL setup configuration
 		GL2 gl = drawable.getGL().getGL2();
 
-		glVersion = gl.glGetString(GL_VERSION);
-
-		System.out.println(versionNo);
-
 		glu = new GLU();
 		gl.glClearDepth(1.0f);
 		gl.glEnable(GL_DEPTH_TEST);
@@ -138,11 +136,18 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		sphere = new IcoSphere(1);
 
 		lightScene(gl);
+
+		glBufferUtil = new AWTGLReadBufferUtil(drawable.getGLProfile(), false);
 	}
 
 	@Override
-	public void dispose(GLAutoDrawable glad)
+	public void dispose(GLAutoDrawable drawable)
 	{
+		try
+		{
+			glBufferUtil.dispose(drawable.getGL());
+		}
+		catch (Exception e) { e.printStackTrace(); }
 	}
 
 	@Override
@@ -192,6 +197,9 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 				combined.mul(autoRot, combined);
 			}
 		}
+
+		if (takeScreenshot)
+			screenShot = glBufferUtil.readPixelsToBufferedImage(gl, true);
 	}
 
 	@Override
@@ -568,5 +576,18 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glVertex3f(0.5f, -0.5f, -0.5f);
 
 		gl.glEnd();
+	}
+
+	// Toggles the state of takeScreenshot and manually calls display to get
+	// a screenshot without negatively impacting frame rate.
+	public BufferedImage getScreenShot()
+	{
+		takeScreenshot = true;
+
+		display();
+
+		takeScreenshot = false;
+
+		return screenShot;
 	}
 }

@@ -1,7 +1,9 @@
 package curlywhirly.gui;
 
 import java.io.*;
+import javax.imageio.*;
 import javax.swing.*;
+import javax.swing.filechooser.*;
 
 import curlywhirly.io.*;
 
@@ -110,7 +112,39 @@ public class Commands
 
 	void showAbout()
 	{
-		System.out.println("Show about");
 		new AboutDialog();
+	}
+
+	void screenshot()
+	{
+		File saveAs = new File(Prefs.guiCurrentDir, winMain.getDataSet().getName() + ".png");
+
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+			RB.getString("gui.Commands.exportImage.pngFiles"), "png");
+
+		// Ask the user for a filename to save the current view as
+		String filename = CWUtils.getSaveFilename(
+			RB.getString("gui.Commands.exportImage.saveDialog"), saveAs, filter);
+
+		// Quit if the user cancelled the file selection
+		if (filename == null)
+			return;
+
+		try
+		{
+			File imageFile = new File(filename);
+			ImageIO.write(winMain.getOpenGLPanel().getScreenShot(), "png", imageFile);
+
+			TaskDialog.showFileOpen(
+				RB.format("gui.Commands.exportImage.success", filename),
+				TaskDialog.INF, imageFile);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+
+			TaskDialog.showOpenLog(RB.format("gui.Commands.exportImage.exception",
+				e), null);
+		}
 	}
 }

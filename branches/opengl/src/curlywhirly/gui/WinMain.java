@@ -169,7 +169,7 @@ public class WinMain extends JFrame
 	public DataSet getDataSet()
 		{ return dataSet; }
 
-	Commands getToolbarActions()
+	Commands getCommands()
 		{ return toolbarActions; }
 
 	public ControlPanel getControlPanel()

@@ -71,6 +71,8 @@ public class DataImporter extends SimpleJob
 
 		// Finally set the link to access the database
 		dataSet.getDbAssociation().setPointSearch(dbURL);
+
+		dataSet.setName(file.getName());
 	}
 
 	// Methods for processing the file's header

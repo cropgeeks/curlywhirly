@@ -34,7 +34,7 @@ public class FileDropAdapter extends DropTargetAdapter
 				{
 					List<?> list = (List<?>) t.getTransferData(dataFlavors[i]);
 
-					winMain.getToolbarActions().openFile(new File(list.get(0).toString()));
+					winMain.getCommands().openFile(new File(list.get(0).toString()));
 
 					dtde.dropComplete(true);
 					return;

@@ -90,7 +90,7 @@ public class CurlyWhirly
 				// Do we want to open an initial project?
 				if (initialFile != null)
 				{
-					winMain.getToolbarActions().openFile(prefsFile);
+					winMain.getCommands().openFile(prefsFile);
 				}
 			}
 

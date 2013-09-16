@@ -4,6 +4,8 @@ import java.util.*;
 
 public class DataSet implements Iterable<DataPoint>
 {
+	private String name;
+
 	private final ArrayList<DataPoint> dataPoints;
 	private final ArrayList<CategoryGroup> categoryGroups;
 	private final String[] axisLabels;
@@ -99,4 +101,12 @@ public class DataSet implements Iterable<DataPoint>
 
 	public DBAssociation getDbAssociation()
 		{ return dbAssociation; }
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public String getName()
+		{ return name; }
 }

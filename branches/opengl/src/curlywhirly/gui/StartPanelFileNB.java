@@ -99,14 +99,14 @@ public class StartPanelFileNB extends JPanel implements ActionListener
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == importLabel)
-			winMain.getToolbarActions().open();
+			winMain.getCommands().open();
 
 		if (e.getSource() == sampleLabel)
-			winMain.getToolbarActions().openSample();
+			winMain.getCommands().openSample();
 //
 		for (int i = 0; i < labels.length; i++)
 			if (e.getSource() == labels[i])
-				winMain.getToolbarActions().openFile(new File(files[i]));
+				winMain.getCommands().openFile(new File(files[i]));
 	}
 
     /** This method is called from within the constructor to
