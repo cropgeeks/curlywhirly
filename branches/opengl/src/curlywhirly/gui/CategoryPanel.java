@@ -6,6 +6,7 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 import curlywhirly.data.*;
+import curlywhirly.gui.viewer.ColorPrefs;
 import scri.commons.gui.RB;
 
 import scri.commons.gui.matisse.*;
@@ -133,7 +134,13 @@ class CategoryPanel
 					{
 						Color newColor = JColorChooser.showDialog(CurlyWhirly.winMain, RB.getString("gui.CategoryPanel.colourChooser"), category.getColor());
 						if (newColor != null)
+						{
+							ColorPrefs.setColor(category.getColorKey(), newColor);
 							category.setColour(newColor);
+							// Needed to force an update of the colour displayed
+							// within the table
+							table.repaint();
+						}
 					}
 				}
 			}

@@ -78,4 +78,10 @@ public class Category
 	{
 		return name;
 	}
+
+	// Utility method used to get the ColorPrefs key for this category
+	public String getColorKey()
+	{
+		return group.getName() + "." + name;
+	}
 }

@@ -6,6 +6,7 @@ import java.util.*;
 
 import curlywhirly.data.*;
 import curlywhirly.gui.*;
+import curlywhirly.gui.viewer.ColorPrefs;
 
 import scri.commons.file.*;
 import scri.commons.gui.*;
@@ -251,7 +252,19 @@ public class DataImporter extends SimpleJob
 		Color[] colours = GUIUtils.generateColours(group.size());
 		int i=0;
 		for (Category category : group)
-			category.setColour(colours[i++]);
+		{
+			// Check if a color preference already exists for this category
+			// in this category group
+			String key = category.getColorKey();
+			Color color = ColorPrefs.get(key);
+			if (color == null)
+			{
+				color = colours[i++];
+				ColorPrefs.setColor(key, color);
+			}
+
+			category.setColour(color);
+		}
 	}
 
 	public DataSet getDataSet()
