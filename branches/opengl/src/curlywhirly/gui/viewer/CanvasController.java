@@ -48,6 +48,6 @@ public class CanvasController
 				break;
 		}
 
-		panel.setClearColor(bgColor);
+		ColorPrefs.setColor("User.OpenGLPanel.background", bgColor);
 	}
 }

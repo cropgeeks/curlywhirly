@@ -1,5 +1,7 @@
 package curlywhirly.gui;
 
+import curlywhirly.gui.dialog.PreferencesDialog;
+import curlywhirly.gui.dialog.AboutDialog;
 import java.io.*;
 import javax.imageio.*;
 import javax.swing.*;
@@ -107,7 +109,7 @@ public class Commands
 
 	void showPrefs()
 	{
-		new PreferencesDialog();
+		new PreferencesDialog(winMain);
 	}
 
 	void showAbout()

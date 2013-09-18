@@ -1,5 +1,8 @@
-package curlywhirly.gui;
+package curlywhirly.gui.dialog;
 
+import curlywhirly.gui.CWUtils;
+import curlywhirly.gui.Prefs;
+import curlywhirly.gui.WinMain;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;

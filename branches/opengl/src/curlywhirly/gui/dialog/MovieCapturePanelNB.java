@@ -1,5 +1,7 @@
-package curlywhirly.gui;
+package curlywhirly.gui.dialog;
 
+import curlywhirly.gui.CurlyWhirly;
+import curlywhirly.gui.Prefs;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;

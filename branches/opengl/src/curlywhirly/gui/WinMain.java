@@ -163,7 +163,7 @@ public class WinMain extends JFrame
 	DataPanel getDataPanel()
 		{ return dataPanel; }
 
-	CanvasController getCanvasController()
+	public CanvasController getCanvasController()
 		{ return controller; }
 
 	public DataSet getDataSet()

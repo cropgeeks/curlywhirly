@@ -52,7 +52,6 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	private int icosphereIndexID;
 
 	private CanvasMouseListener mouseListener;
-	private Color clearColor = Color.BLACK;
 
 	private TextRenderer texRend;
 
@@ -124,7 +123,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glLineWidth(1.0f);
 		gl.setSwapInterval(1);
 		gl.glEnable(GL_RESCALE_NORMAL);
-		gl.glEnable(GL.GL_CULL_FACE);
+		gl.glEnable(GL_CULL_FACE);
 
 		// Vertex buffers for our spheres
 		int[] bufferID = new int[2];
@@ -276,9 +275,9 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glPushMatrix();
 
 		// Set material properties.
-		float[] rgba = {0.2f, 1f, 0.2f};
-		gl.glMaterialfv(GL.GL_FRONT_AND_BACK, GL2.GL_AMBIENT_AND_DIFFUSE, rgba, 0);
-		gl.glMaterialf(GL.GL_FRONT_AND_BACK, GL2.GL_SHININESS, 1);
+//		float[] rgba = {0.2f, 1f, 0.2f};
+//		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, rgba, 0);
+//		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 1);
 //		gl.glMaterialfv(GL.GL_FRONT, GL2.GL_EMISSION, rgba, 0);
 //		gl.glMaterialfv( GL.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, rgba, 0);
 
@@ -292,17 +291,26 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	private void drawAxesLines(GL2 gl)
 	{
-		gl.glBegin(GLES1.GL_LINES);
+		gl.glBegin(GL_LINES);
 		gl.glColor3f(1f, 0, 0);
 
+		float[] xAxisColor = getOpenGLColor(ColorPrefs.get("User.OpenGLPanel.xAxisColor"));
+		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, xAxisColor, 0);
+		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 1);
 		// X-axis
 		gl.glVertex3f(-0.5f, 0, 0);
 		gl.glVertex3f(0.5f, 0, 0);
 
+		float [] yAxisColor = getOpenGLColor(ColorPrefs.get("User.OpenGLPanel.yAxisColor"));
+		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, yAxisColor, 0);
+		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 1);
 		// Y-axis
 		gl.glVertex3f(0, -0.5f, 0);
 		gl.glVertex3f(0, 0.5f, 0);
 
+		float [] zAxisColor = getOpenGLColor(ColorPrefs.get("User.OpenGLPanel.zAxisColor"));
+		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, zAxisColor, 0);
+		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 1);
 		// Z-axis
 		gl.glVertex3f(0, 0, -0.5f);
 		gl.glVertex3f(0, 0, 0.5f);
@@ -313,19 +321,28 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	{
 		GLUquadric quadric = glu.gluNewQuadric();
 
+		float[] xAxisColor = getOpenGLColor(ColorPrefs.get("User.OpenGLPanel.xAxisColor"));
+		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, xAxisColor, 0);
+		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 1);
 		// Draw the cylinders at the positive extent of each axis
-		gl.glPushMatrix();
-		gl.glTranslatef(0, 0.5f, 0);
-		gl.glRotatef(-90, 1, 0, 0);
-		glu.gluCylinder(quadric, 0.01, 0, 0.02, 6, 6);
-		gl.glPopMatrix();
-
 		gl.glPushMatrix();
 		gl.glTranslatef(0.5f, 0, 0);
 		gl.glRotatef(90, 0, 1, 0);
 		glu.gluCylinder(quadric, 0.01, 0, 0.02, 6, 6);
 		gl.glPopMatrix();
 
+		float [] yAxisColor = getOpenGLColor(ColorPrefs.get("User.OpenGLPanel.yAxisColor"));
+		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, yAxisColor, 0);
+		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 1);
+		gl.glPushMatrix();
+		gl.glTranslatef(0, 0.5f, 0);
+		gl.glRotatef(-90, 1, 0, 0);
+		glu.gluCylinder(quadric, 0.01, 0, 0.02, 6, 6);
+		gl.glPopMatrix();
+
+		float [] zAxisColor = getOpenGLColor(ColorPrefs.get("User.OpenGLPanel.zAxisColor"));
+		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, zAxisColor, 0);
+		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 1);
 		gl.glPushMatrix();
 		gl.glTranslatef(0, 0, 0.5f);
 		glu.gluCylinder(quadric, 0.01, 0, 0.02, 6, 6);
@@ -337,16 +354,16 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	private void drawSpheres(GL2 gl)
 	{
 		// Vertex buffer setup code
-		gl.glBindBuffer(GL.GL_ARRAY_BUFFER, icosphereVertexID);
-		gl.glBufferData(GL.GL_ARRAY_BUFFER, sphere.vertexCount()*4,
-			  sphere.vertexBuffer(), GL.GL_STATIC_DRAW);
-		gl.glVertexPointer(3,GL.GL_FLOAT,0,0);
-		gl.glNormalPointer(GL.GL_FLOAT,0,0);
-		gl.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
-		gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, icosphereIndexID);
-		gl.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, sphere.indexCount()*4,
-			  sphere.indexBuffer(), GL.GL_STATIC_DRAW);
-		gl.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
+		gl.glBindBuffer(GL_ARRAY_BUFFER, icosphereVertexID);
+		gl.glBufferData(GL_ARRAY_BUFFER, sphere.vertexCount()*4,
+			  sphere.vertexBuffer(), GL_STATIC_DRAW);
+		gl.glVertexPointer(3, GL_FLOAT,0,0);
+		gl.glNormalPointer(GL_FLOAT,0,0);
+		gl.glBindBuffer(GL_ARRAY_BUFFER, 0);
+		gl.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, icosphereIndexID);
+		gl.glBufferData(GL_ELEMENT_ARRAY_BUFFER, sphere.indexCount()*4,
+			  sphere.indexBuffer(), GL_STATIC_DRAW);
+		gl.glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 		gl.glEnableClientState(GL_VERTEX_ARRAY);
 		gl.glEnableClientState(GL_NORMAL_ARRAY);
@@ -359,7 +376,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		{
 			Color color = point.getColor(dataSet.getCurrentCategoryGroup());
 			// Get each color component into the 0-1 range instead of 0-255
-			rgba = new float[] { color.getRed()/255f, color.getGreen()/255f, color.getBlue()/255f, 1f };
+			rgba = getOpenGLColor(color);
 			gl.glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rgba, 0);
 			gl.glMaterialf(GL_FRONT, GL_SHININESS, 128);
 			drawSphere(gl, point);
@@ -384,7 +401,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 		// Draw the triangles using the isosphereIndexBuffer VBO for the
 		// element data (as well as the isosphereVertexBuffer).
-		gl.glDrawElements(GL.GL_TRIANGLES, sphere.indexCount(), GL.GL_UNSIGNED_INT, 0);
+		gl.glDrawElements(GL_TRIANGLES, sphere.indexCount(), GL_UNSIGNED_INT, 0);
 		gl.glPopMatrix();
 	}
 
@@ -511,13 +528,9 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		}
 	}
 
-	public void setClearColor(Color color)
-	{
-		clearColor = color;
-	}
-
 	private void clearColor(GL2 gl)
 	{
+		Color clearColor = ColorPrefs.get("User.OpenGLPanel.background");
 		// Divide down to a 0-1 range from a 0-255 range
 		gl.glClearColor(clearColor.getRed()/255f, clearColor.getGreen()/255f, clearColor.getBlue()/255f, 0);
 	}
@@ -589,5 +602,10 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		takeScreenshot = false;
 
 		return screenShot;
+	}
+
+	private float[] getOpenGLColor(Color color)
+	{
+		return new float[] { color.getRed()/255f, color.getGreen()/255f, color.getBlue()/255f, 1f };
 	}
 }

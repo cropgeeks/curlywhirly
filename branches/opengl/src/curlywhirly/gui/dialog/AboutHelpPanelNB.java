@@ -1,7 +1,7 @@
 // Copyright 2009-2012 Information & Computational Sciences, JHI. All rights
 // reserved. Use is subject to the accompanying licence terms.
 
-package curlywhirly.gui;
+package curlywhirly.gui.dialog;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -41,7 +41,8 @@ class AboutHelpPanelNB extends JPanel
 	 */
 	@SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         htmlPane = new javax.swing.JEditorPane();

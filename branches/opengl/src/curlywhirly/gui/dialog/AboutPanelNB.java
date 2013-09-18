@@ -1,8 +1,9 @@
 // Copyright 2009-2012 Information & Computational Sciences, JHI. All rights
 // reserved. Use is subject to the accompanying licence terms.
 
-package curlywhirly.gui;
+package curlywhirly.gui.dialog;
 
+import curlywhirly.gui.CWUtils;
 import java.awt.*;
 import java.awt.event.*;
 import java.lang.management.*;
@@ -76,7 +77,8 @@ class AboutPanelNB extends JPanel implements ActionListener
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         p2 = new javax.swing.JPanel();
         localeLabel = new javax.swing.JLabel();

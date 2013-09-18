@@ -1,11 +1,13 @@
 // Copyright 2009-2012 Information & Computational Sciences, JHI. All rights
 // reserved. Use is subject to the accompanying licence terms.
 
-package curlywhirly.gui;
+package curlywhirly.gui.dialog;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import curlywhirly.gui.*;
 
 import scri.commons.gui.*;
 
@@ -16,11 +18,11 @@ public class PreferencesDialog extends JDialog implements ActionListener
 
 	private PreferencesPanelNB nbPanel;
 
-	public PreferencesDialog()
+	public PreferencesDialog(WinMain winMain)
 	{
-		super(CurlyWhirly.winMain, RB.getString("gui.PreferencesDialog.title"), true);
+		super(winMain, RB.getString("gui.PreferencesDialog.title"), true);
 
-		nbPanel = new PreferencesPanelNB(CurlyWhirly.winMain);
+		nbPanel = new PreferencesPanelNB(winMain, this);
 
 		add(nbPanel);
 		add(createButtons(), BorderLayout.SOUTH);
@@ -29,7 +31,7 @@ public class PreferencesDialog extends JDialog implements ActionListener
 		SwingUtils.addCloseHandler(this, bCancel);
 
 		pack();
-		setLocationRelativeTo(CurlyWhirly.winMain);
+		setLocationRelativeTo(winMain);
 		setResizable(false);
 		setVisible(true);
 	}
@@ -53,15 +55,20 @@ public class PreferencesDialog extends JDialog implements ActionListener
 		return p1;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == bOK)
 		{
 			nbPanel.applySettings();
 			isOK = true;
+			setVisible(false);
 		}
 
-		setVisible(false);
+		else if(e.getSource() == nbPanel.bCustomizeColors)
+		{
+			new CustomizeColorsDialog();
+		}
 	}
 
 	public boolean isOK()

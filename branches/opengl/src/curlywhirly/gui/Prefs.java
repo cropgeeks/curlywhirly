@@ -1,5 +1,6 @@
 package curlywhirly.gui;
 
+import java.awt.Color;
 import java.io.*;
 import java.util.*;
 
@@ -43,6 +44,10 @@ public class Prefs extends XMLPreferences
 
 	// Graph background color
 	public static int guiGraphBackground = 0;
+
+	public static Color guiXAxisColor = Color.GREEN;
+	public static Color guiYAxisColor = Color.GREEN;
+	public static Color guiZAxisColor = Color.GREEN;
 
 	public static int guiMovieCaptureFrameRate = 30;
 	public static int guiMovieCaptureSpinSpeedIndex = 1;
