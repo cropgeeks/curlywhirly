@@ -60,7 +60,8 @@ public class Commands
 				}
 
 				winMain.setDataSet(importer.getDataSet());
-				Prefs.setRecentDocument(importer.getFile());
+//				Prefs.setRecentDocument(importer.getFile());
+				CurlyWhirlyFileHandler.addAsMostRecent(importer.getFile());
 			}
 			catch (Exception e)
 			{

@@ -8,6 +8,7 @@ import java.io.*;
 import apple.dts.samplecode.osxadapter.*;
 
 import curlywhirly.gui.viewer.*;
+import curlywhirly.io.*;
 
 import scri.commons.file.*;
 import scri.commons.gui.*;
@@ -15,10 +16,11 @@ import scri.commons.gui.*;
 public class CurlyWhirly
 {
 	private static File prefsFile = getPrefsFile();
+	private static File mruFile;
 	public static Prefs prefs = new Prefs();
 
 	// Optional path to a file to be loaded when app opens
-	public static String initialFile = null;
+	public static File initialFile = null;
 
 	public static WinMain winMain;
 
@@ -40,6 +42,9 @@ public class CurlyWhirly
 //		System.out.println("Java 3D version = " + vuMap.get("j3d.version"));
 //		System.out.println("Renderer = " + vuMap.get("j3d.renderer") + "\n");
 
+		mruFile = new File(prefsFile.getParent(), "curlywhirly-recent.xml");
+		CurlyWhirlyFileHandler.loadMRUList(mruFile);
+
 		// preferences
 		ColorPrefs.load();
 		prefs.loadPreferences(prefsFile, Prefs.class);
@@ -47,6 +52,10 @@ public class CurlyWhirly
 
 		Icons.initialize("/res/icons", ".png");
 		RB.initialize(Prefs.localeText, "res.text.curlywhirly");
+
+		// Start the GUI (either with or without an initial project)
+		if (args.length == 1 && args[0] != null)
+			initialFile = new File(args[0]);
 
 		install4j();
 
@@ -96,7 +105,7 @@ public class CurlyWhirly
 				// Do we want to open an initial project?
 				if (initialFile != null)
 				{
-					winMain.getCommands().openFile(prefsFile);
+					winMain.getCommands().openFile(initialFile);
 				}
 			}
 
@@ -112,6 +121,8 @@ public class CurlyWhirly
 		Prefs.isFirstRun = false;
 		prefs.savePreferences(prefsFile, Prefs.class);
 		ColorPrefs.save();
+		CurlyWhirlyFileHandler.saveMRUList(mruFile);
+
 		System.exit(0);
 	}
 

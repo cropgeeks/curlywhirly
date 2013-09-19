@@ -7,6 +7,8 @@ import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
 
+import curlywhirly.io.*;
+
 import scri.commons.gui.*;
 import scri.commons.gui.matisse.*;
 
@@ -50,23 +52,16 @@ public class StartPanelFileNB extends JPanel implements ActionListener
 
 		int j=0;
 		// Parse the list of recent documents
-		for (final String path: Prefs.guiRecentDocs)
+		for (final CurlyWhirlyFile cwFile: CurlyWhirlyFileHandler.recentFiles)
 		{
-			// Ignore any that haven't been set yet
-			if (path == null || path.equals(" "))
-				continue;
+			// Button text will be "name" (or "name1" ~ "name2")
+			String text = cwFile.dataFile.getName();
+			String tooltip = cwFile.dataFile.getPath();
 
-			File tempFile = new File(path);
-
-			// Button text will be "name" (or "name1" | "name2")
-			String text = tempFile.getName();
-			String filePath = tempFile.getPath();
-			String tooltip = tempFile.getPath();
-
-			if(j < filenames.length)
+			if (j < filenames.length)
 			{
 				filenames[j] = text;
-				files[j] = filePath;
+				files[j] = cwFile.dataFile.getPath();
 				tooltips[j] = tooltip;
 			}
 			else
