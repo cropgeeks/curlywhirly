@@ -44,6 +44,13 @@ public class Commands
 			{
 				Prefs.guiCurrentDir = "" + file.getParent();
 
+				// The input file could be:
+				//  - a tab-delimited data file
+				//  - an xml .curlywhirly file
+				// For now; let's cheat and just use the file extension
+				if (file.getPath().toLowerCase().endsWith(".curlywhirly"))
+					file = CurlyWhirlyFileHandler.createFromXML(file).dataFile;
+
 				DataImporter importer = new DataImporter(file);
 				ProgressDialog dialog = new ProgressDialog(importer, "", "", winMain);
 				if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)

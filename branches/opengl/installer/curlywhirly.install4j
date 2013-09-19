@@ -275,6 +275,27 @@
                 </serializedBean>
                 <condition />
               </action>
+              <action name="" id="871" customizedId="" beanClass="com.install4j.runtime.beans.actions.desktop.CreateFileAssociationAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.desktop.CreateFileAssociationAction">
+                      <void property="description">
+                        <string>CurlyWhirly File</string>
+                      </void>
+                      <void property="extension">
+                        <string>curlywhirly</string>
+                      </void>
+                      <void property="launcherId">
+                        <string>20</string>
+                      </void>
+                      <void property="winAdditionalParameters">
+                        <string />
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
             </actions>
             <formComponents />
           </screen>

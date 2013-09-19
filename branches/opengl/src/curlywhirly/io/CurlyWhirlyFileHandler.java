@@ -62,7 +62,7 @@ public class CurlyWhirlyFileHandler
 	{
 		CurlyWhirlyFile cwFile = new CurlyWhirlyFile();
 
-		NodeList list = eCW.getElementsByTagName("dataFile");
+		NodeList list = eCW.getElementsByTagName("datafile");
 		if (list.getLength() == 1)
 		{
 			Node node = list.item(0);
@@ -137,7 +137,7 @@ public class CurlyWhirlyFileHandler
 			root.appendChild(eCW);
 
 			if (cwFile.dataFile != null)
-				eCW.appendChild(makeCWElement(doc, "dataFile", cwFile.dataFile.getPath()));
+				eCW.appendChild(makeCWElement(doc, "datafile", cwFile.dataFile.getPath()));
 		}
 
 		return doc;
