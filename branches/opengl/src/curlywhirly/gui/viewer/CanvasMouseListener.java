@@ -81,4 +81,10 @@ public class CanvasMouseListener extends MouseInputAdapter
 		int units = e.getWheelRotation();
 		panel.zoom(units);
 	}
+
+	@Override
+	public void mouseMoved(MouseEvent e)
+	{
+		panel.setMousePoint(e.getPoint());
+	}
 }

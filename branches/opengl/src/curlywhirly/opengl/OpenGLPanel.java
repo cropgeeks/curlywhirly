@@ -2,9 +2,11 @@ package curlywhirly.opengl;
 
 import java.awt.*;
 import java.awt.image.*;
+import java.util.*;
 import javax.media.opengl.*;
 import javax.media.opengl.awt.*;
 import javax.media.opengl.glu.*;
+import javax.swing.*;
 import javax.vecmath.*;
 
 import com.jogamp.opengl.util.*;
@@ -15,6 +17,7 @@ import curlywhirly.gui.*;
 import curlywhirly.gui.viewer.*;
 
 import static javax.media.opengl.GL2.*;
+import static javax.media.opengl.fixedfunc.GLMatrixFunc.*;
 
 
 // TODO: Check what exactly needs to be done with the animators at various points
@@ -66,6 +69,15 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	private BufferedImage screenShot;
 	private boolean takeScreenshot = false;
 
+	private Point point = new Point(0, 0);
+	float[] proj = new float[16];
+
+	// Keeps track of the translated locations of points in the display
+	// used in ray tracing code to find points under the mouse.
+	private HashMap<DataPoint, float[]> translatedPoints = new HashMap<>();
+
+	private CollisionDetection detector;
+
 	public OpenGLPanel(WinMain winMain)
 	{
 		this.winMain = winMain;
@@ -81,6 +93,10 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		combined.setIdentity();
 
 		texRend = new TextRenderer(new Font("MONOSPACED", Font.PLAIN, 12));
+
+		detector = new CollisionDetection();
+
+		ToolTipManager.sharedInstance().setInitialDelay(0);
 	}
 
 	// Starts animation, this should be called when you want rendering to start
@@ -90,7 +106,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 			animator.remove(this);
 
 		animator = new FPSAnimator(this, FPS, true);
-		animator.setUpdateFPSFrames(200, System.out);
+//		animator.setUpdateFPSFrames(200, System.out);
 		animator.setPrintExceptions(true);
 		animator.start();
 	}
@@ -199,6 +215,16 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 		if (takeScreenshot)
 			screenShot = glBufferUtil.readPixelsToBufferedImage(gl, true);
+
+		// Mouse over code looking for sphere's under the mouse
+		Ray ray = getRay(gl);
+		DataPoint found = detector.findSphereRayIntersection(ray, translatedPoints);
+
+		// If we have found a spehre, display this sphere's name in a tooltip
+		if (found != null)
+			this.setToolTipText(found.getName());
+		else
+			this.setToolTipText(null);
 	}
 
 	@Override
@@ -222,13 +248,16 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glLoadIdentity();
 		// Field of view, aspect ratio, z plane near, z plane far
 		glu.gluPerspective(perspAngle, aspect, 1, 1000);
-		glu.gluLookAt(1, 0, 2, 0, 0, 0, 0, 1, 0);
+		glu.gluLookAt(0, 0, 2, 0, 0, 0, 0, 1, 0);
+
+		// Store the projection matrix for use in gluUnproject calls
+		gl.glGetFloatv(GL_PROJECTION_MATRIX, proj, 0);
 
 		// Enable the model-view transform
 		gl.glMatrixMode(GL_MODELVIEW);
 		gl.glLoadIdentity();
 		// Rotate view so that it looks at the centre of the model
-		gl.glRotatef(30, 0, 1, 0);
+//		gl.glRotatef(30, 0, 1, 0);
 
 		mouseListener.initialiseArcBall(CANVAS_WIDTH, CANVAS_HEIGHT);
 		animator.start();
@@ -245,7 +274,10 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 			gl.glMatrixMode(GL_PROJECTION);
 			gl.glLoadIdentity();
 			glu.gluPerspective(perspAngle, aspect, 1, 1000);
-			glu.gluLookAt(1, 0, 2, 0, 0, 0, 0, 1, 0);
+			glu.gluLookAt(0, 0, 2, 0, 0, 0, 0, 1, 0);
+
+			// Store the projection matrix for use in gluUnproject calls
+			gl.glGetFloatv(GL_PROJECTION_MATRIX, proj, 0);
 
 			// Enable the model-view transform
 			gl.glMatrixMode(GL_MODELVIEW);
@@ -273,13 +305,6 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	private void drawAxes(GL2 gl)
 	{
 		gl.glPushMatrix();
-
-		// Set material properties.
-//		float[] rgba = {0.2f, 1f, 0.2f};
-//		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, rgba, 0);
-//		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 1);
-//		gl.glMaterialfv(GL.GL_FRONT, GL2.GL_EMISSION, rgba, 0);
-//		gl.glMaterialfv( GL.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, rgba, 0);
 
 		drawAxesLines(gl);
 		drawAxesCones(gl);
@@ -399,6 +424,8 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		// scaled each point to 1/200 of its original size.
 		gl.glTranslatef(map(indices[0])*200f, map(indices[1])*200f, map(indices[2])*200f);
 
+		updateTranslatedPoints(gl, indices, point);
+
 		// Draw the triangles using the isosphereIndexBuffer VBO for the
 		// element data (as well as the isosphereVertexBuffer).
 		gl.glDrawElements(GL_TRIANGLES, sphere.indexCount(), GL_UNSIGNED_INT, 0);
@@ -410,6 +437,19 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	private float map(float number)
 	{
 		return ((number-(-1f))/(1f-(-1f)) * (0.5f-(-0.5f)) + -0.5f);
+	}
+
+	// Keeps track of the translated positions of all of our DataPoints
+	private void updateTranslatedPoints(GL2 gl, float[] indices, DataPoint point)
+	{
+		float[] modelView = new float[16];
+		gl.glGetFloatv(GL_MODELVIEW_MATRIX, modelView, 0);
+
+		float x = (indices[0] * modelView[0]) +  (indices[1] * modelView[4]) + (indices[2] * modelView[8]) + modelView[12];
+		float y = (indices[0] * modelView[1]) +  (indices[1] * modelView[5]) + (indices[2] * modelView[9]) + modelView[13];
+		float z = (indices[0] * modelView[2]) +  (indices[1] * modelView[6]) + (indices[2] * modelView[10]) + modelView[14];
+
+		translatedPoints.put(point, new float[] { x, y, z });
 	}
 
 
@@ -607,5 +647,42 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	private float[] getOpenGLColor(Color color)
 	{
 		return new float[] { color.getRed()/255f, color.getGreen()/255f, color.getBlue()/255f, 1f };
+	}
+
+	public void setMousePoint(Point point)
+	{
+		this.point = point;
+	}
+
+	private Ray getRay(GL2 gl)
+	{
+		int[] view = new int[4];
+		float[] model = new float[16];
+
+		gl.glGetIntegerv(GL.GL_VIEWPORT, view, 0);
+		// Get the current model view matrix
+		gl.glGetFloatv(GL_MODELVIEW_MATRIX, model, 0);
+		float winX = point.x;
+		// Adjust into opengl y space
+		float winY = CANVAS_HEIGHT - (float)point.y -1;
+
+		// Used to store the result of gluUnproject for the near clipping plane
+		float[] near = new float[4];
+		glu.gluUnProject(winX, winY, 0, model, 0, proj, 0, view, 0, near, 0);
+		Vector3f nVec = new Vector3f(near);
+
+		// Used to store the result of gluUnproject for the far clipping plane
+		float[] far = new float[4];
+		glu.gluUnProject(winX, winY, 1, model, 0, proj, 0, view, 0, far, 0);
+		Vector3f fVec = new Vector3f(far);
+
+		// Subtract the near clipping plane vector from the far clipping plane
+		// vector to establish the direction of our ray
+		Vector3f dir = new Vector3f(fVec.x - nVec.x, fVec.y - nVec.y, fVec.z - nVec.z);
+		Vector3f eye = new Vector3f(0, 0, 2);
+
+		Ray ray = new Ray(dir, eye);
+
+		return ray;
 	}
 }
