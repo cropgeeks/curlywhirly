@@ -105,14 +105,17 @@ public class CategoryTableModel extends AbstractTableModel
 			Graphics2D g = image.createGraphics();
 
 			Color color = category.getColor();
-			if (category.getGroup() != dataSet.getCurrentCategoryGroup())
+			GradientPaint paint;
+			if (category.getGroup() == dataSet.getCurrentCategoryGroup())
+				paint = new GradientPaint(0, 0, color.brighter(), 20, 10, color.darker());
+			else
 			{
 				Color temp = category.getColor();
 				int average = (temp.getRed() + temp.getGreen() + temp.getBlue()) / 3;
 				color = new Color(average, average, average);
+				paint = new GradientPaint(0, 0, color.brighter().brighter(), 20, 10, color);
 			}
 
-			GradientPaint paint = new GradientPaint(0, 0, color.brighter(), 20, 10, color.darker());
 			g.setPaint(paint);
 			g.fillRect(0, 0, 20, 10);
 			g.setColor(Color.black);
@@ -130,11 +133,28 @@ public class CategoryTableModel extends AbstractTableModel
 			{ return new Insets(0, 3, 0, 0); }
 	}
 
+	class RightRenderer extends DefaultTableCellRenderer
+	{
+		// Set the attributes of the class and return a reference
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value,
+			boolean isSelected, boolean hasFocus, int row, int column)
+		{
+			super.getTableCellRendererComponent(table, value, isSelected,
+				hasFocus, row, column);
+
+			setHorizontalAlignment(SwingConstants.RIGHT);
+
+			return this;
+		}
+	}
+
 	TableCellRenderer getCellRenderer(int col)
 	{
 		switch (col)
 		{
 			case 1: return new ColorListRenderer();
+			case 3: return new RightRenderer();
 			default: return null;
 		}
 	}

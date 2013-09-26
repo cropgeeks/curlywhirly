@@ -1,5 +1,6 @@
 package curlywhirly.gui;
 
+import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
@@ -10,7 +11,7 @@ import curlywhirly.data.*;
 class CategoryGroupPanel implements ActionListener, TableModelListener
 {
 	private JPanel panel;
-	private ButtonGroup bg;
+	private ButtonGroup buttonGroup;
 	private ArrayList<CategoryPanel> categoryPanels;
 
 	private DataSet dataSet;
@@ -24,41 +25,50 @@ class CategoryGroupPanel implements ActionListener, TableModelListener
 		createControls(schemes);
 
 		// Select the first scheme and colour by this scheme.
-		if (bg.getElements().hasMoreElements())
-			bg.getElements().nextElement().setSelected(true);
+		if (buttonGroup.getElements().hasMoreElements())
+			buttonGroup.getElements().nextElement().setSelected(true);
 
 		if (categoryPanels.size() > 0)
 			dataSet.setCurrentCategoryGroup(dataSet.getCategoryGroups().get(0));
-
-		// Collapse all but the first table.
-		for (int i=1; i < categoryPanels.size(); i++)
-			categoryPanels.get(i).setVisible(false);
 
 		// Setup the table in the dataPanel tab.
 		winMain.getDataPanel().updateTableModel();
 	}
 
-	private void createControls(List<CategoryGroup> schemes)
+	private void createControls(ArrayList<CategoryGroup> catGroups)
 	{
 		panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
 		categoryPanels = new ArrayList<CategoryPanel>();
-		bg = new ButtonGroup();
+		buttonGroup = new ButtonGroup();
 
-		for (int i=0; i < schemes.size(); i++)
-			categoryPanels.add(createCategoryPanel(schemes.get(i)));
+		for (int i=0; i < catGroups.size(); i++)
+		{
+			CategoryPanel catPanel = createCategoryPanel(catGroups.get(i));
+//			panel.add(catPanel, c);
+
+//			buttonGroup.add(catPanel.getButton());
+			categoryPanels.add(catPanel);
+		}
+
+//		panel.add(Box.createVerticalGlue());
 	}
 
-	private CategoryPanel createCategoryPanel(CategoryGroup scheme)
+	private CategoryPanel createCategoryPanel(CategoryGroup group)
 	{
-		CategoryPanel catPanel = new CategoryPanel(this, scheme, dataSet);
+//		CPanel catPanel = new CPanel(this, group, dataSet);
+		CategoryPanel catPanel = new CategoryPanel(this, group, dataSet);
 		// Originally added a single panel from the categoryPanel class, but
 		// you can't nest two boxlayouts of the same orientation and other
 		// layouts stretched the components out.
-		panel.add(catPanel.getNamePanel());
-		panel.add(catPanel.getTable());
-		bg.add(catPanel.getButton());
+		JPanel p = new JPanel();
+		p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+		p.add(catPanel.getNamePanel());
+		p.add(catPanel.getTable());
+		panel.add(p);
+//		panel.add(catPanel);
+		buttonGroup.add(catPanel.getButton());
 
 		return catPanel;
 	}
@@ -83,11 +93,6 @@ class CategoryGroupPanel implements ActionListener, TableModelListener
 				panel.invalidate();
 				panel.repaint();
 			}
-
-			// Expand or contract a category group's panel.
-			else if (e.getSource() == container.getNameLabel())
-				if (container.getButton().isSelected() == false)
-					container.setVisible(!container.isVisible());
 		}
 	}
 

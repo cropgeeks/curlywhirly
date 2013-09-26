@@ -29,6 +29,7 @@ public class Prefs extends XMLPreferences
 	public static int guiWinMainX = 0;
 	public static int guiWinMainY = 0;
 	public static boolean guiWinMainMaximized = false;
+	public static int guiSplitterLocation = 250;
 
 	// Is this the first time the program has ever been run (by this user)?
 	public static boolean isFirstRun = true;

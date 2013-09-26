@@ -239,6 +239,8 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		CANVAS_WIDTH = width;
 		CANVAS_HEIGHT = height;
 
+		System.out.println("Width: " + width);
+
 		// Set the view port (display area) to cover the entire window
 		gl.glViewport(0, 0, width, height);
 

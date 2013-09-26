@@ -9,14 +9,12 @@ import curlywhirly.data.*;
 import curlywhirly.gui.viewer.ColorPrefs;
 import scri.commons.gui.RB;
 
-import scri.commons.gui.matisse.*;
-
 class CategoryPanel
 {
 	// Components of panel
 	private JPanel namePanel;
 	private JRadioButton button;
-	private HyperLinkLabel lblName;
+	private JLabel lblName;
 	private JLabel lblCount;
 	private JTable catTable;
 
@@ -43,33 +41,45 @@ class CategoryPanel
 	private JPanel createNamePanel()
 	{
 		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+		panel.setLayout(new GridBagLayout());
 		panel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.anchor = GridBagConstraints.LINE_START;
+		c.weightx = 1;
 
 		// The radio button for choosing if this is the selected category group
 		button = new JRadioButton();
-		panel.add(button);
+		button.setText(catGroup.getName());
+		panel.add(button, c);
 		button.addActionListener(parent);
-		panel.add(new Box.Filler(new Dimension(2, 0), new Dimension(2, 0), new Dimension(2, 0)));
+//		panel.add(new Box.Filler(new Dimension(2, 0), new Dimension(2, 0), new Dimension(2, 0)));
 
-		createNameLabel();
-		panel.add(lblName);
+//		lblName = createNameLabel();
+//		panel.add(lblName, c);
 
 		// Use glue to place count label at the right hand side of the panel
-		panel.add(Box.createHorizontalGlue());
+//		panel.add(Box.createHorizontalGlue());
+		c.gridx = 1;
+		c.anchor = GridBagConstraints.LINE_END;
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		c.weightx = 0;
 		createCountLabel();
-		panel.add(lblCount);
+		panel.add(lblCount, c);
 
 		return panel;
 	}
 
-	private void createNameLabel()
+	private JLabel createNameLabel()
 	{
-		lblName = new HyperLinkLabel();
-		lblName.setText(catGroup.getName());
-		lblName.setBackground(Color.WHITE);
-		lblName.setForeground(new Color(68, 106, 156));
-		lblName.addActionListener(parent);
+		JLabel name = new JLabel();
+		name.setText(catGroup.getName());
+		name.setBackground(Color.WHITE);
+		name.setForeground(new Color(68, 106, 156));
+
+		return name;
 	}
 
 	private void createCountLabel()
@@ -101,6 +111,17 @@ class CategoryPanel
 			{
 				TableCellRenderer tcr = classModel.getCellRenderer(col);
 				return (tcr != null) ? tcr : super.getCellRenderer(row, col);
+			}
+
+			@Override
+			public void doLayout()
+			{
+				// On resize assign space to the second last column
+				TableColumnModel tcm = getColumnModel();
+				int delta = getParent().getWidth() - tcm.getTotalColumnWidth();
+				TableColumn last = tcm.getColumn(tcm.getColumnCount() - 2);
+				last.setPreferredWidth(last.getPreferredWidth() + delta);
+				last.setWidth(last.getPreferredWidth());
 			}
 		};
 		// Constrain the column widths on the columns with the checkbox and the
@@ -158,7 +179,7 @@ class CategoryPanel
 		return namePanel;
 	}
 
-	HyperLinkLabel getNameLabel()
+	JLabel getNameLabel()
 		{ return lblName; }
 
 	void setVisible(boolean visible)

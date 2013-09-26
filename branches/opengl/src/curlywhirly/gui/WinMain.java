@@ -3,6 +3,7 @@ package curlywhirly.gui;
 import java.awt.*;
 import java.awt.dnd.*;
 import java.awt.event.*;
+import java.beans.*;
 import javax.swing.*;
 
 import curlywhirly.data.*;
@@ -13,12 +14,11 @@ import scri.commons.gui.*;
 
 public class WinMain extends JFrame
 {
-	private ControlPanel controlPanel;
+	private SelectionPanelNB selectionPanel;
+	private ControlsPanelNB controlsPanel;
 	private WinMainToolBar toolbar;
 	private StatusBar statusBar;
 	private CanvasController controller;
-
-	private int controlPanelWidth = 200;
 
 	private OpenGLPanel canvas3D;
 	private StartPanel startPanel;
@@ -52,7 +52,15 @@ public class WinMain extends JFrame
 		// main comp is split pane with control panel on the left and canvas on the right
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, ctrlTabs, startPanel);
 		splitPane.setOneTouchExpandable(true);
+		splitPane.setDividerLocation(Prefs.guiSplitterLocation);
 		add(splitPane);
+
+		splitPane.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent e)
+			{
+				Prefs.guiSplitterLocation = splitPane.getDividerLocation();
+			}
+		});
 
 		// status bar
 		statusBar = new StatusBar();
@@ -76,44 +84,49 @@ public class WinMain extends JFrame
 	private void createTabbedPane()
 	{
 		ctrlTabs = new JTabbedPane();
-		controlPanel = new ControlPanel(this);
-		controlPanel.setPreferredSize(new Dimension(controlPanelWidth, Prefs.guiWinMainH));
+		selectionPanel = new SelectionPanelNB(this);
+		selectionPanel.setPreferredSize(new Dimension(Prefs.guiSplitterLocation, Prefs.guiWinMainH));
+
+		controlsPanel = new ControlsPanelNB(this);
+		controlsPanel.setPreferredSize(new Dimension(Prefs.guiSplitterLocation, Prefs.guiWinMainH));
 
 		dataPanel = new DataPanel();
-		dataPanel.setPreferredSize(new Dimension(controlPanelWidth, Prefs.guiWinMainH));
+		dataPanel.setPreferredSize(new Dimension(Prefs.guiSplitterLocation, Prefs.guiWinMainH));
 
-		ctrlTabs.add("", controlPanel);
-		ctrlTabs.setIconAt(0, Icons.getIcon("CONTROLSTAB"));
+		ctrlTabs.add("", selectionPanel);
+		ctrlTabs.setIconAt(0, Icons.getIcon("SELECTIONTAB"));
 		ctrlTabs.setToolTipTextAt(0, RB.getString("gui.WinMain.controlsTab"));
+		ctrlTabs.add("", controlsPanel);
+		ctrlTabs.setIconAt(1, Icons.getIcon("CONTROLSTAB"));
+		ctrlTabs.setToolTipTextAt(1, "Some Controls");
 		ctrlTabs.add("", dataPanel);
-		ctrlTabs.setIconAt(1, Icons.getIcon("DATATAB"));
-		ctrlTabs.setToolTipTextAt(1, RB.getString("gui.WinMain.dataTab"));
+		ctrlTabs.setIconAt(2, Icons.getIcon("DATATAB"));
+		ctrlTabs.setToolTipTextAt(2, RB.getString("gui.WinMain.dataTab"));
 	}
 
 	private void createCanvas()
 	{
 		canvas3D = new OpenGLPanel(this);
-		canvas3D.setPreferredSize(new Dimension((Prefs.guiWinMainW-controlPanelWidth), Prefs.guiWinMainH));
+		canvas3D.setSize(new Dimension((Prefs.guiWinMainW-Prefs.guiSplitterLocation), Prefs.guiWinMainH));
 	}
 
 	public void setDataSet(DataSet dataSet)
 	{
 		this.dataSet = dataSet;
-		controlPanel.setDataSet(dataSet);
+		selectionPanel.setDataSet(dataSet);
 		dataPanel.setDataSet(dataSet);
-
-		controlPanel.addComboModels();
+		controlsPanel.setDataSet(dataSet);
 
 		//do the rest of the set up
 		//set the title of the window to the name of the dataset
 //		winMain.setTitle(winMain.titleString + "  --  " + dataSet.name);
-		controlPanel.setUpCategoryLists();
+		selectionPanel.setUpCategoryLists();
 		statusBar.setDefaultText();
 
 		display3DCanvas();
 
 		Actions.openedData();
-		controlPanel.toggleEnabled(true);
+		selectionPanel.toggleEnabled(true);
 	}
 
 	private void addListeners()
@@ -172,8 +185,8 @@ public class WinMain extends JFrame
 	Commands getCommands()
 		{ return toolbarActions; }
 
-	public ControlPanel getControlPanel()
-		{ return controlPanel; }
+	public SelectionPanelNB getControlPanel()
+		{ return selectionPanel; }
 
 	public StatusBar getStatusBar()
 		{ return statusBar; }
