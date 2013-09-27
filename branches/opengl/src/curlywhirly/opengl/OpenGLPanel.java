@@ -318,27 +318,29 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	private void drawAxesLines(GL2 gl)
 	{
-		gl.glBegin(GL_LINES);
-		gl.glColor3f(1f, 0, 0);
-
 		float[] xAxisColor = getOpenGLColor(ColorPrefs.get("User.OpenGLPanel.xAxisColor"));
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, xAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 1);
-		// X-axis
+		// Draw X-axis
+		gl.glBegin(GL_LINES);
 		gl.glVertex3f(-0.5f, 0, 0);
 		gl.glVertex3f(0.5f, 0, 0);
+		gl.glEnd();
 
 		float [] yAxisColor = getOpenGLColor(ColorPrefs.get("User.OpenGLPanel.yAxisColor"));
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, yAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 1);
-		// Y-axis
+		// Draw Y-axis
+		gl.glBegin(GL_LINES);
 		gl.glVertex3f(0, -0.5f, 0);
 		gl.glVertex3f(0, 0.5f, 0);
+		gl.glEnd();
 
 		float [] zAxisColor = getOpenGLColor(ColorPrefs.get("User.OpenGLPanel.zAxisColor"));
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, zAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 1);
-		// Z-axis
+		// Draw Z-axis
+		gl.glBegin(GL_LINES);
 		gl.glVertex3f(0, 0, -0.5f);
 		gl.glVertex3f(0, 0, 0.5f);
 		gl.glEnd();
