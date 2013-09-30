@@ -119,7 +119,7 @@ public class WinMain extends JFrame
 
 		//do the rest of the set up
 		//set the title of the window to the name of the dataset
-//		winMain.setTitle(winMain.titleString + "  --  " + dataSet.name);
+		setTitle(RB.getString("gui.CurlyWhirly.title") + " - " + Install4j.VERSION + "  --  " + dataSet.getName());
 		selectionPanel.setUpCategoryLists();
 		statusBar.setDefaultText();
 
@@ -164,7 +164,6 @@ public class WinMain extends JFrame
 	{
 		splitPane.setRightComponent(canvas3D);
 		canvas3D.startAnimator();
-//		repaint();
 	}
 
 	WinMainToolBar getToolbar()

@@ -53,6 +53,8 @@ class PreferencesPanelNB extends JPanel
         updateCombo.setModel(updateModel);
         updateCombo.setSelectedIndex(Prefs.guiUpdateSchedule);
 
+		RB.setText(chkAntialias, "gui.PreferencesPanelNB.antialiasAxes");
+		chkAntialias.setSelected(Prefs.guiAntialiasAxes);
 
 		// Other settings
 		otherPanel.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.PreferencesPanelNB.otherPanelTitle")));
@@ -87,6 +89,7 @@ class PreferencesPanelNB extends JPanel
 		}
 
 		Prefs.guiUpdateSchedule = updateCombo.getSelectedIndex();
+		Prefs.guiAntialiasAxes = chkAntialias.isSelected();
 	}
 
     /** This method is called from within the constructor to
@@ -105,6 +108,7 @@ class PreferencesPanelNB extends JPanel
         updateLabel = new javax.swing.JLabel();
         otherPanel = new javax.swing.JPanel();
         bCustomizeColors = new javax.swing.JButton();
+        chkAntialias = new javax.swing.JCheckBox();
 
         generalPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("General options (restart to apply):"));
 
@@ -147,18 +151,25 @@ class PreferencesPanelNB extends JPanel
 
         bCustomizeColors.setText("Customize colours");
 
+        chkAntialias.setText("Antialias axes");
+
         javax.swing.GroupLayout otherPanelLayout = new javax.swing.GroupLayout(otherPanel);
         otherPanel.setLayout(otherPanelLayout);
         otherPanelLayout.setHorizontalGroup(
             otherPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(otherPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(bCustomizeColors)
-                .addContainerGap(280, Short.MAX_VALUE))
+                .addGroup(otherPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(chkAntialias)
+                    .addComponent(bCustomizeColors))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         otherPanelLayout.setVerticalGroup(
             otherPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(bCustomizeColors)
+            .addGroup(otherPanelLayout.createSequentialGroup()
+                .addComponent(bCustomizeColors)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkAntialias))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -185,6 +196,7 @@ class PreferencesPanelNB extends JPanel
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JButton bCustomizeColors;
+    javax.swing.JCheckBox chkAntialias;
     private javax.swing.JComboBox<String> displayCombo;
     private javax.swing.JLabel displayLabel;
     private javax.swing.JPanel generalPanel;

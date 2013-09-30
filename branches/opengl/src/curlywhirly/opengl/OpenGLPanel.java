@@ -106,7 +106,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 			animator.remove(this);
 
 		animator = new FPSAnimator(this, FPS, true);
-//		animator.setUpdateFPSFrames(200, System.out);
+		animator.setUpdateFPSFrames(200, System.out);
 		animator.setPrintExceptions(true);
 		animator.start();
 	}
@@ -134,9 +134,9 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glDepthFunc(GL_LEQUAL);
 		gl.glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 		gl.glShadeModel(GL_SMOOTH);
-		gl.glEnable(GL_LINE_SMOOTH);
-		gl.glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
-		gl.glLineWidth(1.0f);
+		gl.glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+		gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		gl.glLineWidth(1.5f);
 		gl.setSwapInterval(1);
 		gl.glEnable(GL_RESCALE_NORMAL);
 		gl.glEnable(GL_CULL_FACE);
@@ -239,8 +239,6 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		CANVAS_WIDTH = width;
 		CANVAS_HEIGHT = height;
 
-		System.out.println("Width: " + width);
-
 		// Set the view port (display area) to cover the entire window
 		gl.glViewport(0, 0, width, height);
 
@@ -306,18 +304,26 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	private void drawAxes(GL2 gl)
 	{
-		gl.glPushMatrix();
-
 		drawAxesLines(gl);
 		drawAxesCones(gl);
-
-		gl.glPopMatrix();
 
 //		renderText(gl);
 	}
 
 	private void drawAxesLines(GL2 gl)
 	{
+		// Enable / disable antialiasing for lines based on user preference.
+		if (Prefs.guiAntialiasAxes)
+		{
+			gl.glEnable(GL_BLEND);
+			gl.glEnable(GL_LINE_SMOOTH);
+		}
+		else
+		{
+			gl.glDisable(GL_BLEND);
+			gl.glDisable(GL_LINE_SMOOTH);
+		}
+
 		float[] xAxisColor = getOpenGLColor(ColorPrefs.get("User.OpenGLPanel.xAxisColor"));
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, xAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 1);
@@ -344,6 +350,14 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glVertex3f(0, 0, -0.5f);
 		gl.glVertex3f(0, 0, 0.5f);
 		gl.glEnd();
+
+		// If the user has chosen to antialias axes we must disable this when
+		// we are done.
+		if (Prefs.guiAntialiasAxes)
+		{
+			gl.glDisable(GL_BLEND);
+			gl.glDisable(GL_LINE_SMOOTH);
+		}
 	}
 
 	private void drawAxesCones(GL2 gl)
@@ -400,12 +414,11 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		// Color spheres appropriately
 		DataSet dataSet = winMain.getDataSet();
 
-		float[] rgba;
 		for (DataPoint point : winMain.getDataSet())
 		{
 			Color color = point.getColor(dataSet.getCurrentCategoryGroup());
 			// Get each color component into the 0-1 range instead of 0-255
-			rgba = getOpenGLColor(color);
+			float [] rgba = getOpenGLColor(color);
 			gl.glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rgba, 0);
 			gl.glMaterialf(GL_FRONT, GL_SHININESS, 128);
 			drawSphere(gl, point);

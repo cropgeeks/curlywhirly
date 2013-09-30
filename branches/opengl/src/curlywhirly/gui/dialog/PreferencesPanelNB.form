@@ -135,16 +135,23 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="bCustomizeColors" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="280" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="chkAntialias" min="-2" max="-2" attributes="0"/>
+                      <Component id="bCustomizeColors" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="bCustomizeColors" min="-2" max="-2" attributes="0"/>
+              <Group type="102" attributes="0">
+                  <Component id="bCustomizeColors" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="chkAntialias" min="-2" max="-2" attributes="0"/>
+              </Group>
           </Group>
         </DimensionLayout>
       </Layout>
@@ -152,6 +159,14 @@
         <Component class="javax.swing.JButton" name="bCustomizeColors">
           <Properties>
             <Property name="text" type="java.lang.String" value="Customize colours"/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="chkAntialias">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Antialias axes"/>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>

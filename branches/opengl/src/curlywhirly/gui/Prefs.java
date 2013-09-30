@@ -53,6 +53,8 @@ public class Prefs extends XMLPreferences
 	public static int guiMovieCaptureFrameRate = 30;
 	public static int guiMovieCaptureSpinSpeedIndex = 1;
 
+	public static boolean guiAntialiasAxes = true;
+
 	// The local working directory for disk caching
 	public static String cacheFolder =
 		SystemUtils.getTempUserDirectory("jhi-curlywhirly").getPath();
