@@ -33,6 +33,10 @@ public class ControlsPanelNB extends JPanel implements ActionListener
 		yCombo.setModel(new DefaultComboBoxModel<String>(axisLabels));
 		zCombo.setModel(new DefaultComboBoxModel<String>(axisLabels));
 
+		xCombo.addActionListener(this);
+		yCombo.addActionListener(this);
+		zCombo.addActionListener(this);
+
 		resetComboBoxes();
 	}
 
