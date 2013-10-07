@@ -3,7 +3,7 @@ package curlywhirly.data;
 import java.awt.*;
 import java.util.*;
 
-public class Category
+public class Category implements Comparable<Category>
 {
 	private final String name;
 	private Color color;
@@ -83,5 +83,11 @@ public class Category
 	public String getColorKey()
 	{
 		return group.getName() + "." + name;
+	}
+
+	@Override
+	public int compareTo(Category o)
+	{
+		return name.compareToIgnoreCase(o.name);
 	}
 }

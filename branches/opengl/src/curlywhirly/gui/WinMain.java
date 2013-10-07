@@ -59,6 +59,11 @@ public class WinMain extends JFrame
 			public void propertyChange(PropertyChangeEvent e)
 			{
 				Prefs.guiSplitterLocation = splitPane.getDividerLocation();
+				JScrollPane sp = selectionPanel.getScrollPane();
+				int w = sp.getWidth() - sp.getVerticalScrollBar().getWidth() - splitPane.getWidth();
+				CategoryGroupPanel groupPanel = selectionPanel.getCategoryGroupPanel();
+				if (groupPanel != null)
+					groupPanel.setPreferredSize(new Dimension(w, groupPanel.getPreferredSize().height));
 			}
 		});
 
@@ -189,4 +194,9 @@ public class WinMain extends JFrame
 
 	public StatusBar getStatusBar()
 		{ return statusBar; }
+
+	public JSplitPane getSplitPane()
+	{
+		return splitPane;
+	}
 }

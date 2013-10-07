@@ -6,15 +6,15 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 import curlywhirly.data.*;
-import curlywhirly.gui.viewer.ColorPrefs;
+import curlywhirly.gui.viewer.*;
+
 import scri.commons.gui.RB;
 
-class CategoryPanel
+class CategoryPanel extends JPanel
 {
 	// Components of panel
 	private JPanel namePanel;
 	private JRadioButton button;
-	private JLabel lblName;
 	private JLabel lblCount;
 	private JTable catTable;
 
@@ -29,70 +29,50 @@ class CategoryPanel
 		this.catGroup = catGroup;
 		this.dataSet = dataSet;
 
+		setLayout(new GridBagLayout());
+
 		createControls();
 	}
 
 	private void createControls()
 	{
-		namePanel = createNamePanel();
 		catTable = createTable();
-	}
 
-	private JPanel createNamePanel()
-	{
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridBagLayout());
-		panel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+		setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
 		GridBagConstraints c = new GridBagConstraints();
+		c.gridy = 0;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.anchor = GridBagConstraints.LINE_START;
+		c.gridwidth = GridBagConstraints.RELATIVE;
+		c.gridy = 0;
+		c.gridheight = GridBagConstraints.RELATIVE;
 		c.weightx = 1;
 
 		// The radio button for choosing if this is the selected category group
 		button = new JRadioButton();
 		button.setText(catGroup.getName());
-		panel.add(button, c);
+		add(button, c);
 		button.addActionListener(parent);
-//		panel.add(new Box.Filler(new Dimension(2, 0), new Dimension(2, 0), new Dimension(2, 0)));
-
-//		lblName = createNameLabel();
-//		panel.add(lblName, c);
 
 		// Use glue to place count label at the right hand side of the panel
-//		panel.add(Box.createHorizontalGlue());
 		c.gridx = 1;
 		c.anchor = GridBagConstraints.LINE_END;
 		c.gridwidth = GridBagConstraints.REMAINDER;
+		c.gridy = 0;
+		c.gridheight = GridBagConstraints.RELATIVE;
 		c.weightx = 0;
-		createCountLabel();
-		panel.add(lblCount, c);
+		lblCount = new JLabel();
+		lblCount.setText(getCountString());
+		add(lblCount, c);
 
-		return panel;
-	}
-
-	private JLabel createNameLabel()
-	{
-		JLabel name = new JLabel();
-		name.setText(catGroup.getName());
-		name.setBackground(Color.WHITE);
-		name.setForeground(new Color(68, 106, 156));
-
-		return name;
-	}
-
-	private void createCountLabel()
-	{
-		int total = 0;
-		int selected = 0;
-		for (Category category : catGroup)
-		{
-			total += category.getTotal();
-			selected += category.getNoSelected();
-		}
-
-		lblCount = new JLabel("" + selected + "/" + total);
+		c.gridx = 0;
+		c.gridwidth = GridBagConstraints.REMAINDER;
+		c.gridy = 1;
+		c.gridheight = GridBagConstraints.REMAINDER;
+		c.weightx = 1;
+		add(catTable, c);
 	}
 
 	private JTable createTable()
@@ -168,26 +148,32 @@ class CategoryPanel
 		});
 	}
 
-	// Should be called whenever the count in the name panel needs to be updated
-	// such as from the tableChanged method of the tableModelListener.
-	JPanel updateNamePanel()
+	private String getCountString()
 	{
-		namePanel.remove(lblCount);
-		createCountLabel();
-		namePanel.add(lblCount);
+		int total = 0;
+		int selected = 0;
+		for (Category category : catGroup)
+		{
+			total += category.getTotal();
+			selected += category.getNoSelected();
+		}
 
-		return namePanel;
+		return "" + selected + "/" + total;
 	}
 
-	JLabel getNameLabel()
-		{ return lblName; }
+	// Should be called whenever the count in the name panel needs to be updated
+	// such as from the tableChanged method of the tableModelListener.
+	void updateNamePanel()
+	{
+		lblCount.setText(getCountString());
+	}
 
-	void setVisible(boolean visible)
+	public void setVisible(boolean visible)
 	{
 		catTable.setVisible(visible);
 	}
 
-	boolean isVisible()
+	public boolean isVisible()
 		{ return catTable.isVisible(); }
 
 	JRadioButton getButton()

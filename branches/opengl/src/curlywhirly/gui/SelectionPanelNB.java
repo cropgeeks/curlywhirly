@@ -12,7 +12,6 @@ public class SelectionPanelNB extends JPanel
 {
 	private DataSet dataSet;
 
-	private JPanel panel;
 	private CategoryGroupPanel container;
 
 	private WinMain winMain;
@@ -31,12 +30,9 @@ public class SelectionPanelNB extends JPanel
 	public void setUpCategoryLists()
 	{
 		ArrayList<CategoryGroup> schemes = dataSet.getCategoryGroups();
-		CategoryGroupPanel container = new CategoryGroupPanel(winMain, schemes, dataSet);
+		container = new CategoryGroupPanel(this, winMain, schemes, dataSet);
 
-		panel = container.getPanel();
-//		panel.setMaximumSize(getPreferredSize());
-		panel.setPreferredSize(new Dimension(getPreferredSize().width, panel.getPreferredSize().height));
-		categorySP.setViewportView(panel);
+		categorySP.setViewportView(container);
 		categorySP.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	}
 
@@ -49,6 +45,16 @@ public class SelectionPanelNB extends JPanel
 	public void setDataSet(DataSet dataSet)
 	{
 		this.dataSet = dataSet;
+	}
+
+	JScrollPane getScrollPane()
+	{
+		return categorySP;
+	}
+
+	CategoryGroupPanel getCategoryGroupPanel()
+	{
+		return container;
 	}
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

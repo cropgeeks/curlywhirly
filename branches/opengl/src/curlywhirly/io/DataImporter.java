@@ -61,7 +61,11 @@ public class DataImporter extends SimpleJob
 
 		// We need to assign colors to our categories
 		for (CategoryGroup group : categoryGroups)
+		{
+			// Also sort the category groups at this point
+			group.sort();
 			assignColorsToCategories(group);
+		}
 
 		dataSet = new DataSet(dataPoints, categoryGroups, axisLabels);
 

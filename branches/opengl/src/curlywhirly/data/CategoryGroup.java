@@ -45,4 +45,9 @@ public class CategoryGroup implements Comparable<CategoryGroup>, Iterable<Catego
 	{
 		return categories.iterator();
 	}
+
+	public void sort()
+	{
+		Collections.sort(categories);
+	}
 }
