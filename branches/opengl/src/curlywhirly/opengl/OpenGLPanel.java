@@ -69,14 +69,16 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	private BufferedImage screenShot;
 	private boolean takeScreenshot = false;
 
-	private Point point = new Point(0, 0);
+	private Point mousePoint = new Point(0, 0);
 	float[] proj = new float[16];
 
 	// Keeps track of the translated locations of points in the display
 	// used in ray tracing code to find points under the mouse.
-	private HashMap<DataPoint, float[]> translatedPoints = new HashMap<>();
+	private HashMap<DataPoint, float[]> translatedPoints;
 
 	private CollisionDetection detector;
+
+	private DataSet dataSet;
 
 	public OpenGLPanel(WinMain winMain)
 	{
@@ -97,6 +99,14 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		detector = new CollisionDetection();
 
 		ToolTipManager.sharedInstance().setInitialDelay(0);
+	}
+
+	public void setDataSet(DataSet dataSet)
+	{
+		this.dataSet = dataSet;
+
+		translatedPoints = new HashMap<>();
+		reset();
 	}
 
 	// Starts animation, this should be called when you want rendering to start
@@ -412,9 +422,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glEnableClientState(GL_NORMAL_ARRAY);
 
 		// Color spheres appropriately
-		DataSet dataSet = winMain.getDataSet();
-
-		for (DataPoint point : winMain.getDataSet())
+		for (DataPoint point : dataSet)
 		{
 			Color color = point.getColor(dataSet.getCurrentCategoryGroup());
 			// Get each color component into the 0-1 range instead of 0-255
@@ -668,7 +676,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	public void setMousePoint(Point point)
 	{
-		this.point = point;
+		this.mousePoint = point;
 	}
 
 	private Ray getRay(GL2 gl)
@@ -679,9 +687,9 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glGetIntegerv(GL.GL_VIEWPORT, view, 0);
 		// Get the current model view matrix
 		gl.glGetFloatv(GL_MODELVIEW_MATRIX, model, 0);
-		float winX = point.x;
+		float winX = mousePoint.x;
 		// Adjust into opengl y space
-		float winY = CANVAS_HEIGHT - (float)point.y -1;
+		float winY = CANVAS_HEIGHT - (float)mousePoint.y -1;
 
 		// Used to store the result of gluUnproject for the near clipping plane
 		float[] near = new float[4];

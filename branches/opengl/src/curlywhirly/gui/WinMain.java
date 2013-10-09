@@ -118,6 +118,7 @@ public class WinMain extends JFrame
 	public void setDataSet(DataSet dataSet)
 	{
 		this.dataSet = dataSet;
+		canvas3D.setDataSet(dataSet);
 		selectionPanel.setDataSet(dataSet);
 		dataPanel.setDataSet(dataSet);
 		controlsPanel.setDataSet(dataSet);
