@@ -20,6 +20,8 @@ class CategoryGroupPanel extends JPanel implements ActionListener, TableModelLis
 
 	private SelectionPanelNB parent;
 
+	private Component vStrut;
+
 	CategoryGroupPanel(SelectionPanelNB parent, WinMain winMain, ArrayList<CategoryGroup> schemes, DataSet dataSet)
 	{
 		this.dataSet = dataSet;
@@ -53,16 +55,21 @@ class CategoryGroupPanel extends JPanel implements ActionListener, TableModelLis
 		{
 			CategoryPanel catPanel = createCategoryPanel(catGroups.get(i));
 			add(catPanel);
-			prefHeight += catPanel.getPreferredSize().height;
+			prefHeight += catPanel.getNamePanel().getPreferredSize().height;
+			prefHeight += catPanel.getTable().getPreferredSize().height;
 
 			categoryPanels.add(catPanel);
 		}
 
+		// If the scroll pane is larger than our components add a vertical strut
+		// to push our components to the top.
 		if (prefHeight < parent.getHeight())
 		{
-			add(Box.createVerticalStrut(parent.getHeight()-prefHeight));
-			setPreferredSize(new Dimension(getPreferredSize().width, prefHeight));
+			vStrut = Box.createVerticalStrut(parent.getHeight()-prefHeight);
+			add(vStrut);
 		}
+
+		setPreferredSize(new Dimension(getPreferredSize().width, prefHeight));
 	}
 
 	private CategoryPanel createCategoryPanel(CategoryGroup group)
@@ -90,6 +97,22 @@ class CategoryGroupPanel extends JPanel implements ActionListener, TableModelLis
 				container.setVisible(true);
 				invalidate();
 				repaint();
+			}
+
+			else if (e.getSource() == container.getExpandButton())
+			{
+				// Change visibility
+				container.getTablePanel().setVisible(!container.getTablePanel().isVisible());
+
+				// Update the panel's size.
+				if (container.getTablePanel().isVisible())
+					prefHeight += container.getTable().getPreferredSize().height;
+				else
+					prefHeight -= container.getTable().getPreferredSize().height;
+
+				setPreferredSize(new Dimension(getPreferredSize().width, prefHeight));
+
+				container.repaint();
 			}
 		}
 	}

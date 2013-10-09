@@ -39,7 +39,7 @@ public class CollisionDetection
 
 		float d2 = l.dot(l) - tca * tca;
 		// Radius can be adjusted to make detection more, or less stringent
-		float radiusSquared = 0.005f * 0.005f;
+		float radiusSquared = 0.010f * 0.010f;
 		if (d2 > radiusSquared)
 			return -1;
 		float thc = (float) Math.sqrt(radiusSquared - d2);

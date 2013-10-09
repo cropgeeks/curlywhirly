@@ -100,10 +100,10 @@ public class WinMain extends JFrame
 
 		ctrlTabs.add("", selectionPanel);
 		ctrlTabs.setIconAt(0, Icons.getIcon("SELECTIONTAB"));
-		ctrlTabs.setToolTipTextAt(0, RB.getString("gui.WinMain.controlsTab"));
+		ctrlTabs.setToolTipTextAt(0, RB.getString("gui.WinMain.selectionTab"));
 		ctrlTabs.add("", controlsPanel);
 		ctrlTabs.setIconAt(1, Icons.getIcon("CONTROLSTAB"));
-		ctrlTabs.setToolTipTextAt(1, "Some Controls");
+		ctrlTabs.setToolTipTextAt(1, "Controls");
 		ctrlTabs.add("", dataPanel);
 		ctrlTabs.setIconAt(2, Icons.getIcon("DATATAB"));
 		ctrlTabs.setToolTipTextAt(2, RB.getString("gui.WinMain.dataTab"));

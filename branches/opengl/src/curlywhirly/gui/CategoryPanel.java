@@ -3,6 +3,7 @@ package curlywhirly.gui;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.border.*;
 import javax.swing.table.*;
 
 import curlywhirly.data.*;
@@ -14,9 +15,14 @@ class CategoryPanel extends JPanel
 {
 	// Components of panel
 	private JPanel namePanel;
-	private JRadioButton button;
+	private JRadioButton radioButton;
 	private JLabel lblCount;
 	private JTable catTable;
+	private JRadioButton expandButton;
+	private JPanel tablePanel;
+
+	private static Icon expanded = ((Icon) UIManager.get("Tree.expandedIcon"));
+	private static Icon collapsed = ((Icon) UIManager.get("Tree.collapsedIcon"));
 
 	// Data which backs the components
 	private CategoryGroupPanel parent;
@@ -29,50 +35,128 @@ class CategoryPanel extends JPanel
 		this.catGroup = catGroup;
 		this.dataSet = dataSet;
 
-		setLayout(new GridBagLayout());
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setBackground(Color.WHITE);
 
 		createControls();
 	}
 
 	private void createControls()
 	{
-		catTable = createTable();
+		namePanel = createNamePanel();
+		add(namePanel);
 
-		setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+		tablePanel = createTablePanel();
+		add(tablePanel);
+	}
 
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridy = 0;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.anchor = GridBagConstraints.LINE_START;
-		c.gridwidth = GridBagConstraints.RELATIVE;
-		c.gridy = 0;
-		c.gridheight = GridBagConstraints.RELATIVE;
-		c.weightx = 1;
+	private JPanel createNamePanel()
+	{
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridBagLayout());
+		panel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+
+		GridBagConstraints con = new GridBagConstraints();
+		// The expand / contract button for this CategoryPanel
+		expandButton = createExpandButton(con);
+		panel.add(expandButton, con);
 
 		// The radio button for choosing if this is the selected category group
-		button = new JRadioButton();
-		button.setText(catGroup.getName());
-		add(button, c);
+		radioButton = createRadioButton(con);
+		panel.add(radioButton, con);
+
+		lblCount = createCountLabel(con);
+		panel.add(lblCount, con);
+
+		// This prevents the panel changing size when expandButton's state
+		// changes.
+		panel.setMaximumSize(new Dimension(panel.getMaximumSize().width, panel.getPreferredSize().height));
+
+		return panel;
+	}
+
+	// Expands or contracts this category panel. Uses custom icons (taken from
+	// the JTree control in a JRadioButton to ape the look of a JTree.
+	private JRadioButton createExpandButton(GridBagConstraints con)
+	{
+		con.gridy = 0;
+		con.fill = GridBagConstraints.HORIZONTAL;
+		con.gridx = 0;
+		con.anchor = GridBagConstraints.LINE_START;
+		con.gridy = 0;
+		con.gridheight = GridBagConstraints.REMAINDER;
+		con.weightx = 0;
+
+		// Need to set the icon and rollover icon for each state
+		JRadioButton button = new JRadioButton();
+		button.setIcon(expanded);
+		button.setRolloverIcon(expanded);
+		button.setSelectedIcon(collapsed);
+		button.setRolloverSelectedIcon(collapsed);
+		button.setBorder(new EmptyBorder(0, 0, 0, -8));
+
 		button.addActionListener(parent);
 
-		// Use glue to place count label at the right hand side of the panel
-		c.gridx = 1;
-		c.anchor = GridBagConstraints.LINE_END;
-		c.gridwidth = GridBagConstraints.REMAINDER;
-		c.gridy = 0;
-		c.gridheight = GridBagConstraints.RELATIVE;
-		c.weightx = 0;
-		lblCount = new JLabel();
-		lblCount.setText(getCountString());
-		add(lblCount, c);
+		return button;
+	}
 
-		c.gridx = 0;
-		c.gridwidth = GridBagConstraints.REMAINDER;
-		c.gridy = 1;
-		c.gridheight = GridBagConstraints.REMAINDER;
-		c.weightx = 1;
-		add(catTable, c);
+	private JRadioButton createRadioButton(GridBagConstraints con)
+	{
+		con.gridy = 0;
+		con.fill = GridBagConstraints.HORIZONTAL;
+		con.gridx = 1;
+		con.anchor = GridBagConstraints.LINE_START;
+		con.gridy = 0;
+		con.gridheight = GridBagConstraints.REMAINDER;
+		con.weightx = 1;
+
+		JRadioButton button = new JRadioButton();
+		button.setText(catGroup.getName());
+		button.addActionListener(parent);
+
+		return button;
+	}
+
+	private JLabel createCountLabel(GridBagConstraints con)
+	{
+		con.gridx = 2;
+		con.anchor = GridBagConstraints.LINE_END;
+		con.gridwidth = GridBagConstraints.REMAINDER;
+		con.gridy = 0;
+		con.gridheight = GridBagConstraints.REMAINDER;
+		con.weightx = 0;
+
+		JLabel label = new JLabel();
+		label.setText(getCountString());
+
+		return label;
+	}
+
+	private String getCountString()
+	{
+		int total = 0;
+		int selected = 0;
+		for (Category category : catGroup)
+		{
+			total += category.getTotal();
+			selected += category.getNoSelected();
+		}
+
+		return "" + selected + "/" + total;
+	}
+
+	private JPanel createTablePanel()
+	{
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+		panel.setBackground(Color.WHITE);
+		panel.add(Box.createHorizontalStrut(12));
+
+		catTable = createTable();
+
+		panel.add(catTable);
+
+		return panel;
 	}
 
 	private JTable createTable()
@@ -91,17 +175,6 @@ class CategoryPanel extends JPanel
 			{
 				TableCellRenderer tcr = classModel.getCellRenderer(col);
 				return (tcr != null) ? tcr : super.getCellRenderer(row, col);
-			}
-
-			@Override
-			public void doLayout()
-			{
-				// On resize assign space to the second last column
-				TableColumnModel tcm = getColumnModel();
-				int delta = getParent().getWidth() - tcm.getTotalColumnWidth();
-				TableColumn last = tcm.getColumn(tcm.getColumnCount() - 2);
-				last.setPreferredWidth(last.getPreferredWidth() + delta);
-				last.setWidth(last.getPreferredWidth());
 			}
 		};
 		// Constrain the column widths on the columns with the checkbox and the
@@ -148,19 +221,6 @@ class CategoryPanel extends JPanel
 		});
 	}
 
-	private String getCountString()
-	{
-		int total = 0;
-		int selected = 0;
-		for (Category category : catGroup)
-		{
-			total += category.getTotal();
-			selected += category.getNoSelected();
-		}
-
-		return "" + selected + "/" + total;
-	}
-
 	// Should be called whenever the count in the name panel needs to be updated
 	// such as from the tableChanged method of the tableModelListener.
 	void updateNamePanel()
@@ -177,11 +237,21 @@ class CategoryPanel extends JPanel
 		{ return catTable.isVisible(); }
 
 	JRadioButton getButton()
-		{ return button; }
+		{ return radioButton; }
 
 	JPanel getNamePanel()
 		{ return namePanel; }
 
 	JTable getTable()
 		{ return catTable; }
+
+	JRadioButton getExpandButton()
+	{
+		return expandButton;
+	}
+
+	JPanel getTablePanel()
+	{
+		return tablePanel;
+	}
 }
