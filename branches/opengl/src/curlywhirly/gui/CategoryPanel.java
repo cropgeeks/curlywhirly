@@ -112,6 +112,7 @@ class CategoryPanel extends JPanel
 
 		JRadioButton button = new JRadioButton();
 		button.setText(catGroup.getName());
+		button.setToolTipText(catGroup.getName());
 		button.addActionListener(parent);
 
 		return button;
