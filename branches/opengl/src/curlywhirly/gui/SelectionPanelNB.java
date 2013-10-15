@@ -22,7 +22,7 @@ public class SelectionPanelNB extends JPanel
 
 		this.winMain = winMain;
 
-		RB.setText(lblCategory, "gui.ControlPanel.lblCategory");
+//		RB.setText(lblCategory, "gui.ControlPanel.lblCategory");
 
 		toggleEnabled(false);
 	}
@@ -92,7 +92,7 @@ public class SelectionPanelNB extends JPanel
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane categorySP;
-    javax.swing.JLabel lblCategory;
+    private javax.swing.JLabel lblCategory;
     // End of variables declaration//GEN-END:variables
 
 }

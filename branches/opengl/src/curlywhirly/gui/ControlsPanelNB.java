@@ -4,6 +4,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import curlywhirly.data.*;
+import java.awt.Color;
 
 import scri.commons.gui.*;
 
@@ -19,10 +20,23 @@ public class ControlsPanelNB extends JPanel implements ActionListener
 
 		this.winMain = winMain;
 
+		axisPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 		RB.setText(lblAxesTitle, "gui.ControlPanel.axesTitle");
 		RB.setText(lblX, "gui.ControlPanel.lblX");
 		RB.setText(lblY, "gui.ControlPanel.lblY");
 		RB.setText(lblZ, "gui.ControlPanel.lblZ");
+
+		axisLabelPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+		RB.setText(lblAxisLabelOptions, "gui.ControlPanel.axisLabelOptions");
+		RB.setText(chkAxisLabels, "gui.ControlPanel.axisLabels");
+		RB.setText(jCheckBox2, "gui.ControlPanel.datasetLabels");
+
+		chkAxisLabels.setSelected(Prefs.guiChkAxisLabels);
+		jCheckBox2.setSelected(Prefs.guiChkDatasetLabels);
+		chkAxisLabels.addActionListener(this);
+		jCheckBox2.addActionListener(this);
+
+		toggleEnabled(false);
     }
 
 	private void addComboModels()
@@ -71,6 +85,12 @@ public class ControlsPanelNB extends JPanel implements ActionListener
 			dataSet.setCurrZ(index);
 			winMain.getDataPanel().updateTableModel();
 		}
+
+		else if (e.getSource() == chkAxisLabels)
+			Prefs.guiChkAxisLabels = !Prefs.guiChkAxisLabels;
+
+		else if (e.getSource() == jCheckBox2)
+			Prefs.guiChkDatasetLabels = !Prefs.guiChkDatasetLabels;
 	}
 
 	public void toggleEnabled(boolean enabled)
@@ -78,10 +98,15 @@ public class ControlsPanelNB extends JPanel implements ActionListener
 		lblX.setEnabled(enabled);
 		lblY.setEnabled(enabled);
 		lblZ.setEnabled(enabled);
+		axisPanel.setEnabled(enabled);
 		lblAxesTitle.setEnabled(enabled);
 		xCombo.setEnabled(enabled);
 		yCombo.setEnabled(enabled);
 		zCombo.setEnabled(enabled);
+		lblAxisLabelOptions.setEnabled(enabled);
+		axisPanel.setEnabled(enabled);
+		chkAxisLabels.setEnabled(enabled);
+		jCheckBox2.setEnabled(enabled);
 	}
 
 	public void setDataSet(DataSet dataSet)
@@ -101,35 +126,24 @@ public class ControlsPanelNB extends JPanel implements ActionListener
     private void initComponents()
     {
 
-        zCombo = new javax.swing.JComboBox<String>();
-        lblZ = new javax.swing.JLabel();
-        lblY = new javax.swing.JLabel();
-        yCombo = new javax.swing.JComboBox<String>();
-        xCombo = new javax.swing.JComboBox<String>();
-        lblX = new javax.swing.JLabel();
         lblAxesTitle = new javax.swing.JLabel();
+        axisPanel = new javax.swing.JPanel();
+        lblX = new javax.swing.JLabel();
+        xCombo = new javax.swing.JComboBox<String>();
+        lblZ = new javax.swing.JLabel();
+        yCombo = new javax.swing.JComboBox<String>();
+        lblY = new javax.swing.JLabel();
+        zCombo = new javax.swing.JComboBox<String>();
+        axisLabelPanel = new javax.swing.JPanel();
+        chkAxisLabels = new javax.swing.JCheckBox();
+        jCheckBox2 = new javax.swing.JCheckBox();
+        lblAxisLabelOptions = new javax.swing.JLabel();
 
-        zCombo.setBorder(null);
-        zCombo.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                zComboactionPerformed(evt);
-            }
-        });
+        lblAxesTitle.setText("Data to display:");
 
-        lblZ.setText("z-axis:");
+        axisPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
 
-        lblY.setText("y-axis:");
-
-        yCombo.setBorder(null);
-        yCombo.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                yComboactionPerformed(evt);
-            }
-        });
+        lblX.setText("x-axis:");
 
         xCombo.setBorder(null);
         xCombo.addActionListener(new java.awt.event.ActionListener()
@@ -140,9 +154,91 @@ public class ControlsPanelNB extends JPanel implements ActionListener
             }
         });
 
-        lblX.setText("x-axis:");
+        lblZ.setText("z-axis:");
 
-        lblAxesTitle.setText("Data to display:");
+        yCombo.setBorder(null);
+        yCombo.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                yComboactionPerformed(evt);
+            }
+        });
+
+        lblY.setText("y-axis:");
+
+        zCombo.setBorder(null);
+        zCombo.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                zComboactionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout axisPanelLayout = new javax.swing.GroupLayout(axisPanel);
+        axisPanel.setLayout(axisPanelLayout);
+        axisPanelLayout.setHorizontalGroup(
+            axisPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(axisPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(axisPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblX)
+                    .addComponent(lblY)
+                    .addComponent(lblZ))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(axisPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(yCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(zCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(xCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        axisPanelLayout.setVerticalGroup(
+            axisPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(axisPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(axisPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(lblX)
+                    .addComponent(xCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(axisPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(lblY)
+                    .addComponent(yCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(axisPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(lblZ)
+                    .addComponent(zCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        axisLabelPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        chkAxisLabels.setText("Show axis labels");
+
+        jCheckBox2.setText("Use dataset labels");
+
+        javax.swing.GroupLayout axisLabelPanelLayout = new javax.swing.GroupLayout(axisLabelPanel);
+        axisLabelPanel.setLayout(axisLabelPanelLayout);
+        axisLabelPanelLayout.setHorizontalGroup(
+            axisLabelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(axisLabelPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(axisLabelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(chkAxisLabels)
+                    .addComponent(jCheckBox2))
+                .addContainerGap())
+        );
+        axisLabelPanelLayout.setVerticalGroup(
+            axisLabelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(axisLabelPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(chkAxisLabels)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCheckBox2)
+                .addContainerGap())
+        );
+
+        lblAxisLabelOptions.setText("Axis label options:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -151,20 +247,13 @@ public class ControlsPanelNB extends JPanel implements ActionListener
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(axisPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblX)
-                            .addComponent(lblY)
-                            .addComponent(lblZ))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(yCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(zCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(xCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblAxesTitle)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(lblAxesTitle)
+                            .addComponent(lblAxisLabelOptions))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(axisLabelPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -173,18 +262,12 @@ public class ControlsPanelNB extends JPanel implements ActionListener
                 .addContainerGap()
                 .addComponent(lblAxesTitle)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(lblX)
-                    .addComponent(xCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(axisPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblAxisLabelOptions)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(lblY)
-                    .addComponent(yCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(lblZ)
-                    .addComponent(zCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(axisLabelPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(92, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -205,7 +288,12 @@ public class ControlsPanelNB extends JPanel implements ActionListener
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel axisLabelPanel;
+    private javax.swing.JPanel axisPanel;
+    private javax.swing.JCheckBox chkAxisLabels;
+    private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JLabel lblAxesTitle;
+    private javax.swing.JLabel lblAxisLabelOptions;
     private javax.swing.JLabel lblX;
     private javax.swing.JLabel lblY;
     private javax.swing.JLabel lblZ;

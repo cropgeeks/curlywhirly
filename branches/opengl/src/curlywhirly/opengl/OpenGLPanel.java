@@ -26,6 +26,10 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	public static int CANVAS_WIDTH = 800;
 	public static int CANVAS_HEIGHT = 600;
 
+	private static final int X_AXIS = 0;
+	private static final int Y_AXIS = 1;
+	private static final int Z_AXIS = 2;
+
 	// Our target framerate
 	private static final int FPS = 60;
 	// The animator which updates the display at the desired framerate
@@ -80,6 +84,8 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	private DataSet dataSet;
 
+	private TextRenderer renderer;
+
 	public OpenGLPanel(WinMain winMain)
 	{
 		this.winMain = winMain;
@@ -93,8 +99,6 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
         currRot.setIdentity();
 		autoRot.setIdentity();
 		combined.setIdentity();
-
-		texRend = new TextRenderer(new Font("MONOSPACED", Font.PLAIN, 12));
 
 		detector = new CollisionDetection();
 
@@ -163,6 +167,8 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		lightScene(gl);
 
 		glBufferUtil = new AWTGLReadBufferUtil(drawable.getGLProfile(), false);
+
+		renderer = new TextRenderer(new Font("SansSerif", Font.BOLD, 36), true, false);
 	}
 
 	@Override
@@ -171,6 +177,8 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		try
 		{
 			glBufferUtil.dispose(drawable.getGL());
+
+			renderer = null;
 		}
 		catch (Exception e) { e.printStackTrace(); }
 	}
@@ -204,9 +212,10 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 		gl.glMultMatrixf(combArr, 0);
 
-		drawAxes(gl);
+		// Render spheres first as if they are rendered after axis labels
+		// the spheres become obscured by the axis labels.
 		drawSpheres(gl);
-
+		drawAxes(gl);
 //		viewExtentCube(gl);
 
 		gl.glPopMatrix();
@@ -226,15 +235,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		if (takeScreenshot)
 			screenShot = glBufferUtil.readPixelsToBufferedImage(gl, true);
 
-		// Mouse over code looking for sphere's under the mouse
-		Ray ray = getRay(gl);
-		DataPoint found = detector.findSphereRayIntersection(ray, translatedPoints);
-
-		// If we have found a spehre, display this sphere's name in a tooltip
-		if (found != null)
-			this.setToolTipText(found.getName());
-		else
-			this.setToolTipText(null);
+		drawTooltip(gl);
 	}
 
 	@Override
@@ -380,8 +381,13 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		// Draw the cylinders at the positive extent of each axis
 		gl.glPushMatrix();
 		gl.glTranslatef(0.5f, 0, 0);
+		gl.glPushMatrix();
 		gl.glRotatef(90, 0, 1, 0);
 		glu.gluCylinder(quadric, 0.01, 0, 0.02, 6, 6);
+		gl.glPopMatrix();
+
+		if (Prefs.guiChkAxisLabels)
+			billboardText(gl, getAxisLabel(X_AXIS));
 		gl.glPopMatrix();
 
 		float [] yAxisColor = getOpenGLColor(ColorPrefs.get("User.OpenGLPanel.yAxisColor"));
@@ -389,8 +395,13 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 1);
 		gl.glPushMatrix();
 		gl.glTranslatef(0, 0.5f, 0);
+		gl.glPushMatrix();
 		gl.glRotatef(-90, 1, 0, 0);
 		glu.gluCylinder(quadric, 0.01, 0, 0.02, 6, 6);
+		gl.glPopMatrix();
+
+		if (Prefs.guiChkAxisLabels)
+			billboardText(gl, getAxisLabel(Y_AXIS));
 		gl.glPopMatrix();
 
 		float [] zAxisColor = getOpenGLColor(ColorPrefs.get("User.OpenGLPanel.zAxisColor"));
@@ -399,6 +410,9 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glPushMatrix();
 		gl.glTranslatef(0, 0, 0.5f);
 		glu.gluCylinder(quadric, 0.01, 0, 0.02, 6, 6);
+
+		if (Prefs.guiChkAxisLabels)
+			billboardText(gl, getAxisLabel(Z_AXIS));
 		gl.glPopMatrix();
 
 		glu.gluDeleteQuadric(quadric);
@@ -470,11 +484,18 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		float[] modelView = new float[16];
 		gl.glGetFloatv(GL_MODELVIEW_MATRIX, modelView, 0);
 
+		float [] location = getXYZForMatrix(indices, modelView);
+
+		translatedPoints.put(point, location);
+	}
+
+	private float[] getXYZForMatrix(float[] indices, float[] modelView)
+	{
 		float x = (indices[0] * modelView[0]) +  (indices[1] * modelView[4]) + (indices[2] * modelView[8]) + modelView[12];
 		float y = (indices[0] * modelView[1]) +  (indices[1] * modelView[5]) + (indices[2] * modelView[9]) + modelView[13];
 		float z = (indices[0] * modelView[2]) +  (indices[1] * modelView[6]) + (indices[2] * modelView[10]) + modelView[14];
 
-		translatedPoints.put(point, new float[] { x, y, z });
+		return new float[] { x, y, z };
 	}
 
 
@@ -709,5 +730,62 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		Ray ray = new Ray(dir, eye);
 
 		return ray;
+	}
+
+	// To render billboarded text we must rotate the text that we are drawing
+	// by the inverse of the rotations that are applied to the camera. This
+	// keeps the text facing the camera at all times.
+	private void billboardText(GL2 gl, String text)
+		throws GLException
+	{
+		float[] invMat = new float[16];
+		float[] invCombArr = new float[16];
+		synchronized(matrixLock)
+		{
+			Matrix4f invCurr = (Matrix4f) currRot.clone();
+			Matrix4f invComb = (Matrix4f) combined.clone();
+			invCurr.invert();
+			invComb.invert();
+			get(invMat, invCurr);
+			get(invCombArr, invComb);
+		}
+
+		// The order that we apply the combined and mouse rotations is reversed
+		// from the order in the display code. This is because we need these
+		// rotations to happen in the reverse order.
+		gl.glMultMatrixf(invCombArr, 0);
+
+		if (isDragging)
+			gl.glMultMatrixf(invMat, 0);
+
+		renderer.begin3DRendering();
+		renderer.setColor(ColorPrefs.get("User.OpenGLPanel.textColor"));
+		renderer.draw3D(text, 0.02f, -0.01f, 0, 0.001f);
+		renderer.end3DRendering();
+	}
+
+	private void drawTooltip(GL2 gl)
+	{
+		// Mouse over code looking for sphere's under the mouse
+		Ray ray = getRay(gl);
+		DataPoint found = detector.findSphereRayIntersection(ray, translatedPoints);
+
+		// If we have found a spehre, display this sphere's name in a tooltip
+		if (found != null)
+			this.setToolTipText(found.getName());
+		else
+			this.setToolTipText(null);
+	}
+
+	private String getAxisLabel(int axis)
+	{
+		switch (axis)
+		{
+			case X_AXIS: return Prefs.guiChkDatasetLabels ? dataSet.getAxisLabels()[0] : "X";
+			case Y_AXIS: return Prefs.guiChkDatasetLabels ? dataSet.getAxisLabels()[1] : "Y";
+			case Z_AXIS: return Prefs.guiChkDatasetLabels ? dataSet.getAxisLabels()[2] : "Z";
+
+			default: return null;
+		}
 	}
 }

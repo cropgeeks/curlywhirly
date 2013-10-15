@@ -133,6 +133,8 @@ public class WinMain extends JFrame
 
 		Actions.openedData();
 		selectionPanel.toggleEnabled(true);
+		controlsPanel.toggleEnabled(true);
+		dataPanel.toggleEnabled(true);
 	}
 
 	private void addListeners()

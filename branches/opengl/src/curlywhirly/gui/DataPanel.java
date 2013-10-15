@@ -31,6 +31,8 @@ public class DataPanel extends JPanel implements ActionListener
 
 		controls.pointsTable.setModel(new DefaultTableModel());
 		controls.pointsTable.addMouseListener(new TableMouseListener());
+
+		toggleEnabled(false);
 	}
 
 	void updateTableModel()
@@ -145,5 +147,10 @@ public class DataPanel extends JPanel implements ActionListener
 			if (e.isPopupTrigger())
 				displayMenu(e);
 		}
+	}
+
+	void toggleEnabled(boolean enabled)
+	{
+		controls.toggleEnabled(enabled);
 	}
 }

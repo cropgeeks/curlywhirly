@@ -50,6 +50,9 @@ public class Prefs extends XMLPreferences
 	public static Color guiYAxisColor = Color.GREEN;
 	public static Color guiZAxisColor = Color.GREEN;
 
+	public static boolean guiChkAxisLabels = true;
+	public static boolean guiChkDatasetLabels = false;
+
 	public static int guiMovieCaptureFrameRate = 30;
 	public static int guiMovieCaptureSpinSpeedIndex = 1;
 

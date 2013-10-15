@@ -4,12 +4,8 @@ import java.awt.*;
 import java.io.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.filechooser.*;
-
-import curlywhirly.io.*;
 
 import scri.commons.gui.*;
-import scri.commons.file.FileUtils;
 
 public class WinMainToolBar extends JToolBar
 {
@@ -23,8 +19,6 @@ public class WinMainToolBar extends JToolBar
 	private JButton about;
 
 	private JSlider slider;
-
-	private File imageFile;
 
 	private final WinMain winMain;
 
@@ -54,6 +48,8 @@ public class WinMainToolBar extends JToolBar
 				winMain.getOpenGLPanel().setSpeed(speed);
 			}
 		});
+
+		slider.setEnabled(false);
 
 		open = (JButton) getButton(false,
 			RB.getString("gui.WinMainToolBar.open"),
@@ -133,29 +129,7 @@ public class WinMainToolBar extends JToolBar
 		button.setFocusable(false);
 		button.setMargin(new Insets(2, 1, 2, 1));
 
-		if (SystemUtils.isMacOS())
-		{
-			button.putClientProperty("JButton.buttonType", "bevel");
-			button.setMargin(new Insets(-2, -1, -2, -1));
-		}
-
 		return button;
-	}
-
-	private boolean promptForFilename()
-	{
-		File basename = new File(Prefs.guiCurrentDir, "Image.png");
-
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(
-			RB.getString("other.Filters.png"), "png");
-
-		String filename = CWUtils.getSaveFilename(
-			RB.getString("gui.WinMainToolBar.saveDialog"), basename, filter);
-
-		if (filename != null)
-			imageFile = new File(filename);
-
-		return imageFile != null;
 	}
 
 	JSlider getSlider()

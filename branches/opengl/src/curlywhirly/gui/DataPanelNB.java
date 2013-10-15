@@ -14,6 +14,12 @@ public class DataPanelNB extends JPanel
 		this.parent = parent;
     }
 
+	void toggleEnabled(boolean enabled)
+	{
+		lblPoints.setEnabled(enabled);
+		pointsTable.setEnabled(enabled);
+	}
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
