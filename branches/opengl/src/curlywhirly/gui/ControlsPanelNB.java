@@ -29,12 +29,12 @@ public class ControlsPanelNB extends JPanel implements ActionListener
 		axisLabelPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 		RB.setText(lblAxisLabelOptions, "gui.ControlPanel.axisLabelOptions");
 		RB.setText(chkAxisLabels, "gui.ControlPanel.axisLabels");
-		RB.setText(jCheckBox2, "gui.ControlPanel.datasetLabels");
+		RB.setText(chkDatasetLabels, "gui.ControlPanel.datasetLabels");
 
 		chkAxisLabels.setSelected(Prefs.guiChkAxisLabels);
-		jCheckBox2.setSelected(Prefs.guiChkDatasetLabels);
+		chkDatasetLabels.setSelected(Prefs.guiChkDatasetLabels);
 		chkAxisLabels.addActionListener(this);
-		jCheckBox2.addActionListener(this);
+		chkDatasetLabels.addActionListener(this);
 
 		toggleEnabled(false);
     }
@@ -87,9 +87,12 @@ public class ControlsPanelNB extends JPanel implements ActionListener
 		}
 
 		else if (e.getSource() == chkAxisLabels)
+		{
 			Prefs.guiChkAxisLabels = !Prefs.guiChkAxisLabels;
+			chkDatasetLabels.setEnabled(Prefs.guiChkAxisLabels);
+		}
 
-		else if (e.getSource() == jCheckBox2)
+		else if (e.getSource() == chkDatasetLabels)
 			Prefs.guiChkDatasetLabels = !Prefs.guiChkDatasetLabels;
 	}
 
@@ -106,7 +109,10 @@ public class ControlsPanelNB extends JPanel implements ActionListener
 		lblAxisLabelOptions.setEnabled(enabled);
 		axisPanel.setEnabled(enabled);
 		chkAxisLabels.setEnabled(enabled);
-		jCheckBox2.setEnabled(enabled);
+		chkDatasetLabels.setEnabled(enabled);
+
+		if (enabled)
+			chkDatasetLabels.setEnabled(Prefs.guiChkAxisLabels);
 	}
 
 	public void setDataSet(DataSet dataSet)
@@ -136,7 +142,7 @@ public class ControlsPanelNB extends JPanel implements ActionListener
         zCombo = new javax.swing.JComboBox<String>();
         axisLabelPanel = new javax.swing.JPanel();
         chkAxisLabels = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
+        chkDatasetLabels = new javax.swing.JCheckBox();
         lblAxisLabelOptions = new javax.swing.JLabel();
 
         lblAxesTitle.setText("Data to display:");
@@ -215,7 +221,7 @@ public class ControlsPanelNB extends JPanel implements ActionListener
 
         chkAxisLabels.setText("Show axis labels");
 
-        jCheckBox2.setText("Use dataset labels");
+        chkDatasetLabels.setText("Use dataset labels");
 
         javax.swing.GroupLayout axisLabelPanelLayout = new javax.swing.GroupLayout(axisLabelPanel);
         axisLabelPanel.setLayout(axisLabelPanelLayout);
@@ -225,7 +231,7 @@ public class ControlsPanelNB extends JPanel implements ActionListener
                 .addContainerGap()
                 .addGroup(axisLabelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(chkAxisLabels)
-                    .addComponent(jCheckBox2))
+                    .addComponent(chkDatasetLabels))
                 .addContainerGap())
         );
         axisLabelPanelLayout.setVerticalGroup(
@@ -234,7 +240,7 @@ public class ControlsPanelNB extends JPanel implements ActionListener
                 .addContainerGap()
                 .addComponent(chkAxisLabels)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBox2)
+                .addComponent(chkDatasetLabels)
                 .addContainerGap())
         );
 
@@ -267,7 +273,7 @@ public class ControlsPanelNB extends JPanel implements ActionListener
                 .addComponent(lblAxisLabelOptions)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(axisLabelPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(92, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -291,7 +297,7 @@ public class ControlsPanelNB extends JPanel implements ActionListener
     private javax.swing.JPanel axisLabelPanel;
     private javax.swing.JPanel axisPanel;
     private javax.swing.JCheckBox chkAxisLabels;
-    private javax.swing.JCheckBox jCheckBox2;
+    private javax.swing.JCheckBox chkDatasetLabels;
     private javax.swing.JLabel lblAxesTitle;
     private javax.swing.JLabel lblAxisLabelOptions;
     private javax.swing.JLabel lblX;
