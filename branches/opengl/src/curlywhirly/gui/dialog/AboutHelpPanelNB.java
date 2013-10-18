@@ -4,11 +4,8 @@
 package curlywhirly.gui.dialog;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
-
-import scri.commons.gui.*;
 
 class AboutHelpPanelNB extends JPanel
 {

@@ -3,11 +3,11 @@
 
 package curlywhirly.gui.dialog;
 
-import curlywhirly.gui.CWUtils;
-import curlywhirly.gui.CurlyWhirly;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import curlywhirly.gui.*;
 
 import scri.commons.gui.*;
 
@@ -78,13 +78,13 @@ public class AboutDialog extends JDialog implements ActionListener
 					String tooltip = "<html>";
 
 					if (x >= 25 && x < 120)
-						tooltip += "Micha Bayer";
+						tooltip += "Gordon Stephen";
 					else if (x >= 140 && x < 240)
 						tooltip += "Iain Milne";
 					else if (x >= 250 && x < 350)
-						tooltip += "Paul Shaw";
+						tooltip += "Micha Bayer";
 					else if (x >= 360 && x < 450)
-						tooltip += "Gordon Stephen";
+						tooltip += "Paul Shaw";
 					else if (x >= 460 && x < 570)
 						tooltip += "David Marshall";
 					else

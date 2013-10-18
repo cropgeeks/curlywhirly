@@ -95,7 +95,7 @@ class AboutPanelNB extends JPanel implements ActionListener
         localeLabel.setForeground(java.awt.Color.gray);
         localeLabel.setText("Current Locale:");
 
-        nameLabel.setText("Micha Bayer, Iain Milne, Paul Shaw, Gordon Stephen and David Marshall");
+        nameLabel.setText("Gordon Stephen, Iain Milne, Micha Bayer,Paul Shaw and David Marshall");
 
         copyrightLabel.setText("Copyright (C) 2009-2012, Information & Computational Sciences, JHI");
 
@@ -134,7 +134,7 @@ class AboutPanelNB extends JPanel implements ActionListener
                             .addComponent(memLabel)
                             .addComponent(localeLabel)
                             .addComponent(webLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 3, Short.MAX_VALUE))
                     .addComponent(iconPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
