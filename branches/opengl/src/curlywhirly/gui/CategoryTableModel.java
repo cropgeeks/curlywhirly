@@ -12,6 +12,8 @@ public class CategoryTableModel extends AbstractTableModel
 	private CategoryGroup group;
 	private DataSet dataSet;
 
+	public static final int CHECK_BOX_COL = 0;
+
 	public CategoryTableModel(CategoryGroup scheme, DataSet dataSet)
 	{
 		this.group = scheme;

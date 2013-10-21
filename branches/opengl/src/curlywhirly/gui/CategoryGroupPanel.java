@@ -80,6 +80,18 @@ class CategoryGroupPanel extends JPanel implements ActionListener, TableModelLis
 		return catPanel;
 	}
 
+	void selectAll()
+	{
+		for (CategoryPanel panel : categoryPanels)
+			panel.selectAll();
+	}
+
+	void selectNone()
+	{
+		for (CategoryPanel panel : categoryPanels)
+			panel.selectNone();
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{

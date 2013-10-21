@@ -1,6 +1,5 @@
 package curlywhirly.gui;
 
-import curlywhirly.analysis.DataPointSaver;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -10,11 +9,12 @@ import javax.swing.event.*;
 import javax.swing.filechooser.*;
 import javax.swing.table.*;
 
+import curlywhirly.analysis.*;
 import curlywhirly.data.*;
 
 import scri.commons.gui.*;
 
-public class DataPanel extends JPanel implements ActionListener
+public class DataPanel extends JPanel
 {
 	private DataPanelNB controls;
 	private DataPanelTableModel model;
@@ -44,11 +44,6 @@ public class DataPanel extends JPanel implements ActionListener
 		controls.pointsTable.setRowSorter(sorter);
 
 		controls.lblPoints.setText(RB.format("gui.DataPanel.label", model.getRowCount()));
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e)
-	{
 	}
 
 	public void setDataSet(DataSet dataSet)

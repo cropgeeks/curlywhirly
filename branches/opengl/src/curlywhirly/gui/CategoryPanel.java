@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.event.*;
 import javax.swing.table.*;
 
 import curlywhirly.data.*;
@@ -154,8 +155,10 @@ class CategoryPanel extends JPanel
 		panel.add(Box.createHorizontalStrut(12));
 
 		catTable = createTable();
+		catTable.addMouseListener(new TableMouseListener());
 
 		panel.add(catTable);
+		panel.addMouseListener(new TableMouseListener());
 
 		return panel;
 	}
@@ -222,6 +225,22 @@ class CategoryPanel extends JPanel
 		});
 	}
 
+	void selectAll()
+	{
+		setCategoriesSelected(true);
+	}
+
+	void selectNone()
+	{
+		setCategoriesSelected(false);
+	}
+
+	private void setCategoriesSelected(boolean selected)
+	{
+		for (int row=0; row < catTable.getRowCount(); row++)
+			catTable.setValueAt(selected, row, CategoryTableModel.CHECK_BOX_COL);
+	}
+
 	// Should be called whenever the count in the name panel needs to be updated
 	// such as from the tableChanged method of the tableModelListener.
 	void updateNamePanel()
@@ -254,5 +273,47 @@ class CategoryPanel extends JPanel
 	JPanel getTablePanel()
 	{
 		return tablePanel;
+	}
+
+	private void displayMenu(MouseEvent e)
+	{
+		JMenuItem mAllInGroup = new JMenuItem();
+		RB.setText(mAllInGroup, "gui.CategoryPanel.mAllInGroup");
+		mAllInGroup.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				selectAll();
+			}
+		});
+
+		JMenuItem mNoneInGroup = new JMenuItem();
+		RB.setText(mNoneInGroup, "gui.CategoryPanel.mNoneInGroup");
+		mNoneInGroup.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				selectNone();
+			}
+		});
+
+		JPopupMenu menu = new JPopupMenu();
+		menu.add(mAllInGroup);
+		menu.add(mNoneInGroup);
+		menu.show(e.getComponent(), e.getX(), e.getY());
+	}
+
+	private class TableMouseListener extends MouseInputAdapter
+	{
+		@Override
+		public void mousePressed(MouseEvent e)
+		{
+			if (e.isPopupTrigger())
+				displayMenu(e);
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e)
+		{
+			if (e.isPopupTrigger())
+				displayMenu(e);
+		}
 	}
 }
