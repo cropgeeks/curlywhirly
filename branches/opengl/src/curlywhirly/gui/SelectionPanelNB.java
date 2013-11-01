@@ -6,6 +6,8 @@ import javax.swing.*;
 
 import curlywhirly.data.*;
 
+import scri.commons.gui.*;
+
 public class SelectionPanelNB extends JPanel implements ActionListener
 {
 	private DataSet dataSet;
@@ -20,10 +22,12 @@ public class SelectionPanelNB extends JPanel implements ActionListener
 
 		this.winMain = winMain;
 
-//		RB.setText(lblCategory, "gui.ControlPanel.lblCategory");
-
 		lblSelectAll.addActionListener(this);
 		lblSelectNone.addActionListener(this);
+
+		RB.setText(lblCategory, "gui.selectionPanelNB.lblCategory");
+		RB.setText(lblSelectAll, "gui.selectionPanelNB.selectAll");
+		RB.setText(lblSelectNone, "gui.selectionPanelNB.selectNone");
 
 		toggleEnabled(false);
 	}
