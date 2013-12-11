@@ -1,11 +1,11 @@
 package curlywhirly.gui;
 
 import java.awt.*;
-import java.lang.reflect.*;
+import java.io.*;
 import java.net.*;
+import javax.swing.*;
 
 import scri.commons.gui.*;
-import javax.swing.JPanel;
 
 public class GUIUtils
 {
@@ -29,43 +29,18 @@ public class GUIUtils
 	{
 		try
 		{
-			if (SystemUtils.jreVersion() >= 1.6)
-				visitURL6(html);
-			else
-				visitURL5(html);
+			Desktop desktop = Desktop.getDesktop();
+
+			URI uri = new URI(html);
+			desktop.browse(uri);
 		}
-		catch(URISyntaxException use)
+		catch(URISyntaxException | IOException e)
 		{
 			String message = RB.format("gui.GUIUtils.urlError", html);
 			TaskDialog.error(message, RB.getString("gui.text.close"));
-		}
-		catch (Exception e)
-		{
+
 			e.printStackTrace();
 		}
-	}
-
-	// Java6 method for visiting a URL
-	private static void visitURL6(String html)
-		throws Exception
-	{
-		Desktop desktop = Desktop.getDesktop();
-
-		URI uri = new URI(html);
-		desktop.browse(uri);
-	}
-
-	// Java5 (OS X only) method for visiting a URL
-	private static void visitURL5(String html)
-		throws Exception
-	{
-		// See: http://www.centerkey.com/java/browser/
-
-		Class<?> fileMgr = Class.forName("com.apple.eio.FileManager");
-		Method openURL = fileMgr.getDeclaredMethod("openURL",
-			new Class[] {String.class});
-
-		openURL.invoke(null, new Object[] {html});
 	}
 
 	public static void cancelMovieCapture()

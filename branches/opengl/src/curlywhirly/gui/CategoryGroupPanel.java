@@ -22,7 +22,7 @@ class CategoryGroupPanel extends JPanel implements ActionListener, TableModelLis
 
 	private Component vStrut;
 
-	CategoryGroupPanel(SelectionPanelNB parent, WinMain winMain, ArrayList<CategoryGroup> schemes, DataSet dataSet)
+	CategoryGroupPanel(final SelectionPanelNB parent, WinMain winMain, ArrayList<CategoryGroup> schemes, DataSet dataSet)
 	{
 		this.dataSet = dataSet;
 		this.winMain = winMain;
@@ -40,6 +40,34 @@ class CategoryGroupPanel extends JPanel implements ActionListener, TableModelLis
 
 		// Setup the table in the dataPanel tab.
 		winMain.getDataPanel().updateTableModel();
+
+		addComponentListener();
+	}
+
+	// Listens for resize events and adjusts the size of the "vertical padding"
+	// vStrut as required. Prevents unwanted whitespace appearing in CategoryPanels
+	private void addComponentListener()
+	{
+		this.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e)
+			{
+				super.componentResized(e);
+
+				// If the scroll pane is larger than our components add a vertical strut
+				// to push our components to the top.
+				if (prefHeight < parent.getHeight())
+				{
+					// vStrut might not exist if this gets called as part of the panel setup
+					if (vStrut != null)
+						remove(vStrut);
+
+					// Adjust the size of vStrut and add it to the panel again
+					vStrut = Box.createVerticalStrut(parent.getHeight()-prefHeight);
+					add(vStrut);
+				}
+			}
+		});
 	}
 
 	private void createControls(ArrayList<CategoryGroup> catGroups)
