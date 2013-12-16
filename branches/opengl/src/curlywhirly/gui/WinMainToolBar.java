@@ -101,7 +101,7 @@ public class WinMainToolBar extends JToolBar
 		add(slider);
 		addSeparator();
 		add(screenshot);
-		add(movie);
+//		add(movie);
 		addSeparator();
 		add(prefs);
 		addSeparator();
