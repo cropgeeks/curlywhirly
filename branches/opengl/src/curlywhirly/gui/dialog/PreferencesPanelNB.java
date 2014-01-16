@@ -11,17 +11,11 @@ import scri.commons.gui.*;
 
 class PreferencesPanelNB extends JPanel
 {
-	private WinMain winMain;
-	private PreferencesDialog parent;
-
-	private DefaultComboBoxModel<String> displayModel;
-	private DefaultComboBoxModel<String> updateModel;
+	private final DefaultComboBoxModel<String> displayModel;
+	private final DefaultComboBoxModel<String> updateModel;
 
     public PreferencesPanelNB(WinMain winMain, PreferencesDialog parent)
     {
-		this.winMain = winMain;
-		this.parent = parent;
-
         initComponents();
 
         GUIUtils.setPanelColor(this, false);
@@ -65,16 +59,20 @@ class PreferencesPanelNB extends JPanel
 
     private int getLocaleIndex()
 	{
-		if (Prefs.localeText.equals("en_GB"))
-			return 1;
-		else if (Prefs.localeText.equals("en_US"))
-			return 2;
-		else if (Prefs.localeText.equals("de_DE"))
-			return 3;
-		else if (Prefs.localeText.equals("es_MX"))
-			return 4;
-		else
-			return 0;
+		switch (Prefs.localeText)
+		{
+			case "en_GB":
+				return 1;
+			case "en_US":
+				return 2;
+			case "de_DE":
+				return 3;
+			case "es_MX":
+				return 4;
+
+			default:
+				return 0;
+		}
 	}
 
 	public void applySettings()

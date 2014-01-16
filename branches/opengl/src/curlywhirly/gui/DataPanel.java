@@ -49,6 +49,18 @@ public class DataPanel extends JPanel
 	public void setDataSet(DataSet dataSet)
 	{
 		this.dataSet = dataSet;
+
+		if (dataSet == null)
+		{
+			// Blank out the table data and selected points count
+			controls.pointsTable.setModel(new DefaultTableModel());
+			controls.pointsTable.setRowSorter(null);
+			controls.lblPoints.setText(RB.format("gui.DataPanel.label", 0));
+		}
+		else
+			updateTableModel();
+
+		toggleEnabled(dataSet != null);
 	}
 
 	private void saveReadsSummary()
@@ -144,7 +156,7 @@ public class DataPanel extends JPanel
 		}
 	}
 
-	void toggleEnabled(boolean enabled)
+	private void toggleEnabled(boolean enabled)
 	{
 		controls.toggleEnabled(enabled);
 	}

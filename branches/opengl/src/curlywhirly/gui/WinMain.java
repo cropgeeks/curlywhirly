@@ -55,7 +55,9 @@ public class WinMain extends JFrame
 		splitPane.setDividerLocation(Prefs.guiSplitterLocation);
 		add(splitPane);
 
-		splitPane.addPropertyChangeListener(new PropertyChangeListener() {
+		splitPane.addPropertyChangeListener(new PropertyChangeListener()
+		{
+			@Override
 			public void propertyChange(PropertyChangeEvent e)
 			{
 				Prefs.guiSplitterLocation = splitPane.getDividerLocation();
@@ -125,16 +127,20 @@ public class WinMain extends JFrame
 
 		//do the rest of the set up
 		//set the title of the window to the name of the dataset
-		setTitle(RB.getString("gui.CurlyWhirly.title") + " - " + Install4j.VERSION + "  --  " + dataSet.getName());
-		selectionPanel.setUpCategoryLists();
-		statusBar.setDefaultText();
+		if (dataSet != null)
+		{
+			setTitle(dataSet.getName() + " - " + RB.getString("gui.CurlyWhirly.title") + " - " + Install4j.VERSION);
+			statusBar.setDefaultText();
 
-		display3DCanvas();
+			display3DCanvas();
 
-		Actions.openedData();
-		selectionPanel.toggleEnabled(true);
-		controlsPanel.toggleEnabled(true);
-		dataPanel.toggleEnabled(true);
+			Actions.openedData();
+		}
+		else
+		{
+			setTitle(RB.getString("gui.CurlyWhirly.title") + " - " + Install4j.VERSION);
+			Actions.openedNoData();
+		}
 	}
 
 	private void addListeners()
@@ -172,6 +178,72 @@ public class WinMain extends JFrame
 	{
 		splitPane.setRightComponent(canvas3D);
 		canvas3D.startAnimator();
+	}
+
+	// Sets the display back to its default (no data loaded) state
+	public void closeDataSet()
+	{
+		int location = splitPane.getDividerLocation();
+
+		splitPane.setRightComponent(startPanel);
+
+		splitPane.setDividerLocation(location);
+
+		setDataSet(null);
+	}
+
+	// Checks with the user if it is definitely okay to close the currently
+	// loaded dataset
+	public boolean okToClose()
+	{
+		if (Prefs.guiWarnOnClose == false)
+			return true;
+
+		// If no assembly is loaded, it's fine too
+		if (dataSet == null)
+			return true;
+
+		// For all other situations, we need to prompt...
+		String msg = RB.getString("gui.WinMain.okToCloseMsg");
+		JCheckBox checkbox = new JCheckBox();
+		RB.setText(checkbox, "gui.WinMain.warnOnClose");
+
+		String[] options = new String[] {
+			RB.getString("gui.text.yes"),
+			RB.getString("gui.text.no") };
+
+		int response = TaskDialog.show(msg, TaskDialog.QST, 1, checkbox, options);
+
+		Prefs.guiWarnOnClose = !checkbox.isSelected();
+
+		return response == 0;
+	}
+
+	// Check with the user that it is definitely okay to close the application
+	public boolean okToExit()
+	{
+		// If the user doesn't care, just allow it
+		if (Prefs.guiWarnOnExit == false)
+			return true;
+
+		// If no assembly is loaded, it's fine too
+		if (dataSet == null)
+			return true;
+
+		// For all other situations, we need to prompt...
+		String msg = RB.getString("gui.WinMain.okToExitMsg");
+		JCheckBox checkbox = new JCheckBox();
+		RB.setText(checkbox, "gui.WinMain.warnOnExit");
+
+		String[] options = new String[] {
+			RB.getString("gui.text.yes"),
+			RB.getString("gui.text.no") };
+
+		int response = TaskDialog.show(msg, TaskDialog.QST, 1, checkbox, options);
+
+		Prefs.guiWarnOnExit = !checkbox.isSelected();
+
+		return response == 0;
 	}
 
 	WinMainToolBar getToolbar()

@@ -53,6 +53,9 @@ public class Prefs extends XMLPreferences
 	public static boolean guiChkAxisLabels = true;
 	public static boolean guiChkDatasetLabels = false;
 
+	public static boolean guiWarnOnExit = true;
+	public static boolean guiWarnOnClose = true;
+
 	public static int guiMovieCaptureFrameRate = 30;
 	public static int guiMovieCaptureSpinSpeedIndex = 1;
 

@@ -56,6 +56,7 @@ public class ColorPrefs
 		initColor("User.OpenGLPanel.zAxisColor", Color.GREEN);
 		initColor("User.OpenGLPanel.background", Color.BLACK);
 		initColor("User.OpenGLPanel.textColor", Color.WHITE);
+		initColor("User.OpenGLPanel.closeButtonColor", Color.DARK_GRAY);
 	}
 
 

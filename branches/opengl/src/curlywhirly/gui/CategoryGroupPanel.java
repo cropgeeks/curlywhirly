@@ -10,36 +10,21 @@ import curlywhirly.data.*;
 
 class CategoryGroupPanel extends JPanel implements ActionListener, TableModelListener
 {
+	private final WinMain winMain;
+	private final SelectionPanelNB parent;
+
+	private DataSet dataSet;
+
 	private ButtonGroup buttonGroup;
 	private ArrayList<CategoryPanel> categoryPanels;
 
-	private DataSet dataSet;
-	private WinMain winMain;
-
 	private int prefHeight;
-
-	private SelectionPanelNB parent;
-
 	private Component vStrut;
 
-	CategoryGroupPanel(final SelectionPanelNB parent, WinMain winMain, ArrayList<CategoryGroup> schemes, DataSet dataSet)
+	CategoryGroupPanel(final SelectionPanelNB parent, WinMain winMain)
 	{
-		this.dataSet = dataSet;
 		this.winMain = winMain;
-
 		this.parent = parent;
-
-		createControls(schemes);
-
-		// Select the first scheme and colour by this scheme.
-		if (buttonGroup.getElements().hasMoreElements())
-			buttonGroup.getElements().nextElement().setSelected(true);
-
-		if (categoryPanels.size() > 0)
-			dataSet.setCurrentCategoryGroup(dataSet.getCategoryGroups().get(0));
-
-		// Setup the table in the dataPanel tab.
-		winMain.getDataPanel().updateTableModel();
 
 		addComponentListener();
 	}
@@ -70,6 +55,34 @@ class CategoryGroupPanel extends JPanel implements ActionListener, TableModelLis
 		});
 	}
 
+	void setDataSet(DataSet dataSet)
+	{
+		this.dataSet = dataSet;
+
+		// Because we tweak the height of the component ourselves so that it
+		// renders correctly we need to reset that here to make the scroll bar
+		// disappear if it's a null dataset
+		prefHeight = 0;
+		setPreferredSize(new Dimension(getPreferredSize().width, prefHeight));
+
+		setupCategoryGroupUI();
+	}
+
+	private void setupCategoryGroupUI()
+	{
+		if (dataSet != null)
+		{
+			createControls(dataSet.getCategoryGroups());
+
+			// Select the first scheme and colour by this scheme.
+			if (buttonGroup.getElements().hasMoreElements())
+				buttonGroup.getElements().nextElement().setSelected(true);
+
+			if (categoryPanels.size() > 0)
+				dataSet.setCurrentCategoryGroup(dataSet.getCategoryGroups().get(0));
+		}
+	}
+
 	private void createControls(ArrayList<CategoryGroup> catGroups)
 	{
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -80,14 +93,7 @@ class CategoryGroupPanel extends JPanel implements ActionListener, TableModelLis
 		prefHeight = 0;
 
 		for (int i=0; i < catGroups.size(); i++)
-		{
-			CategoryPanel catPanel = createCategoryPanel(catGroups.get(i));
-			add(catPanel);
-			prefHeight += catPanel.getNamePanel().getPreferredSize().height;
-			prefHeight += catPanel.getTable().getPreferredSize().height;
-
-			categoryPanels.add(catPanel);
-		}
+			addCategoryPanel(catGroups.get(i));
 
 		// If the scroll pane is larger than our components add a vertical strut
 		// to push our components to the top.
@@ -100,12 +106,15 @@ class CategoryGroupPanel extends JPanel implements ActionListener, TableModelLis
 		setPreferredSize(new Dimension(getPreferredSize().width, prefHeight));
 	}
 
-	private CategoryPanel createCategoryPanel(CategoryGroup group)
+	private void addCategoryPanel(CategoryGroup group)
 	{
 		CategoryPanel catPanel = new CategoryPanel(this, group, dataSet);
+		add(catPanel);
 		buttonGroup.add(catPanel.getButton());
+		categoryPanels.add(catPanel);
 
-		return catPanel;
+		prefHeight += catPanel.getNamePanelHeight();
+		prefHeight += catPanel.getTableHeight();
 	}
 
 	void selectAll()
@@ -127,34 +136,41 @@ class CategoryGroupPanel extends JPanel implements ActionListener, TableModelLis
 		// an event.
 		for (int i=0; i < categoryPanels.size(); i++)
 		{
-			CategoryPanel container = categoryPanels.get(i);
+			CategoryPanel catPanel = categoryPanels.get(i);
 
 			// Change the currently selected category group.
-			if (e.getSource() == container.getButton())
-			{
-				CategoryGroup catGroup = dataSet.getCategoryGroups().get(i);
-				dataSet.setCurrentCategoryGroup(catGroup);
-				container.setVisible(true);
-				invalidate();
-				repaint();
-			}
+			if (e.getSource() == catPanel.getButton())
+				changeSelectedCategoryGroup(dataSet.getCategoryGroups().get(i), catPanel);
 
-			else if (e.getSource() == container.getExpandButton())
-			{
-				// Change visibility
-				container.getTablePanel().setVisible(!container.getTablePanel().isVisible());
-
-				// Update the panel's size.
-				if (container.getTablePanel().isVisible())
-					prefHeight += container.getTable().getPreferredSize().height;
-				else
-					prefHeight -= container.getTable().getPreferredSize().height;
-
-				setPreferredSize(new Dimension(getPreferredSize().width, prefHeight));
-
-				container.repaint();
-			}
+			else if (e.getSource() == catPanel.getExpandButton())
+				toggleGroupExpanded(catPanel);
 		}
+	}
+
+	private void changeSelectedCategoryGroup(CategoryGroup catGroup, CategoryPanel catPanel)
+	{
+		dataSet.setCurrentCategoryGroup(catGroup);
+		catPanel.setVisible(true);
+		invalidate();
+		repaint();
+	}
+
+	private void toggleGroupExpanded(CategoryPanel catPanel)
+	{
+		JPanel tablePanel = catPanel.getTablePanel();
+
+		// Change visibility and update panel size
+		tablePanel.setVisible(!catPanel.getTablePanel().isVisible());
+		updatePanelSize(catPanel, tablePanel);
+
+		catPanel.repaint();
+	}
+
+	private void updatePanelSize(CategoryPanel catPanel, JPanel tablePanel)
+	{
+		int tableHeight = catPanel.getTableHeight();
+		prefHeight = tablePanel.isVisible() ? prefHeight + tableHeight : prefHeight - tableHeight;
+		setPreferredSize(new Dimension(getPreferredSize().width, prefHeight));
 	}
 
 	// Respond to user interaction with the tables by updating their title

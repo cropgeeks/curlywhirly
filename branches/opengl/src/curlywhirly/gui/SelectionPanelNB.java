@@ -1,7 +1,6 @@
 package curlywhirly.gui;
 
 import java.awt.event.*;
-import java.util.*;
 import javax.swing.*;
 
 import curlywhirly.data.*;
@@ -14,7 +13,7 @@ public class SelectionPanelNB extends JPanel implements ActionListener
 
 	private CategoryGroupPanel container;
 
-	private WinMain winMain;
+	private final WinMain winMain;
 
 	public SelectionPanelNB(WinMain winMain)
 	{
@@ -34,8 +33,8 @@ public class SelectionPanelNB extends JPanel implements ActionListener
 
 	public void setUpCategoryLists()
 	{
-		ArrayList<CategoryGroup> schemes = dataSet.getCategoryGroups();
-		container = new CategoryGroupPanel(this, winMain, schemes, dataSet);
+		container = new CategoryGroupPanel(this, winMain);
+		container.setDataSet(dataSet);
 
 		categorySP.setViewportView(container);
 		categorySP.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -54,6 +53,10 @@ public class SelectionPanelNB extends JPanel implements ActionListener
 	public void setDataSet(DataSet dataSet)
 	{
 		this.dataSet = dataSet;
+
+		setUpCategoryLists();
+
+		toggleEnabled(dataSet != null);
 	}
 
 	JScrollPane getScrollPane()

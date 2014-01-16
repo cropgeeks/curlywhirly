@@ -86,11 +86,15 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	private TextRenderer renderer;
 
+	private final CloseOverlay closeOverlay;
+
 	public OpenGLPanel(WinMain winMain)
 	{
 		this.winMain = winMain;
+		closeOverlay = new CloseOverlay(winMain);
 
 		addGLEventListener(this);
+		addGLEventListener(closeOverlay);
 
 		mouseListener = new CanvasMouseListener(this);
 
@@ -788,4 +792,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 			default: return null;
 		}
 	}
+
+	public CloseOverlay getCloseOverlay()
+		{ return closeOverlay; }
 }

@@ -37,10 +37,6 @@ public class CurlyWhirly
 		System.out.println("CurlyWhirly " + Install4j.getVersion(CurlyWhirly.class) + " on "
 			+ System.getProperty("os.name")	+ " (" + System.getProperty("os.arch") + ")");
 		System.out.println("Using " + prefsFile);
-//		java.util.Map vuMap = javax.media.j3d.VirtualUniverse.getProperties();
-//		System.out.println("Runtime Java Version = " + System.getProperty("java.version"));
-//		System.out.println("Java 3D version = " + vuMap.get("j3d.version"));
-//		System.out.println("Renderer = " + vuMap.get("j3d.renderer") + "\n");
 
 		mruFile = new File(prefsFile.getParent(), "curlywhirly-recent.xml");
 		CurlyWhirlyFileHandler.loadMRUList(mruFile);
@@ -96,7 +92,8 @@ public class CurlyWhirly
 			@Override
 			public void windowClosing(WindowEvent e)
 			{
-				shutdown();
+				if (winMain.okToExit())
+					shutdown();
 			}
 
 			@Override

@@ -10,7 +10,7 @@ import curlywhirly.opengl.*;
 
 public class CanvasMouseListener extends MouseInputAdapter
 {
-	private OpenGLPanel panel;
+	private final OpenGLPanel panel;
 	private ArcBall arcBall;
 
 	public CanvasMouseListener(OpenGLPanel panel)
@@ -56,6 +56,15 @@ public class CanvasMouseListener extends MouseInputAdapter
 		{
 			startDrag(e.getPoint());
 		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e)
+	{
+		int x = e.getX();
+		int y = e.getY();
+
+		panel.getCloseOverlay().handleClick(x, y);
 	}
 
 	@Override

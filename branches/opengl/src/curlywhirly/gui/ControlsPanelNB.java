@@ -10,7 +10,7 @@ import scri.commons.gui.*;
 
 public class ControlsPanelNB extends JPanel implements ActionListener
 {
-	private WinMain winMain;
+	private final WinMain winMain;
 	private DataSet dataSet;
 
     /** Creates new form ControlsPanelNB */
@@ -119,7 +119,17 @@ public class ControlsPanelNB extends JPanel implements ActionListener
 	{
 		this.dataSet = dataSet;
 
-		addComboModels();
+		if (dataSet == null)
+		{
+			// Blank out the combo boxes if we don't have a dataset
+			xCombo.setModel(new DefaultComboBoxModel<String>());
+			yCombo.setModel(new DefaultComboBoxModel<String>());
+			zCombo.setModel(new DefaultComboBoxModel<String>());
+		}
+		else
+			addComboModels();
+
+		toggleEnabled(dataSet != null);
 	}
 
     /** This method is called from within the constructor to

@@ -22,13 +22,13 @@ class CategoryPanel extends JPanel
 	private JRadioButton expandButton;
 	private JPanel tablePanel;
 
-	private static Icon expanded = ((Icon) UIManager.get("Tree.expandedIcon"));
-	private static Icon collapsed = ((Icon) UIManager.get("Tree.collapsedIcon"));
+	private static final Icon EXPANDED = ((Icon) UIManager.get("Tree.expandedIcon"));
+	private static final Icon COLLAPSED = ((Icon) UIManager.get("Tree.collapsedIcon"));
 
 	// Data which backs the components
-	private CategoryGroupPanel parent;
-	private CategoryGroup catGroup;
-	private DataSet dataSet;
+	private final CategoryGroupPanel parent;
+	private final CategoryGroup catGroup;
+	private final DataSet dataSet;
 
 	CategoryPanel(CategoryGroupPanel parent, CategoryGroup catGroup, DataSet dataSet)
 	{
@@ -90,10 +90,10 @@ class CategoryPanel extends JPanel
 
 		// Need to set the icon and rollover icon for each state
 		JRadioButton button = new JRadioButton();
-		button.setIcon(expanded);
-		button.setRolloverIcon(expanded);
-		button.setSelectedIcon(collapsed);
-		button.setRolloverSelectedIcon(collapsed);
+		button.setIcon(EXPANDED);
+		button.setRolloverIcon(EXPANDED);
+		button.setSelectedIcon(COLLAPSED);
+		button.setRolloverSelectedIcon(COLLAPSED);
 		button.setBorder(new EmptyBorder(0, 0, 0, -8));
 
 		button.addActionListener(parent);
@@ -188,41 +188,9 @@ class CategoryPanel extends JPanel
 		table.getColumnModel().getColumn(1).setMaxWidth(20);
 		table.getColumnModel().getColumn(1).setPreferredWidth(20);
 
-		addTableMouseListener(table);
+//		addTableMouseListener(table);
 
 		return table;
-	}
-
-	private void addTableMouseListener(final JTable table)
-	{
-		table.addMouseListener(new MouseAdapter()
-		{
-			@Override
-			public void mouseClicked(MouseEvent me)
-			{
-				if (table.getSelectedRows().length > 1)
-					return;
-
-				if (me.getClickCount() == 2)
-				{
-					int row = table.getSelectedRow();
-					Category category = (Category) table.getValueAt(row, 2);
-
-					if (category != null)
-					{
-						Color newColor = JColorChooser.showDialog(CurlyWhirly.winMain, RB.getString("gui.CategoryPanel.colourChooser"), category.getColor());
-						if (newColor != null)
-						{
-							ColorPrefs.setColor(category.getColorKey(), newColor);
-							category.setColour(newColor);
-							// Needed to force an update of the colour displayed
-							// within the table
-							table.repaint();
-						}
-					}
-				}
-			}
-		});
 	}
 
 	void selectAll()
@@ -259,11 +227,8 @@ class CategoryPanel extends JPanel
 	JRadioButton getButton()
 		{ return radioButton; }
 
-	JPanel getNamePanel()
-		{ return namePanel; }
-
-	JTable getTable()
-		{ return catTable; }
+	int getNamePanelHeight()
+		{ return namePanel.getPreferredSize().height; }
 
 	JRadioButton getExpandButton()
 	{
@@ -274,6 +239,9 @@ class CategoryPanel extends JPanel
 	{
 		return tablePanel;
 	}
+
+	int getTableHeight()
+		{ return catTable.getPreferredSize().height; }
 
 	private void displayMenu(MouseEvent e)
 	{
@@ -314,6 +282,29 @@ class CategoryPanel extends JPanel
 		{
 			if (e.isPopupTrigger())
 				displayMenu(e);
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent me)
+		{
+			if (catTable.getSelectedRows().length == 0 || catTable.getSelectedRows().length > 1)
+				return;
+
+			if (me.getClickCount() == 2)
+			{
+				int row = catTable.getSelectedRow();
+				Category category = (Category) catTable.getValueAt(row, 2);
+
+				Color newColor = JColorChooser.showDialog(CurlyWhirly.winMain, RB.getString("gui.CategoryPanel.colourChooser"), category.getColor());
+				if (newColor != null)
+				{
+					ColorPrefs.setColor(category.getColorKey(), newColor);
+					category.setColour(newColor);
+					// Needed to force an update of the colour displayed
+					// within the table
+					catTable.repaint();
+				}
+			}
 		}
 	}
 }

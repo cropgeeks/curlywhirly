@@ -16,15 +16,26 @@ public class PreferencesDialog extends JDialog implements ActionListener
 	private JButton bOK, bCancel, bHelp;
 	private boolean isOK;
 
-	private PreferencesPanelNB nbPanel;
+	private final JTabbedPane tabs;
+
+	private final PreferencesPanelNB nbPanel;
+	private final WarningTabNB nbWarning;
 
 	public PreferencesDialog(WinMain winMain)
 	{
 		super(winMain, RB.getString("gui.PreferencesDialog.title"), true);
 
 		nbPanel = new PreferencesPanelNB(winMain, this);
+		nbWarning = new WarningTabNB();
 
-		add(nbPanel);
+		tabs = new JTabbedPane();
+		tabs.setBorder(BorderFactory.createEmptyBorder(2, 2, 10, 2));
+		tabs.addTab(RB.getString("gui.dialog.PreferencesDialog.generalTab"),
+		Icons.getIcon("GENERALTAB"), nbPanel);
+		tabs.addTab(RB.getString("gui.dialog.PreferencesDialog.warningTab"),
+		Icons.getIcon("WARNINGSTAB"), nbWarning);
+
+		add(tabs);
 		add(createButtons(), BorderLayout.SOUTH);
 
 		getRootPane().setDefaultButton(bOK);
@@ -44,13 +55,12 @@ public class PreferencesDialog extends JDialog implements ActionListener
 		bCancel.addActionListener(this);
 		bHelp = SwingUtils.getButton(RB.getString("gui.text.help"));
 		RB.setText(bHelp, "gui.text.help");
-//		TabletUtils.setHelp(bHelp, "gui.dialog.prefs.PreferencesDialog");
 
 		JPanel p1 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
 		p1.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 5));
 		p1.add(bOK);
 		p1.add(bCancel);
-		p1.add(bHelp);
+//		p1.add(bHelp);
 
 		return p1;
 	}
@@ -61,6 +71,7 @@ public class PreferencesDialog extends JDialog implements ActionListener
 		if (e.getSource() == bOK)
 		{
 			nbPanel.applySettings();
+			nbWarning.applySettings();
 			isOK = true;
 			setVisible(false);
 		}
@@ -68,6 +79,11 @@ public class PreferencesDialog extends JDialog implements ActionListener
 		else if(e.getSource() == nbPanel.bCustomizeColors)
 		{
 			new CustomizeColorsDialog();
+		}
+
+		else if (e.getSource() == bCancel)
+		{
+			setVisible(false);
 		}
 	}
 
