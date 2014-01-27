@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.3" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="importLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="sampleLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="openLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="project0" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="project1" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="project2" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="project3" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="project4" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="project5" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="project6" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="project7" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="project8" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="project9" alignment="0" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="importLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="sampleLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="openLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="project0" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="project1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="project2" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="project3" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="project4" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="project5" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="project6" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="project7" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="project8" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="project9" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="28" max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="scri.commons.gui.matisse.HyperLinkLabel" name="importLabel">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="9c" green="6a" red="44" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Import data into CurlyWhirly"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="openLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Open previously accessed files:"/>
+      </Properties>
+    </Component>
+    <Component class="scri.commons.gui.matisse.HyperLinkLabel" name="sampleLabel">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="9c" green="6a" red="44" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Load sample data into CurlyWhirly"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
+    </Component>
+    <Component class="scri.commons.gui.matisse.HyperLinkLabel" name="project0">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="9c" green="6a" red="44" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="&lt;project0&gt;"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
+    </Component>
+    <Component class="scri.commons.gui.matisse.HyperLinkLabel" name="project1">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="9c" green="6a" red="44" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="&lt;project1&gt;"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
+    </Component>
+    <Component class="scri.commons.gui.matisse.HyperLinkLabel" name="project2">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="9c" green="6a" red="44" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="&lt;project2&gt;"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
+    </Component>
+    <Component class="scri.commons.gui.matisse.HyperLinkLabel" name="project3">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="9c" green="6a" red="44" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="&lt;project3&gt;"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
+    </Component>
+    <Component class="scri.commons.gui.matisse.HyperLinkLabel" name="project4">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="9c" green="6a" red="44" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="&lt;project4&gt;"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
+    </Component>
+    <Component class="scri.commons.gui.matisse.HyperLinkLabel" name="project5">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="9c" green="6a" red="44" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="&lt;project5&gt;"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
+    </Component>
+    <Component class="scri.commons.gui.matisse.HyperLinkLabel" name="project6">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="9c" green="6a" red="44" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="&lt;project6&gt;"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
+    </Component>
+    <Component class="scri.commons.gui.matisse.HyperLinkLabel" name="project7">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="9c" green="6a" red="44" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="&lt;project7&gt;"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
+    </Component>
+    <Component class="scri.commons.gui.matisse.HyperLinkLabel" name="project8">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="9c" green="6a" red="44" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="&lt;project8&gt;"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
+    </Component>
+    <Component class="scri.commons.gui.matisse.HyperLinkLabel" name="project9">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="9c" green="6a" red="44" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="&lt;project9&gt;"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
+    </Component>
+  </SubComponents>
+</Form>

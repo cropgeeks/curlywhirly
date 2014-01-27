@@ -1,0 +1,134 @@
+<html>
+
+	<head>
+		<style>
+		table
+		{
+			margin-top: 6px;
+			margin-bottom: 6px;
+		    border-width: 0px;
+			border-spacing: 0px;
+			border-collapse: collapse;
+		}
+		th
+		{
+			border-width: 1px;
+			padding: 3px;
+			border-style: solid;
+			border-color: gray;
+		}
+		h1
+		{
+			color: #872175;
+			margin-top: 14px;
+			margin-bottom: 3pt;
+			border-bottom: 1px solid #333333;
+		}
+		h2
+		{
+			color: #559cbf;
+			margin-top: 12pt;
+		}
+		p
+		{
+			margin-top: 2px;
+			margin-bottom: 2px;
+		}
+		</style>
+	</head>
+
+	<body>
+
+		<h1>Formato de datos</h1>
+		<h2>Formato de datos previo</h2>
+		<p>Los datos deben tener un mínimo de tres variables para la visualización tridimensional y deben ser enviados en un archivo de texto delimitado por tabulación (Tab), en el orden que se muestra a continuación:</p>
+
+		<table>
+			<tr>
+				<th>Categoría de datos</th>
+				<th>Etiquetas para puntos de datos individuales</th>
+				<th>Columna de datos 1</th>
+				<th>Columna de datos 2</th>
+				<th>...</th>
+				<th>Columna de datos n</th>
+			</tr>
+		</table>
+
+		<p>Si sus datos no tienen  información de categoría anexada, la primera columna se podrá dejar en blanco, asegurándose de usar la tecla tabuladora para dejar la columna vacía.</p>
+		<p>No hay un límite para el número de columnas de datos; pero estos obviamente deberán de ser numéricos. Las columnas se pueden denominar de cualquier manera que se considere conveniente. Es necesario asegurarse que no haya renglones o tabuladores extra al final de los datos.</p>
+
+		<h2>Nuevo formato multi-categoría de datos</h2>
+		<p>Este formato cuenta con soporte desde la versión 1.10.12.10 en adelante y es capaz de manejar múltiples columnas con información de categorías, permitiendo a los usuarios categorizar la información de distintas maneras. El formato de datos previo seguirá contando con soporte.</p>
+		<p>El formato básico es como se describe arriba, pero los encabezados de las categorías deben empezar con el prefijo "categorías". Podrá haber un número ilimitado de estas hacia la izquierda de columna con las etiquetas para puntos de datos individuales:</p>
+
+		<table>
+			<tr>
+				<th>Categoría de datos 1</th>
+				<th>Categoría de datos 2</th>
+				<th>...</th>
+				<th>Categoría de datos m</th>
+				<th>Etiquetas para puntos de datos individuales</th>
+				<th>Columna de datos 1</th>
+				<th>Columna de datos 2</th>
+				<th>...</th>
+				<th>Columna de datos n</th>
+			</tr>
+		</table>
+		<p>De esa manera, los encabezados de los datos podrían ser como los del ejemplo que a continuación se presenta:</p>
+		<table>
+			<tr>
+				<th>categorías:tamaño</th>
+				<th>categorías:edad</th>
+				<th>mis etiquetas</th>
+				<th>PCO1</th>
+				<th>PCO2</th>
+				<th>PCO3</th>
+			</tr>
+		</table>
+
+			
+		<h2>URL para búsquedas en la base de datos</h2>
+		<p>Curly Whirly es capaz de utilizar una línea especial del encabezado en sus archivos de entrada que comienza con el carácter #. Usted puede usar esta línea para suministrar una URL de búsqueda (por ejemplo, hacia una base de datos en línea que contenga más información sobre los datos) que será llamada cuando se le dé clic en alguno de los datos. La línea recién descrita deberá tener el siguiente formato:</p>
+		<pre># cwDatabaseSearch = http://mylookup.address/info=$DATA</pre>
+		
+		<p>$DATA será reemplazada al momento de correr el programa por el nombre del dato en el que se hizo el clic y podrá ser localizada en cualquier parte dentro de la URL.</p>
+		
+		<h1>Cargando datos</h1>
+		<p>De clic en "Abrir archivo de datos" en la barra de herramientas y seleccione un archivo para cargar. Si usted desea experimentar con algunos datos, haga clic en el botón de “Abrir un archivo de datos de muestra” en la barra de herramientas, o en el link de la página de bienvenida. Esto cargará un archivo de la aplicación que contiene datos generados al azar. Usted podrá usar esto para probar cómo funciona la aplicación.</p>
+
+		
+		<h1>Escogiendo que datos desplegar </h1>
+		<p>En el lado izquierdo del panel de control, seleccione para cada eje la variable del menú que usted quisiera ver desplegada</p>
+		
+		
+		<h1>Controles de visualización</h1>
+		<p>Para reorientar la gráfica, haga clic y con el botón izquierdo del mouse y arrastre. Para regresar a la vista original, haga clic en el botón llamado "Restaurar punto de vista base" en la barra de herramientas. </p>
+		<p>Para hacer zoom-in y zoom-out, haga clic en medio y arrastre, u oprima la tecla Alt y haga clic izquierdo y arrastre.</p>
+		<p>Para girar la escena continuamente, haga clic en el botón de "Girar" en la barra de herramientas. Haga clic de nuevo para detener la rotación. Usted puede controlar la velocidad de la rotación usando la barra deslizante localizada junto al botón "Girar".</p>
+
+		
+		<h1>Color de fondo</h1>
+		<p>Para cambiar el color de fondo de la pantalla, haga clic en el botón de "Ajustes de captura" en la barra de herramientas y seleccione un color del menú desplegable en la ventana recién abierta. Las opciones son gris claro, gris oscuro, negro y blanco.</p>
+		
+		
+		<h1>Resaltando subconjuntos de datos</h1>
+		<p>Usted puede colorear los datos selectivamente de una o más categorías haciendo clic en ellas en la lista del panel, ubicado en la parte inferior izquierda. Para seleccionar más de una categoría, oprima Ctrl+clic (o Cmd+clic en OS X). Este convertirá en gris a los otros puntos de datos, exceptuando aquellos en las categorías seleccionadas. </p>
+		<p>Haga doble clic en una categoría para cambiar su color.</p>
+		<p>Para mostrar los colores originales de nuevo, presione el botón denominado "Restaurar".</p> 
+
+		
+		<h1>Explorando puntos de datos individuales</h1>
+		<p>Posicione el mouse sobre un punto de datos y su etiqueta individual (como viene incluida en el archivo) será desplegada en la barra de estado, en la esquina inferior izquierda de la aplicación. Si una herramienta de búsqueda  URL fue incluida en el archivo de datos, el hacer clic en un punto lo llevará a esa URL, con el nombre del punto tal como fue especificado en el argumento $DATA.</p>
+
+		
+		<h1>Captura de pantalla</h1>
+		<p>Para crear una captura de la pantalla actual, haga clic en el botón "Capturar imagen de la pantalla" en la barra de herramientas. Seleccione la ubicación y el nombre de la imagen en la ventana recién abierta y haga clic en "Guardar" para crear la imagen.</p>
+
+		
+		<h1>Capturar como película</h1>
+		<p>Al hacer un clic en el botón de "Capturar Película" en la barra de herramientas, se abrirá una nueva ventana con la configuración necesaria para crear una película animada de la escena actual. Hay dos configuraciones que se pueden ajustar: Una es para el número de cuadros por segundo (CPS) y el otro es para la velocidad de giro. Ambos afectarán el tamaño final del archivo de la película. Haga clic en "Capturar película" para seleccionar el nombre del archivo y su ubicación y de clic en "Guardar" para comenzar el proceso.</p>
+		<p>Durante el proceso de captura, asegúrese de no mover ni cambiar el tamaño de la pantalla.</p>
+
+	</body>
+
+</html>

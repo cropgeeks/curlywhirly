@@ -1,0 +1,128 @@
+<html>
+
+	<head>
+		<style>
+		table
+		{
+			margin-top: 6px;
+			margin-bottom: 6px;
+		    border-width: 0px;
+			border-spacing: 0px;
+			border-collapse: collapse;
+		}
+		th
+		{
+			border-width: 1px;
+			padding: 3px;
+			border-style: solid;
+			border-color: gray;
+		}
+		h1
+		{
+			color: #872175;
+			margin-top: 14px;
+			margin-bottom: 3pt;
+			border-bottom: 1px solid #333333;
+		}
+		h2
+		{
+			color: #559cbf;
+			margin-top: 12pt;
+		}
+		p
+		{
+			margin-top: 2px;
+			margin-bottom: 2px;
+		}
+		</style>
+	</head>
+
+	<body>
+
+		<h1>Datei Format</h1>
+		<h2>Veraltetes Datei Format</h2>
+		<p>F&uuml;r die 3-dimensionale Darstellung m&uuml;ssen mindestens drei Dimensionen in den Daten vorhanden sein. Die Daten m&uuml;ssen in einer per Tab getrennten Text Datei mit der folgenden Spalten Reihenfolge vorliegen:</p>
+
+		<table>
+			<tr>
+				<th>Kategorie Daten</th>
+				<th>Labels der individuellen Datenpunkte</th>
+				<th>Datenspalte 1</th>
+				<th>Datenspalte 2</th>
+				<th>...</th>
+				<th>Datenspalte n</th>
+			</tr>
+		</table>
+
+		<p>Die erste Spalte kann leer gelassen werden (Tab muss trotzdem vorhanden sein), fall keine Kategorie Informationen vorliegen.</p>
+		<p>Es gibt keine Begrenzung f&uuml;r die Anzahl der Datenspalten. Die Daten m&uuml;ssen numerischer Natur sein. Die Spalten Labels k&ouml;nnen beliebig gew&auml;hlt werden. Bitte stellen Sie sicher, dass weder zus&auml;tzliche Zeilen noch zus&auml;tzliche Tabs vorhanden sind.</p>
+
+		<h2>Neues Multi-Kategorie Format</h2>
+		<p>Dieses neue Format wird seit Version 1.10.12.10 unterst&uuml;tzt und erlaubt mehrere Spalten mit Kategorie Informationen. Somit k&ouml;nnen Benutzer ihre Daten auf verschiedene Weisen kategorisieren. Das veraltete Datei Format wird weiterhin unterst&uuml;tzt.</p>
+		<p>Das Basis-Format ist identisch zu dem zuvor beschriebenen, jedoch m&uuml;ssen Kategorie &Uuml;berschriften mit "categories:" starten. Die Anzahl dieser Spalten ist unbegrenzt und sie m&uuml;ssen sich links von der Spalte mit den Daten Labels befinden.</p>
+
+		<table>
+			<tr>
+				<th>Kategorie Daten 1</th>
+				<th>Kategorie Daten 2</th>
+				<th>...</th>
+				<th>Kategorie Daten m</th>
+				<th>Labels der individuellen Datenpunkte</th>
+				<th>Datenspalte 1</th>
+				<th>Datenspalte 2</th>
+				<th>...</th>
+				<th>Datenspalte n</th>
+			</tr>
+		</table>
+		<p>Folglich k&ouml;nnte ein Beispiel-Header so aussehen:</p>
+		<table>
+			<tr>
+				<th>categories:size</th>
+				<th>categories:age</th>
+				<th>myLabels</th>
+				<th>PCO1</th>
+				<th>PCO2</th>
+				<th>PCO3</th>
+			</tr>
+		</table>
+
+		
+		<h2>Datenbank Suche URL</h2>
+		<p>CurlyWhirly unterst&uuml;tzt ein spezielles &Uuml;berschriften Zeile im Input, welches mit einem # beginnt. Diese Zeile kann genutzt werden um eine Nachschlag-URL bereit zu stellen (beispielsweise f&uuml;r eine Online Datenbank mit zus&auml;tzlichen Informationen &uuml;ber die Daten) welche bei Doppelklick auf einen Datenpunkt ge&ouml;ffnet wird. Die Zeile muss das folgende Format haben:
+		
+		<pre># cwDatabaseSearch = http://mylookup.address/info=$DATA</pre>
+		
+		<p>$DATA wird zur Laufzeit durch den Namen des Datenpunktes ersetzt auf welchen geklickt wurde. $DATA kann sich an einer beliebigen Stelle un der URL befinden.</p>
+		
+		<h1>Laden von Daten</h1>
+		<p>Daten werden mit einem Klick auf "Datei &ouml;ffnen" in der Men&uuml;leiste ge&ouml;ffnet. Um einen Beispiel-Datensatz zu benutzen klicken Sie auf "Beispieldaten &ouml;ffnen" in der Men&uuml;leiste oder auf den Link in der Wilkommensseite. Dies f&uuml;hrt dazu, dass ein Datensatz geladen wird, der zuf&auml;llig generierte Daten enth&auml;lt. Diese Daten k&ouml;nnen genutzt werden um die Funktionalit&auml;ten des Programms kennenzulernen.</p>
+
+		<h1>Daten f&uuml;r die Visualisierung ausw&auml;hlen</h1>		
+		<p>Auf der linken Seite befinden sich die Haupt-Bedienelemente. W&auml;hlen Sie f&uuml;r jede Achse eine Variable aus der Dropdown-Liste f&uuml;r welche f&uuml;r die Visualisierung verwendet werden sollen.</p>
+		
+		<h1>Ansichtseinstellungen</h1>
+		<p>Klicken und ziehen Sie die linke Maustaste um den Graphen zu drehen. Um den Graphen auf seine Uhrsprungsposition zur&uuml;ckzusetzen, klicken Sie auf "Zur&uuml;cksetzen" in der Men&uuml;leiste.</p>
+		<p>Klicken und ziehen Sie die mittlere Maustaste um zu Zoomen. Alternativ kann auch Alt+linke Maustaste und Ziehen verwendet werden.</p>
+		<p>Um die Szene kontinuierlich zu drehen, klicken Sie auf "Drehen" in der Men&uuml;leiste. Klicken Sie erneut um die Rotation zu stoppen. Die Drehgeshwindigkeit kann mit dem Schieberegler rechts neben dem "Drehen" Knopf reguliert werden.</p>
+
+		<h1>Hintergrundfarbe</h1>		
+		<p>Die Hintergrundfarbe der Szene kann unter "Einstellungen" in der Men&uuml;leiste ge&auml;ndert werden. Selektieren Sie daf&uuml;r einfach eine Farbe aus der Dropdown Liste in dem neu ge&ouml;ffneten Fenster. Die Auswahlm&ouml;glichkeiten sind Hellgrau, Dunkelgrau, Schwarz und Wei&szlig;</p>
+
+		<h1>Hervorhebung einer Teilmenge der Daten</h1>		
+		<p>Sie k&ouml;nnen eine Teilmenge der Daten durch Selektion im linken Panel farblich hervorheben (Strg+Linksklick (oder Cmd+Linksklick auf OS X) f&uuml;r Mehrfachauswahl). Dadurch werden alle Punkte die nicht zu den selektierten Kategorien geh&ouml;ren ausgegraut.</p>
+		<p>Die Farbe einer Kategorie kann per Doppelklick auf diese ver&auml;ndert werden.</p>
+		<p>Um die Originalf&auml;rbung wieder herzustellen, klicken Sie auf "Auswahl zur&uuml;cksetzen" unterhalb der Kategorie-Liste.</p>
+
+		<h1>Untersuchung individueller Datenpunkte</h1>		
+		<p>Positionieren Sie die Maus &uuml;ber einem Datenpunkt um sein individuelles Label (wie im Datei Format festgelegt) in der Statusleiste in der unteren Linken Ecke des Programms anzuzeigen. Falls die Datenbank-Such-URL in der Datei festgelegt wurde, kann diese durch Linksklick auf den Datenpunkt ge&ouml;ffnet werden. Dabei wird der Name des Punktes f&uuml;r das $DATA Argument verwendet.</p>
+
+		<h1>Screenshot erstellen</h1>
+		<p>Um einen Screenshot der aktuellen Szene zu erstellen, klicken Sie auf "Screenshot erstellen" in der Men&uuml;leiste. W&auml;hlen Sie den Namen und den Ort der zu speichernden Datei aus und klicken Sie auf "Speichern" um das Bild zu erstellen.</p>
+
+		<h1>Aufnahme eines Films</h1>		
+		<p>Durch Klick auf "Film aufnehmen" &ouml;ffnet sich ein neues Fenster mit Einstellungen zur Aufnahme eines Films der aktuellen Szene. Es gibt zwei Einstellungen: Eine f&uuml;r die Bildfrequenz (FPS) und die andere f&uuml;r die Drehgeschwindigkeit. Beide Einstellungen haben direkte Auswirkungen auf die Gr&ouml;&szlig;e des Films. Durch einen Klick auf "Film aufnehmen" gelangen Sie zur Auswahl des Dateinamens und Speicherortes. Klicken Sie auf "Speichern" um den Aufnahmeprozess zu starten.</p>
+		<p>Bitte w&auml;hrend des Aufnahmeprozesses weder das Aufnahmefenster bewegen noch seine Gr&ouml;&szlig;e &auml;ndern.</p>
+
+	</body>
+
+</html>
