@@ -6,8 +6,6 @@ package curlywhirly.gui;
 import java.awt.event.*;
 import javax.swing.*;
 
-import curlywhirly.controller.*;
-
 import scri.commons.gui.*;
 
 public class StartPanelWelcomeNB extends JPanel implements ActionListener

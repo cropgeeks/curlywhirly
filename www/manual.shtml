@@ -25,7 +25,7 @@
 <p>
 	Topics:
 	<br>
-	<a href="#dataformats">Data format</a>
+	<a href="#dataformat">Data format</a>
 	<br>
 	<a href="#loadingdata">Loading data</a>
 	<br>
@@ -44,45 +44,20 @@
 </p>
 <h4>
 	Data format
-	<a name="dataformats"></a>
+	<a name="dataformat"></a>
 </h4>
 <p>
-<i>Legacy data format</i>
-<p>
-The minimum requirement for data is that there are at least three data variables available for display. Data
-must be in supplied by the user in a tab-delimited text file, with the column order as follows:
+The CurlyWhirly data format supports multiple columns with category information, allowing users to categorize their data in different ways.
 </p>
 <p>
-
-	Category data --> Labels for individual data points --> Data column 1 --> Data column 2 --> ..... Data column n
-
+It is a tab delimited text format with a header which specifies the category groups which categories are found in, as well as the axis names for the data set. The category column header should start with the prefix "categories:" and the header line for the column which contains your data point names should be "label".
 </p>
 <p>
-	If your data does not have category information attached to it, the entire first column can be left empty.
+A header line should resemble the following:
 </p>
+categories:size --> categories:age --> Label --> PCO1 --> PCO2 --> PCO3
 <p>
-	There is no limit on the number of data columns but the data in these must obviously be numerical. Columns can
-	be labelled with any label. Make sure there are no extra lines or tabs after the end of the data in either
-	direction.
-</p>
-<i>New multi-category data format</i>
-<p>
-This format is supported from version 1.10.12.10 onwards and supports multiple columns with category information, allowing users
-to categorize their data in different ways. The legacy format is still supported.
-</p>
-<p>
-The basic format is as described above, but category column headers must starts with the prefix 
-"categories:" and there can be an unlimited number of these to the left of the column with the data labels:
-</p>
-<p>
-Category data1 --> category data2 --> .... category data n --> Labels for individual data points --> Data column 1 --> Data column 2 --> ..... Data column n
-</p>
-Thus, the data headers might look something like this:
-<p>
-categories:size --> categories:age --> myLabels --> PCO1 --> PCO2 --> PCO3
-</p>
-<p>
-An <a href="exampleDataCurlyWhirly.txt">example file with multi-category data</a> is available.
+An <a href="exampleDataCurlyWhirly.txt">example data file</a> is available.
 
 </p>
 <a href="#top">Back to top</a>
@@ -92,9 +67,7 @@ An <a href="exampleDataCurlyWhirly.txt">example file with multi-category data</a
 	Loading data
 	<a name="loadingdata"></a>
 </h4>
-Go to File --> Open... and select a file of choice. If you would like to experiment with some example data, go
-to File --> Load example data. This will load a file supplied with the application which contains randomly
-generated data. You can use this to explore the functionality of the application.
+You can load data into CurlyWhirly by clicking the "Open data" button on the toolbar, or the "Import a file into CurlyWhirly" link on the "Welcome to CurlyWhirly" screen. In both cases simply select your desired file and it will be loaded. Additionally you can drag and drop a data file onto CurlyWhirly which automatically loads the file.
 <br>
 <a href="#top">Back to top</a>
 
@@ -113,10 +86,9 @@ displayed.
 	View controls
 	<a name="viewcontrols"></a>
 </h4>
-To reorient the graph, click and drag with the left mouse button. To go back to the original viewpoint, click
-the button labelled "Reset Viewpoint".
+To reorient the graph, click and drag with the left mouse button. To go back to the original viewpoint, click the button labelled "Reset".
 <p>
-	To zoom in and out, middle-click and drag or Alt+Left-click and drag.
+	To zoom in and out of the graph, use the mouse wheel.
 	<br>
 	<a href="#top">Back to top</a>
 
@@ -126,8 +98,7 @@ the button labelled "Reset Viewpoint".
 	Background colour
 	<a name="bgcolour"></a>
 </h4>
-Select this from the drop-down menu at the top of the left hand control panel. Options are light grey, dark
-grey, black and white.
+To change the background colour, or infact any of the customizable colours within CurlyWhirly, click the "Options" button on the toolbar to open up the CurlyWhirly Options dialog. In the dialog click the "Customize colours" button to display the Customize Colours dialog, double click the OpenGLPanel.background entry and select a new colour using the colour chooser. This - and any other customised colours - is stored by CurlyWhrily for future use in addition to immediately changing the background colour.
 <br>
 <a href="#top">Back to top</a>
 
@@ -136,33 +107,16 @@ grey, black and white.
 	Highlighting subsets of data
 	<a name="subsets"></a>
 </h4>
-You can selectively colour data from one or more categories by clicking on them in the category list panel on
-the bottom left (Ctrl + click to select more than one category). This will grey out all data points except for
-those in the selected categories.
-<p>
-	To show the original colouring again, press the button labelled "Reset Selection".
-	<br>
-	<a href="#top">Back to top</a>
+In the first tab of the control panel is a listing of all the category groups in the data set and their associated categories. By default the first category group is selected, which means that it is used to colour data points. You can select and deselect categories from any category group and this affects the 3D display. If you deselect a a category, any data point which is associated with that category will be coloured grey, instead of the colour of the category associated with that data point in the current category group. You can use this selection / deselection mechanism to iteratively filter down to a set of coloured points that you are interested in looking at.
+<br>
+<a href="#top">Back to top</a>
 
-</p>
 <h4>
 	Exploring individual data points
 	<a name="datapoints"></a>
 </h4>
 Position the mouse over a data point and its individual label (as supplied in the data file) will be displayed
-in the status bar at the bottom left corner of the application. 
-
-<p>
-Users can also enter an annotation URL for data points (File -> Annotation URL...) 
- and this then allows them to click on a data point which results in the default web browser being started up with a URL 
- constructed by the application. The annotation URL entered by the user needs to be such that the name (label) of the data point 
- can be appended to it to form a valid URL, for example:
-  </p>
-  <ul>
-<li>URL entered by user: http://rice.plantbiology.msu.edu/cgi-bin/gbrowse/rice/?name=</li> 
- <li>data point label: LOC_Os10g28230</li> 
- <li>valid URL constructed by the application: http://rice.plantbiology.msu.edu/cgi-bin/gbrowse/rice/?name=LOC_Os10g28230</li> 
- </ul>
+in the status bar at the bottom left corner of the application.
 <br>
 <a href="#top">Back to top</a>
 

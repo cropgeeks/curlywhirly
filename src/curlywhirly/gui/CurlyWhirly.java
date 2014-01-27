@@ -1,139 +1,99 @@
 package curlywhirly.gui;
 
-import java.awt.*;
-import java.awt.dnd.*;
+import curlywhirly.gui.dialog.PreferencesDialog;
+import curlywhirly.gui.dialog.AboutDialog;
 import java.awt.event.*;
 import java.io.*;
-import javax.swing.*;
 
 import apple.dts.samplecode.osxadapter.*;
+
+import curlywhirly.gui.viewer.*;
+import curlywhirly.io.*;
 
 import scri.commons.file.*;
 import scri.commons.gui.*;
 
-import curlywhirly.controller.*;
-import curlywhirly.data.*;
-
-public class CurlyWhirly extends JFrame
+public class CurlyWhirly
 {
-	public static DataSet dataSet;
-	public static MainCanvas canvas3D;
-	public static StartPanel startPanel;
-	public JSplitPane splitPane;
-
-	public int controlPanelWidth = 200;
-
-	public static MTControlPanel controlPanel;
-	static JCheckBox instructionsCheckBox;
-	public static boolean dataLoaded = false;
-
 	private static File prefsFile = getPrefsFile();
+	private static File mruFile;
 	public static Prefs prefs = new Prefs();
-	public StatusBar statusBar;
-	public static MenuBar menuBar;
-	public static WinMainToolBar toolbar;
-
-	public static MovieCaptureThread currentMovieCaptureThread = null;
-
-	public FrameListener frameListener = null;
-
-	public static DataLoader dataLoader =null;
-
-	public static String dataAnnotationURL = null;
 
 	// Optional path to a file to be loaded when app opens
-	public static String initialFile = null;
-	public static boolean dragAndDropDataLoad = false;
+	public static File initialFile = null;
 
-	public static CurlyWhirly curlyWhirly = null;
+	public static WinMain winMain;
 
 	public static final String titleString = "CurlyWhirly - " + Install4j.VERSION;
 
 
 	public static void main(String[] args)
+		throws Exception
 	{
 		// OS X: This has to be set before anything else
 		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "CurlyWhirly");
 
 		// Some handy debug output...
-		System.out.println("CurlyWhirly " + Install4j.getVersion() + " on "
+		System.out.println("CurlyWhirly " + Install4j.getVersion(CurlyWhirly.class) + " on "
 			+ System.getProperty("os.name")	+ " (" + System.getProperty("os.arch") + ")");
 		System.out.println("Using " + prefsFile);
-		java.util.Map vuMap = javax.media.j3d.VirtualUniverse.getProperties();
-		System.out.println("Runtime Java Version = " + System.getProperty("java.version"));
-		System.out.println("Java 3D version = " + vuMap.get("j3d.version"));
-		System.out.println("Renderer = " + vuMap.get("j3d.renderer") + "\n");
 
+		mruFile = new File(prefsFile.getParent(), "curlywhirly-recent.xml");
+		CurlyWhirlyFileHandler.loadMRUList(mruFile);
+
+		// preferences
+		ColorPrefs.load();
+		prefs.loadPreferences(prefsFile, Prefs.class);
+		prefs.savePreferences(prefsFile, Prefs.class);
+
+		Icons.initialize("/res/icons", ".png");
+		RB.initialize(Prefs.localeText, "res.text.curlywhirly");
+
+		// Start the GUI (either with or without an initial project)
+		if (args.length == 1 && args[0] != null)
+			initialFile = new File(args[0]);
+
+		install4j();
+
+		new CurlyWhirly();
+	}
+
+	// Sets up the install4j environment to check for updates
+	private static void install4j()
+	{
+		Install4j i4j = new Install4j("7308-4813-7424-6439", "281");
+
+		i4j.setUser(Prefs.guiUpdateSchedule, Prefs.curlywhirlyID, 0);
+		i4j.setURLs("http://bioinf.hutton.ac.uk/curlywhirly/installers/updates.xml",
+				    "http://bioinf.hutton.ac.uk/curlywhirly/logs/curlywhirly.pl");
+
+		i4j.doStartUpCheck(CurlyWhirly.class);
+	}
+
+	CurlyWhirly()
+	{
 		try
 		{
-			// preferences
-			prefs.loadPreferences(prefsFile, Prefs.class);
-
 			// Set System L&F
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			Nimbus.customizeNimbus();
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
 
-		Icons.initialize("/res/icons", ".png");
-		RB.initialize(Prefs.localeText, "res.text.curlywhirly");
-
-		curlyWhirly = new CurlyWhirly();
-		dataLoader = new DataLoader();
-	}
-
-	CurlyWhirly()
-	{
-		//this initializes all the task dialog instances
-		TaskDialog.initialize(this, RB.getString("gui.CurlyWhirly.title"));
-
 		if (SystemUtils.isMacOS())
 			handleOSXStupidities();
 
-		// And use Nimbus for all non-Apple systems
-		else
-		{
-			try {
+		winMain = new WinMain();
 
-			Nimbus.customizeNimbus();
-			}
-			catch (Exception e) {}
-//			winKey = RB.getString("gui.text.ctrl");
-		}
-
-		Install4j.doStartUpCheck();
-
-		setupComponents();
-		pack();
-
-		// get the GUI set up
-		setTitle(RB.getString("gui.CurlyWhirly.title") + " - " + Install4j.VERSION);
-		setSize(Prefs.guiWinMainWidth, Prefs.guiWinMainHeight);
-
-		// Determine where on screen to display
-		if (Prefs.isFirstRun)
-			setLocationRelativeTo(null);
-		else
-			setLocation(Prefs.guiWinMainX, Prefs.guiWinMainY);
-
-		// Maximize the frame if neccassary
-		if (Prefs.guiWinMainMaximized)
-			setExtendedState(Frame.MAXIMIZED_BOTH);
-
-		setIconImage(Icons.getIcon("curlywurly_icon32px").getImage());
-
-
-		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-
-		addWindowListener(new WindowAdapter()
+		winMain.addWindowListener(new WindowAdapter()
 		{
 			@Override
 			public void windowClosing(WindowEvent e)
 			{
-				Prefs.isFirstRun = false;
-				shutdown();
+				if (winMain.okToExit())
+					shutdown();
 			}
 
 			@Override
@@ -142,93 +102,25 @@ public class CurlyWhirly extends JFrame
 				// Do we want to open an initial project?
 				if (initialFile != null)
 				{
-					CurlyWhirly.dataLoader = new DataLoader();
-					CurlyWhirly.dataLoader.loadDataInThread(new File(initialFile));
+					winMain.getCommands().openFile(initialFile);
 				}
 			}
 
 		});
 
+		TaskDialog.initialize(winMain, RB.getString("gui.CurlyWhirly.title"));
 
-		addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentResized(ComponentEvent e)
-			{
-				if (getExtendedState() != Frame.MAXIMIZED_BOTH)
-				{
-					Prefs.guiWinMainWidth  = getSize().width;
-					Prefs.guiWinMainHeight = getSize().height;
-					Prefs.guiWinMainX = getLocation().x;
-					Prefs.guiWinMainY = getLocation().y;
-
-					Prefs.guiWinMainMaximized = false;
-				}
-				else
-					Prefs.guiWinMainMaximized = true;
-			}
-
-			public void componentMoved(ComponentEvent e)
-			{
-				Prefs.guiWinMainX = getLocation().x;
-				Prefs.guiWinMainY = getLocation().y;
-			}
-
-		});
-
-		frameListener = new FrameListener(this);
-		addWindowFocusListener(frameListener);
-		addComponentListener(frameListener);
-
-		setVisible(true);
-
-		//start a thread that fades in a label on the canvas prompting the user to open a file
-//		CanvasLabelFadeInThread t = new CanvasLabelFadeInThread(canvas3D);
-//		t.start();
+		winMain.setVisible(true);
 	}
 
 	void shutdown()
 	{
+		Prefs.isFirstRun = false;
 		prefs.savePreferences(prefsFile, Prefs.class);
+		ColorPrefs.save();
+		CurlyWhirlyFileHandler.saveMRUList(mruFile);
+
 		System.exit(0);
-	}
-
-	private void setupComponents()
-	{
-		//workaround for the 3D drawing problem with Swing menus
-		JPopupMenu.setDefaultLightWeightPopupEnabled( false );
-		ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
-		ToolTipManager.sharedInstance().setInitialDelay(0);
-
-		// toolbar
-		toolbar = new WinMainToolBar(this);
-		add(toolbar, BorderLayout.NORTH);
-
-		// control panel
-		controlPanel = new MTControlPanel(this);
-		controlPanel.setPreferredSize(new Dimension(controlPanelWidth, Prefs.guiWinMainHeight));
-
-		// instantiate the canvas here rather than in the data load method
-		// we want to be able to recycle it when we load another dataset over the top of the current one
-		canvas3D = new MainCanvas(this);
-		canvas3D.setPreferredSize(new Dimension((Prefs.guiWinMainWidth-controlPanelWidth), Prefs.guiWinMainHeight));
-
-		startPanel = new StartPanel();
-
-		// main comp is split pane with control panel on the left and canvas on the right
-		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controlPanel, startPanel);
-		splitPane.setOneTouchExpandable(true);
-		add(splitPane);
-
-		//in the absence of data this creates an empty scene graph and we then paint a label onto the canvas that prompts the user to open a file
-		canvas3D.createSceneGraph(false);
-
-		// status bar
-		statusBar = new StatusBar();
-		add(statusBar, java.awt.BorderLayout.SOUTH);
-
-		//drag and drop support
-		FileDropAdapter dropAdapter = new FileDropAdapter(this);
-		setDropTarget(new DropTarget(this, dropAdapter));
 	}
 
 	private static File getPrefsFile()
@@ -236,6 +128,9 @@ public class CurlyWhirly extends JFrame
 		// Ensure the .scri-bioinf folder exists
 		File fldr = new File(System.getProperty("user.home"), ".scri-bioinf");
 		fldr.mkdirs();
+
+		// Color-prefs file
+		ColorPrefs.setFile(new File(fldr, "curlywhirly-colors.xml"));
 
 		// This is the file we really want
 		File file = new File(fldr, "curlywhirly.xml");
@@ -278,12 +173,13 @@ public class CurlyWhirly extends JFrame
 	/** "Preferences" on the OS X system menu. */
 	public void osxPreferences()
 	{
+		new PreferencesDialog(winMain);
 	}
 
 	/** "About CurlyWhirly" on the OS X system menu. */
 	public void osxAbout()
 	{
-		new AboutDialog(this, true);
+		new AboutDialog();
 	}
 
 	/** "Quit CurlyWhirly" on the OS X system menu. */
@@ -292,5 +188,4 @@ public class CurlyWhirly extends JFrame
 		shutdown();
 		return true;
 	}
-
 }

@@ -1,27 +1,25 @@
 package curlywhirly.gui;
 
 import java.awt.*;
-import java.lang.reflect.*;
+import java.io.*;
 import java.net.*;
-import javax.vecmath.Color3f;
+import javax.swing.*;
 
 import scri.commons.gui.*;
-import javax.swing.JPanel;
 
 public class GUIUtils
 {
 	/**
 	 * Returns an array of colours the length of numColours
 	 */
-	public static Color3f [] generateColours(int numColours)
+	public static Color [] generateColours(int numColours)
 	{
-		Color3f [] colours = new Color3f[numColours];
+		Color [] colours = new Color[numColours];
 		float increment = 1/(float)numColours;
 		float currentHue = 0;
 		for (int i = 0; i < colours.length; i++)
 		{
-			Color col = Color.getHSBColor(currentHue, 1, 1);
-			colours[i] = new Color3f(col);
+			colours[i] = Color.getHSBColor(currentHue, 1, 1);
 			currentHue += increment;
 		}
 		return colours;
@@ -31,52 +29,27 @@ public class GUIUtils
 	{
 		try
 		{
-			if (SystemUtils.jreVersion() >= 1.6)
-				visitURL6(html);
-			else
-				visitURL5(html);
+			Desktop desktop = Desktop.getDesktop();
+
+			URI uri = new URI(html);
+			desktop.browse(uri);
 		}
-		catch(URISyntaxException use)
+		catch(URISyntaxException | IOException e)
 		{
 			String message = RB.format("gui.GUIUtils.urlError", html);
 			TaskDialog.error(message, RB.getString("gui.text.close"));
-		}
-		catch (Exception e)
-		{
+
 			e.printStackTrace();
 		}
-	}
-
-	// Java6 method for visiting a URL
-	private static void visitURL6(String html)
-		throws Exception
-	{
-		Desktop desktop = Desktop.getDesktop();
-
-		URI uri = new URI(html);
-		desktop.browse(uri);
-	}
-
-	// Java5 (OS X only) method for visiting a URL
-	private static void visitURL5(String html)
-		throws Exception
-	{
-		// See: http://www.centerkey.com/java/browser/
-
-		Class<?> fileMgr = Class.forName("com.apple.eio.FileManager");
-		Method openURL = fileMgr.getDeclaredMethod("openURL",
-			new Class[] {String.class});
-
-		openURL.invoke(null, new Object[] {html});
 	}
 
 	public static void cancelMovieCapture()
 	{
 		//cancel any ongoing movie capture thread
-		CurlyWhirly.currentMovieCaptureThread.threadCanceled = true;
-		CurlyWhirly.currentMovieCaptureThread.movieFile.delete();
-		CurlyWhirly.canvas3D.resetOriginalView();
-		CurlyWhirly.canvas3D.repaint();
+//		CurlyWhirly.currentMovieCaptureThread.threadCanceled = true;
+//		CurlyWhirly.currentMovieCaptureThread.movieFile.delete();
+//		CurlyWhirly.canvas3D.resetOriginalView();
+//		CurlyWhirly.canvas3D.repaint();
 	}
 
 	public static void sendFeedback()

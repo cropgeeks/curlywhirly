@@ -3,19 +3,12 @@ package curlywhirly.gui;
 import java.awt.*;
 import java.io.*;
 import javax.swing.*;
-import javax.swing.filechooser.*;
-
-import curlywhirly.controller.*;
-import curlywhirly.data.*;
+import javax.swing.event.*;
 
 import scri.commons.gui.*;
-import scri.commons.file.FileUtils;
 
-class WinMainToolBar extends JToolBar
+public class WinMainToolBar extends JToolBar
 {
-	private CurlyWhirly frame;
-	private DataLoadingDialog dataLoadingDialog;
-
 	private JButton open;
 	private JButton sample;
 	private JButton reset;
@@ -25,25 +18,38 @@ class WinMainToolBar extends JToolBar
 	private JButton prefs;
 	private JButton about;
 
-	static JSlider slider;
+	private JSlider slider;
 
-	private File imageFile;
+	private final WinMain winMain;
 
-	WinMainToolBar(CurlyWhirly frame)
+	WinMainToolBar(final WinMain winMain)
 	{
-		this.frame = frame;
+		this.winMain = winMain;
 
 		setFloatable(false);
 //		setBorderPainted(false);
 
-		slider = new JSlider(0, 100, 50) {
-			public Dimension getMaximumSize() {
+		slider = new JSlider(0, 100, 50)
+		{
+			@Override
+			public Dimension getMaximumSize()
+			{
 				return new Dimension(175, getPreferredSize().height);
 			}
 		};
 		slider.setToolTipText(RB.getString("gui.WinMainToolBar.sliderTT"));
 
-		new Actions(frame);
+		slider.addChangeListener(new ChangeListener()
+		{
+			@Override
+			public void stateChanged(ChangeEvent evt)
+			{
+				int speed = slider.getValue();
+				winMain.getOpenGLPanel().setSpeed(speed);
+			}
+		});
+
+		slider.setEnabled(false);
 
 		open = (JButton) getButton(false,
 			RB.getString("gui.WinMainToolBar.open"),
@@ -95,7 +101,7 @@ class WinMainToolBar extends JToolBar
 		add(slider);
 		addSeparator();
 		add(screenshot);
-		add(movie);
+//		add(movie);
 		addSeparator();
 		add(prefs);
 		addSeparator();
@@ -104,145 +110,9 @@ class WinMainToolBar extends JToolBar
 		add(new JLabel(" "));
 	}
 
-	void open()
-	{
-		// file chooser
-		JFileChooser fc = new JFileChooser(Prefs.guiCurrentDir);
-
-		int returnVal = fc.showOpenDialog(frame);
-		if (returnVal == JFileChooser.APPROVE_OPTION)
-			openFile(fc.getSelectedFile());
-	}
-
-	void openFile(File file)
-	{
-		if (file == null)
-			open();
-		else
-		{
-			Prefs.guiCurrentDir = "" + file.getParent();
-
-			CurlyWhirly.dataLoader = new DataLoader();
-			CurlyWhirly.dataLoader.loadDataInThread(file);
-		}
-	}
-
-	void openSample()
-	{
-		File dir = SystemUtils.getTempUserDirectory("scri-curlywhirly");
-		File sample = new File(dir, "sample.txt");
-
-		try
-		{
-			FileUtils.writeFile(sample, getClass().getResourceAsStream("/data/randomData.txt"));
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return;
-		}
-
-		// load the example dataset provided with the application
-		CurlyWhirly.dataLoader = new DataLoader();
-		CurlyWhirly.dataLoader.loadDataInThread(sample);
-	}
-
-	void reset()
-	{
-		frame.canvas3D.resetOriginalView();
-	}
-
-	void spin()
-	{
-		// Start or stop the spinning
-		if (spin.isSelected())
-			frame.canvas3D.spin();
-		else
-			frame.canvas3D.stopSpinning();
-
-		// And enabled/disable the speed slider based on the state
-		WinMainToolBar.slider.setEnabled(spin.isSelected());
-	}
-
-	void screenshot()
-	{
-		if (promptForFilename())
-		{
-			ImageExporter exporter = new ImageExporter(imageFile, frame);
-
-			ProgressDialog dialog = new ProgressDialog(exporter,
-				RB.format("gui.WinMainToolBar.screenshot.title"),
-				RB.format("gui.WinMainToolBar.screenshot.label"),
-				frame);
-
-			// If the operation failed or was cancelled...
-			if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
-			{
-				if (dialog.getResult() == ProgressDialog.JOB_FAILED)
-				{
-					dialog.getException().printStackTrace();
-					TaskDialog.error(
-						RB.format("gui.WinMainToolBar.screenshot.exception",
-						dialog.getException().getMessage()),
-						RB.getString("gui.text.close"));
-				}
-
-				return;
-			}
-
-			TaskDialog.showFileOpen(
-				RB.format("gui.WinMainToolBar.screenshot.success", imageFile),
-				TaskDialog.INF, imageFile);
-		}
-	}
-
-	void captureMovie()
-	{
-		new MovieCaptureDialog(frame);
-	}
-
-	void showPrefs()
-	{
-		PreferencesDialog dialog = new PreferencesDialog(frame);
-	}
-
-	void showAbout()
-	{
-		new AboutDialog(frame, true);
-	}
-
 	// Utility method to help create the buttons. Sets their text, tooltip, and
 	// icon, as well as adding actionListener, defining margings, etc.
-//	AbstractButton getButton(boolean toggle, String title, String tt, ImageIcon icon)
-//	{
-//		AbstractButton button = null;
-//
-//		if (toggle)
-//			button = new JToggleButton();
-//		else
-//			button = new JButton();
-//
-//		button.setText(title != null ? title : "");
-//		button.setToolTipText(tt);
-//		button.setIcon(icon);
-//		button.setFocusPainted(false);
-//		button.setFocusable(false);
-//		button.setMargin(new Insets(2, 1, 2, 1));
-//		button.addActionListener(this);
-//
-//		if (SystemUtils.isMacOS())
-//		{
-//			button.putClientProperty("JButton.buttonType", "bevel");
-//			button.setMargin(new Insets(-2, -1, -2, -1));
-//		}
-//
-//		return button;
-//	}
-
-
-	// Utility method to help create the buttons. Sets their text, tooltip, and
-	// icon, as well as adding actionListener, defining margings, etc.
-	public static AbstractButton getButton(boolean toggle, String title,
+	private AbstractButton getButton(boolean toggle, String title,
 			String tt, ImageIcon icon, Action a)
 	{
 		AbstractButton button = null;
@@ -259,28 +129,16 @@ class WinMainToolBar extends JToolBar
 		button.setFocusable(false);
 		button.setMargin(new Insets(2, 1, 2, 1));
 
-		if (SystemUtils.isMacOS())
-		{
-			button.putClientProperty("JButton.buttonType", "bevel");
-			button.setMargin(new Insets(-2, -1, -2, -1));
-		}
-
 		return button;
 	}
 
-	private boolean promptForFilename()
+	JSlider getSlider()
 	{
-		File basename = new File(Prefs.guiCurrentDir, "Image.png");
+		return slider;
+	}
 
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(
-			RB.getString("other.Filters.png"), "png");
-
-		String filename = CWUtils.getSaveFilename(
-			RB.getString("gui.WinMainToolBar.saveDialog"), basename, filter);
-
-		if (filename != null)
-			imageFile = new File(filename);
-
-		return imageFile != null;
+	JToggleButton getSpin()
+	{
+		return spin;
 	}
 }
