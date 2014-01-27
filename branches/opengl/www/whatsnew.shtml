@@ -15,12 +15,43 @@
 <!--#include virtual="header.shtml" -->
 
 <p>
+<h2>Version 1.14.01.27</h2>
+<ul>
+<li>NEW: Complete rewrite of the graphics engine; now using native OpenGL rather than Java3D.</li>
+<li>NEW: Added a category selection mechanism which allows for filtering upon multiple categories form separate category groups, while colouring by a given category group.</li>
+<li>NEW: A table of data points active in the display is now available in the control panel.</li>
+<li>NEW: The table of data points can be saved to disk and/or copied to clipboard.</li>
+<li>NEW: CurlyWhirly is now available as a native installer for 64-bit platforms.</li>
+<li>NEW: The auto-spin feature can now spin the model at any angle.</li>
+<li>NEW: Much of the UI has been translated into German and Spanish.</li>
+<li>NEW: Updated the UI to include logos for JHI and Masagro.</li>
+<li>NEW: Added a dataset close button to the main display.</li>
+<li>NEW: CurlyWhirly now (optionally) warns on dataset and application close.</li>
+<li>NEW: Added a new About box (and licence pane) matching the style used in Flapjack and Tablet.</li>
+<li>NEW: The installers and web start version are now all code signed.</li>
+<li>NEW: The codebase is now Java 7 across all supported platforms (Windows, OSX, Linux).</li>
+<li>NEW: Added a preferences dialog for setting some of the lesser-used options.</li>
+<li>NEW: User preferences (such as colour) are now remembered between sessions.</li>
+<li>NEW: Capture screenshot now prompts the user for a location to save the image file.</li>
+<li>NEW: Capture screenshot gives the option to view the image after creation.</li>
+<li>NEW: Added a recent files listing to the front page of CurlyWhirly.</li>
+<li>NEW: The spin slider now updates the spinning speed in real-time.</li>
+<li>NEW: Introduced a tabbed panel to separate control of the 3D display from summary information about the underlying data.</li>
+<li>NEW: Many improvements and bug fixes to data loading code.</li>
+<li>NEW: It is now possible to customize the colours of the axes.</li>
+<li>NEW: Added a preferences option to control antialising.</li>
+<li>CHG: Dropped the application menus in favour of a lightweight toolbar approach.</li>
+<li>BUG: Fixed UI controls being active before data is loaded.</li>
+</ul>
+
+
+<p>
 <h2>Version 1.10.12.10</h2>
 <ul>
-<li>Drag and drop support for file opening</li>
-<li>Store annotation URLs and automatically fire up web browser with this when data points are clicked</li>
-<li>Visualization of multi-category datasets </li>
-<li>Open files from the command line (allows file extension associations)</li>
+<li>NEW: Added drag and drop support for file opening.</li>
+<li>NEW: Annotation URLs can be embedded in the file format for viewing when data points are clicked.</li>
+<li>NEW: Visualization of multi-category datasets.</li>
+<li>NEW: Open files from the command line (allows file extension associations).</li>
 </ul>
 </p>
 
@@ -28,9 +59,7 @@
 <p>
 <h2>Version 1.09.05.13</h2>
 <ul>
-<li>Movie recording. Users can now capture a full revolution of the graph about the y axis by using the movie capture option, 
-save the resulting movie as an avi (raw RGB format) file, and then e.g. embed this into a Powerpoint presentation or similar. 
-With your data loaded, just go to File -> Capture movie... and then follow the instructions in the dialog. </li>
+<li>NEW: Users can now capture a full revolution of the graph about the y axis by using the movie capture option.</li>
 </ul>
 </p>
 
