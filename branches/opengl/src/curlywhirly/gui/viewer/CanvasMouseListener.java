@@ -12,10 +12,12 @@ public class CanvasMouseListener extends MouseInputAdapter
 {
 	private final OpenGLPanel panel;
 	private ArcBall arcBall;
+	private final Rotation rotation;
 
-	public CanvasMouseListener(OpenGLPanel panel)
+	public CanvasMouseListener(OpenGLPanel panel, Rotation rotation)
 	{
 		this.panel = panel;
+		this.rotation = rotation;
 
 		// Register this class as the mouse listener for the OpenGLPanel
 		panel.addMouseListener(this);
@@ -33,20 +35,26 @@ public class CanvasMouseListener extends MouseInputAdapter
 
 	public void startDrag(Point point)
 	{
-		panel.toggleDragging();
-		// Update Start Vector
-		panel.updateLastRotation();
-		// Prepare For Dragging
-		arcBall.click(point);
+		if (rotation.isSpinning() == false)
+		{
+			// Update Start Vector
+			rotation.updateLastRotation();
+			// Prepare For Dragging
+			arcBall.click(point);
+		}
 	}
 
 	public void drag(Point point)
 	{
-		Quat4f rotQuat = new Quat4f();
+		if (rotation.isSpinning() == false)
+		{
+			Quat4f rotQuat = new Quat4f();
 
-		// Update end vector
-		arcBall.drag(point, rotQuat);
-		panel.updateCurrentRotation(rotQuat);
+			// Update end vector
+			arcBall.drag(point, rotQuat);
+
+			rotation.updateCurrentRotation(rotQuat);
+		}
 	}
 
 	@Override
@@ -78,10 +86,7 @@ public class CanvasMouseListener extends MouseInputAdapter
 	public void mouseReleased(MouseEvent e)
 	{
 		if (SwingUtilities.isLeftMouseButton(e))
-		{
-			panel.toggleDragging();
-			panel.mouseUp();
-		}
+			rotation.updateCombinedRotation();
 	}
 
 	@Override

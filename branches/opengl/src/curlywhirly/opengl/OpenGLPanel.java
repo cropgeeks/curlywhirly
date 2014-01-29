@@ -36,20 +36,9 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	private static FPSAnimator animator;
 	private WinMain winMain;
 
-	// Variables related automatic rotation of the model
-	private boolean autoSpin = false;
-	private float speed = -0.1f;
-
 	private GLU glu;
 
-	// Rotation variables to allow compound rotations
-	private Matrix4f lastRot = new Matrix4f();
-	private Matrix4f currRot = new Matrix4f();
-	private float[] matrix = new float[16];
-	private final Object matrixLock = new Object();
-	private Matrix4f autoRot = new Matrix4f();
-	private Matrix4f combined = new Matrix4f();
-	private float[] combArr = new float[16];
+	private final Rotation rotation;
 
 	// An custom made sphere object (faster than gluSphere)
 	private IcoSphere sphere;
@@ -60,14 +49,10 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	private CanvasMouseListener mouseListener;
 
-	private TextRenderer texRend;
-
 	// For aspects of the viewing transform and zooming
 	private int perspAngle = 45;
 	private float aspect;
 	boolean doZoom = false;
-
-	private boolean isDragging = false;
 
 	private AWTGLReadBufferUtil glBufferUtil;
 	private BufferedImage screenShot;
@@ -96,13 +81,9 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		addGLEventListener(this);
 		addGLEventListener(closeOverlay);
 
-		mouseListener = new CanvasMouseListener(this);
+		rotation = new Rotation();
 
-		// Initialize mouse handling code
-        lastRot.setIdentity();
-        currRot.setIdentity();
-		autoRot.setIdentity();
-		combined.setIdentity();
+		mouseListener = new CanvasMouseListener(this, rotation);
 
 		detector = new CollisionDetection();
 
@@ -197,12 +178,6 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		// Get the graphics context
 		GL2 gl = drawable.getGL().getGL2();
 
-		synchronized(matrixLock)
-		{
-			get(matrix, currRot);
-			get(combArr, combined);
-		}
-
 		zoomPerspective(gl);
 
 		clearColor(gl);
@@ -211,10 +186,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 		gl.glPushMatrix();
 
-		if (isDragging)
-			gl.glMultMatrixf(matrix, 0);
-
-		gl.glMultMatrixf(combArr, 0);
+		applyUserRotations(gl);
 
 		// Render spheres first as if they are rendered after axis labels
 		// the spheres become obscured by the axis labels.
@@ -224,22 +196,19 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 		gl.glPopMatrix();
 
-		if (autoSpin)
-		{
-			synchronized(matrixLock)
-			{
-				rotateMatrix(speed);
-				// When carrying out automatic rotation we need to multiply the
-				// automatic rotation by our combined rotation and set our
-				// combined rotation to the result of this.
-				combined.mul(autoRot, combined);
-			}
-		}
+		rotation.automaticallyRotate();
 
 		if (takeScreenshot)
 			screenShot = glBufferUtil.readPixelsToBufferedImage(gl, true);
 
 		drawTooltip(gl);
+	}
+
+	private void applyUserRotations(GL2 gl)
+	{
+		// Apply user rotation first.
+		gl.glMultMatrixf(rotation.getDragArray(), 0);
+		gl.glMultMatrixf(rotation.getCumulativeRotationArray(), 0);
 	}
 
 	@Override
@@ -271,8 +240,6 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		// Enable the model-view transform
 		gl.glMatrixMode(GL_MODELVIEW);
 		gl.glLoadIdentity();
-		// Rotate view so that it looks at the centre of the model
-//		gl.glRotatef(30, 0, 1, 0);
 
 		mouseListener.initialiseArcBall(CANVAS_WIDTH, CANVAS_HEIGHT);
 		animator.start();
@@ -321,8 +288,6 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	{
 		drawAxesLines(gl);
 		drawAxesCones(gl);
-
-//		renderText(gl);
 	}
 
 	private void drawAxesLines(GL2 gl)
@@ -502,120 +467,20 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		return new float[] { x, y, z };
 	}
 
-
-	// Methods relating to arbitrary rotations
-
-	void rotateMatrix(float angle)
-	{
-		angle = (float) ((angle * Math.PI) / 180);
-
-		autoRot.m00 = (float) Math.cos(angle);
-		autoRot.m01 = 0;
-		autoRot.m02 = (float) - Math.sin(angle);
-		autoRot.m03 = 0;
-
-		autoRot.m10 = 0;
-		autoRot.m11 = 1;
-		autoRot.m12 = 0;
-		autoRot.m13 = 0;
-
-		autoRot.m20 = (float) Math.sin(angle);
-		autoRot.m21 = 0;
-		autoRot.m22 = (float) Math.cos(angle);
-		autoRot.m23 = 0;
-
-		autoRot.m30 = 0;
-		autoRot.m31 = 0;
-		autoRot.m32 = 0;
-		autoRot.m33 = 1;
-	}
-
 	public void reset()
 	{
 		// Reset Rotation
-		synchronized(matrixLock)
-		{
-			lastRot.setIdentity();
-			currRot.setIdentity();
-			autoRot.setIdentity();
-			combined.setIdentity();
-		}
+		rotation.setIdentity();
 
 		perspAngle = 45;
 		doZoom = true;
-	}
-
-	public void updateLastRotation()
-	{
-		if (!autoSpin)
-		{
-			// Set Last Static Rotation To Last Dynamic One
-			synchronized(matrixLock)
-			{
-				lastRot.set(currRot);
-			}
-		}
-	}
-
-	public void updateCurrentRotation(Quat4f rotQuat)
-	{
-		if (!autoSpin)
-		{
-			synchronized(matrixLock)
-			{
-				// Convert Quaternion Into Matrix3f
-				currRot.setRotation(rotQuat);
-				// Accumulate Last Rotation Into This One
-				currRot.mul(currRot, lastRot);
-			}
-		}
-	}
-
-	private void get(float[] dest, Matrix4f matrix)
-	{
-		dest[0] = matrix.m00;
-        dest[1] = matrix.m10;
-        dest[2] = matrix.m20;
-        dest[3] = matrix.m30;
-        dest[4] = matrix.m01;
-        dest[5] = matrix.m11;
-        dest[6] = matrix.m21;
-        dest[7] = matrix.m31;
-        dest[8] = matrix.m02;
-        dest[9] = matrix.m12;
-        dest[10] = matrix.m22;
-        dest[11] = matrix.m32;
-        dest[12] = matrix.m03;
-        dest[13] = matrix.m13;
-        dest[14] = matrix.m23;
-        dest[15] = matrix.m33;
 	}
 
 	// Methods used to update the display from outwith the class
 
 	public void toggleSpin()
 	{
-		autoSpin = !autoSpin;
-	}
-
-	public void toggleDragging()
-	{
-		isDragging = !isDragging;
-	}
-
-	// When the mouse is released froma drag operation we need to carefully
-	// manage the state of our rotation matrices.
-	public void mouseUp()
-	{
-		synchronized (matrixLock)
-		{
-			// Multiply the current mouse rotation matrix by the combined matrix
-			// and store as the new combined matrix (multiply in this order as
-			// our mouse rotations were being applied first while dragging).
-			combined.mul(currRot, combined);
-			// Reset currRot to prevent mouse clicks rotating the model
-			currRot.setIdentity();
-		}
+		rotation.toggleSpin();
 	}
 
 	private void clearColor(GL2 gl)
@@ -625,9 +490,9 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glClearColor(clearColor.getRed()/255f, clearColor.getGreen()/255f, clearColor.getBlue()/255f, 0);
 	}
 
-	public void setSpeed(float speed)
+	public void setRotationSpeed(float speed)
 	{
-		this.speed = ((speed-0f)/(100f-0f) * (-1.0f-(-0.1f)) + -0.1f);
+		rotation.setRotationSpeed(speed);
 	}
 
 	public void zoom(int zoom)
@@ -742,25 +607,14 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	private void billboardText(GL2 gl, String text)
 		throws GLException
 	{
-		float[] invMat = new float[16];
-		float[] invCombArr = new float[16];
-		synchronized(matrixLock)
-		{
-			Matrix4f invCurr = (Matrix4f) currRot.clone();
-			Matrix4f invComb = (Matrix4f) combined.clone();
-			invCurr.invert();
-			invComb.invert();
-			get(invMat, invCurr);
-			get(invCombArr, invComb);
-		}
+		float[] invMat = rotation.getInverseDragArray();
+		float[] invCombArr = rotation.getInverseCumulativeArray();
 
 		// The order that we apply the combined and mouse rotations is reversed
 		// from the order in the display code. This is because we need these
 		// rotations to happen in the reverse order.
 		gl.glMultMatrixf(invCombArr, 0);
-
-		if (isDragging)
-			gl.glMultMatrixf(invMat, 0);
+		gl.glMultMatrixf(invMat, 0);
 
 		renderer.begin3DRendering();
 		renderer.setColor(ColorPrefs.get("User.OpenGLPanel.textColor"));
@@ -775,10 +629,8 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		DataPoint found = detector.findSphereRayIntersection(ray, translatedPoints);
 
 		// If we have found a spehre, display this sphere's name in a tooltip
-		if (found != null)
-			this.setToolTipText(found.getName());
-		else
-			this.setToolTipText(null);
+		String text = found != null ? found.getName() : null;
+		setToolTipText(text);
 	}
 
 	private String getAxisLabel(int axis)

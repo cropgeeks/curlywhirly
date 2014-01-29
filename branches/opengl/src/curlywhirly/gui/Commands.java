@@ -112,7 +112,7 @@ public class Commands
 
 		// And enabled/disable the speed slider based on the state
 		slider.setEnabled(winMain.getToolbar().getSpin().isSelected());
-		winMain.getOpenGLPanel().setSpeed(slider.getValue());
+		winMain.getOpenGLPanel().setRotationSpeed(slider.getValue());
 	}
 
 	void showPrefs()

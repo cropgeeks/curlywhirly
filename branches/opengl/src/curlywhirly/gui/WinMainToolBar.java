@@ -45,7 +45,7 @@ public class WinMainToolBar extends JToolBar
 			public void stateChanged(ChangeEvent evt)
 			{
 				int speed = slider.getValue();
-				winMain.getOpenGLPanel().setSpeed(speed);
+				winMain.getOpenGLPanel().setRotationSpeed(speed);
 			}
 		});
 
