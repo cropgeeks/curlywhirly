@@ -100,7 +100,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="copyrightLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Copyright (C) 2009-2012, Information &amp; Computational Sciences, JHI"/>
+            <Property name="text" type="java.lang.String" value="Copyright (C) 2009-2014, Information &amp; Computational Sciences, JHI"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="versionLabel">

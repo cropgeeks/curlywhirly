@@ -1,4 +1,4 @@
-// Copyright 2009-2012 Information & Computational Sciences, JHI. All rights
+// Copyright 2009-2014 Information & Computational Sciences, JHI. All rights
 // reserved. Use is subject to the accompanying licence terms.
 
 package curlywhirly.gui.dialog;
@@ -97,7 +97,7 @@ class AboutPanelNB extends JPanel implements ActionListener
 
         nameLabel.setText("Gordon Stephen, Iain Milne, Micha Bayer,Paul Shaw and David Marshall");
 
-        copyrightLabel.setText("Copyright (C) 2009-2012, Information & Computational Sciences, JHI");
+        copyrightLabel.setText("Copyright (C) 2009-2014, Information & Computational Sciences, JHI");
 
         versionLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         versionLabel.setText("CurlyWhirly - x.xx.xx.xx");
