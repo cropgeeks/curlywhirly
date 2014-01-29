@@ -7,14 +7,14 @@ import curlywhirly.data.*;
 
 public class CollisionDetection
 {
-	DataPoint findSphereRayIntersection(Ray ray, HashMap<DataPoint, float[]> translatedPoints)
+	DataPoint findSphereRayIntersection(Ray ray, HashMap<DataPoint, float[]> translatedPoints, float pointSize)
 	{
 		float tmin = 1000000;
 
 		DataPoint found = null;
 		for (DataPoint point : translatedPoints.keySet())
 		{
-			float t = intersect(ray, translatedPoints.get(point), tmin);
+			float t = intersect(ray, translatedPoints.get(point), tmin, pointSize);
 			if (t > 0 && t < tmin)
 			{
 				tmin = t;
@@ -25,7 +25,7 @@ public class CollisionDetection
 		return found;
 	}
 
-	private float intersect(Ray ray, float[] sphere, float max_t)
+	private float intersect(Ray ray, float[] sphere, float max_t, float pointSize)
 	{
 		float t0, t1;
 
@@ -39,7 +39,7 @@ public class CollisionDetection
 
 		float d2 = l.dot(l) - tca * tca;
 		// Radius can be adjusted to make detection more, or less stringent
-		float radiusSquared = 0.010f * 0.010f;
+		float radiusSquared = pointSize * pointSize;
 		if (d2 > radiusSquared)
 			return -1;
 		float thc = (float) Math.sqrt(radiusSquared - d2);

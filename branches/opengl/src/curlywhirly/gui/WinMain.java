@@ -9,6 +9,8 @@ import javax.swing.*;
 import curlywhirly.data.*;
 import curlywhirly.gui.viewer.*;
 import curlywhirly.opengl.*;
+import javax.media.opengl.GLCapabilities;
+import javax.media.opengl.GLProfile;
 
 import scri.commons.gui.*;
 
@@ -113,7 +115,12 @@ public class WinMain extends JFrame
 
 	private void createCanvas()
 	{
-		canvas3D = new OpenGLPanel(this);
+		GLProfile profile = GLProfile.getDefault();
+		GLCapabilities caps = new GLCapabilities(profile);
+
+		caps.setSampleBuffers(true);
+		caps.setNumSamples(2);
+		canvas3D = new OpenGLPanel(this, caps);
 		canvas3D.setSize(new Dimension((Prefs.guiWinMainW-Prefs.guiSplitterLocation), Prefs.guiWinMainH));
 	}
 

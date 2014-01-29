@@ -31,9 +31,9 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	private static final int Z_AXIS = 2;
 
 	// Our target framerate
-	private static final int FPS = 60;
+	private static final int FPS = 30;
 	// The animator which updates the display at the desired framerate
-	private static FPSAnimator animator;
+	private static Animator animator;
 	private WinMain winMain;
 
 	private GLU glu;
@@ -73,8 +73,12 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	private final CloseOverlay closeOverlay;
 
-	public OpenGLPanel(WinMain winMain)
+	private float pointSize = 0.25f;
+
+	public OpenGLPanel(WinMain winMain, GLCapabilities caps)
 	{
+		super(caps);
+
 		this.winMain = winMain;
 		closeOverlay = new CloseOverlay(winMain);
 
@@ -104,7 +108,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		if (animator != null)
 			animator.remove(this);
 
-		animator = new FPSAnimator(this, FPS, true);
+		animator = new Animator(this);
 		animator.setUpdateFPSFrames(200, System.out);
 		animator.setPrintExceptions(true);
 		animator.start();
@@ -232,7 +236,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glLoadIdentity();
 		// Field of view, aspect ratio, z plane near, z plane far
 		glu.gluPerspective(perspAngle, aspect, 1, 1000);
-		glu.gluLookAt(0, 0, 2, 0, 0, 0, 0, 1, 0);
+		glu.gluLookAt(0, 0, 200, 0, 0, 0, 0, 1, 0);
 
 		// Store the projection matrix for use in gluUnproject calls
 		gl.glGetFloatv(GL_PROJECTION_MATRIX, proj, 0);
@@ -256,7 +260,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 			gl.glMatrixMode(GL_PROJECTION);
 			gl.glLoadIdentity();
 			glu.gluPerspective(perspAngle, aspect, 1, 1000);
-			glu.gluLookAt(0, 0, 2, 0, 0, 0, 0, 1, 0);
+			glu.gluLookAt(0, 0, 200, 0, 0, 0, 0, 1, 0);
 
 			// Store the projection matrix for use in gluUnproject calls
 			gl.glGetFloatv(GL_PROJECTION_MATRIX, proj, 0);
@@ -304,31 +308,31 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 			gl.glDisable(GL_LINE_SMOOTH);
 		}
 
-		float[] xAxisColor = getOpenGLColor(ColorPrefs.get("User.OpenGLPanel.xAxisColor"));
+		float[] xAxisColor = convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.xAxisColor"));
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, xAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 1);
 		// Draw X-axis
 		gl.glBegin(GL_LINES);
-		gl.glVertex3f(-0.5f, 0, 0);
-		gl.glVertex3f(0.5f, 0, 0);
+		gl.glVertex3f(-50f, 0, 0);
+		gl.glVertex3f(50f, 0, 0);
 		gl.glEnd();
 
-		float [] yAxisColor = getOpenGLColor(ColorPrefs.get("User.OpenGLPanel.yAxisColor"));
+		float [] yAxisColor = convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.yAxisColor"));
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, yAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 1);
 		// Draw Y-axis
 		gl.glBegin(GL_LINES);
-		gl.glVertex3f(0, -0.5f, 0);
-		gl.glVertex3f(0, 0.5f, 0);
+		gl.glVertex3f(0, -50f, 0);
+		gl.glVertex3f(0, 50f, 0);
 		gl.glEnd();
 
-		float [] zAxisColor = getOpenGLColor(ColorPrefs.get("User.OpenGLPanel.zAxisColor"));
+		float [] zAxisColor = convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.zAxisColor"));
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, zAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 1);
 		// Draw Z-axis
 		gl.glBegin(GL_LINES);
-		gl.glVertex3f(0, 0, -0.5f);
-		gl.glVertex3f(0, 0, 0.5f);
+		gl.glVertex3f(0, 0, -50f);
+		gl.glVertex3f(0, 0, 50f);
 		gl.glEnd();
 
 		// If the user has chosen to antialias axes we must disable this when
@@ -344,41 +348,41 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	{
 		GLUquadric quadric = glu.gluNewQuadric();
 
-		float[] xAxisColor = getOpenGLColor(ColorPrefs.get("User.OpenGLPanel.xAxisColor"));
+		float[] xAxisColor = convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.xAxisColor"));
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, xAxisColor, 0);
-		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 1);
+		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
 		// Draw the cylinders at the positive extent of each axis
 		gl.glPushMatrix();
-		gl.glTranslatef(0.5f, 0, 0);
+		gl.glTranslatef(50f, 0, 0);
 		gl.glPushMatrix();
 		gl.glRotatef(90, 0, 1, 0);
-		glu.gluCylinder(quadric, 0.01, 0, 0.02, 6, 6);
+		glu.gluCylinder(quadric, 1, 0, 2, 6, 6);
 		gl.glPopMatrix();
 
 		if (Prefs.guiChkAxisLabels)
 			billboardText(gl, getAxisLabel(X_AXIS));
 		gl.glPopMatrix();
 
-		float [] yAxisColor = getOpenGLColor(ColorPrefs.get("User.OpenGLPanel.yAxisColor"));
+		float [] yAxisColor = convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.yAxisColor"));
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, yAxisColor, 0);
-		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 1);
+		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
 		gl.glPushMatrix();
-		gl.glTranslatef(0, 0.5f, 0);
+		gl.glTranslatef(0, 50f, 0);
 		gl.glPushMatrix();
 		gl.glRotatef(-90, 1, 0, 0);
-		glu.gluCylinder(quadric, 0.01, 0, 0.02, 6, 6);
+		glu.gluCylinder(quadric, 1, 0, 2, 6, 6);
 		gl.glPopMatrix();
 
 		if (Prefs.guiChkAxisLabels)
 			billboardText(gl, getAxisLabel(Y_AXIS));
 		gl.glPopMatrix();
 
-		float [] zAxisColor = getOpenGLColor(ColorPrefs.get("User.OpenGLPanel.zAxisColor"));
+		float [] zAxisColor = convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.zAxisColor"));
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, zAxisColor, 0);
-		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 1);
+		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
 		gl.glPushMatrix();
-		gl.glTranslatef(0, 0, 0.5f);
-		glu.gluCylinder(quadric, 0.01, 0, 0.02, 6, 6);
+		gl.glTranslatef(0, 0, 50f);
+		glu.gluCylinder(quadric, 1, 0, 2, 6, 6);
 
 		if (Prefs.guiChkAxisLabels)
 			billboardText(gl, getAxisLabel(Z_AXIS));
@@ -409,7 +413,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		{
 			Color color = point.getColor(dataSet.getCurrentCategoryGroup());
 			// Get each color component into the 0-1 range instead of 0-255
-			float [] rgba = getOpenGLColor(color);
+			float [] rgba = convertRgbToGl(color);
 			gl.glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rgba, 0);
 			gl.glMaterialf(GL_FRONT, GL_SHININESS, 128);
 			drawSphere(gl, point);
@@ -423,14 +427,15 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	{
 		gl.glPushMatrix();
 		// Scale our unit sphere down to a more manageable scale
-		gl.glScalef(0.005f, 0.005f, 0.005f);
+		gl.glScalef(pointSize, pointSize, pointSize);
 
 		// Get the position information for each axis so that these can be used
 		// to translate our spheres to the correct location
 		float[] indices = point.getPosition(winMain.getDataSet().getCurrentAxes());
 		// Bring our translations into the correct coordinate space as we've
 		// scaled each point to 1/200 of its original size.
-		gl.glTranslatef(map(indices[0])*200f, map(indices[1])*200f, map(indices[2])*200f);
+		float translationScale = 1/pointSize;
+		gl.glTranslatef(map(indices[0])*translationScale, map(indices[1])*translationScale, map(indices[2])*translationScale);
 
 		updateTranslatedPoints(gl, indices, point);
 
@@ -444,7 +449,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	// into our -0.5 to 0.5 coordinate space.
 	private float map(float number)
 	{
-		return ((number-(-1f))/(1f-(-1f)) * (0.5f-(-0.5f)) + -0.5f);
+		return ((number-(-1f))/(1f-(-1f)) * (50f-(-50f)) + -50f);
 	}
 
 	// Keeps track of the translated positions of all of our DataPoints
@@ -503,49 +508,6 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		doZoom = true;
 	}
 
-	private void viewExtentCube(GL2 gl)
-	{
-		gl.glBegin(GL_QUADS);
-
-		// Top-face
-		gl.glVertex3f(0.5f, 0.5f, -0.5f);
-		gl.glVertex3f(-0.5f, 0.5f, -0.5f);
-		gl.glVertex3f(-0.5f, 0.5f, 0.5f);
-		gl.glVertex3f(0.5f, 0.5f, 0.5f);
-
-		// Bottom-face
-		gl.glVertex3f(0.5f, -0.5f, 0.5f);
-		gl.glVertex3f(-0.5f, -0.5f, 0.5f);
-		gl.glVertex3f(-0.5f, -0.5f, -0.5f);
-		gl.glVertex3f(0.5f, -0.5f, -0.5f);
-
-		// Front-face
-		gl.glVertex3f(0.5f, 0.5f, 0.5f);
-		gl.glVertex3f(-0.5f, 0.5f, 0.5f);
-		gl.glVertex3f(-0.5f, -0.5f, 0.5f);
-		gl.glVertex3f(0.5f, -0.5f, 0.5f);
-
-		// Back-face
-		gl.glVertex3f(0.5f, -0.5f, -0.5f);
-		gl.glVertex3f(-0.5f, -0.5f, -0.5f);
-		gl.glVertex3f(-0.5f, 0.5f, -0.5f);
-		gl.glVertex3f(0.5f, 0.5f, -0.5f);
-
-		// Left-face
-		gl.glVertex3f(-0.5f, 0.5f, 0.5f);
-		gl.glVertex3f(-0.5f, 0.5f, -0.5f);
-		gl.glVertex3f(-0.5f, -0.5f, -0.5f);
-		gl.glVertex3f(-0.5f, -0.5f, 0.5f);
-
-		// Right-face
-		gl.glVertex3f(0.5f, 0.5f, -0.5f);
-		gl.glVertex3f(0.5f, 0.5f, 0.5f);
-		gl.glVertex3f(0.5f, -0.5f, 0.5f);
-		gl.glVertex3f(0.5f, -0.5f, -0.5f);
-
-		gl.glEnd();
-	}
-
 	// Toggles the state of takeScreenshot and manually calls display to get
 	// a screenshot without negatively impacting frame rate.
 	public BufferedImage getScreenShot()
@@ -559,7 +521,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		return screenShot;
 	}
 
-	private float[] getOpenGLColor(Color color)
+	private float[] convertRgbToGl(Color color)
 	{
 		return new float[] { color.getRed()/255f, color.getGreen()/255f, color.getBlue()/255f, 1f };
 	}
@@ -594,7 +556,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		// Subtract the near clipping plane vector from the far clipping plane
 		// vector to establish the direction of our ray
 		Vector3f dir = new Vector3f(fVec.x - nVec.x, fVec.y - nVec.y, fVec.z - nVec.z);
-		Vector3f eye = new Vector3f(0, 0, 2);
+		Vector3f eye = new Vector3f(0, 0, 200);
 
 		Ray ray = new Ray(dir, eye);
 
@@ -618,7 +580,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 		renderer.begin3DRendering();
 		renderer.setColor(ColorPrefs.get("User.OpenGLPanel.textColor"));
-		renderer.draw3D(text, 0.02f, -0.01f, 0, 0.001f);
+		renderer.draw3D(text, 2f, -1f, 0, 0.1f);
 		renderer.end3DRendering();
 	}
 
@@ -626,7 +588,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	{
 		// Mouse over code looking for sphere's under the mouse
 		Ray ray = getRay(gl);
-		DataPoint found = detector.findSphereRayIntersection(ray, translatedPoints);
+		DataPoint found = detector.findSphereRayIntersection(ray, translatedPoints, pointSize);
 
 		// If we have found a spehre, display this sphere's name in a tooltip
 		String text = found != null ? found.getName() : null;
