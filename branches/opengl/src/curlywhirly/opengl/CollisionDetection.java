@@ -10,7 +10,33 @@ import curlywhirly.data.*;
 
 public class CollisionDetection
 {
-	DataPoint findSphereRayIntersection(Ray ray, HashMap<DataPoint, float[]> translatedPoints, float pointSize)
+	// Keeps track of the translated locations of points in the display
+	// used in ray tracing code to find points under the mouse.
+	private final HashMap<DataPoint, float[]> translatedPoints;
+
+	public CollisionDetection()
+	{
+		translatedPoints = new HashMap<DataPoint, float[]>();
+	}
+
+	// Keeps track of the translated positions of all of our DataPoints
+	void updatePointLocation(float[] modelView, float[] axes, DataPoint point)
+	{
+		float [] location = getXYZForMatrix(axes, modelView);
+
+		translatedPoints.put(point, location);
+	}
+
+	private float[] getXYZForMatrix(float[] axes, float[] modelView)
+	{
+		float x = (axes[0] * modelView[0]) +  (axes[1] * modelView[4]) + (axes[2] * modelView[8]) + modelView[12];
+		float y = (axes[0] * modelView[1]) +  (axes[1] * modelView[5]) + (axes[2] * modelView[9]) + modelView[13];
+		float z = (axes[0] * modelView[2]) +  (axes[1] * modelView[6]) + (axes[2] * modelView[10]) + modelView[14];
+
+		return new float[] { x, y, z };
+	}
+
+	DataPoint findSphereRayIntersection(Ray ray, float pointSize)
 	{
 		float tmin = 1000000;
 

@@ -6,7 +6,6 @@ package curlywhirly.opengl;
 import java.awt.*;
 import java.awt.image.*;
 import java.nio.*;
-import java.util.*;
 import javax.media.opengl.*;
 import javax.media.opengl.awt.*;
 import javax.media.opengl.glu.*;
@@ -35,11 +34,10 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	private static final int Y_AXIS = 1;
 	private static final int Z_AXIS = 2;
 
-	// Our target framerate
-	private static final int FPS = 30;
-	// The animator which updates the display at the desired framerate
-	private static Animator animator;
 	private WinMain winMain;
+
+	// The animator which updates the display at the desired framerate
+	private Animator animator;
 
 	private GLU glu;
 
@@ -51,25 +49,25 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	private int icosphereVertexID;
 	// GL 1.5+, VBO ID for face data
 	private int icosphereIndexID;
+	// Buffer to hold isosphere vertex data.
+	private FloatBuffer vertexBuffer;
+	// Buffer to hold faces, represented by 3 indices
+	private IntBuffer indexBuffer;
 
 	private CanvasMouseListener mouseListener;
 
 	// For aspects of the viewing transform and zooming
 	private int perspAngle = 45;
 	private float aspect;
-	boolean doZoom = false;
 
+	// Screenshot variables
 	private AWTGLReadBufferUtil glBufferUtil;
 	private BufferedImage screenShot;
 	private boolean takeScreenshot = false;
 
+	// Collision detection variables
 	private Point mousePoint = new Point(0, 0);
 	float[] proj = new float[16];
-
-	// Keeps track of the translated locations of points in the display
-	// used in ray tracing code to find points under the mouse.
-	private HashMap<DataPoint, float[]> translatedPoints;
-
 	private CollisionDetection detector;
 
 	private DataSet dataSet;
@@ -79,11 +77,6 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	private final CloseOverlay closeOverlay;
 
 	private float pointSize = 1f;
-
-	// Buffer to hold isosphere vertex data.
-	private FloatBuffer vertexBuffer;
-	// Buffer to hold faces, represented by 3 indices
-	private IntBuffer indexBuffer;
 
 	public OpenGLPanel(WinMain winMain, GLCapabilities caps)
 	{
@@ -99,8 +92,6 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 		mouseListener = new CanvasMouseListener(this, rotation);
 
-		detector = new CollisionDetection();
-
 		ToolTipManager.sharedInstance().setInitialDelay(0);
 	}
 
@@ -108,7 +99,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	{
 		this.dataSet = dataSet;
 
-		translatedPoints = new HashMap<>();
+		detector = new CollisionDetection();
 		reset();
 	}
 
@@ -190,7 +181,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		// Clear the colour and depth buffers
 		gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		zoomPerspective(gl);
+		updatePerspective(gl);
 
 		gl.glPushMatrix();
 
@@ -235,15 +226,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glViewport(0, 0, width, height);
 
 		// Setup perspective projection, with aspect ratio matching viewport
-		// Switch to the projection matrix and reset it.
-		gl.glMatrixMode(GL_PROJECTION);
-		gl.glLoadIdentity();
-		// Field of view, aspect ratio, z plane near, z plane far
-		glu.gluPerspective(perspAngle, aspect, 1, 1000);
-		glu.gluLookAt(0, 0, 200, 0, 0, 0, 0, 1, 0);
-
-		// Store the projection matrix for use in gluUnproject calls
-		gl.glGetFloatv(GL_PROJECTION_MATRIX, proj, 0);
+		setPerspective(gl);
 
 		// Enable the model-view transform
 		gl.glMatrixMode(GL_MODELVIEW);
@@ -253,27 +236,32 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		animator.start();
 	}
 
-	// Carries out a zoom operation by altering the projection matrix
-	// (specifically by narrowing and widening the viewing angle)
-	private void zoomPerspective(GL2 gl)
+	// If the user has altered the perspective angle this carries out a zoom
+	// operation by altering the projection matrix (specifically by narrowing
+	// and widening the viewing angle)
+	private void updatePerspective(GL2 gl)
 	{
-		if (doZoom)
-		{
-			gl.glPushMatrix();
-			// Switch to and update the projection matrix
-			gl.glMatrixMode(GL_PROJECTION);
-			gl.glLoadIdentity();
-			glu.gluPerspective(perspAngle, aspect, 1, 1000);
-			glu.gluLookAt(0, 0, 200, 0, 0, 0, 0, 1, 0);
+		gl.glPushMatrix();
 
-			// Store the projection matrix for use in gluUnproject calls
-			gl.glGetFloatv(GL_PROJECTION_MATRIX, proj, 0);
+		setPerspective(gl);
 
-			// Enable the model-view transform
-			gl.glMatrixMode(GL_MODELVIEW);
-			doZoom = false;
-			gl.glPopMatrix();
-		}
+		// Enable the model-view transform
+		gl.glMatrixMode(GL_MODELVIEW);
+		gl.glPopMatrix();
+	}
+
+	private void setPerspective(GL2 gl)
+	{
+		// Switch to the projection matrix and reset it.
+		gl.glMatrixMode(GL_PROJECTION);
+		gl.glLoadIdentity();
+
+		// perspective, aspect ratio, zNear, zFar
+		glu.gluPerspective(perspAngle, aspect, 1, 1000);
+		glu.gluLookAt(0, 0, 200, 0, 0, 0, 0, 1, 0);
+
+		// Store the projection matrix for use in gluUnproject calls
+		gl.glGetFloatv(GL_PROJECTION_MATRIX, proj, 0);
 	}
 
 	private void lightScene(GL2 gl)
@@ -433,13 +421,15 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 		// Get the position information for each axis so that these can be used
 		// to translate our spheres to the correct location
-		float[] indices = point.getPosition(winMain.getDataSet().getCurrentAxes());
+		float[] axes = point.getPosition(winMain.getDataSet().getCurrentAxes());
 		// Bring our translations into the correct coordinate space as we've
 		// scaled each point to 1/200 of its original size.
 		float translationScale = 1/pointSize;
-		gl.glTranslatef(map(indices[0])*translationScale, map(indices[1])*translationScale, map(indices[2])*translationScale);
+		gl.glTranslatef(map(axes[0])*translationScale, map(axes[1])*translationScale, map(axes[2])*translationScale);
 
-		updateTranslatedPoints(gl, indices, point);
+		float[] modelView = new float[16];
+		gl.glGetFloatv(GL_MODELVIEW_MATRIX, modelView, 0);
+		detector.updatePointLocation(modelView, axes, point);
 
 		// Draw the triangles using the isosphereIndexBuffer VBO for the
 		// element data (as well as the isosphereVertexBuffer).
@@ -476,33 +466,12 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		return ((number-(-1f))/(1f-(-1f)) * (50f-(-50f)) + -50f);
 	}
 
-	// Keeps track of the translated positions of all of our DataPoints
-	private void updateTranslatedPoints(GL2 gl, float[] indices, DataPoint point)
-	{
-		float[] modelView = new float[16];
-		gl.glGetFloatv(GL_MODELVIEW_MATRIX, modelView, 0);
-
-		float [] location = getXYZForMatrix(indices, modelView);
-
-		translatedPoints.put(point, location);
-	}
-
-	private float[] getXYZForMatrix(float[] indices, float[] modelView)
-	{
-		float x = (indices[0] * modelView[0]) +  (indices[1] * modelView[4]) + (indices[2] * modelView[8]) + modelView[12];
-		float y = (indices[0] * modelView[1]) +  (indices[1] * modelView[5]) + (indices[2] * modelView[9]) + modelView[13];
-		float z = (indices[0] * modelView[2]) +  (indices[1] * modelView[6]) + (indices[2] * modelView[10]) + modelView[14];
-
-		return new float[] { x, y, z };
-	}
-
 	public void reset()
 	{
 		// Reset Rotation
 		rotation.setIdentity();
 
 		perspAngle = 45;
-		doZoom = true;
 	}
 
 	// Methods used to update the display from outwith the class
@@ -529,7 +498,6 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		perspAngle += zoom;
 		perspAngle = perspAngle < 1 ? 1 : perspAngle;
 		perspAngle = perspAngle > 90 ? 90 : perspAngle;
-		doZoom = true;
 	}
 
 	// Toggles the state of takeScreenshot and manually calls display to get
@@ -612,7 +580,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	{
 		// Mouse over code looking for sphere's under the mouse
 		Ray ray = getRay(gl);
-		DataPoint found = detector.findSphereRayIntersection(ray, translatedPoints, pointSize);
+		DataPoint found = detector.findSphereRayIntersection(ray, pointSize);
 
 		// If we have found a spehre, display this sphere's name in a tooltip
 		String text = found != null ? found.getName() : null;
