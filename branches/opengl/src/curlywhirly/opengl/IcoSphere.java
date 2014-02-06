@@ -3,207 +3,198 @@
 
 package curlywhirly.opengl;
 
-import java.nio.*;
 import java.util.*;
-
-import com.jogamp.common.nio.*;
 
 public class IcoSphere
 {
-	private float[][] icoshedronVertices;
-	// represented as 3 indices in the vertex array.
-	private int[][] icoshedronFaces;
+	private final ArrayList<FaceTriangle> icoFaces;
+	private final ArrayList<Float[]> icoVertices;
 
-	// Buffer to hold isosphere vertex data.
-	private FloatBuffer vertexBuffer;
-	// Buffer to hold faces, represented by 3 indices
-	private IntBuffer indexBuffer;
-	// Number of float values stored in the buffers.
-	private int vertexCount;
-	private int indexCount;
+	private int index;
+	private final HashMap<String, Integer> middlePointCache;
+
+	private final ArrayList<Float> vertexIndices;
+	private final ArrayList<Integer> faceNormals;
 
 	public IcoSphere(int level)
 	{
-		icoshedronVertices = setupVertices();
-		icoshedronFaces = setupFaces();
+		index = 0;
+		icoVertices = new ArrayList<Float[]>();
+		icoFaces = new ArrayList<FaceTriangle>();
+		middlePointCache = new HashMap<String, Integer>();
+		vertexIndices = new ArrayList<Float>();
+		faceNormals = new ArrayList<Integer>();
+
+		setupVertices();
+		setupFaces();
+
 		makeIcosphere(level);
 	}
 
-	private float[][] setupVertices()
+	private void setupVertices()
 	{
 		// Initialize the data for the icosahedron vertices.
-		float t = (float)((Math.sqrt(5) - 1)/2);
-		float[][] vertices = new float[][]
-		{
-			new float[] { -1, -t, 0 },
-			new float[] { 0, 1, t },
-			new float[] { 0, 1, -t },
-			new float[] { 1, t, 0 },
-			new float[] { 1, -t, 0 },
-			new float[] { 0, -1, -t },
-			new float[] { 0, -1, t },
-			new float[] { t, 0, 1 },
-			new float[] { -t, 0, 1 },
-			new float[] { t, 0, -1 },
-			new float[] { -t, 0, -1 },
-			new float[] { -1, t, 0 },
-		};
+		float t = (float)((1 + (Math.sqrt(5)))/2);
 
-		// Normalize the vertices to have unit length.
-		for (float[] v : vertices)
-		{
-			float length = (float)Math.sqrt((v[0] * v[0]) + (v[1] * v[1]) + (v[2] * v[2]));
-			v[0] /= length;
-			v[1] /= length;
-			v[2] /= length;
-		}
+		addVertex(new Float[] { -1f, t, 0f });
+		addVertex(new Float[] { 1f, t, 0f });
+		addVertex(new Float[] { -1f, -t, 0f });
+		addVertex(new Float[] { 1f, -t, 0f });
 
-		return vertices;
+		addVertex(new Float[] { 0f, -1f, t });
+		addVertex(new Float[] { 0f, 1f, t });
+		addVertex(new Float[] { 0f, -1f, -t });
+		addVertex(new Float[] { 0f, 1f, -t });
+
+		addVertex(new Float[] { t, 0f, -1f });
+		addVertex(new Float[] { t, 0f, 1f });
+		addVertex(new Float[] { -t, 0f, -1f });
+		addVertex(new Float[] { -t, 0f, 1f });
 	}
 
-	private int[][] setupFaces()
+	// Create the default 20 faces of the icosahedron
+	private void setupFaces()
 	{
-		int[][] faces = new int[][]
-		{
-			{ 3, 7, 1 },
-			{ 4, 7, 3 },
-			{ 6, 7, 4 },
-			{ 8, 7, 6 },
-			{ 7, 8, 1 },
-			{ 9, 4, 3 },
-			{ 2, 9, 3 },
-			{ 2, 3, 1 },
-			{ 11, 2, 1 },
-			{ 10, 2, 11 },
-			{ 10, 9, 2 },
-			{ 9, 5, 4 },
-			{ 6, 4, 5 },
-			{ 0, 6, 5 },
-			{ 0, 11, 8 },
-			{ 11, 1, 8 },
-			{ 10, 0, 5 },
-			{ 10, 5, 9 },
-			{ 0, 8, 6 },
-			{ 0, 10, 11 },
-		};
+		// 5 faces around point 0
+		icoFaces.add(new FaceTriangle(0, 11, 5));
+		icoFaces.add(new FaceTriangle(0, 5, 1));
+		icoFaces.add(new FaceTriangle(0, 1, 7));
+		icoFaces.add(new FaceTriangle(0, 7, 10));
+		icoFaces.add(new FaceTriangle(0, 10, 11));
 
-		return faces;
+		// 5 adjacent faces
+		icoFaces.add(new FaceTriangle(1, 5, 9));
+		icoFaces.add(new FaceTriangle(5, 11, 4));
+		icoFaces.add(new FaceTriangle(11, 10, 2));
+		icoFaces.add(new FaceTriangle(10, 7, 6));
+		icoFaces.add(new FaceTriangle(7, 1, 8));
+
+		// 5 faces around point 3
+		icoFaces.add(new FaceTriangle(3, 9, 4));
+		icoFaces.add(new FaceTriangle(3, 4, 2));
+		icoFaces.add(new FaceTriangle(3, 2, 6));
+		icoFaces.add(new FaceTriangle(3, 6, 8));
+		icoFaces.add(new FaceTriangle(3, 8, 9));
+
+		// 5 adjacent faces
+		icoFaces.add(new FaceTriangle(4, 9, 5));
+		icoFaces.add(new FaceTriangle(2, 4, 11));
+		icoFaces.add(new FaceTriangle(6, 2, 10));
+		icoFaces.add(new FaceTriangle(8, 6, 7));
+		icoFaces.add(new FaceTriangle(9, 8, 1));
 	}
 
-	private void makeIcosphere(int level)
+	private void makeIcosphere(int subdivision)
 	{
-		ArrayList<Float> vertices = new ArrayList<Float>();
-		ArrayList<Integer> faceIndices = new ArrayList<Integer>();
-
-		// Create a linear arraylist of our (normalized) vertices
-		for (float[] v : icoshedronVertices)
+		// Subdivide our faces by the number of times specified
+		for (int i=0; i < subdivision; i++)
 		{
-			vertices.add(v[0]);
-			vertices.add(v[1]);
-			vertices.add(v[2]);
+			ArrayList<FaceTriangle> subdividedFaces = new ArrayList<>();
+			for (FaceTriangle face : icoFaces)
+			{
+				// Subdivide triangle into 4 trianlges
+				int a = getMiddlePoint(face.v1, face.v2);
+				int b = getMiddlePoint(face.v2, face .v3);
+				int c = getMiddlePoint(face.v3, face.v1);
+
+				// Add our subdivided faces
+				subdividedFaces.add(new FaceTriangle(face.v1, a, c));
+				subdividedFaces.add(new FaceTriangle(face.v2, b, a));
+				subdividedFaces.add(new FaceTriangle(face.v3, c, b));
+				subdividedFaces.add(new FaceTriangle(a, b, c));
+			}
+			// Clear the collection and add the subdivided faces, preparing
+			// us for potential further subdivision
+			icoFaces.clear();
+			icoFaces.addAll(subdividedFaces);
 		}
 
-		// Subdivide each face of the sphere in turn, to the required level of detail
-		for (int[] face : icoshedronFaces)
-			subdivide(face[0], face[1], face[2], vertices, faceIndices, level);
-
-		vertexCount = vertices.size();
-		indexCount = faceIndices.size();
-
-		// Setup vertex and index buffers ready for the OpenGL code
-		vertexBuffer = Buffers.newDirectFloatBuffer(vertices.size());
-		for (float x : vertices)
-			vertexBuffer.put(x);
-		vertexBuffer.rewind();
-
-		indexBuffer = Buffers.newDirectIntBuffer(faceIndices.size());
-		for (int i : faceIndices)
-			indexBuffer.put(i);
-		indexBuffer.rewind();
+		createVertexList();
+		createFaceNormalList();
 	}
 
-	/**
-	* Subdivides a triangular face on the unit sphere and stores the
-	* data for all the (sub-)faces that are generated into the list of
-	* vertex coordinates and the list of vertex indices for faces.
-	* (Note that a given vertex will actually be generated twice, and that
-	* no attempt is made to eliminate this redundancy.)
-	* @param v1  Index in vertex list of the first vertex of the face.
-	* @param v2  Index in vertex list of the second vertex of the face.
-	* @param v3  Index in vertex list of the third vertex of the face.
-	* @param vertices  The vertex list.
-	* @param faces  The list of vertex indices for each face that is generated.
-	* @param level  The number of times the face is to be subdivided.
-	*/
-	private void subdivide(int v1, int v2, int v3, ArrayList<Float> vertices,
-						 ArrayList<Integer> faces, int level)
+	private void createFaceNormalList()
 	{
-		if (level == 0)
+		for (FaceTriangle face : icoFaces)
 		{
-			// For level 0, add the vertex indices for this face to the vertex data.
-			faces.add(v1);
-			faces.add(v2);
-			faces.add(v3);
+			faceNormals.add(face.v1);
+			faceNormals.add(face.v2);
+			faceNormals.add(face.v3);
 		}
-		else
-		{
-			// Subdivide the face into 4 triangles, and then subdivide
-			// each of those triangles (level-1) times. The new vertices
-			// that are generated are placed in the vertex list.  There
-			// is a new vertex half-way between each pair of vertices
-			// of the original face.
-			float a1 = (vertices.get(3*v1) + vertices.get(3*v2));
-			float a2 = (vertices.get(3*v1+1) + vertices.get(3*v2+1));
-			float a3 = (vertices.get(3*v1+2) + vertices.get(3*v2+2));
-			float length = (float)Math.sqrt(a1*a1+a2*a2+a3*a3);
-			a1 /= length;
-			a2 /= length;
-			a3 /= length;
-			int indexA = vertices.size()/3;
-			vertices.add(a1);
-			vertices.add(a2);
-			vertices.add(a3);
+	}
 
-			float b1 = (vertices.get(3*v3) + vertices.get(3*v2));
-			float b2 = (vertices.get(3*v3+1) + vertices.get(3*v2+1));
-			float b3 = (vertices.get(3*v3+2) + vertices.get(3*v2+2));
-			length = (float)Math.sqrt(b1*b1+b2*b2+b3*b3);
-			b1 /= length;
-			b2 /= length;
-			b3 /= length;
-			int indexB = vertices.size()/3;
-			vertices.add(b1);
-			vertices.add(b2);
-			vertices.add(b3);
+	private void createVertexList()
+	{
+		for (Float[] vertices : icoVertices)
+			for (float vertex : vertices)
+				vertexIndices.add(vertex);
+	}
 
-			float c1 = (vertices.get(3*v1) + vertices.get(3*v3));
-			float c2 = (vertices.get(3*v1+1) + vertices.get(3*v3+1));
-			float c3 = (vertices.get(3*v1+2) + vertices.get(3*v3+2));
-			length = (float)Math.sqrt(c1*c1+c2*c2+c3*c3);
-			c1 /= length;
-			c2 /= length;
-			c3 /= length;
-			int indexC = vertices.size()/3;
-			vertices.add(c1);
-			vertices.add(c2);
-			vertices.add(c3);
+	private int getMiddlePoint(int p1, int p2)
+	{
+		int smallerIndex = Math.min(p1, p2);
+		int greaterIndex = Math.max(p1, p2);
+		String key = smallerIndex + "-" + greaterIndex;
 
-			subdivide(v1,indexA,indexC,vertices,faces,level-1);
-			subdivide(indexA,v2,indexB,vertices,faces,level-1);
-			subdivide(indexC,indexB,v3,vertices,faces,level-1);
-			subdivide(indexA,indexB,indexC,vertices,faces,level-1);
-		}
+		Integer value = middlePointCache.get(key);
+		if (value != null)
+			return value;
+
+		Float[] point1 = icoVertices.get(p1);
+		Float[] point2 = icoVertices.get(p2);
+		// Generate a 3D point that is in the middle of point 1 and 2
+		Float[] middle = new Float[] {
+				(point1[0] + point2[0]) / 2f,
+				(point1[1] + point2[1]) / 2f,
+				(point1[2] + point2[2]) / 2f };
+
+		int i = addVertex(middle);
+		middlePointCache.put(key, i);
+		return i;
+	}
+
+	private int addVertex(Float[] vertex)
+	{
+		normalizeVertex(vertex);
+		icoVertices.add(vertex);
+		return index++;
+	}
+
+	private void normalizeVertex(Float[] v)
+	{
+		float length = (float)Math.sqrt((v[0] * v[0]) + (v[1] * v[1]) + (v[2] * v[2]));
+		v[0] /= length;
+		v[1] /= length;
+		v[2] /= length;
+	}
+
+	public ArrayList<Float> getVertices()
+	{
+		return vertexIndices;
+	}
+
+	public ArrayList<Integer> getFaceNormals()
+	{
+		return faceNormals;
 	}
 
 	public int vertexCount()
-		{ return vertexCount; }
+		{ return vertexIndices.size(); }
 
-	public int indexCount()
-		{ return indexCount; }
+	public int faceNormalCount()
+		{ return faceNormals.size(); }
 
-	public FloatBuffer vertexBuffer()
-		{ return vertexBuffer; }
+	class FaceTriangle
+	{
+		final int v1;
+		final int v2;
+		final int v3;
 
-	public IntBuffer indexBuffer()
-		{ return indexBuffer; }
+		FaceTriangle(int v1, int v2, int v3)
+		{
+			this.v1 = v1;
+			this.v2 = v2;
+			this.v3 = v3;
+		}
+	}
 }

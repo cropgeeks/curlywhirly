@@ -5,6 +5,7 @@ package curlywhirly.opengl;
 
 import java.awt.*;
 import java.awt.image.*;
+import java.nio.*;
 import java.util.*;
 import javax.media.opengl.*;
 import javax.media.opengl.awt.*;
@@ -12,6 +13,7 @@ import javax.media.opengl.glu.*;
 import javax.swing.*;
 import javax.vecmath.*;
 
+import com.jogamp.common.nio.*;
 import com.jogamp.opengl.util.*;
 import com.jogamp.opengl.util.awt.*;
 
@@ -76,7 +78,12 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	private final CloseOverlay closeOverlay;
 
-	private float pointSize = 0.25f;
+	private float pointSize = 1f;
+
+	// Buffer to hold isosphere vertex data.
+	private FloatBuffer vertexBuffer;
+	// Buffer to hold faces, represented by 3 indices
+	private IntBuffer indexBuffer;
 
 	public OpenGLPanel(WinMain winMain, GLCapabilities caps)
 	{
@@ -137,6 +144,8 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		glu = new GLU();
 		gl.glClearDepth(1.0f);
 		gl.glEnable(GL_DEPTH_TEST);
+		gl.glDepthMask(true);
+		gl.glDepthRangef(0f, 1f);
 		gl.glDepthFunc(GL_LEQUAL);
 		gl.glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 		gl.glShadeModel(GL_SMOOTH);
@@ -147,14 +156,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glEnable(GL_RESCALE_NORMAL);
 		gl.glEnable(GL_CULL_FACE);
 
-		// Vertex buffers for our spheres
-		int[] bufferID = new int[2];
-		gl.glGenBuffers(2, bufferID, 0);
-		icosphereVertexID = bufferID[0];
-		icosphereIndexID = bufferID[1];
-
-		// A single sphere object to be copied from
-		sphere = new IcoSphere(1);
+		createSphereVertexBuffer(gl);
 
 		lightScene(gl);
 
@@ -184,12 +186,11 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 		// Get the graphics context
 		GL2 gl = drawable.getGL().getGL2();
-
-		zoomPerspective(gl);
-
 		clearColor(gl);
 		// Clear the colour and depth buffers
 		gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		zoomPerspective(gl);
 
 		gl.glPushMatrix();
 
@@ -398,14 +399,12 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	{
 		// Vertex buffer setup code
 		gl.glBindBuffer(GL_ARRAY_BUFFER, icosphereVertexID);
-		gl.glBufferData(GL_ARRAY_BUFFER, sphere.vertexCount()*4,
-			  sphere.vertexBuffer(), GL_STATIC_DRAW);
+		gl.glBufferData(GL_ARRAY_BUFFER, sphere.vertexCount()*4, vertexBuffer, GL_STATIC_DRAW);
 		gl.glVertexPointer(3, GL_FLOAT,0,0);
 		gl.glNormalPointer(GL_FLOAT,0,0);
 		gl.glBindBuffer(GL_ARRAY_BUFFER, 0);
 		gl.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, icosphereIndexID);
-		gl.glBufferData(GL_ELEMENT_ARRAY_BUFFER, sphere.indexCount()*4,
-			  sphere.indexBuffer(), GL_STATIC_DRAW);
+		gl.glBufferData(GL_ELEMENT_ARRAY_BUFFER, sphere.faceNormalCount()*4, indexBuffer, GL_STATIC_DRAW);
 		gl.glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 		gl.glEnableClientState(GL_VERTEX_ARRAY);
@@ -444,12 +443,34 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 		// Draw the triangles using the isosphereIndexBuffer VBO for the
 		// element data (as well as the isosphereVertexBuffer).
-		gl.glDrawElements(GL_TRIANGLES, sphere.indexCount(), GL_UNSIGNED_INT, 0);
+		gl.glDrawElements(GL_TRIANGLES, sphere.faceNormalCount(), GL_UNSIGNED_INT, 0);
 		gl.glPopMatrix();
 	}
 
+	private void createSphereVertexBuffer(GL2 gl)
+	{
+		// Vertex buffers for our spheres
+		int[] bufferID = new int[2];
+		gl.glGenBuffers(2, bufferID, 0);
+		icosphereVertexID = bufferID[0];
+		icosphereIndexID = bufferID[1];
+
+		// A single sphere object to be copied from
+		sphere = new IcoSphere(1);
+
+		vertexBuffer = Buffers.newDirectFloatBuffer(sphere.vertexCount());
+		for (float vertex : sphere.getVertices())
+			vertexBuffer.put(vertex);
+		vertexBuffer.rewind();
+
+		indexBuffer = Buffers.newDirectIntBuffer(sphere.faceNormalCount());
+		for (int face : sphere.getFaceNormals())
+			indexBuffer.put(face);
+		indexBuffer.rewind();
+	}
+
 	// Our translations are stored in a -1 to 1 range and we want to re-map these
-	// into our -0.5 to 0.5 coordinate space.
+	// into our -50 to 50 coordinate space.
 	private float map(float number)
 	{
 		return ((number-(-1f))/(1f-(-1f)) * (50f-(-50f)) + -50f);
