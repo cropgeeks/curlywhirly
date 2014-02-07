@@ -1,5 +1,7 @@
 <project name="CurlyWhirly" default="compile" basedir=".">
 
+	<property file="build.properties" />
+
 	<property name="src" location="src"/>
 	<property name="res" location="res"/>
 	<property name="lib" location="lib"/>
@@ -17,7 +19,7 @@
 	</path>
 
 	<target name="compile" depends="init">
-		<javac srcdir="${src}" destdir="${classes}" source="6" target="6" debug="true" includeantruntime="false">
+		<javac srcdir="${src}" destdir="${classes}" source="7" target="7" debug="true" includeantruntime="false">
 			<compilerarg value="-Xlint:-options"/>
 			<classpath refid="project.classpath"/>
 			<exclude name="**/package-info.java"/>
@@ -49,11 +51,17 @@
 				<attribute name="Main-Class" value="curlywhirly.gui.CurlyWhirly"/>
 				<attribute name="Class-Path"
 					value="gluegen-rt.jar
-						i4jruntime.jar
-						j3dcore.jar
-						j3dutils.jar
-						jmf.jar
-						jogl.jar
+						gluegen-rt-natives-linux-amd64.jar
+						gluegen-rt-natives-linux-i586.jar
+						gluegen-rt-natives-macosx-universal.jar
+						gluegen-rt-natives-windows-amd64.jar
+						gluegen-rt-natives-windows-i586.jar
+						jogl-all.jar
+						jogl-all-natives-linux-amd64.jar
+						jogl-all-natives-linux-i586.jar
+						jogl-all-natives-macosx-universal.jar
+						jogl-all-natives-windows-amd64.jar
+						jogl-all-natives-windows-i586.jar
 						scri-commons.jar
 						osxadapter.jar
 						vecmath.jar"/>
@@ -66,11 +74,8 @@
 		<input message="Enter the version number:" addproperty="i4j.version"/>
 	</target>
 
-	<target name="install4j" depends="getversion, jar">
-		<input message="Enter the private key password for signing:" addproperty="password">
-    		<handler classname="org.apache.tools.ant.input.SecureInputHandler"/>
-		</input>
 
+	<target name="install4j" depends="getversion, jar">
 		<taskdef name="install4j"
 			classname="com.install4j.Install4JTask"
 			classpath="C:\Program Files\Install4j\bin\ant.jar"/>
@@ -81,10 +86,10 @@
 			<fileset dir="installer" includes="**/*.dmg"/>
 		</delete>
 
-		<install4j projectfile="installer/curlywhirly_installer.install4j"
+		<install4j projectfile="installer/curlywhirly.install4j"
 		           release="${i4j.version}"
-		           winKeystorePassword="${password}"
-		           macKeystorePassword="${password}"/>
+		           winKeystorePassword="${keystore.password}"
+		           macKeystorePassword="${keystore.password}"/>
 	</target>
 
 </project>

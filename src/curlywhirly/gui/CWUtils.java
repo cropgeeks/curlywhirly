@@ -1,10 +1,15 @@
+// Copyright 2009-2014 Information & Computational Sciences, JHI. All rights
+// reserved. Use is subject to the accompanying licence terms.
+
 package curlywhirly.gui;
 
 import java.awt.*;
+import java.awt.datatransfer.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.net.*;
 import javax.swing.*;
+import javax.swing.table.*;
 import javax.swing.filechooser.*;
 
 import scri.commons.gui.*;
@@ -27,35 +32,12 @@ public class CWUtils
 	{
 		try
 		{
-			if (SystemUtils.jreVersion() >= 1.6)
-				visitURL6(html);
-			else
-				visitURL5(html);
+			Desktop desktop = Desktop.getDesktop();
+
+			URI uri = new URI(html);
+			desktop.browse(uri);
 		}
 		catch (Exception e) { System.out.println(e); }
-	}
-
-	// Java6 method for visiting a URL
-	private static void visitURL6(String html)
-		throws Exception
-	{
-		Desktop desktop = Desktop.getDesktop();
-
-		URI uri = new URI(html);
-		desktop.browse(uri);
-	}
-
-	// Java5 (OS X only) method for visiting a URL
-	private static void visitURL5(String html)
-		throws Exception
-	{
-		// See: http://www.centerkey.com/java/browser/
-
-		Class<?> fileMgr = Class.forName("com.apple.eio.FileManager");
-		Method openURL = fileMgr.getDeclaredMethod("openURL",
-			new Class[] {String.class});
-
-		openURL.invoke(null, new Object[] {html});
 	}
 
 	/**
@@ -75,7 +57,7 @@ public class CWUtils
 		if (file != null)
 			fc.setSelectedFile(file);
 
-		while (fc.showSaveDialog(CurlyWhirly.curlyWhirly) == JFileChooser.APPROVE_OPTION)
+		while (fc.showSaveDialog(CurlyWhirly.winMain) == JFileChooser.APPROVE_OPTION)
 		{
 			file = fc.getSelectedFile();
 
@@ -110,5 +92,34 @@ public class CWUtils
 		}
 
 		return null;
+	}
+
+	public static void copyTableToClipboard(JTable table, AbstractTableModel model)
+	{
+		StringBuilder text = new StringBuilder();
+		String newline = System.getProperty("line.separator");
+
+		// Column headers
+		for (int c = 0; c < model.getColumnCount(); c++)
+		{
+			text.append(model.getColumnName(c));
+			text.append(c < model.getColumnCount()-1 ? "\t" : newline);
+		}
+
+		// Each row
+		for (int r = 0; r < table.getRowCount(); r++)
+		{
+			int row = table.convertRowIndexToModel(r);
+
+			for (int c = 0; c < model.getColumnCount(); c++)
+			{
+				text.append(model.getValueAt(row, c));
+				text.append(c < model.getColumnCount()-1 ? "\t" : newline);
+			}
+		}
+
+		StringSelection selection = new StringSelection(text.toString());
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
+			selection, null);
 	}
 }

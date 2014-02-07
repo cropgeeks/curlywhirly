@@ -1,5 +1,5 @@
-// Copyright 2009 Plant Bioinformatics Group, SCRI. All rights reserved.
-// Use is subject to the accompanying licence terms.
+// Copyright 2009-2014 Information & Computational Sciences, JHI. All rights
+// reserved. Use is subject to the accompanying licence terms.
 
 package curlywhirly.gui;
 
@@ -7,18 +7,18 @@ import java.awt.datatransfer.*;
 import java.awt.dnd.*;
 import java.io.*;
 import java.util.*;
-
-import curlywhirly.data.*;
+import javax.swing.SwingUtilities;
 
 public class FileDropAdapter extends DropTargetAdapter
 {
-	private final CurlyWhirly winMain;
+	private final WinMain winMain;
 
-	public FileDropAdapter(CurlyWhirly winMain)
+	public FileDropAdapter(WinMain winMain)
 	{
 		this.winMain = winMain;
 	}
 
+	@Override
 	public void drop(DropTargetDropEvent dtde)
 	{
 		Transferable t = dtde.getTransferable();
@@ -34,11 +34,20 @@ public class FileDropAdapter extends DropTargetAdapter
 				if (dataFlavors[i].isFlavorJavaFileListType())
 				{
 					List<?> list = (List<?>) t.getTransferData(dataFlavors[i]);
+					final String filename = list.get(0).toString();
 
-					//open the file
-					CurlyWhirly.dragAndDropDataLoad = true;
-					CurlyWhirly.dataLoader = new DataLoader();
-					CurlyWhirly.dataLoader.loadDataInThread(new File(list.get(0).toString()));
+					// We thread this off, so that Windows doesn't hang after a
+					// drag n drop from Explorer while CurlyWhirly actually loads
+					// the data
+					Runnable r = new Runnable() {
+						@Override
+						public void run()
+						{
+							winMain.getCommands().openFile(new File(filename));
+						}
+					};
+
+					SwingUtilities.invokeLater(r);
 
 					dtde.dropComplete(true);
 					return;
@@ -47,6 +56,6 @@ public class FileDropAdapter extends DropTargetAdapter
 
 			dtde.dropComplete(true);
 		}
-		catch (Exception e) {}
+		catch (UnsupportedFlavorException | IOException e) {}
 	}
 }

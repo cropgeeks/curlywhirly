@@ -1,12 +1,10 @@
-// Copyright 2009-2012 Information & Computational Sciences, JHI. All rights
+// Copyright 2009-2014 Information & Computational Sciences, JHI. All rights
 // reserved. Use is subject to the accompanying licence terms.
 
 package curlywhirly.gui;
 
 import java.awt.event.*;
 import javax.swing.*;
-
-import curlywhirly.controller.*;
 
 import scri.commons.gui.*;
 
