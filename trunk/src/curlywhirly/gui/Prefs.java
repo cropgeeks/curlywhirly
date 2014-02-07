@@ -1,9 +1,11 @@
+// Copyright 2009-2014 Information & Computational Sciences, JHI. All rights
+// reserved. Use is subject to the accompanying licence terms.
+
 package curlywhirly.gui;
 
+import java.awt.Color;
 import java.io.*;
 import java.util.*;
-
-import curlywhirly.controller.*;
 
 import scri.commons.gui.*;
 
@@ -25,11 +27,12 @@ public class Prefs extends XMLPreferences
 	public static String guiCurrentDir = "";
 
 	// The width, height, location and maximized status of the main window
-	public static int guiWinMainWidth = 1000;
-	public static int guiWinMainHeight = 700;
+	public static int guiWinMainW = 1000;
+	public static int guiWinMainH = 700;
 	public static int guiWinMainX = 0;
 	public static int guiWinMainY = 0;
 	public static boolean guiWinMainMaximized = false;
+	public static int guiSplitterLocation = 250;
 
 	// Is this the first time the program has ever been run (by this user)?
 	public static boolean isFirstRun = true;
@@ -46,8 +49,20 @@ public class Prefs extends XMLPreferences
 	// Graph background color
 	public static int guiGraphBackground = 0;
 
+	public static Color guiXAxisColor = Color.GREEN;
+	public static Color guiYAxisColor = Color.GREEN;
+	public static Color guiZAxisColor = Color.GREEN;
+
+	public static boolean guiChkAxisLabels = true;
+	public static boolean guiChkDatasetLabels = false;
+
+	public static boolean guiWarnOnExit = true;
+	public static boolean guiWarnOnClose = true;
+
 	public static int guiMovieCaptureFrameRate = 30;
 	public static int guiMovieCaptureSpinSpeedIndex = 1;
+
+	public static boolean guiAntialiasAxes = true;
 
 	// The local working directory for disk caching
 	public static String cacheFolder =

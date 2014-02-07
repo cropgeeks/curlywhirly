@@ -1,3 +1,6 @@
+// Copyright 2009-2014 Information & Computational Sciences, JHI. All rights
+// reserved. Use is subject to the accompanying licence terms.
+
 package curlywhirly.gui;
 
 import java.awt.event.*;
@@ -26,12 +29,12 @@ public class FrameListener implements ComponentListener, WindowFocusListener
 	{
 		//if the user has moved the window the movie screen capture will be disrupted and
 		//we need to cancel the capture
-		if(frame.currentMovieCaptureThread != null && !windowMoved)
-		{
-			GUIUtils.cancelMovieCapture();
-			TaskDialog.error(RB.getString("gui.FrameListener.error"), RB.getString("gui.text.close"));
-		}
-		windowMoved = true;
+//		if(frame.currentMovieCaptureThread != null && !windowMoved)
+//		{
+//			GUIUtils.cancelMovieCapture();
+//			TaskDialog.error(RB.getString("gui.FrameListener.error"), RB.getString("gui.text.close"));
+//		}
+//		windowMoved = true;
 	}
 
 
@@ -39,11 +42,11 @@ public class FrameListener implements ComponentListener, WindowFocusListener
 	{
 		//if the user has resized the window the movie screen capture will be disrupted and
 		//we need to cancel the capture
-		if(frame.currentMovieCaptureThread != null)
-		{
-			GUIUtils.cancelMovieCapture();
-			TaskDialog.error(RB.getString("gui.FrameListener.error"), RB.getString("gui.text.close"));
-		}
+//		if(frame.currentMovieCaptureThread != null)
+//		{
+//			GUIUtils.cancelMovieCapture();
+//			TaskDialog.error(RB.getString("gui.FrameListener.error"), RB.getString("gui.text.close"));
+//		}
 	}
 
 	//not used

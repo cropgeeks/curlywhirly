@@ -18,7 +18,7 @@
 <h2>Download CurlyWhirly</h2>
 
 <p>The most recent release of CurlyWhirly is:
-<b>1.10.12.10</b> (10th December 2010).</p>
+<b>1.14.01.27</b> (27th January 2014).</p>
 
 <p>Please use the links below to download the CurlyWhirly installer most suitable
 for your operating system. CurlyWhirly is currently available for:</p>
@@ -28,42 +28,32 @@ for your operating system. CurlyWhirly is currently available for:</p>
 	<td>&nbsp;&nbsp;&nbsp;</td>
 	<td><img src="images/icon_windows.gif" alt="Windows"></td>
 	<td>
-		<a href="installers/curlywhirly_windows_installer.exe">
-		Microsoft Windows</a> (23MB)
-	</td>
-</tr>
-<tr>
-	<td>&nbsp;&nbsp;&nbsp;</td>
-	<td><img src="images/icon_osx.gif" alt="OS X"></td>
-	<td>
-		<a href="installers/curlywhirly_macos_installer.dmg">
-		Apple Mac OS X</a> (7MB)
+		<a href="installers/curlywhirly_windows_x86_1_14_01_27.exe">Windows (32 bit)</a> or
+		<a href="installers/curlywhirly_windows_x64_1_14_01_27.exe">Windows (64 bit)</a>
 	</td>
 </tr>
 <tr>
 	<td>&nbsp;&nbsp;&nbsp;</td>
 	<td><img src="images/icon_linux.gif" alt="Linux"></td>
 	<td>
-		<a href="installers/curlywhirly_linux_installer.sh">
-		Linux</a> (26MB)
+		<a href="installers/curlywhirly_linux_x86_1_14_01_27.sh">Linux (32 bit)</a> or
+		<a href="installers/curlywhirly_linux_x64_1_14_01_27.sh">Linux (64 bit)</a>
 	</td>
 </tr>
 <tr>
 	<td>&nbsp;&nbsp;&nbsp;</td>
-	<td><img src="images/icon_solaris.gif" alt="Solaris"></td>
+	<td><img src="images/icon_osx.gif" alt="OS X"></td>
 	<td>
-		<a href="installers/curlywhirly_solaris_installer.sh">
-		Solaris (sparc)</a> (31MB)
+		<a href="installers/curlywhirly_macos_1_14_01_27.dmg">Mac OS X</a>
 	</td>
 </tr>
+
 </table>
 
 <p>Follow the instructions provided by the graphical installer to install CurlyWhirly.</p>
 
 <p>CurlyWhirly is developed on Windows 7 (64bit), and gets additional regular
-testing on OS X 10.5.5 (64bit), Ubuntu Linux 7.10 (32bit), and Centos 5.2
-(32bit).</p>
-
+testing on OS X 10.9 (64bit), Fedora Linux 19 (64bit).</p>
 
 <!--#include virtual="footer.html" -->
 

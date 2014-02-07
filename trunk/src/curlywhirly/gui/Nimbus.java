@@ -1,4 +1,4 @@
-// Copyright 2009-2012 Information & Computational Sciences, JHI. All rights
+// Copyright 2009-2014 Information & Computational Sciences, JHI. All rights
 // reserved. Use is subject to the accompanying licence terms.
 
 package curlywhirly.gui;
@@ -38,6 +38,7 @@ class Nimbus
 		UIManager.put("SplitPane[Enabled].size", 8);
 
 		UIManager.put("nimbusOrange", new Color(51, 98, 140));
+		UIManager.put("nimbusSelectionBackground", new Color(115, 164, 209));
 //		UIManager.put("nimbusOrange", new Color(57, 105, 138));
 //		UIManager.put("nimbusOrange", new Color(115, 164, 209));
 	}

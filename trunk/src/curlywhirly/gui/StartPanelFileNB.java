@@ -1,4 +1,4 @@
-// Copyright 2009-2012 Information & Computational Sciences, JHI. All rights
+// Copyright 2009-2014 Information & Computational Sciences, JHI. All rights
 // reserved. Use is subject to the accompanying licence terms.
 
 package curlywhirly.gui;
@@ -6,6 +6,8 @@ package curlywhirly.gui;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
+
+import curlywhirly.io.*;
 
 import scri.commons.gui.*;
 import scri.commons.gui.matisse.*;
@@ -22,10 +24,14 @@ public class StartPanelFileNB extends JPanel implements ActionListener
 	private String[] filenames = new String[10];
 	private String[] tooltips = new String[10];
 
-	public StartPanelFileNB()
+	private WinMain winMain;
+
+	public StartPanelFileNB(WinMain winMain)
 	{
 		initComponents();
 		setOpaque(false);
+
+		this.winMain = winMain;
 
 		RB.setText(importLabel, "gui.NBStartFilePanel.importLabel");
 		RB.setText(openLabel, "gui.NBStartFilePanel.openLabel");
@@ -46,23 +52,16 @@ public class StartPanelFileNB extends JPanel implements ActionListener
 
 		int j=0;
 		// Parse the list of recent documents
-		for (final String path: Prefs.guiRecentDocs)
+		for (final CurlyWhirlyFile cwFile: CurlyWhirlyFileHandler.recentFiles)
 		{
-			// Ignore any that haven't been set yet
-			if (path == null || path.equals(" "))
-				continue;
+			// Button text will be "name" (or "name1" ~ "name2")
+			String text = cwFile.dataFile.getName();
+			String tooltip = cwFile.dataFile.getPath();
 
-			File tempFile = new File(path);
-
-			// Button text will be "name" (or "name1" | "name2")
-			String text = tempFile.getName();
-			String filePath = tempFile.getPath();
-			String tooltip = tempFile.getPath();
-
-			if(j < filenames.length)
+			if (j < filenames.length)
 			{
 				filenames[j] = text;
-				files[j] = filePath;
+				files[j] = cwFile.dataFile.getPath();
 				tooltips[j] = tooltip;
 			}
 			else
@@ -91,19 +90,18 @@ public class StartPanelFileNB extends JPanel implements ActionListener
 		}
     }
 
+	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-//		WinMain wm = Tablet.winMain;
-//
 		if (e.getSource() == importLabel)
-			CurlyWhirly.toolbar.openFile(null);
+			winMain.getCommands().open();
 
 		if (e.getSource() == sampleLabel)
-			CurlyWhirly.toolbar.openSample();
+			winMain.getCommands().openSample();
 //
 		for (int i = 0; i < labels.length; i++)
 			if (e.getSource() == labels[i])
-				CurlyWhirly.toolbar.openFile(new File(files[i]));
+				winMain.getCommands().openFile(new File(files[i]));
 	}
 
     /** This method is called from within the constructor to

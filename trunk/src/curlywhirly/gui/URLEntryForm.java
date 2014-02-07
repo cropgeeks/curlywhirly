@@ -1,3 +1,6 @@
+// Copyright 2009-2014 Information & Computational Sciences, JHI. All rights
+// reserved. Use is subject to the accompanying licence terms.
+
 package curlywhirly.gui;
 
 import javax.swing.*;
@@ -24,7 +27,7 @@ public class URLEntryForm extends JDialog
 		String url = dataURLTextField.getText();
 		if (url != null)
 		{
-			CurlyWhirly.dataAnnotationURL = url;
+//			CurlyWhirly.dataAnnotationURL = url;
 			dataURLTextField.setText(url);
 			//close the window
 			setVisible(false);

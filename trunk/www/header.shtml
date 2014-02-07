@@ -11,7 +11,7 @@
 
 <div id="topNav">
 	<span class="headerText">
-		<b>Plant Bioinformatics Group</b>
+		<b>Information &amp; Computational Sciences</b>
 	</span>
 </div>
 
@@ -23,9 +23,7 @@
   <li><a href="download.shtml">Download CurlyWhirly</a></li>
   <li><a href="screenshots.shtml">Screenshots</a></li>
   <li><a href="manual.shtml">Manual</a></li>
-  <li><a href="people.shtml">People</a></li>
-   <li><a href="map.shtml">Usage map</a></li>
-    <li><a href="whatsnew.shtml">What's new</a></li>
+  <li><a href="whatsnew.shtml">What's new</a></li>
 </ul>
 
 <!--#include virtual="../software_common/links.html" -->

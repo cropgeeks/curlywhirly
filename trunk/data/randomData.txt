@@ -1,4 +1,4 @@
-Category	Label	pa1	pa2	pa3
+categories:Category	Label	pa1	pa2	pa3
 category A	obj1	0.47	0.95	0.39
 category A	obj2	0.98	0.98	0.36
 category A	obj3	0.5	0.4	0.11

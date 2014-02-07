@@ -40,91 +40,59 @@
 	<body>
 
 		<h1>Data format</h1>
-		<h2>Legacy data format</h2>
-		<p>The data has to have a minimum of three data variables for three-dimensional visualisation. Data must be supplied in a tab-delimited text file, with the column order as follows:</p>
+		<p>The CurlyWhirly data format is a tab delimited text format with a header which specifies the category groups which categories are found in, as well as the axis names for the data set. The category column header should start with the prefix "categories:" and the header line for the column which contains your data point names should be "label".</p>
 
-		<table>
-			<tr>
-				<th>Category data</th>
-				<th>Labels for individual data points</th>
-				<th>Data column 1</th>
-				<th>Data column 2</th>
-				<th>...</th>
-				<th>Data column n</th>
-			</tr>
-		</table>
-
-		<p>If your data does not have category information attached to it, the entire first column can be left empty (but still tabbed).</p>
-		<p>There is no limit on the number of data columns but the data in these must obviously be numerical. Columns can be labelled with any label. Make sure there are no extra lines or tabs after the end of the data in either direction.</p>
-
-		<h2>New multi-category data format</h2>
-		<p>This format is supported from version 1.10.12.10 onwards and supports multiple columns with category information, allowing users to categorize their data in different ways. The legacy format is still supported.</p>
-		<p>The basic format is as described above, but category column headers must start with the prefix "categories:" and there can be an unlimited number of these to the left of the column with the data labels:</p>
-
-		<table>
-			<tr>
-				<th>Category data 1</th>
-				<th>Category data 2</th>
-				<th>...</th>
-				<th>Category data m</th>
-				<th>Labels for individual data points</th>
-				<th>Data column 1</th>
-				<th>Data column 2</th>
-				<th>...</th>
-				<th>Data column n</th>
-			</tr>
-		</table>
-		<p>Thus, the data headers might look something like this:</p>
+		<p>A header line should resemble the following:</p>
 		<table>
 			<tr>
 				<th>categories:size</th>
 				<th>categories:age</th>
-				<th>myLabels</th>
+				<th>Label</th>
 				<th>PCO1</th>
 				<th>PCO2</th>
 				<th>PCO3</th>
 			</tr>
 		</table>
 
-			
+
 		<h2>Database search URL</h2>
 		<p>CurlyWhirly supports a special header line in its input files that begins with a # character. You can use this line to supply a lookup URL (for example to  an online database containing more information about the data) that will be called when points are clicked on. The line must be in the following format:</p>
 		<pre># cwDatabaseSearch = http://mylookup.address/info=$DATA</pre>
-		
+
 		<p>$DATA will be replaced at runtime by the name of the point clicked on. It can be located anywhere within the URL.</p>
-		
+
 		<h1>Loading data</h1>
 		<p>Click "Open file" in the toolbar and select a file to load. If you would like to experiment with some example data, click on the "Open sample data" button in the toolbar or on the link on the welcome page. This will load a file supplied with the application which contains randomly generated data. You can use this to explore the functionality of the application.</p>
 
-		
+
 		<h1>Choosing data to display</h1>
 		<p>On the left hand control panel, select for each axis from the drop-down menu which variable you would like displayed.</p>
-		
-		
+
+
 		<h1>View controls</h1>
 		<p>To reorient the graph, click and drag with the left mouse button. To go back to the original viewpoint, click the button labelled "Reset Viewpoint" in the toolbar.</p>
 		<p>To zoom in and out, middle-click and drag or Alt+Left-click and drag.</p>
 		<p>To spin the scene continuously, click the "Spin" button in the toolbar. Click it again to stop the rotation. You can control the rotation speed using the slider located next to the "Spin" button.</p>
 
-		
+
 		<h1>Background colour</h1>
 		<p>To change the background colour of the display, click on the "Settings" button in the toolbar and select a colour from the drop-down menu  in the newly opened window. Options are light grey, dark grey, black and white.</p>
-		
-		
+
+
 		<h1>Highlighting subsets of data</h1>
 		<p>You can selectively colour data from one or more categories by clicking on them in the category list panel on the bottom left (Ctrl+click (or Cmd+click on OS X) to select more than one category). This will grey out all data points except for those in the selected categories.</p>
 		<p>Double-click on a category to change its colour.</p>
-		<p>To show the original colouring again, press the button labelled "Reset Selection".</p> 
+		<p>To show the original colouring again, press the button labelled "Reset Selection".</p>
 
-		
+
 		<h1>Exploring individual data points</h1>
 		<p>Position the mouse over a data point and its individual label (as supplied in the data file) will be displayed in the status bar at the bottom left corner of the application. If a database search URL was supplied in the data file, then clicking on a point will link you out to that URL with the point's name as the supplied $DATA argument.</p>
 
-		
+
 		<h1>Capturing a screenshot</h1>
 		<p>To create a screenshot of the current display, click on the "Capture Screenshot" button in the toolbar. Select the location and name of the image file in the newly opened window and click "Save" to create the image.</p>
 
-		
+
 		<h1>Capturing a movie</h1>
 		<p>Clicking on the "Capture movie" button in the toolbar will open a new window with settings to create an animated movie of the current scene. There are two settings: one for the number of frames per second (FPS) and one for the spin speed. Both will affect the final file size of the movie. Click on "Capture movie" to select the file name and location and click on "Save" to start the process.</p>
 		<p>During the capture process, ensure you do not resize or move the window.</p>
