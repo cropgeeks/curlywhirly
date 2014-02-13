@@ -77,15 +77,17 @@ public class AboutDialog extends JDialog implements ActionListener
 
 					String tooltip = "<html>";
 
-					if (x >= 25 && x < 120)
+					if (x >= 20 && x < 100)
 						tooltip += "Gordon Stephen";
-					else if (x >= 140 && x < 240)
+					else if (x >= 110 && x < 210)
 						tooltip += "Iain Milne";
-					else if (x >= 250 && x < 350)
+					else if (x >= 220 && x < 310)
 						tooltip += "Micha Bayer";
-					else if (x >= 360 && x < 450)
+					else if (x >= 320 && x < 410)
 						tooltip += "Paul Shaw";
-					else if (x >= 460 && x < 570)
+					else if (x >= 420 && x < 510)
+						tooltip += "Sebastian Raubach";
+					else if (x >= 520)
 						tooltip += "David Marshall";
 					else
 						tooltip = null;
