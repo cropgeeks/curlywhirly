@@ -122,4 +122,9 @@ public class CWUtils
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
 			selection, null);
 	}
+
+	public static float[] convertRgbToGl(Color color)
+	{
+		return new float[] { color.getRed()/255f, color.getGreen()/255f, color.getBlue()/255f, 1f };
+	}
 }
