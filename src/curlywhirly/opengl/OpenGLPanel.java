@@ -300,7 +300,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 			gl.glDisable(GL_LINE_SMOOTH);
 		}
 
-		float[] xAxisColor = convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.xAxisColor"));
+		float[] xAxisColor = CWUtils.convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.xAxisColor"));
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, xAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 1);
 		// Draw X-axis
@@ -309,7 +309,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glVertex3f(50f, 0, 0);
 		gl.glEnd();
 
-		float [] yAxisColor = convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.yAxisColor"));
+		float [] yAxisColor = CWUtils.convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.yAxisColor"));
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, yAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 1);
 		// Draw Y-axis
@@ -318,7 +318,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glVertex3f(0, 50f, 0);
 		gl.glEnd();
 
-		float [] zAxisColor = convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.zAxisColor"));
+		float [] zAxisColor = CWUtils.convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.zAxisColor"));
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, zAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 1);
 		// Draw Z-axis
@@ -340,7 +340,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	{
 		GLUquadric quadric = glu.gluNewQuadric();
 
-		float[] xAxisColor = convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.xAxisColor"));
+		float[] xAxisColor = CWUtils.convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.xAxisColor"));
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, xAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
 		// Draw the cylinders at the positive extent of each axis
@@ -355,7 +355,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 			billboardText(gl, getAxisLabel(X_AXIS));
 		gl.glPopMatrix();
 
-		float [] yAxisColor = convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.yAxisColor"));
+		float [] yAxisColor = CWUtils.convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.yAxisColor"));
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, yAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
 		gl.glPushMatrix();
@@ -369,7 +369,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 			billboardText(gl, getAxisLabel(Y_AXIS));
 		gl.glPopMatrix();
 
-		float [] zAxisColor = convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.zAxisColor"));
+		float [] zAxisColor = CWUtils.convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.zAxisColor"));
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, zAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
 		gl.glPushMatrix();
@@ -403,7 +403,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		{
 			Color color = point.getColor(dataSet.getCurrentCategoryGroup());
 			// Get each color component into the 0-1 range instead of 0-255
-			float [] rgba = convertRgbToGl(color);
+			float [] rgba = CWUtils.convertRgbToGl(color);
 			gl.glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rgba, 0);
 			gl.glMaterialf(GL_FRONT, GL_SHININESS, 128);
 			drawSphere(gl, point);
@@ -513,11 +513,6 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		return screenShot;
 	}
 
-	private float[] convertRgbToGl(Color color)
-	{
-		return new float[] { color.getRed()/255f, color.getGreen()/255f, color.getBlue()/255f, 1f };
-	}
-
 	public void setMousePoint(Point point)
 	{
 		this.mousePoint = point;
@@ -601,4 +596,9 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	public CloseOverlay getCloseOverlay()
 		{ return closeOverlay; }
+
+	public void setPointSize(float pointSize)
+	{
+		this.pointSize = pointSize;
+	}
 }

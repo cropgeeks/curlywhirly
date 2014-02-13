@@ -62,11 +62,7 @@ public class DataPoint
 	{
 		Category cat = categories.get(group);
 
-		Color color = Color.DARK_GRAY;
-		if (cat != null && isSelected())
-			color = cat.getColor();
-
-		return color;
+		return isSelected() ? cat.getColor() : Color.DARK_GRAY;
 	}
 
 	public Category getCategoryForGroup(CategoryGroup group)
