@@ -15,6 +15,15 @@
 <!--#include virtual="header.shtml" -->
 
 <p>
+<h2>Version 1.14.02.18</h2>
+<ul>
+<li>NEW: Improved sphere display and sphere anti-aliasing.</li>
+<li>NEW: Added a slider to the UI to control data point size.</li>
+<li>CHG: Updated OpenGL libraries to the latest version.</li>
+</ul>
+</p>
+
+<p>
 <h2>Version 1.14.01.27</h2>
 <ul>
 <li>NEW: Complete rewrite of the graphics engine; now using native OpenGL rather than Java3D.</li>
@@ -43,6 +52,7 @@
 <li>CHG: Dropped the application menus in favour of a lightweight toolbar approach.</li>
 <li>BUG: Fixed UI controls being active before data is loaded.</li>
 </ul>
+</p>
 
 
 <p>
