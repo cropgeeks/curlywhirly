@@ -40,6 +40,7 @@ public class ControlsPanelNB extends JPanel implements ActionListener, ChangeLis
 		chkAxisLabels.addActionListener(this);
 		chkDatasetLabels.addActionListener(this);
 
+        spherePanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 		pointSizeSlider.setMinimum(1);
 		pointSizeSlider.setMaximum(100);
 		pointSizeSlider.setValue(50);
@@ -119,6 +120,10 @@ public class ControlsPanelNB extends JPanel implements ActionListener, ChangeLis
 		axisPanel.setEnabled(enabled);
 		chkAxisLabels.setEnabled(enabled);
 		chkDatasetLabels.setEnabled(enabled);
+        pointSizeSlider.setEnabled(enabled);
+        spherePanelLabel.setEnabled(enabled);
+        spherePanel.setEnabled(enabled);
+        sizeSliderLabel.setEnabled(enabled);
 
 		if (enabled)
 			chkDatasetLabels.setEnabled(Prefs.guiChkAxisLabels);
@@ -161,8 +166,7 @@ public class ControlsPanelNB extends JPanel implements ActionListener, ChangeLis
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         lblAxesTitle = new javax.swing.JLabel();
         axisPanel = new javax.swing.JPanel();
@@ -176,10 +180,10 @@ public class ControlsPanelNB extends JPanel implements ActionListener, ChangeLis
         chkAxisLabels = new javax.swing.JCheckBox();
         chkDatasetLabels = new javax.swing.JCheckBox();
         lblAxisLabelOptions = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        spherePanelLabel = new javax.swing.JLabel();
+        spherePanel = new javax.swing.JPanel();
         pointSizeSlider = new javax.swing.JSlider();
-        jLabel2 = new javax.swing.JLabel();
+        sizeSliderLabel = new javax.swing.JLabel();
 
         lblAxesTitle.setText("Data to display:");
 
@@ -261,30 +265,30 @@ public class ControlsPanelNB extends JPanel implements ActionListener, ChangeLis
 
         lblAxisLabelOptions.setText("Axis label options:");
 
-        jLabel1.setText("Sphere options:");
+        spherePanelLabel.setText("Sphere options:");
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        spherePanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel2.setText("Size:");
+        sizeSliderLabel.setText("Size:");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout spherePanelLayout = new javax.swing.GroupLayout(spherePanel);
+        spherePanel.setLayout(spherePanelLayout);
+        spherePanelLayout.setHorizontalGroup(
+            spherePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(spherePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2)
+                .addComponent(sizeSliderLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pointSizeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        spherePanelLayout.setVerticalGroup(
+            spherePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(spherePanelLayout.createSequentialGroup()
                 .addGap(7, 7, 7)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(spherePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pointSizeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
+                    .addComponent(sizeSliderLabel))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -301,9 +305,9 @@ public class ControlsPanelNB extends JPanel implements ActionListener, ChangeLis
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblAxesTitle)
                             .addComponent(lblAxisLabelOptions)
-                            .addComponent(jLabel1))
+                            .addComponent(spherePanelLabel))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(spherePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -318,9 +322,9 @@ public class ControlsPanelNB extends JPanel implements ActionListener, ChangeLis
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(axisLabelPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel1)
+                .addComponent(spherePanelLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(spherePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -331,15 +335,15 @@ public class ControlsPanelNB extends JPanel implements ActionListener, ChangeLis
     private javax.swing.JPanel axisPanel;
     private javax.swing.JCheckBox chkAxisLabels;
     private javax.swing.JCheckBox chkDatasetLabels;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblAxesTitle;
     private javax.swing.JLabel lblAxisLabelOptions;
     private javax.swing.JLabel lblX;
     private javax.swing.JLabel lblY;
     private javax.swing.JLabel lblZ;
     javax.swing.JSlider pointSizeSlider;
+    private javax.swing.JLabel sizeSliderLabel;
+    private javax.swing.JPanel spherePanel;
+    private javax.swing.JLabel spherePanelLabel;
     private javax.swing.JComboBox<String> xCombo;
     private javax.swing.JComboBox<String> yCombo;
     private javax.swing.JComboBox<String> zCombo;
