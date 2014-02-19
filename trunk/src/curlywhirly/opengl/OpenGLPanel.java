@@ -34,7 +34,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	private static final int Y_AXIS = 1;
 	private static final int Z_AXIS = 2;
 
-	private WinMain winMain;
+	private final WinMain winMain;
 
 	// The animator which updates the display at the desired framerate
 	private Animator animator;
@@ -54,7 +54,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	// Buffer to hold faces, represented by 3 indices
 	private IntBuffer indexBuffer;
 
-	private CanvasMouseListener mouseListener;
+	private final CanvasMouseListener mouseListener;
 
 	// For aspects of the viewing transform and zooming
 	private int perspAngle = 45;
@@ -586,9 +586,9 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	{
 		switch (axis)
 		{
-			case X_AXIS: return Prefs.guiChkDatasetLabels ? dataSet.getAxisLabels()[0] : "X";
-			case Y_AXIS: return Prefs.guiChkDatasetLabels ? dataSet.getAxisLabels()[1] : "Y";
-			case Z_AXIS: return Prefs.guiChkDatasetLabels ? dataSet.getAxisLabels()[2] : "Z";
+			case X_AXIS: return Prefs.guiChkDatasetLabels ? dataSet.getCurrentAxisLabels()[0] : "X";
+			case Y_AXIS: return Prefs.guiChkDatasetLabels ? dataSet.getCurrentAxisLabels()[1] : "Y";
+			case Z_AXIS: return Prefs.guiChkDatasetLabels ? dataSet.getCurrentAxisLabels()[2] : "Z";
 
 			default: return null;
 		}
