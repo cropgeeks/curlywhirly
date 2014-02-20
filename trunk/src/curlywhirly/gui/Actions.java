@@ -5,16 +5,16 @@ package curlywhirly.gui;
 
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.event.*;
 
 import scri.commons.gui.*;
 
 public class Actions
 {
-	private WinMain winMain;
+	private final WinMain winMain;
 
 	public static AbstractAction fileOpen;
 	public static AbstractAction fileSample;
+    public static AbstractAction dataExport;
 	public static AbstractAction reset;
 	public static AbstractAction spin;
 	public static AbstractAction screenshot;
@@ -35,58 +35,70 @@ public class Actions
 	public static ImageIcon getIcon(String name)
 	{
 		ImageIcon icon = Icons.getIcon(name);
-
-		if (SystemUtils.isMacOS())
-			return null;
-		else
-			return icon;
+        
+        return SystemUtils.isMacOS() ? null : icon;
 	}
 
 	private void createActions()
 	{
 		fileOpen = new AbstractAction(RB.getString("gui.WinMainToolBar.open"), getIcon("OPEN")) {
+            @Override
 			public void actionPerformed(ActionEvent e) {
 				winMain.getCommands().open();
 			}
 		};
 
 		fileSample = new AbstractAction("", getIcon("SAMPLE")) {
+            @Override
 			public void actionPerformed(ActionEvent e) {
 				winMain.getCommands().openSample();
 			}
 		};
+        
+        dataExport = new AbstractAction(RB.getString("gui.WinMainToolBar.export"), getIcon("EXPORT")) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                winMain.getCommands().exportDataSet();
+            }
+        };
 
 		reset = new AbstractAction(RB.getString("gui.WinMainToolBar.reset"), getIcon("RESET")) {
+            @Override
 			public void actionPerformed(ActionEvent e) {
 				winMain.getCommands().reset();
 			}
 		};
 
 		spin = new AbstractAction(RB.getString("gui.WinMainToolBar.spin"), getIcon("SPIN")) {
+            @Override
 			public void actionPerformed(ActionEvent e) {
 				winMain.getCommands().spin();
 			}
 		};
 
 		screenshot = new AbstractAction(RB.getString("gui.WinMainToolBar.screenshot"), getIcon("SCREENSHOT")) {
+            @Override
 			public void actionPerformed(ActionEvent e) {
 				winMain.getCommands().screenshot();
 			}
 		};
 
 		captureMovie = new AbstractAction(RB.getString("gui.WinMainToolBar.movie"), getIcon("MOVIE")) {
+            @Override
 			public void actionPerformed(ActionEvent e) {
 //				winMain.getToolbarActions().captureMovie();
 			}
 		};
 
 		showPrefs = new AbstractAction(RB.getString("gui.WinMainToolBar.prefs"), getIcon("PREFS")) {
+            @Override
 			public void actionPerformed(ActionEvent e) {
 				winMain.getCommands().showPrefs();
 			}
 		};
 
 		showAbout = new AbstractAction("", getIcon("HELP")) {
+            @Override
 			public void actionPerformed(ActionEvent e) {
 				winMain.getCommands().showAbout();
 			}
@@ -97,9 +109,9 @@ public class Actions
 	{
 		fileOpen.setEnabled(true);
 		fileSample.setEnabled(true);
+        dataExport.setEnabled(false);
 		reset.setEnabled(false);
 		spin.setEnabled(false);
-//		WinMainToolBar.slider.setEnabled(false);
 		screenshot.setEnabled(false);
 		captureMovie.setEnabled(false);
 		showPrefs.setEnabled(true);
@@ -110,11 +122,11 @@ public class Actions
 	{
 		fileOpen.setEnabled(true);
 		fileSample.setEnabled(true);
+        dataExport.setEnabled(true);
 		reset.setEnabled(true);
 		spin.setEnabled(true);
-//		WinMainToolBar.slider.setEnabled(true);
 		screenshot.setEnabled(true);
-//		captureMovie.setEnabled(true);
+		captureMovie.setEnabled(true);
 		showPrefs.setEnabled(true);
 		showAbout.setEnabled(true);
 	}

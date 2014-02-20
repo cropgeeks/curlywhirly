@@ -6,7 +6,6 @@ package curlywhirly.gui;
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.io.*;
-import java.lang.reflect.*;
 import java.net.*;
 import javax.swing.*;
 import javax.swing.table.*;
@@ -37,7 +36,7 @@ public class CWUtils
 			URI uri = new URI(html);
 			desktop.browse(uri);
 		}
-		catch (Exception e) { System.out.println(e); }
+		catch (URISyntaxException | IOException e) { System.out.println(e); }
 	}
 
 	/**
