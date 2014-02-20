@@ -78,7 +78,7 @@ public class DataImporter extends SimpleJob
 		normalizer.normalize(dataSet);
 
 		// Finally set the link to access the database
-		dataSet.getDbAssociation().setPointSearch(dbURL);
+		dataSet.getDbAssociation().setDbPointUrl(dbURL);
 
 		dataSet.setName(file.getName());
 	}
