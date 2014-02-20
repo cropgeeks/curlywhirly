@@ -9,20 +9,20 @@ package curlywhirly.data;
  */
 public class DBAssociation
 {
-	private String pointSearch = "";
+	private String dbPointUrl = "";
 
 	public DBAssociation()
 	{
 	}
 
-	public String getPointSearch()
-		{ return pointSearch; }
+	public String getDbPointUrl()
+		{ return dbPointUrl; }
 
-	public void setPointSearch(String pointSearch)
-		{ this.pointSearch = pointSearch; }
+	public void setDbPointUrl(String dbPointUrl)
+		{ this.dbPointUrl = dbPointUrl; }
 
 	public boolean isPointSearchEnabled()
 	{
-		return pointSearch.length() > 0;
+		return dbPointUrl.length() > 0;
 	}
 }

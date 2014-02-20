@@ -100,6 +100,41 @@ public class Commands
 		// load the example dataset provided with the application
 		openFile(sample);
 	}
+    
+    void exportDataSet()
+	{
+		File saveAs = new File(Prefs.guiCurrentDir, winMain.getDataSet().getName() + ".txt");
+
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+			RB.getString("gui.Commands.exportDataSet.txtFiles"), "txt");
+
+		// Ask the user for a filename to save the current view as
+		String filename = CWUtils.getSaveFilename(
+			RB.getString("gui.Commands.exportDataSet.saveDialog"), saveAs, filter);
+
+		// Quit if the user cancelled the file selection
+		if (filename == null)
+			return;
+
+		try
+		{
+            File exportedData = new File(filename);
+            // Replace these lines with dataset export code
+            DataExporter exporter = new DataExporter(winMain.getDataSet(), exportedData);
+            exporter.runJob(0);
+
+			TaskDialog.showFileOpen(
+				RB.format("gui.Commands.exportDataSet.success", filename),
+				TaskDialog.INF, exportedData);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+
+			TaskDialog.showOpenLog(RB.format("gui.Commands.exportDataSet.exception",
+				e), null);
+		}
+	}
 
 	void reset()
 	{

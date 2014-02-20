@@ -4,7 +4,6 @@
 package curlywhirly.gui;
 
 import java.awt.*;
-import java.io.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
@@ -12,25 +11,21 @@ import scri.commons.gui.*;
 
 public class WinMainToolBar extends JToolBar
 {
-	private JButton open;
-	private JButton sample;
-	private JButton reset;
-	private JToggleButton spin;
-	private JButton screenshot;
-	private JButton movie;
-	private JButton prefs;
-	private JButton about;
+	private final JButton open;
+	private final JButton sample;
+    private final JButton export;
+	private final JButton reset;
+	private final JToggleButton spin;
+	private final JButton screenshot;
+	private final JButton movie;
+	private final JButton prefs;
+	private final JButton about;
 
 	private JSlider slider;
 
-	private final WinMain winMain;
-
 	WinMainToolBar(final WinMain winMain)
 	{
-		this.winMain = winMain;
-
 		setFloatable(false);
-//		setBorderPainted(false);
 
 		slider = new JSlider(0, 100, 50)
 		{
@@ -62,6 +57,11 @@ public class WinMainToolBar extends JToolBar
 		sample = (JButton) getButton(false, null,
 			RB.getString("gui.WinMainToolBar.sampleTT"),
 			Icons.getIcon("SAMPLE"), Actions.fileSample);
+        
+        export = (JButton) getButton(false,
+			RB.getString("gui.WinMainToolBar.export"),
+			RB.getString("gui.WinMainToolBar.exportTT"),
+			Icons.getIcon("EXPORT"), Actions.dataExport);
 
 		reset = (JButton) getButton(false,
 			RB.getString("gui.WinMainToolBar.reset"),
@@ -98,6 +98,7 @@ public class WinMainToolBar extends JToolBar
 
 		add(open);
 		add(sample);
+        add(export);
 		addSeparator();
 		add(reset);
 		add(spin);
@@ -118,12 +119,7 @@ public class WinMainToolBar extends JToolBar
 	private AbstractButton getButton(boolean toggle, String title,
 			String tt, ImageIcon icon, Action a)
 	{
-		AbstractButton button = null;
-
-		if (toggle)
-			button = new JToggleButton(a);
-		else
-			button = new JButton(a);
+		AbstractButton button = toggle ? new JToggleButton(a) : new JButton(a);
 
 		button.setText(title != null ? title : "");
 		button.setToolTipText(tt);
