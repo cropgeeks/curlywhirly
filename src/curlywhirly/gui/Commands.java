@@ -11,6 +11,9 @@ import javax.swing.*;
 import javax.swing.filechooser.*;
 
 import curlywhirly.io.*;
+import curlywhirly.opengl.OpenGLPanel;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
 import scri.commons.gui.*;
 import scri.commons.file.*;
@@ -181,7 +184,8 @@ public class Commands
 		try
 		{
 			File imageFile = new File(filename);
-			ImageIO.write(winMain.getOpenGLPanel().getScreenShot(), "png", imageFile);
+            BufferedImage image = winMain.getOpenGLPanel().getScreenShot();
+			ImageIO.write(image, "png", imageFile);
 
 			TaskDialog.showFileOpen(
 				RB.format("gui.Commands.exportImage.success", filename),
