@@ -59,12 +59,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	// For aspects of the viewing transform and zooming
 	private int perspAngle = 45;
 	private float aspect;
-
-	// Screenshot variables
-	private AWTGLReadBufferUtil glBufferUtil;
-	private BufferedImage screenShot;
-	private boolean takeScreenshot = false;
-
+    
 	// Collision detection variables
 	private Point mousePoint = new Point(0, 0);
 	float[] proj = new float[16];
@@ -151,8 +146,6 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 		lightScene(gl);
 
-		glBufferUtil = new AWTGLReadBufferUtil(drawable.getGLProfile(), false);
-
 		renderer = new TextRenderer(new Font("SansSerif", Font.BOLD, 36), true, false);
 	}
 
@@ -161,8 +154,6 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	{
 		try
 		{
-			glBufferUtil.dispose(drawable.getGL());
-
 			renderer = null;
 		}
 		catch (Exception e) { e.printStackTrace(); }
@@ -197,9 +188,6 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 		rotation.automaticallyRotate();
 
-		if (takeScreenshot)
-			screenShot = glBufferUtil.readPixelsToBufferedImage(gl, true);
-
 		drawTooltip(gl);
 	}
 
@@ -221,7 +209,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 		CANVAS_WIDTH = width;
 		CANVAS_HEIGHT = height;
-
+        
 		// Set the view port (display area) to cover the entire window
 		gl.glViewport(0, 0, width, height);
 
@@ -500,17 +488,22 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		perspAngle = perspAngle > 90 ? 90 : perspAngle;
 	}
 
-	// Toggles the state of takeScreenshot and manually calls display to get
-	// a screenshot without negatively impacting frame rate.
+	// Uses GLPanel's method of getting a screenshot on the EDT, other methods
+    // of getting screenshots could clutter up the rendering code.
 	public BufferedImage getScreenShot()
+        throws Exception
 	{
-		takeScreenshot = true;
-
-		display();
-
-		takeScreenshot = false;
-
-		return screenShot;
+        // Create an image of the correct proportions
+        BufferedImage image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = image.createGraphics();
+        // "Print" the current state of the panel to that image
+        setupPrint(1, 1, 1, getWidth(), getHeight());
+        printAll(g);
+        image.flush();
+        // Called to release the panel from the EDT.
+        releasePrint();
+        
+        return image;
 	}
 
 	public void setMousePoint(Point point)
