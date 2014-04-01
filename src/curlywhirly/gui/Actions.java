@@ -35,7 +35,7 @@ public class Actions
 	public static ImageIcon getIcon(String name)
 	{
 		ImageIcon icon = Icons.getIcon(name);
-        
+
         return SystemUtils.isMacOS() ? null : icon;
 	}
 
@@ -54,7 +54,7 @@ public class Actions
 				winMain.getCommands().openSample();
 			}
 		};
-        
+
         dataExport = new AbstractAction(RB.getString("gui.WinMainToolBar.export"), getIcon("EXPORT")) {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -86,7 +86,7 @@ public class Actions
 		captureMovie = new AbstractAction(RB.getString("gui.WinMainToolBar.movie"), getIcon("MOVIE")) {
             @Override
 			public void actionPerformed(ActionEvent e) {
-//				winMain.getToolbarActions().captureMovie();
+				winMain.getCommands().captureMovie();
 			}
 		};
 

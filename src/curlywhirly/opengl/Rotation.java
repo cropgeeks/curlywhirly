@@ -16,7 +16,7 @@ public class Rotation
 
 	// Variables related automatic rotation of the model
 	private boolean autoSpin;
-	private float speed;
+	private float rotationAngle;
 
 	Rotation()
 	{
@@ -26,7 +26,7 @@ public class Rotation
 		combinedRotation = new Matrix4f();
 
 		autoSpin = false;
-		speed = -0.1f;
+		rotationAngle = -0.1f;
 	}
 
 	void setIdentity()
@@ -40,41 +40,19 @@ public class Rotation
 	void automaticallyRotate()
 	{
 		if (autoSpin)
-		{
-			rotateMatrix(speed);
-			// When carrying out automatic rotation we need to multiply the
-			// automatic rotation by our combined rotation and set our
-			// combined rotation to the result of this.
-			combinedRotation.mul(autoRotation, combinedRotation);
-		}
+            rotateSceneBy(rotationAngle);
 	}
 
-	// Methods relating to arbitrary rotations
-
-	void rotateMatrix(float angle)
-	{
+    void rotateSceneBy(float angle)
+    {
+		// Rotate around the Y-axis by angle
 		angle = (float) ((angle * Math.PI) / 180);
-
-		autoRotation.m00 = (float) Math.cos(angle);
-		autoRotation.m01 = 0;
-		autoRotation.m02 = (float) - Math.sin(angle);
-		autoRotation.m03 = 0;
-
-		autoRotation.m10 = 0;
-		autoRotation.m11 = 1;
-		autoRotation.m12 = 0;
-		autoRotation.m13 = 0;
-
-		autoRotation.m20 = (float) Math.sin(angle);
-		autoRotation.m21 = 0;
-		autoRotation.m22 = (float) Math.cos(angle);
-		autoRotation.m23 = 0;
-
-		autoRotation.m30 = 0;
-		autoRotation.m31 = 0;
-		autoRotation.m32 = 0;
-		autoRotation.m33 = 1;
-	}
+		autoRotation.set(new AxisAngle4f(0, 1, 0, -angle));
+        // When carrying out automatic rotation we need to multiply the
+        // automatic rotation by our combined rotation and set our
+        // combined rotation to the result of this.
+        combinedRotation.mul(autoRotation, combinedRotation);
+    }
 
 	// Updates the value to the last user drag rotation.
 	public void updateLastRotation()
@@ -103,10 +81,15 @@ public class Rotation
 		currRotation.setIdentity();
 	}
 
+	public float getRotationSpeed()
+	{
+		return rotationAngle;
+	}
+
 	// Sets the speed at which the model automatically rotates
 	public void setRotationSpeed(float speed)
 	{
-		this.speed = ((speed-0f)/(100f-0f) * (-1.0f-(-0.1f)) + -0.1f);
+		this.rotationAngle = speed;
 	}
 
 	public void toggleSpin()
@@ -165,8 +148,9 @@ public class Rotation
 		return matrix4fToArray(invCurr);
 	}
 
-	// Returns the inverse of the combined rotation array. Allows us to billboard
-	// text by apply the opposite rotations to the text that we do to the model.
+	// Returns the inverse of the combined rotation array. Allows us to
+	// billboard text by applying the opposite rotations to the text that we do
+	// to the model.
 	float[] getInverseCumulativeArray()
 	{
 		Matrix4f invComb = (Matrix4f) combinedRotation.clone();
