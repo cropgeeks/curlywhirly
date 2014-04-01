@@ -5,6 +5,7 @@ package curlywhirly.gui.dialog;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import javax.swing.*;
 
 import scri.commons.gui.*;
@@ -20,6 +21,7 @@ class AboutLicencePanelNB extends JPanel implements ActionListener
 		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>();
 		model.addElement("CurlyWhirly");
 		model.addElement("JOGL");
+		model.addElement("Monte Media");
 
 		combo.setModel(model);
 		combo.addActionListener(this);
@@ -34,12 +36,13 @@ class AboutLicencePanelNB extends JPanel implements ActionListener
 		{
 			htmlPane.setPage(getClass().getResource("/installer/licence/" + filename));
 		}
-		catch (Exception e)
+		catch (IOException e)
 		{
 			System.out.println(e);
 		}
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e)
 	{
 		if (combo.getSelectedItem() == "CurlyWhirly")
@@ -47,6 +50,9 @@ class AboutLicencePanelNB extends JPanel implements ActionListener
 
 		else if (combo.getSelectedItem() == "JOGL")
 			displayLicence("jogl.txt");
+
+		else if (combo.getSelectedItem() == "Monte Media")
+			displayLicence("monte-media.txt");
 	}
 
 	/**

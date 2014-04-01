@@ -7,13 +7,12 @@ import java.awt.*;
 import java.awt.dnd.*;
 import java.awt.event.*;
 import java.beans.*;
+import javax.media.opengl.*;
 import javax.swing.*;
 
 import curlywhirly.data.*;
 import curlywhirly.gui.viewer.*;
 import curlywhirly.opengl.*;
-import javax.media.opengl.GLCapabilities;
-import javax.media.opengl.GLProfile;
 
 import scri.commons.gui.*;
 
@@ -35,6 +34,8 @@ public class WinMain extends JFrame
 	private Commands toolbarActions;
 
 	private DataSet dataSet;
+
+	private GLCapabilities caps;
 
 	WinMain()
 	{
@@ -119,7 +120,7 @@ public class WinMain extends JFrame
 	private void createCanvas()
 	{
 		GLProfile profile = GLProfile.getDefault();
-		GLCapabilities caps = new GLCapabilities(profile);
+		caps = new GLCapabilities(profile);
 
 		caps.setSampleBuffers(true);
 		caps.setNumSamples(2);
@@ -284,4 +285,7 @@ public class WinMain extends JFrame
 	{
 		return splitPane;
 	}
+
+	public GLCapabilities getCapabilities()
+		{ return caps; }
 }

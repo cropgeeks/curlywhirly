@@ -64,7 +64,9 @@
 						jogl-all-natives-windows-i586.jar
 						scri-commons.jar
 						osxadapter.jar
-						vecmath.jar"/>
+						vecmath.jar
+						jmf.jar
+						monte-cc.jar"/>
 				<attribute name="Implementation-Version" value="${i4j.version}"/>
 			</manifest>
 		</jar>

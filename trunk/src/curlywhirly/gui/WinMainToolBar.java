@@ -27,7 +27,9 @@ public class WinMainToolBar extends JToolBar
 	{
 		setFloatable(false);
 
-		slider = new JSlider(0, 100, 50)
+		// Convert rotation speed to our slider model's number scale
+		float initial = ((Prefs.guiRotationSpeed-(-0.1f)) / (-1.0f-(-0.1f)) * (100f-0f) + 0f);
+		slider = new JSlider(0, 100, (int) initial)
 		{
 			@Override
 			public Dimension getMaximumSize()
@@ -43,7 +45,9 @@ public class WinMainToolBar extends JToolBar
 			public void stateChanged(ChangeEvent evt)
 			{
 				int speed = slider.getValue();
-				winMain.getOpenGLPanel().setRotationSpeed(speed);
+				float rotation = ((speed-0f)/(100f-0f) * (-1.0f-(-0.1f)) + -0.1f);
+				Prefs.guiRotationSpeed = rotation;
+				winMain.getOpenGLPanel().getScene().setRotationSpeed(rotation);
 			}
 		});
 
@@ -57,7 +61,7 @@ public class WinMainToolBar extends JToolBar
 		sample = (JButton) getButton(false, null,
 			RB.getString("gui.WinMainToolBar.sampleTT"),
 			Icons.getIcon("SAMPLE"), Actions.fileSample);
-        
+
         export = (JButton) getButton(false,
 			RB.getString("gui.WinMainToolBar.export"),
 			RB.getString("gui.WinMainToolBar.exportTT"),
@@ -105,7 +109,7 @@ public class WinMainToolBar extends JToolBar
 		add(slider);
 		addSeparator();
 		add(screenshot);
-//		add(movie);
+		add(movie);
 		addSeparator();
 		add(prefs);
 		addSeparator();
@@ -132,12 +136,8 @@ public class WinMainToolBar extends JToolBar
 	}
 
 	JSlider getSlider()
-	{
-		return slider;
-	}
+		{ return slider; }
 
 	JToggleButton getSpin()
-	{
-		return spin;
-	}
+		{ return spin; }
 }

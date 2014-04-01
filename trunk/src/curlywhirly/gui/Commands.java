@@ -3,24 +3,21 @@
 
 package curlywhirly.gui;
 
-import curlywhirly.gui.dialog.PreferencesDialog;
-import curlywhirly.gui.dialog.AboutDialog;
+import java.awt.image.*;
 import java.io.*;
 import javax.imageio.*;
 import javax.swing.*;
 import javax.swing.filechooser.*;
 
+import curlywhirly.gui.dialog.*;
 import curlywhirly.io.*;
-import curlywhirly.opengl.OpenGLPanel;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 
-import scri.commons.gui.*;
 import scri.commons.file.*;
+import scri.commons.gui.*;
 
 public class Commands
 {
-	private WinMain winMain;
+	private final WinMain winMain;
 
 	Commands(WinMain winMain)
 	{
@@ -73,7 +70,6 @@ public class Commands
 				}
 
 				winMain.setDataSet(importer.getDataSet());
-//				Prefs.setRecentDocument(importer.getFile());
 				CurlyWhirlyFileHandler.addAsMostRecent(importer.getFile());
 			}
 			catch (Exception e)
@@ -94,7 +90,7 @@ public class Commands
 		{
 			FileUtils.writeFile(sample, getClass().getResourceAsStream("/data/randomData.txt"));
 		}
-		catch (Exception e)
+		catch (IOException e)
 		{
 			e.printStackTrace();
 			return;
@@ -103,7 +99,7 @@ public class Commands
 		// load the example dataset provided with the application
 		openFile(sample);
 	}
-    
+
     void exportDataSet()
 	{
 		File saveAs = new File(Prefs.guiCurrentDir, winMain.getDataSet().getName() + ".txt");
@@ -141,19 +137,20 @@ public class Commands
 
 	void reset()
 	{
-		winMain.getOpenGLPanel().reset();
+		winMain.getOpenGLPanel().getScene().reset();
 	}
 
 	void spin()
 	{
 		// Start or stop the spinning
-		winMain.getOpenGLPanel().toggleSpin();
+		boolean isSpinning = winMain.getOpenGLPanel().getScene().toggleSpin();
+		System.out.println("Spinning: " + isSpinning);
 
 		JSlider slider = winMain.getToolbar().getSlider();
+		slider.setEnabled(isSpinning);
 
 		// And enabled/disable the speed slider based on the state
-		slider.setEnabled(winMain.getToolbar().getSpin().isSelected());
-		winMain.getOpenGLPanel().setRotationSpeed(slider.getValue());
+		winMain.getOpenGLPanel().getScene().setRotationSpeed(Prefs.guiRotationSpeed);
 	}
 
 	void showPrefs()
@@ -197,6 +194,28 @@ public class Commands
 
 			TaskDialog.showOpenLog(RB.format("gui.Commands.exportImage.exception",
 				e), null);
+		}
+	}
+
+	public void captureMovie()
+	{
+		MovieCaptureDialog captureDialog = new MovieCaptureDialog(winMain);
+
+		if (captureDialog.isOk())
+		{
+			int frameRate = captureDialog.getFrameRate();
+			int length = captureDialog.getLength();
+			String name = captureDialog.getFilename();
+			MovieExporter exporter = new MovieExporter(winMain, frameRate, length, name);
+
+			ProgressDialog dialog = new ProgressDialog(exporter, "Exporting Movie", "Please wait while the movie is exported...", winMain);
+			if (dialog.getResult() == ProgressDialog.JOB_FAILED)
+			{
+				TaskDialog.error(
+					RB.format("gui.Commands.import.error",
+					dialog.getException()),
+					RB.getString("gui.text.close"));
+			}
 		}
 	}
 }

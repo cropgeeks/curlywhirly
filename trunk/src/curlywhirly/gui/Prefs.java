@@ -3,7 +3,7 @@
 
 package curlywhirly.gui;
 
-import java.awt.Color;
+import java.awt.*;
 import java.io.*;
 import java.util.*;
 
@@ -60,7 +60,9 @@ public class Prefs extends XMLPreferences
 	public static boolean guiWarnOnClose = true;
 
 	public static int guiMovieCaptureFrameRate = 30;
-	public static int guiMovieCaptureSpinSpeedIndex = 1;
+	public static int guiMovieCaptureLength = 5;
+
+	public static float guiRotationSpeed = -0.5f;
 
 	public static boolean guiAntialiasAxes = true;
 
