@@ -55,7 +55,6 @@ public class MovieExporter extends SimpleJob
 			throws Exception
 	{
 		File file = panel.getMovieCapture().startMovieCapture(totalFrames, rotation);
-		file.deleteOnExit();
 
 		while (panel.getMovieCapture().getRenderedFrames() < totalFrames)
 		{
@@ -79,6 +78,7 @@ public class MovieExporter extends SimpleJob
 			TaskDialog.QST, new File(name));
 
 		FileUtils.emptyDirectory(file, false);
+		file.delete();
 	}
 
 	@Override
