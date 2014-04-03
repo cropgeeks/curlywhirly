@@ -208,11 +208,14 @@ public class Commands
 			String name = captureDialog.getFilename();
 			MovieExporter exporter = new MovieExporter(winMain, frameRate, length, name);
 
-			ProgressDialog dialog = new ProgressDialog(exporter, "Exporting Movie", "Please wait while the movie is exported...", winMain);
+			ProgressDialog dialog = new ProgressDialog(exporter,
+				RB.getString("gui.Commands.captureMovie.progressDialog.title"),
+				RB.getString("gui.Commands.captureMovie.progressDialog.message"),
+				winMain);
 			if (dialog.getResult() == ProgressDialog.JOB_FAILED)
 			{
 				TaskDialog.error(
-					RB.format("gui.Commands.import.error",
+					RB.format("gui.Commands.captureMovie.error",
 					dialog.getException()),
 					RB.getString("gui.text.close"));
 			}
