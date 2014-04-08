@@ -12,20 +12,18 @@ import scri.commons.gui.*;
 
 public class DataPanelTableModel extends AbstractTableModel
 {
-	private String[] columnNames;
-	private ArrayList<DataPoint> dataPoints;
-	private DataSet dataSet;
+	private final String[] columnNames;
+	private final ArrayList<DataPoint> dataPoints;
+	private final DataSet dataSet;
 
-	DataPanelTableModel(DataSet dataSet, CategoryGroup categoryGroup)
+	DataPanelTableModel(DataSet dataSet)
 	{
 		this.dataSet = dataSet;
 
 		dataPoints = new ArrayList<DataPoint>();
 		for (DataPoint dataPoint : dataSet)
 		{
-			Category category = dataPoint.getCategoryForGroup(categoryGroup);
-
-			if (category != null && dataPoint.isSelected())
+			if (dataPoint.isSelected())
 				dataPoints.add(dataPoint);
 		}
 

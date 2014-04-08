@@ -40,7 +40,7 @@ public class DataPanel extends JPanel
 
 	void updateTableModel()
 	{
-		model = new DataPanelTableModel(dataSet, dataSet.getCurrentCategoryGroup());
+		model = new DataPanelTableModel(dataSet);
 		controls.pointsTable.setModel(model);
 
 		sorter = new TableRowSorter<DataPanelTableModel>(model);
