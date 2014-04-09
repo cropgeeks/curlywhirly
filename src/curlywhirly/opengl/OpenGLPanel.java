@@ -61,11 +61,10 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	public void setDataSet(DataSet dataSet)
 	{
         Rotation rotation = new Rotation();
-        int perspectiveAngle = 45;
-        scene = new Scene(dataSet, rotation, perspectiveAngle, (float)CANVAS_WIDTH / CANVAS_HEIGHT);
-		mouseListener = new CanvasMouseListener(this, rotation);
-
 		detector = new CollisionDetection();
+        int perspectiveAngle = 45;
+        scene = new Scene(dataSet, rotation, perspectiveAngle, (float)CANVAS_WIDTH / CANVAS_HEIGHT, detector);
+		mouseListener = new CanvasMouseListener(this, rotation);
 
 		scene.reset();
 	}
