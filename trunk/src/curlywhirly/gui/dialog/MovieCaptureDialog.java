@@ -61,6 +61,8 @@ public class MovieCaptureDialog extends JDialog implements ActionListener, Chang
 		RB.setText(filenameLabel, "gui.dialog.MovieCaptureDialog.fileNameLabel");
 		RB.setText(bBrowse, "gui.text.browse");
 
+		bBrowse.addActionListener(this);
+
 		filenameTextField.setText(Prefs.guiCurrentDir + System.getProperty("file.separator") + winMain.getDataSet().getName() + RB.getString("gui.MovieCaptureDialog.fileExtension"));
 
 		frameRateSpinner.setModel(new SpinnerNumberModel(Prefs.guiMovieCaptureFrameRate, 1, 60, 1));
