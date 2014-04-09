@@ -66,6 +66,8 @@ public class Prefs extends XMLPreferences
 
 	public static boolean guiAntialiasAxes = true;
 
+	public static int guiDataPanelFilter = 0;
+
 	// The local working directory for disk caching
 	public static String cacheFolder =
 		SystemUtils.getTempUserDirectory("jhi-curlywhirly").getPath();

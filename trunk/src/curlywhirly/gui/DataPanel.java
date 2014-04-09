@@ -53,6 +53,9 @@ public class DataPanel extends JPanel
 	{
 		this.dataSet = dataSet;
 
+		// Reset the row filter to prevent crashes
+		controls.clearFilter();
+
 		if (dataSet == null)
 		{
 			// Blank out the table data and selected points count
@@ -162,5 +165,11 @@ public class DataPanel extends JPanel
 	private void toggleEnabled(boolean enabled)
 	{
 		controls.toggleEnabled(enabled);
+	}
+
+	void setTableFilter(RowFilter<DataPanelTableModel, Object> rf)
+	{
+		sorter.setRowFilter(rf);
+//		controls.contigsLabel.setText(getTitle(controls.table.getRowCount()));
 	}
 }
