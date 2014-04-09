@@ -31,10 +31,10 @@ public class DataPanelTableModel extends AbstractTableModel
 		// can be displayed in the table header.
 		String[] axisLabels = dataSet.getCurrentAxisLabels();
 
-		columnNames = new String[] { RB.getString("gui.DataEntryTableModel.headers.name"),
-									RB.format("gui.DataEntryTableModel.headers.col1", axisLabels[0]),
-									RB.format("gui.DataEntryTableModel.headers.col2", axisLabels[1]),
-									RB.format("gui.DataEntryTableModel.headers.col3", axisLabels[2]) };
+		columnNames = new String[] { RB.getString("gui.DataPanelTableModel.headers.name"),
+									RB.format("gui.DataPanelTableModel.headers.col1", axisLabels[0]),
+									RB.format("gui.DataPanelTableModel.headers.col2", axisLabels[1]),
+									RB.format("gui.DataPanelTableModel.headers.col3", axisLabels[2]) };
 	}
 
 	@Override
