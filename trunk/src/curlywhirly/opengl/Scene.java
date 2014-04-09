@@ -47,13 +47,15 @@ public class Scene
     private float pointSize = 1f;
 
     private TextRenderer renderer;
+	private CollisionDetection detector;
 
-    public Scene(DataSet dataSet, Rotation rotation, int perspAngle, float aspect)
+    public Scene(DataSet dataSet, Rotation rotation, int perspAngle, float aspect, CollisionDetection detector)
     {
         this.dataSet = dataSet;
         this.rotation = rotation;
         this.perspAngle = perspAngle;
         this.aspect = aspect;
+		this.detector = detector;
 
         glu = new GLU();
     }
@@ -177,7 +179,7 @@ public class Scene
 
 		float[] modelView = new float[16];
 		gl.glGetFloatv(GL_MODELVIEW_MATRIX, modelView, 0);
-//		detector.updatePointLocation(modelView, axes, point);
+		detector.updatePointLocation(modelView, axes, point);
 
 		// Draw the triangles using the isosphereIndexBuffer VBO for the
 		// element data (as well as the isosphereVertexBuffer).
