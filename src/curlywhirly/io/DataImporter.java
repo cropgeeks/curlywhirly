@@ -37,7 +37,7 @@ public class DataImporter extends SimpleJob
 	private int lineCount = 0;
 	private int expectedTokenCount = -1;
 
-	private String dbURL;
+	private String dbURL = "";
 
 	public DataImporter(File file)
 	{

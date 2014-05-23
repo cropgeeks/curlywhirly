@@ -66,7 +66,7 @@ public class DataExporter extends SimpleJob
 
     private String getDataPointString(DataPoint dataPoint)
     {
-        StringBuilder point = new StringBuilder();
+        StringBuilder point = new StringBuilder("");
 
         // Output the categories assocaited with this data point (in category
         // group order, hence the loop over the dataset's category groups)

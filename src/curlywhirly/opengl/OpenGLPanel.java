@@ -44,6 +44,9 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	private final CloseOverlay closeOverlay;
 	private final MovieCaptureEventListener movieCapture;
 
+	private DataPoint underMouse = null;
+	private DataSet dataSet;
+
 	public OpenGLPanel(WinMain winMain, GLCapabilities caps)
 	{
 		super(caps);
@@ -60,6 +63,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	public void setDataSet(DataSet dataSet)
 	{
+		this.dataSet = dataSet;
         Rotation rotation = new Rotation();
 		detector = new CollisionDetection();
         int perspectiveAngle = 45;
@@ -204,7 +208,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glGetFloatv(GL_MODELVIEW_MATRIX, model, 0);
 		float winX = mousePoint.x;
 		// Adjust into opengl y space
-		float winY = CANVAS_HEIGHT - (float)mousePoint.y -1;
+		float winY = view[3] - (float)mousePoint.y;
 
 		// Used to store the result of gluUnproject for the near clipping plane
 		float[] near = new float[4];
@@ -218,7 +222,8 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 		// Subtract the near clipping plane vector from the far clipping plane
 		// vector to establish the direction of our ray
-		Vector3f dir = new Vector3f(fVec.x - nVec.x, fVec.y - nVec.y, fVec.z - nVec.z);
+		Vector3f dir = new Vector3f();
+		dir.sub(fVec, nVec);
 		Vector3f eye = new Vector3f(0, 0, 200);
 
 		Ray ray = new Ray(dir, eye);
@@ -230,11 +235,18 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	{
 		// Mouse over code looking for sphere's under the mouse
 		Ray ray = getRay(gl);
-		DataPoint found = detector.findSphereRayIntersection(ray, scene.getPointSize());
+		underMouse = detector.findSphereRayIntersection(ray, scene.getPointSize());
 
 		// If we have found a spehre, display this sphere's name in a tooltip
-		String text = found != null ? found.getName() : null;
+		String text = underMouse != null ? underMouse.getName() : null;
 		setToolTipText(text);
+	}
+
+	public void visitUrl()
+		throws UnsupportedEncodingException
+	{
+		if (underMouse != null)
+			dataSet.getDbAssociation().visitUrlForPoint(underMouse.getName());
 	}
 
 	public CloseOverlay getCloseOverlay()

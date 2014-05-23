@@ -179,7 +179,7 @@ public class Scene
 
 		float[] modelView = new float[16];
 		gl.glGetFloatv(GL_MODELVIEW_MATRIX, modelView, 0);
-		detector.updatePointLocation(modelView, axes, point);
+		detector.updatePointLocation(modelView, point);
 
 		// Draw the triangles using the isosphereIndexBuffer VBO for the
 		// element data (as well as the isosphereVertexBuffer).
