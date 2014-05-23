@@ -5,6 +5,7 @@ package curlywhirly.gui.viewer;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.vecmath.*;
@@ -76,6 +77,13 @@ public class CanvasMouseListener extends MouseInputAdapter
 		int y = e.getY();
 
 		panel.getCloseOverlay().handleClick(x, y);
+
+		// Attempt to visit the point under the mouse (if there is one)
+		try
+		{
+			panel.visitUrl();
+		}
+		catch(UnsupportedEncodingException ex) { ex.printStackTrace(); }
 	}
 
 	@Override
