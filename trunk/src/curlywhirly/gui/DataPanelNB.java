@@ -6,12 +6,15 @@ package curlywhirly.gui;
 import java.awt.event.*;
 import java.text.*;
 import javax.swing.*;
-import javax.swing.RowFilter.*;
 import javax.swing.event.*;
+import javax.swing.RowFilter.*;
+import javax.swing.table.*;
+
+import curlywhirly.data.*;
 
 import scri.commons.gui.*;
 
-public class DataPanelNB extends JPanel implements ActionListener, DocumentListener
+public class DataPanelNB extends JPanel implements ActionListener, DocumentListener, MouseListener
 {
 	private DataPanel parent;
 
@@ -28,7 +31,26 @@ public class DataPanelNB extends JPanel implements ActionListener, DocumentListe
 
 		setupFilterComboBox();
 		filterTextField.getDocument().addDocumentListener(this);
+
+		pointsTable.addMouseListener(this);
     }
+
+	private JTable createTable()
+	{
+		final JTable table = new JTable()
+		{
+			@Override
+			public TableCellRenderer getCellRenderer(int row, int col)
+			{
+				TableCellRenderer tcr = DataPanelTableModel.getCellRenderer(col);
+				return (tcr != null) ? tcr : super.getCellRenderer(row, col);
+			}
+		};
+
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+		return table;
+	}
 
 	private void setupFilterComboBox()
 	{
@@ -136,6 +158,39 @@ public class DataPanelNB extends JPanel implements ActionListener, DocumentListe
 		filterTextField.setText("");
 	}
 
+	@Override
+	public void mouseClicked(MouseEvent e)
+	{
+		int row = pointsTable.rowAtPoint(e.getPoint());
+
+		if (row != -1)
+		{
+			DataPoint point = (DataPoint) pointsTable.getValueAt(row, 1);
+			point.toggleSelection();
+			pointsTable.repaint();
+		}
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e)
+	{
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e)
+	{
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e)
+	{
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e)
+	{
+	}
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -148,7 +203,7 @@ public class DataPanelNB extends JPanel implements ActionListener, DocumentListe
 
         lblPoints = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        pointsTable = new javax.swing.JTable();
+        pointsTable = createTable();
         filterByLabel = new javax.swing.JLabel();
         filterCombo = new javax.swing.JComboBox<String>();
         filterTextField = new javax.swing.JTextField();

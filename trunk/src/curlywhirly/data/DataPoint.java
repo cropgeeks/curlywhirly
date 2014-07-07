@@ -3,7 +3,7 @@
 
 package curlywhirly.data;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.*;
 
 public class DataPoint
@@ -15,6 +15,7 @@ public class DataPoint
 	// Provides a quick method of querying for a Category by CategoryGroup.
 	// Useful for getting the colour to display for the point.
 	private final HashMap<CategoryGroup, Category> categories;
+	private boolean isSelected = true;
 
 	public DataPoint(String name, ArrayList<Float> values, HashMap<CategoryGroup, Category> categories)
 	{
@@ -44,15 +45,19 @@ public class DataPoint
 	public ArrayList<Float> getValues()
 		{ return values; }
 
-	// Returns true only when every category that this DataPoint is tagged as
-	// having is selected, otherwise returns false.
 	public boolean isSelected()
 	{
-		for (Category category : categories.values())
-			if (category.isSelected() == false)
-				return false;
+		return isSelected;
+	}
 
-		return true;
+	public void setSelected(boolean selected)
+	{
+		isSelected = selected;
+	}
+
+	public void toggleSelection()
+	{
+		isSelected = !isSelected;
 	}
 
 	// Uses the supplied CategoryGroup to look for an appropriate Category. If
@@ -62,7 +67,7 @@ public class DataPoint
 	{
 		Category cat = categories.get(group);
 
-		return isSelected() ? cat.getColor() : Color.DARK_GRAY;
+		return cat.getColor();
 	}
 
 	public Category getCategoryForGroup(CategoryGroup group)

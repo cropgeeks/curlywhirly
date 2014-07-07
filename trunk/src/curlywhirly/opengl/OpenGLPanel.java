@@ -47,9 +47,13 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	private DataPoint underMouse = null;
 	private DataSet dataSet;
 
+	private WinMain winMain;
+
 	public OpenGLPanel(WinMain winMain, GLCapabilities caps)
 	{
 		super(caps);
+
+		this.winMain = winMain;
 
 		closeOverlay = new CloseOverlay(winMain);
 		movieCapture = new MovieCaptureEventListener(this);
@@ -68,7 +72,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		detector = new CollisionDetection();
         int perspectiveAngle = 45;
         scene = new Scene(dataSet, rotation, perspectiveAngle, (float)CANVAS_WIDTH / CANVAS_HEIGHT, detector);
-		mouseListener = new CanvasMouseListener(this, rotation);
+		mouseListener = new CanvasMouseListener(this, rotation, dataSet);
 
 		scene.reset();
 	}
@@ -247,6 +251,15 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	{
 		if (underMouse != null)
 			dataSet.getDbAssociation().visitUrlForPoint(underMouse.getName());
+	}
+
+	public void selectPoint()
+	{
+		if (underMouse != null)
+		{
+			underMouse.toggleSelection();
+			winMain.getControlPanel().repaint();
+		}
 	}
 
 	public CloseOverlay getCloseOverlay()

@@ -46,7 +46,17 @@ public class DataPanel extends JPanel
 		sorter = new TableRowSorter<DataPanelTableModel>(model);
 		controls.pointsTable.setRowSorter(sorter);
 
-		controls.lblPoints.setText(RB.format("gui.DataPanel.label", model.getRowCount()));
+		controls.lblPoints.setText(getTitle());
+
+		controls.pointsTable.getColumnModel().getColumn(0).setPreferredWidth(20);
+	}
+
+	private String getTitle()
+	{
+		int selectedPoints = model.selectedPointsCount();
+		return selectedPoints != model.getRowCount() ?
+			RB.format("gui.DataPanel.labelFiltered", selectedPoints, model.getRowCount()) :
+			RB.format("gui.DataPanel.label", selectedPoints);
 	}
 
 	public void setDataSet(DataSet dataSet)
@@ -69,6 +79,22 @@ public class DataPanel extends JPanel
 		toggleEnabled(dataSet != null);
 	}
 
+	private void saveHighlightedReadsSummary()
+	{
+		// Loop over the table pulling out the data points to hand off to the
+		// DataPointSaver
+		ArrayList<DataPoint> dataPoints = new ArrayList<>();
+		for (int i=0; i < controls.pointsTable.getRowCount(); i++)
+		{
+			int row = controls.pointsTable.convertRowIndexToModel(i);
+			DataPoint point = (DataPoint) model.getValueAt(row, 1);
+			if (point.isSelected())
+				dataPoints.add(point);
+		}
+
+		saveSummary(dataPoints);
+	}
+
 	private void saveReadsSummary()
 	{
 		// Loop over the table pulling out the data points to hand off to the
@@ -77,10 +103,15 @@ public class DataPanel extends JPanel
 		for (int i=0; i < controls.pointsTable.getRowCount(); i++)
 		{
 			int row = controls.pointsTable.convertRowIndexToModel(i);
-			DataPoint point = (DataPoint) model.getValueAt(row, 0);
+			DataPoint point = (DataPoint) model.getValueAt(row, 1);
 			dataPoints.add(point);
 		}
 
+		saveSummary(dataPoints);
+	}
+
+	private void saveSummary(ArrayList<DataPoint> dataPoints)
+	{
 		File saveAs = new File(Prefs.guiCurrentDir, "tablesummary.txt");
 
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
@@ -111,8 +142,6 @@ public class DataPanel extends JPanel
 				TaskDialog.showOpenLog(RB.format("gui.DataPanel.saveDataPoints.exception",
 					dialog.getException()), null);
 			}
-
-			return;
 		}
 	}
 
@@ -129,6 +158,14 @@ public class DataPanel extends JPanel
 			}
 		});
 
+		JMenuItem mSaveHighlightedReads = new JMenuItem("", Icons.getIcon("FILESAVE16"));
+		RB.setText(mSaveHighlightedReads, "gui.DataPanel.mTableSaveHighlighted");
+		mSaveHighlightedReads.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				saveHighlightedReadsSummary();
+			}
+		});
+
 		JMenuItem mTableCopy = new JMenuItem("", Icons.getIcon("CLIPBOARD"));
 		RB.setText(mTableCopy, "gui.DataPanel.mTableCopy");
 		mTableCopy.addActionListener(new ActionListener() {
@@ -137,9 +174,9 @@ public class DataPanel extends JPanel
 			}
 		});
 
-
 		JPopupMenu menu = new JPopupMenu();
 		menu.add(mSaveReads);
+		menu.add(mSaveHighlightedReads);
 		menu.addSeparator();
 		menu.add(mTableCopy);
 		menu.show(e.getComponent(), e.getX(), e.getY());

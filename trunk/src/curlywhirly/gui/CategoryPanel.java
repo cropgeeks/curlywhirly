@@ -217,6 +217,10 @@ class CategoryPanel extends JPanel
 	void updateNamePanel()
 	{
 		lblCount.setText(getCountString());
+
+		int selected = 0;
+		for (Category category : catGroup)
+			selected += category.getNoSelected();
 	}
 
 	public void setVisible(boolean visible)

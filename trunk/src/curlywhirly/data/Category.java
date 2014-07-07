@@ -50,6 +50,9 @@ public class Category implements Comparable<Category>
 	public void setSelected(boolean selected)
 	{
 		this.selected = selected;
+
+		for (DataPoint dataPoint : dataPoints)
+			dataPoint.setSelected(selected);
 	}
 
 	public boolean isSelected()
