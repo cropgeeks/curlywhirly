@@ -56,7 +56,7 @@ public class ArcBall
 		}
 	}
 
-	public void setBounds(float width, float height)
+	private void setBounds(float width, float height)
 	{
 		this.width = 1f / ((width - 1f) * 0.5f);
 		this.height = 1f / ((height - 1f) * 0.5f);

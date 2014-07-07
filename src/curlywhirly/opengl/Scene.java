@@ -151,9 +151,10 @@ public class Scene
 		// Color spheres appropriately
 		for (DataPoint point : dataSet)
 		{
-			Color color = point.getColor(dataSet.getCurrentCategoryGroup());
+			Color color = point.isSelected() ? point.getColor(dataSet.getCurrentCategoryGroup()) : Color.DARK_GRAY;
 			// Get each color component into the 0-1 range instead of 0-255
 			float [] rgba = CWUtils.convertRgbToGl(color);
+
 			gl.glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rgba, 0);
 			gl.glMaterialf(GL_FRONT, GL_SHININESS, 128);
 			drawSphere(gl, point);

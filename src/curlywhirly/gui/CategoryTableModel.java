@@ -36,7 +36,7 @@ public class CategoryTableModel extends AbstractTableModel
 	}
 
 	@Override
-	public Class getColumnClass(int column)
+	public Class<?> getColumnClass(int column)
 	{
 		switch (column)
 		{
@@ -150,6 +150,30 @@ public class CategoryTableModel extends AbstractTableModel
 
 			setHorizontalAlignment(SwingConstants.RIGHT);
 
+			if (((String)value).startsWith("0"))
+				setForeground(Color.GRAY);
+			else
+				setForeground(UIManager.getColor("Label.foreground"));
+
+			return this;
+		}
+	}
+
+	class CategoryRenderer extends DefaultTableCellRenderer
+	{
+		// Set the attributes of the class and return a reference
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value,
+			boolean isSelected, boolean hasFocus, int row, int column)
+		{
+			super.getTableCellRendererComponent(table, value, isSelected,
+				hasFocus, row, column);
+
+			if (((Category)value).getNoSelected() == 0)
+				setForeground(Color.GRAY);
+			else
+				setForeground(UIManager.getColor("Label.foreground"));
+
 			return this;
 		}
 	}
@@ -159,6 +183,7 @@ public class CategoryTableModel extends AbstractTableModel
 		switch (col)
 		{
 			case 1: return new ColorListRenderer();
+			case 2: return new CategoryRenderer();
 			case 3: return new RightRenderer();
 			default: return null;
 		}
