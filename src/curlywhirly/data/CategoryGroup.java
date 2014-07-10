@@ -38,6 +38,12 @@ public class CategoryGroup implements Comparable<CategoryGroup>, Iterable<Catego
 	}
 
 	@Override
+	public String toString()
+	{
+		return name;
+	}
+
+	@Override
 	public int compareTo(CategoryGroup o)
 	{
 		return name.compareTo(o.name);
