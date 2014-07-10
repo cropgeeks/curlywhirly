@@ -51,7 +51,7 @@ public class DataPanel extends JPanel
 		controls.pointsTable.getColumnModel().getColumn(0).setPreferredWidth(20);
 	}
 
-	private String getTitle()
+	String getTitle()
 	{
 		int selectedPoints = model.selectedPointsCount();
 		return selectedPoints != model.getRowCount() ?
