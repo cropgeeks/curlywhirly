@@ -8,7 +8,7 @@ import java.util.*;
 
 import curlywhirly.data.*;
 import curlywhirly.gui.*;
-import curlywhirly.opengl.*;
+import curlywhirly.gui.viewer.opengl.*;
 
 public class CanvasController
 {

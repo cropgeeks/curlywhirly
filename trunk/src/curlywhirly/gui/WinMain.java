@@ -12,7 +12,7 @@ import javax.swing.*;
 
 import curlywhirly.data.*;
 import curlywhirly.gui.viewer.*;
-import curlywhirly.opengl.*;
+import curlywhirly.gui.viewer.opengl.*;
 
 import scri.commons.gui.*;
 

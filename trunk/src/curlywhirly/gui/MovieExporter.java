@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.*;
 import javax.imageio.*;
 
-import curlywhirly.opengl.*;
+import curlywhirly.gui.viewer.opengl.*;
 
 import org.monte.media.*;
 import org.monte.media.avi.*;
