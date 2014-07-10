@@ -168,6 +168,7 @@ public class DataPanelNB extends JPanel implements ActionListener, DocumentListe
 			DataPoint point = (DataPoint) pointsTable.getValueAt(row, 1);
 			point.toggleSelection();
 			pointsTable.repaint();
+			lblPoints.setText(parent.getTitle());
 		}
 	}
 

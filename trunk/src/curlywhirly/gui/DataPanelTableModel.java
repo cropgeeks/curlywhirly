@@ -29,11 +29,11 @@ public class DataPanelTableModel extends AbstractTableModel
 		// can be displayed in the table header.
 		String[] axisLabels = dataSet.getCurrentAxisLabels();
 
-		columnNames = new String[] { "Colour",
-									RB.getString("gui.DataPanelTableModel.headers.name"),
-									RB.format("gui.DataPanelTableModel.headers.col1", axisLabels[0]),
-									RB.format("gui.DataPanelTableModel.headers.col2", axisLabels[1]),
-									RB.format("gui.DataPanelTableModel.headers.col3", axisLabels[2]) };
+		columnNames = new String[] { RB.getString("gui.DataPanelTableModel.headers.col1"),
+									RB.getString("gui.DataPanelTableModel.headers.col2"),
+									RB.format("gui.DataPanelTableModel.headers.col3", axisLabels[0]),
+									RB.format("gui.DataPanelTableModel.headers.col4", axisLabels[1]),
+									RB.format("gui.DataPanelTableModel.headers.col5", axisLabels[2]) };
 	}
 
 	@Override
@@ -55,9 +55,9 @@ public class DataPanelTableModel extends AbstractTableModel
 		{
 			case 0: return Color.class;
 			case 1: return DataPoint.class;
-			case 2: return String.class;
-			case 3: return String.class;
-			case 4: return String.class;
+			case 2: return Float.class;
+			case 3: return Float.class;
+			case 4: return Float.class;
 
 			default: return null;
 		}
@@ -73,17 +73,6 @@ public class DataPanelTableModel extends AbstractTableModel
 	{
 		return columnNames.length;
 	}
-
-//	@Override
-//	public boolean isCellEditable(int rowIndex, int columnIndex)
-//	{
-//		switch (columnIndex)
-//		{
-//			case 0: return true;
-//
-//			default: return false;
-//		}
-//	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex)
@@ -103,19 +92,6 @@ public class DataPanelTableModel extends AbstractTableModel
 
 		return null;
 	}
-
-//	@Override
-//	public void setValueAt(Object value, int rowIndex, int columnIndex)
-//	{
-//		DataPoint point = (DataPoint) getValueAt(rowIndex, 2);
-//
-//		switch (columnIndex)
-//		{
-//			case 0: point.setSelected((boolean) value);
-//					fireTableDataChanged();
-//					break;
-//		}
-//	}
 
 	public int selectedPointsCount()
 	{
@@ -186,6 +162,9 @@ public class DataPanelTableModel extends AbstractTableModel
 				setForeground(UIManager.getColor("Label.foreground"));
 			else
 				setForeground(Color.GRAY);
+
+			if (table.getColumnClass(column) == Float.class)
+				setHorizontalAlignment(SwingConstants.RIGHT);
 
 			return this;
 		}
