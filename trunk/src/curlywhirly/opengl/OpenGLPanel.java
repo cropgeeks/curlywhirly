@@ -14,6 +14,7 @@ import javax.vecmath.*;
 
 import curlywhirly.data.*;
 import curlywhirly.gui.*;
+import curlywhirly.gui.dialog.*;
 import curlywhirly.gui.viewer.*;
 
 import com.jogamp.opengl.util.*;
@@ -270,4 +271,14 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
     public Scene getScene()
         { return scene; }
+
+	public void showDataPointDialog(DataPoint point)
+	{
+		new DataPointInformationDialog(dataSet, point);
+	}
+
+	public DataPoint getUnderMouse()
+	{
+		return underMouse;
+	}
 }

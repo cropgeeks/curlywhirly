@@ -76,8 +76,18 @@ public class CanvasMouseListener extends MouseInputAdapter
 		if (SwingUtilities.isLeftMouseButton(e))
 			startDrag(e.getPoint());
 
-		else if (e.isPopupTrigger())
+		else if (e.isPopupTrigger() && panel.getUnderMouse() != null)
 			new CanvasMenu().display(e);
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e)
+	{
+		if (SwingUtilities.isLeftMouseButton(e))
+			rotation.updateCombinedRotation();
+
+		else if (e.isPopupTrigger() && panel.getUnderMouse() != null)
+			menu.display(e);
 	}
 
 	@Override
@@ -100,16 +110,6 @@ public class CanvasMouseListener extends MouseInputAdapter
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent e)
-	{
-		if (SwingUtilities.isLeftMouseButton(e))
-			rotation.updateCombinedRotation();
-
-		else if (e.isPopupTrigger())
-			menu.display(e);
-	}
-
-	@Override
 	public void mouseWheelMoved(MouseWheelEvent e)
 	{
 		int units = e.getWheelRotation();
@@ -125,6 +125,7 @@ public class CanvasMouseListener extends MouseInputAdapter
 	class CanvasMenu implements ActionListener
 	{
 		private JMenuItem mVisitUrl;
+		private JMenuItem mPointInf;
 
 		// Create and display the popup menu
 		void display(MouseEvent e)
@@ -134,8 +135,13 @@ public class CanvasMouseListener extends MouseInputAdapter
 			mVisitUrl.addActionListener(this);
 			mVisitUrl.setEnabled(dataSet.getDbAssociation().isPointSearchEnabled());
 
+			mPointInf = new JMenuItem();
+			RB.setText(mPointInf, "gui.viewer.CanvasMouseListener.mPointInf");
+			mPointInf.addActionListener(this);
+
 			JPopupMenu menu = new JPopupMenu();
 			menu.add(mVisitUrl);
+			menu.add(mPointInf);
 			menu.show(e.getComponent(), e.getX(), e.getY());
 		}
 
@@ -150,6 +156,9 @@ public class CanvasMouseListener extends MouseInputAdapter
 				}
 				catch (UnsupportedEncodingException ex) { ex.printStackTrace(); }
 			}
+
+			else if (e.getSource() == mPointInf)
+				panel.showDataPointDialog(panel.getUnderMouse());
 		}
 	}
 }
