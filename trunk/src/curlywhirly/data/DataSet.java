@@ -62,7 +62,10 @@ public class DataSet implements Iterable<DataPoint>
 	}
 
 	public void setCurrentCategoryGroup(CategoryGroup currentGroup)
-		{ this.currentGroup = currentGroup; }
+	{
+		if (categoryGroups.isEmpty() == false)
+			this.currentGroup = currentGroup;
+	}
 
 	public CategoryGroup getCurrentCategoryGroup()
 		{ return currentGroup; }

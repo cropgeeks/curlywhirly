@@ -169,7 +169,7 @@ public class CategoryTableModel extends AbstractTableModel
 			super.getTableCellRendererComponent(table, value, isSelected,
 				hasFocus, row, column);
 
-			if (((Category)value).getNoSelected() == 0)
+			if (((Category)value).getSelectedCount() == 0)
 				setForeground(Color.GRAY);
 			else
 				setForeground(UIManager.getColor("Label.foreground"));

@@ -59,4 +59,31 @@ public class CategoryGroup implements Comparable<CategoryGroup>, Iterable<Catego
 	{
 		Collections.sort(categories);
 	}
+
+	public int selectedDataPointCount()
+	{
+		int selected = 0;
+		for (Category cat : categories)
+			selected += cat.getSelectedCount();
+
+		return selected;
+	}
+
+	public int totalDataPoints()
+	{
+		int total = 0;
+		for (Category cat : categories)
+			total += cat.getTotal();
+
+		return total;
+	}
+
+	public int selectedCategoriesCount()
+	{
+		int count = 0;
+		for (Category cat : categories)
+			count = cat.isSelected() ? count+1 : count;
+
+		return count;
+	}
 }
