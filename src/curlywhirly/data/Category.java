@@ -29,7 +29,7 @@ public class Category implements Comparable<Category>
 	public int getTotal()
 		{ return dataPoints.size(); }
 
-	public int getNoSelected()
+	public int getSelectedCount()
 	{
 		int count = 0;
 		for (DataPoint point : dataPoints)
@@ -41,7 +41,7 @@ public class Category implements Comparable<Category>
 
 	public String getSelectedText()
 	{
-		return "" + getNoSelected() + "/" + getTotal();
+		return "" + getSelectedCount() + "/" + getTotal();
 	}
 
 	public String getName()

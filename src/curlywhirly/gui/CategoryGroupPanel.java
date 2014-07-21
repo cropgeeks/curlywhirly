@@ -5,18 +5,24 @@ package curlywhirly.gui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.filechooser.*;
 
+import curlywhirly.analysis.*;
 import curlywhirly.data.*;
 
-class CategoryGroupPanel extends JPanel implements ActionListener, TableModelListener
+import scri.commons.gui.*;
+
+class CategoryGroupPanel extends JPanel implements TableModelListener
 {
 	private final WinMain winMain;
 	private final SelectionPanelNB parent;
 
 	private DataSet dataSet;
+	private ArrayList<CategoryGroup> categoryGroups;
 
 	private ButtonGroup buttonGroup;
 	private ArrayList<CategoryPanel> categoryPanels;
@@ -62,6 +68,8 @@ class CategoryGroupPanel extends JPanel implements ActionListener, TableModelLis
 	{
 		this.dataSet = dataSet;
 
+		categoryGroups = dataSet.getCategoryGroups();
+
 		// Because we tweak the height of the component ourselves so that it
 		// renders correctly we need to reset that here to make the scroll bar
 		// disappear if it's a null dataset
@@ -75,14 +83,13 @@ class CategoryGroupPanel extends JPanel implements ActionListener, TableModelLis
 	{
 		if (dataSet != null)
 		{
-			createControls(dataSet.getCategoryGroups());
+			createControls(categoryGroups);
 
 			// Select the first scheme and colour by this scheme.
 			if (buttonGroup.getElements().hasMoreElements())
 				buttonGroup.getElements().nextElement().setSelected(true);
 
-			if (categoryPanels.size() > 0)
-				dataSet.setCurrentCategoryGroup(dataSet.getCategoryGroups().get(0));
+			dataSet.setCurrentCategoryGroup(categoryGroups.get(0));
 		}
 	}
 
@@ -95,8 +102,8 @@ class CategoryGroupPanel extends JPanel implements ActionListener, TableModelLis
 
 		prefHeight = 0;
 
-		for (int i=0; i < catGroups.size(); i++)
-			addCategoryPanel(catGroups.get(i));
+		for (CategoryGroup catGroup : catGroups)
+			addCategoryPanel(catGroup);
 
 		// If the scroll pane is larger than our components add a vertical strut
 		// to push our components to the top.
@@ -113,11 +120,10 @@ class CategoryGroupPanel extends JPanel implements ActionListener, TableModelLis
 	{
 		CategoryPanel catPanel = new CategoryPanel(this, group, dataSet);
 		add(catPanel);
-		buttonGroup.add(catPanel.getButton());
+		buttonGroup.add(catPanel.getNamePanel().getRadioButton());
 		categoryPanels.add(catPanel);
 
-		prefHeight += catPanel.getNamePanelHeight();
-		prefHeight += catPanel.getTableHeight();
+		prefHeight += catPanel.getPreferredSize().height;
 	}
 
 	void selectAll()
@@ -132,46 +138,9 @@ class CategoryGroupPanel extends JPanel implements ActionListener, TableModelLis
 			panel.selectNone();
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e)
+	void updatePanelSize(CategoryPanel catPanel, JPanel tablePanel)
 	{
-		// Loop over our controls testing each one to see if it has triggered
-		// an event.
-		for (int i=0; i < categoryPanels.size(); i++)
-		{
-			CategoryPanel catPanel = categoryPanels.get(i);
-
-			// Change the currently selected category group.
-			if (e.getSource() == catPanel.getButton())
-				changeSelectedCategoryGroup(dataSet.getCategoryGroups().get(i), catPanel);
-
-			else if (e.getSource() == catPanel.getExpandButton())
-				toggleGroupExpanded(catPanel);
-		}
-	}
-
-	private void changeSelectedCategoryGroup(CategoryGroup catGroup, CategoryPanel catPanel)
-	{
-		dataSet.setCurrentCategoryGroup(catGroup);
-		catPanel.setVisible(true);
-		invalidate();
-		repaint();
-	}
-
-	private void toggleGroupExpanded(CategoryPanel catPanel)
-	{
-		JPanel tablePanel = catPanel.getTablePanel();
-
-		// Change visibility and update panel size
-		tablePanel.setVisible(!catPanel.getTablePanel().isVisible());
-		updatePanelSize(catPanel, tablePanel);
-
-		catPanel.repaint();
-	}
-
-	private void updatePanelSize(CategoryPanel catPanel, JPanel tablePanel)
-	{
-		int tableHeight = catPanel.getTableHeight();
+		int tableHeight = catPanel.getTablePanel().getCatTable().getHeight();
 		prefHeight = tablePanel.isVisible() ? prefHeight + tableHeight : prefHeight - tableHeight;
 		setPreferredSize(new Dimension(getPreferredSize().width, prefHeight));
 	}
@@ -189,5 +158,39 @@ class CategoryGroupPanel extends JPanel implements ActionListener, TableModelLis
 		repaint();
 
 		winMain.getDataPanel().updateTableModel();
+	}
+
+	void exportCategories()
+	{
+		File saveAs = new File(Prefs.guiCurrentDir, "selectedcategories.txt");
+
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+			RB.getString("gui.text.formats.txt"), "txt");
+
+		// Ask the user for a filename to save the data to
+		String filename = CWUtils.getSaveFilename(
+			RB.getString("gui.CategoryGroupPanel.saveCategoryGroups.saveDialog"), saveAs, filter);
+
+		// Quit if the user cancelled the file selection
+		if (filename == null)
+			return;
+
+		CategoryGroupSaver saver = new CategoryGroupSaver(new File(filename), categoryGroups);
+
+		ProgressDialog dialog = new ProgressDialog(saver,
+			RB.getString("gui.CategoryGroupPanel.saveCategoryGroups.title"),
+			RB.getString("gui.CategoryGroupPanel.saveCategoryGroups.label"),
+			CurlyWhirly.winMain);
+
+		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
+		{
+			if (dialog.getResult() == ProgressDialog.JOB_FAILED)
+			{
+				dialog.getException().printStackTrace();
+
+				TaskDialog.showOpenLog(RB.format("gui.CategoryGroupPanel.saveCategoryGroups.exception",
+					dialog.getException()), null);
+			}
+		}
 	}
 }

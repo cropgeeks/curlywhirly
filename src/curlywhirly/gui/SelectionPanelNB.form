@@ -31,7 +31,8 @@
                               <Component id="lblSelectNone" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="lblExport" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -42,9 +43,12 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="lblCategory" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="lblCategory" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblExport" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="categorySP" pref="23" max="32767" attributes="0"/>
+              <Component id="categorySP" pref="25" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="103" alignment="0" groupAlignment="3" attributes="0">
@@ -84,6 +88,11 @@
     <Component class="scri.commons.gui.matisse.HyperLinkLabel" name="lblSelectNone">
       <Properties>
         <Property name="text" type="java.lang.String" value="Select none"/>
+      </Properties>
+    </Component>
+    <Component class="scri.commons.gui.matisse.HyperLinkLabel" name="lblExport">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Export"/>
       </Properties>
     </Component>
   </SubComponents>

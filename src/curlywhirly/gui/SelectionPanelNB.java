@@ -26,10 +26,12 @@ public class SelectionPanelNB extends JPanel implements ActionListener
 
 		lblSelectAll.addActionListener(this);
 		lblSelectNone.addActionListener(this);
+		lblExport.addActionListener(this);
 
-		RB.setText(lblCategory, "gui.selectionPanelNB.lblCategory");
-		RB.setText(lblSelectAll, "gui.selectionPanelNB.selectAll");
-		RB.setText(lblSelectNone, "gui.selectionPanelNB.selectNone");
+		RB.setText(lblCategory, "gui.SelectionPanelNB.lblCategory");
+		RB.setText(lblSelectAll, "gui.SelectionPanelNB.selectAll");
+		RB.setText(lblSelectNone, "gui.SelectionPanelNB.selectNone");
+		RB.setText(lblExport, "gui.SelectionPanelNB.export");
 
 		toggleEnabled(false);
 	}
@@ -51,6 +53,7 @@ public class SelectionPanelNB extends JPanel implements ActionListener
 		lblSelectAll.setEnabled(enabled);
 		lblSelectNone.setEnabled(enabled);
 		lblPipe.setEnabled(enabled);
+		lblExport.setEnabled(enabled);
 	}
 
 	public void setDataSet(DataSet dataSet)
@@ -80,6 +83,9 @@ public class SelectionPanelNB extends JPanel implements ActionListener
 
 		else if (e.getSource() == lblSelectNone)
 			container.selectNone();
+
+		else if (e.getSource() == lblExport)
+			container.exportCategories();
 	}
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -91,6 +97,7 @@ public class SelectionPanelNB extends JPanel implements ActionListener
         lblSelectAll = new scri.commons.gui.matisse.HyperLinkLabel();
         lblPipe = new javax.swing.JLabel();
         lblSelectNone = new scri.commons.gui.matisse.HyperLinkLabel();
+        lblExport = new scri.commons.gui.matisse.HyperLinkLabel();
 
         lblCategory.setText("Category selection:");
 
@@ -99,6 +106,8 @@ public class SelectionPanelNB extends JPanel implements ActionListener
         lblPipe.setText("|");
 
         lblSelectNone.setText("Select none");
+
+        lblExport.setText("Export");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -117,16 +126,19 @@ public class SelectionPanelNB extends JPanel implements ActionListener
                                 .addComponent(lblPipe)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(lblSelectNone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblExport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblCategory)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblCategory)
+                    .addComponent(lblExport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(categorySP, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
+                .addComponent(categorySP, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -140,6 +152,7 @@ public class SelectionPanelNB extends JPanel implements ActionListener
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane categorySP;
     javax.swing.JLabel lblCategory;
+    private scri.commons.gui.matisse.HyperLinkLabel lblExport;
     private javax.swing.JLabel lblPipe;
     private scri.commons.gui.matisse.HyperLinkLabel lblSelectAll;
     private scri.commons.gui.matisse.HyperLinkLabel lblSelectNone;
