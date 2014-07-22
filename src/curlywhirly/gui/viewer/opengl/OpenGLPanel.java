@@ -64,6 +64,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		addGLEventListener(movieCapture);
 
 		ToolTipManager.sharedInstance().setInitialDelay(0);
+		setLayout(new BorderLayout());
 	}
 
 	public void setDataSet(DataSet dataSet)
@@ -73,7 +74,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		detector = new CollisionDetection();
         int perspectiveAngle = 45;
         scene = new Scene(dataSet, rotation, perspectiveAngle, (float)CANVAS_WIDTH / CANVAS_HEIGHT, detector);
-		mouseListener = new CanvasMouseListener(this, rotation, dataSet);
+		mouseListener = new CanvasMouseListener(this, rotation, dataSet, winMain);
 
 		scene.reset();
 	}
@@ -116,6 +117,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 		gl.glShadeModel(GL_SMOOTH);
 		gl.glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+		gl.glEnable(GL_BLEND);
 		gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		gl.glLineWidth(1.5f);
 		gl.setSwapInterval(1);
@@ -256,7 +258,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	public void selectPoint()
 	{
-		if (underMouse != null)
+		if (underMouse != null && scene.isMultiSelecting() == false)
 		{
 			underMouse.toggleSelection();
 			winMain.getControlPanel().repaint();

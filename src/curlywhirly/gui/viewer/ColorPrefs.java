@@ -57,6 +57,7 @@ public class ColorPrefs
 		initColor("User.OpenGLPanel.background", Color.BLACK);
 		initColor("User.OpenGLPanel.textColor", Color.WHITE);
 		initColor("User.OpenGLPanel.closeButtonColor", Color.DARK_GRAY);
+		initColor("User.OpenGLPanel.multiSelectColor", Color.WHITE);
 	}
 
 
