@@ -175,7 +175,8 @@ class CategoryGroupPanel extends JPanel implements TableModelListener
 		if (filename == null)
 			return;
 
-		CategoryGroupSaver saver = new CategoryGroupSaver(new File(filename), categoryGroups);
+		File categoryFile = new File(filename);
+		CategoryGroupSaver saver = new CategoryGroupSaver(categoryFile, categoryGroups);
 
 		ProgressDialog dialog = new ProgressDialog(saver,
 			RB.getString("gui.CategoryGroupPanel.saveCategoryGroups.title"),
@@ -192,5 +193,7 @@ class CategoryGroupPanel extends JPanel implements TableModelListener
 					dialog.getException()), null);
 			}
 		}
+		else
+			TaskDialog.showFileOpen(RB.getString("gui.CategoryGroupPanel.saveCategoryGroups.openFile"), TaskDialog.INF, categoryFile);
 	}
 }
