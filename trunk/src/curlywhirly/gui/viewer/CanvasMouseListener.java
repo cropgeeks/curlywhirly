@@ -11,6 +11,7 @@ import javax.swing.event.*;
 import javax.vecmath.*;
 
 import curlywhirly.data.*;
+import curlywhirly.gui.*;
 import curlywhirly.gui.viewer.opengl.*;
 
 import scri.commons.gui.*;
@@ -21,14 +22,18 @@ public class CanvasMouseListener extends MouseInputAdapter
 	private ArcBall arcBall;
 	private final Rotation rotation;
 	private final DataSet dataSet;
+	private final WinMain winMain;
 
 	private final CanvasMenu menu;
 
-	public CanvasMouseListener(OpenGLPanel panel, Rotation rotation, DataSet dataSet)
+	private DataPoint underMouse;
+
+	public CanvasMouseListener(OpenGLPanel panel, Rotation rotation, DataSet dataSet, WinMain winMain)
 	{
 		this.panel = panel;
 		this.rotation = rotation;
 		this.dataSet = dataSet;
+		this.winMain = winMain;
 
 		// Register this class as the mouse listener for the OpenGLPanel
 		panel.addMouseListener(this);
@@ -76,8 +81,11 @@ public class CanvasMouseListener extends MouseInputAdapter
 		if (SwingUtilities.isLeftMouseButton(e))
 			startDrag(e.getPoint());
 
-		else if (e.isPopupTrigger() && panel.getUnderMouse() != null)
-			new CanvasMenu().display(e);
+		else if (e.isPopupTrigger() && panel.getUnderMouse() != null && panel.getScene().isMultiSelecting() == false)
+		{
+			menu.display(e);
+			underMouse = panel.getUnderMouse();
+		}
 	}
 
 	@Override
@@ -86,8 +94,11 @@ public class CanvasMouseListener extends MouseInputAdapter
 		if (SwingUtilities.isLeftMouseButton(e))
 			rotation.updateCombinedRotation();
 
-		else if (e.isPopupTrigger() && panel.getUnderMouse() != null)
+		else if (e.isPopupTrigger() && panel.getUnderMouse() != null && panel.getScene().isMultiSelecting() == false)
+		{
 			menu.display(e);
+			underMouse = panel.getUnderMouse();
+		}
 	}
 
 	@Override
@@ -126,6 +137,7 @@ public class CanvasMouseListener extends MouseInputAdapter
 	{
 		private JMenuItem mVisitUrl;
 		private JMenuItem mPointInf;
+		private JMenuItem mMultiSelect;
 
 		// Create and display the popup menu
 		void display(MouseEvent e)
@@ -139,9 +151,14 @@ public class CanvasMouseListener extends MouseInputAdapter
 			RB.setText(mPointInf, "gui.viewer.CanvasMouseListener.mPointInf");
 			mPointInf.addActionListener(this);
 
+			mMultiSelect = new JMenuItem();
+			RB.setText(mMultiSelect, "gui.viewer.CanvasMouseListener.mMultiSelect");
+			mMultiSelect.addActionListener(this);
+
 			JPopupMenu menu = new JPopupMenu();
 			menu.add(mVisitUrl);
 			menu.add(mPointInf);
+			menu.add(mMultiSelect);
 			menu.show(e.getComponent(), e.getX(), e.getY());
 		}
 
@@ -158,7 +175,13 @@ public class CanvasMouseListener extends MouseInputAdapter
 			}
 
 			else if (e.getSource() == mPointInf)
-				panel.showDataPointDialog(panel.getUnderMouse());
+				panel.showDataPointDialog(underMouse);
+
+			else if (e.getSource() == mMultiSelect)
+			{
+				panel.getScene().multiSelect(underMouse);
+				winMain.getMultiSelectPanel().setVisible(true);
+			}
 		}
 	}
 }

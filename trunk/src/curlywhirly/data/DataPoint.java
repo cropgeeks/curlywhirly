@@ -15,13 +15,15 @@ public class DataPoint
 	// Provides a quick method of querying for a Category by CategoryGroup.
 	// Useful for getting the colour to display for the point.
 	private final HashMap<CategoryGroup, Category> categories;
-	private boolean isSelected = true;
+	private boolean isSelected;
 
 	public DataPoint(String name, ArrayList<Float> values, HashMap<CategoryGroup, Category> categories)
 	{
 		this.name = name;
 		this.values = values;
 		this.categories = categories;
+
+		isSelected = true;
 	}
 
 	// Accepts as input an int array of the axes that are currently being

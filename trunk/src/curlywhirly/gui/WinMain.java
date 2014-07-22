@@ -36,6 +36,8 @@ public class WinMain extends JFrame
 	private DataSet dataSet;
 
 	private GLCapabilities caps;
+	private JPanel canvasContainer;
+	private MultiSelectPanel multiSelectPanel;
 
 	WinMain()
 	{
@@ -126,6 +128,12 @@ public class WinMain extends JFrame
 		caps.setNumSamples(2);
 		canvas3D = new OpenGLPanel(this, caps);
 		canvas3D.setSize(new Dimension((Prefs.guiWinMainW-Prefs.guiSplitterLocation), Prefs.guiWinMainH));
+
+		canvasContainer = new JPanel();
+		canvasContainer.setLayout(new BorderLayout());
+		canvasContainer.add(canvas3D);
+		multiSelectPanel = new MultiSelectPanel(canvas3D);
+		canvasContainer.add(multiSelectPanel, BorderLayout.SOUTH);
 	}
 
 	public void setDataSet(DataSet dataSet)
@@ -187,7 +195,7 @@ public class WinMain extends JFrame
 
 	public void display3DCanvas()
 	{
-		splitPane.setRightComponent(canvas3D);
+		splitPane.setRightComponent(canvasContainer);
 		canvas3D.startAnimator();
 	}
 
@@ -288,4 +296,7 @@ public class WinMain extends JFrame
 
 	public GLCapabilities getCapabilities()
 		{ return caps; }
+
+	public MultiSelectPanel getMultiSelectPanel()
+		{ return multiSelectPanel; }
 }
