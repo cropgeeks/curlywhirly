@@ -132,7 +132,7 @@ public class WinMain extends JFrame
 		canvasContainer = new JPanel();
 		canvasContainer.setLayout(new BorderLayout());
 		canvasContainer.add(canvas3D);
-		multiSelectPanel = new MultiSelectPanel(canvas3D);
+		multiSelectPanel = new MultiSelectPanel(canvas3D.getSelectionOverlay(), canvas3D);
 		canvasContainer.add(multiSelectPanel, BorderLayout.SOUTH);
 	}
 
@@ -143,6 +143,7 @@ public class WinMain extends JFrame
 		selectionPanel.setDataSet(dataSet);
 		dataPanel.setDataSet(dataSet);
 		controlsPanel.setDataSet(dataSet);
+		multiSelectPanel.setDataSet(dataSet);
 
 		//do the rest of the set up
 		//set the title of the window to the name of the dataset

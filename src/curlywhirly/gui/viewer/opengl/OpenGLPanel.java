@@ -43,6 +43,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	private CollisionDetection detector;
 
 	private final CloseOverlay closeOverlay;
+	private final MultiSelectionRenderer selectionOverlay;
 	private final MovieCaptureEventListener movieCapture;
 
 	private DataPoint underMouse = null;
@@ -57,10 +58,12 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		this.winMain = winMain;
 
 		closeOverlay = new CloseOverlay(winMain);
+		selectionOverlay = new MultiSelectionRenderer(winMain);
 		movieCapture = new MovieCaptureEventListener(this);
 
 		addGLEventListener(this);
 		addGLEventListener(closeOverlay);
+		addGLEventListener(selectionOverlay);
 		addGLEventListener(movieCapture);
 
 		ToolTipManager.sharedInstance().setInitialDelay(0);
@@ -75,6 +78,8 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
         int perspectiveAngle = 45;
         scene = new Scene(dataSet, rotation, perspectiveAngle, (float)CANVAS_WIDTH / CANVAS_HEIGHT, detector);
 		mouseListener = new CanvasMouseListener(this, rotation, dataSet, winMain);
+
+		selectionOverlay.setDataSet(dataSet, rotation);
 
 		scene.reset();
 	}
@@ -117,8 +122,6 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 		gl.glShadeModel(GL_SMOOTH);
 		gl.glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-		gl.glEnable(GL_BLEND);
-		gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		gl.glLineWidth(1.5f);
 		gl.setSwapInterval(1);
 		gl.glEnable(GL_RESCALE_NORMAL);
@@ -258,7 +261,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	public void selectPoint()
 	{
-		if (underMouse != null && scene.isMultiSelecting() == false)
+		if (underMouse != null && selectionOverlay.isMultiSelecting() == false)
 		{
 			underMouse.toggleSelection();
 			winMain.getControlPanel().repaint();
@@ -267,6 +270,9 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	public CloseOverlay getCloseOverlay()
 		{ return closeOverlay; }
+
+	public MultiSelectionRenderer getSelectionOverlay()
+		{ return selectionOverlay; }
 
 	public MovieCaptureEventListener getMovieCapture()
 		{ return movieCapture; }

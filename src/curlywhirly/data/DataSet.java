@@ -118,4 +118,7 @@ public class DataSet implements Iterable<DataPoint>
 
 	public ArrayList<DataPoint> getDataPoints()
 		{ return dataPoints; }
+
+	public int size()
+	{	return dataPoints.size(); }
 }

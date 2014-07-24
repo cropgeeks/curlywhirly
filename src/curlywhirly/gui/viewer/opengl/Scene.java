@@ -12,7 +12,6 @@ import curlywhirly.gui.viewer.*;
 
 import com.jogamp.common.nio.*;
 import com.jogamp.opengl.util.awt.*;
-import com.jogamp.opengl.util.gl2.*;
 
 import static javax.media.opengl.GL.*;
 import static javax.media.opengl.fixedfunc.GLLightingFunc.*;
@@ -29,7 +28,6 @@ public class Scene
     private final Rotation rotation;
 
     private final GLU glu;
-	private final GLUT glut;
 
     // An custom made sphere object (faster than gluSphere)
 	private IcoSphere sphere;
@@ -52,10 +50,7 @@ public class Scene
     private TextRenderer renderer;
 	private final CollisionDetection detector;
 
-	private DataPoint mSelect;
-	private boolean multiSelect = false;
-	private float selectPointSize = 2f;
-	private final HashSet<DataPoint> multiSelected = new HashSet<>();
+	private HashSet<DataPoint> multiSelected = new HashSet<>();
 
     public Scene(DataSet dataSet, Rotation rotation, int perspAngle, float aspect, CollisionDetection detector)
     {
@@ -66,7 +61,6 @@ public class Scene
 		this.detector = detector;
 
         glu = new GLU();
-		glut = new GLUT();
     }
 
     void init(GL2 gl)
@@ -93,42 +87,11 @@ public class Scene
 		// the spheres become obscured by the axis labels.
 		drawSpheres(gl);
 		drawAxes(gl);
-		drawSelectSphere(gl);
 
 		gl.glPopMatrix();
 
 		rotation.automaticallyRotate();
     }
-
-	private void drawSelectSphere(GL2 gl)
-	{
-		if (multiSelect == false || mSelect == null)
-			return;
-
-		gl.glEnable(GL_BLEND);
-		gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		gl.glDisable(GL_CULL_FACE);
-		gl.glDepthFunc(GL_LEQUAL);
-		gl.glPushMatrix();
-		// Scale our unit sphere down to a more manageable scale
-		gl.glScalef(selectPointSize, selectPointSize, selectPointSize);
-
-		// Get the position information for each axis so that these can be used
-		// to translate our spheres to the correct location
-		float[] axes = mSelect.getPosition(dataSet.getCurrentAxes());
-		// Bring our translations into the correct coordinate space as we've
-		// scaled each point to 1/200 of its original size.
-		float translationScale = 1/(selectPointSize);
-		gl.glTranslatef(map(axes[0])*translationScale, map(axes[1])*translationScale, map(axes[2])*translationScale);
-
-		float[] rgba = new float[] { 0.5f, 0.5f, 1.0f, 0.4f };
-		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, rgba, 0);
-		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
-		glut.glutSolidSphere(1, 32, 32);
-		gl.glPopMatrix();
-		gl.glEnable(GL_CULL_FACE);
-		gl.glDisable(GL_BLEND);
-	}
 
     private void clearColor(GL2 gl)
 	{
@@ -172,7 +135,7 @@ public class Scene
 		gl.glMultMatrixf(rotation.getCumulativeRotationArray(), 0);
 	}
 
-    	private void drawSpheres(GL2 gl)
+    private void drawSpheres(GL2 gl)
 	{
 		// Vertex buffer setup code
 		gl.glBindBuffer(GL_ARRAY_BUFFER, icosphereVertexID);
@@ -193,9 +156,9 @@ public class Scene
 		for (DataPoint point : dataSet)
 		{
 			Color color = point.isSelected() ? point.getColor(dataSet.getCurrentCategoryGroup()) : Color.DARK_GRAY;
-			if (multiSelect && multiSelected.contains(point))
+			if (multiSelected.contains(point))
 				color = mSelectColor;
-			// Get each color component into the 0-1 range instead of 0-255
+//			 Get each color component into the 0-1 range instead of 0-255
 			float [] rgba = CWUtils.convertRgbToGl(color);
 
 			gl.glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rgba, 0);
@@ -210,16 +173,15 @@ public class Scene
 	private void drawSphere(GL2 gl, DataPoint point)
 	{
 		gl.glPushMatrix();
-		// Scale our unit sphere down to a more manageable scale
-		gl.glScalef(pointSize, pointSize, pointSize);
 
 		// Get the position information for each axis so that these can be used
 		// to translate our spheres to the correct location
 		float[] axes = point.getPosition(dataSet.getCurrentAxes());
-		// Bring our translations into the correct coordinate space as we've
-		// scaled each point to 1/200 of its original size.
-		float translationScale = 1/pointSize;
-		gl.glTranslatef(map(axes[0])*translationScale, map(axes[1])*translationScale, map(axes[2])*translationScale);
+		// Bring our translations into the correct coordinate space
+		gl.glTranslatef(map(axes[0]), map(axes[1]), map(axes[2]));
+
+		// Scale our unit sphere down to a more manageable scale
+		gl.glScalef(pointSize, pointSize, pointSize);
 
 		float[] modelView = new float[16];
 		gl.glGetFloatv(GL_MODELVIEW_MATRIX, modelView, 0);
@@ -255,11 +217,17 @@ public class Scene
 
     private void drawAxes(GL2 gl)
 	{
-		drawAxesLines(gl);
+		gl.glPushMatrix();
+		gl.glScalef(50f, 50f, 50f);
+		float[] xAxisColor = CWUtils.convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.xAxisColor"));
+		float[] yAxisColor = CWUtils.convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.yAxisColor"));
+		float[] zAxisColor = CWUtils.convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.zAxisColor"));
+		drawAxesLines(gl, xAxisColor, yAxisColor, zAxisColor);
+		gl.glPopMatrix();
 		drawAxesCones(gl);
 	}
 
-	private void drawAxesLines(GL2 gl)
+	void drawAxesLines(GL2 gl, float[] xAxisColor, float[] yAxisColor, float[] zAxisColor)
 	{
 		// Enable / disable antialiasing for lines based on user preference.
 		if (Prefs.guiAntialiasAxes)
@@ -273,31 +241,28 @@ public class Scene
 			gl.glDisable(GL_LINE_SMOOTH);
 		}
 
-		float[] xAxisColor = CWUtils.convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.xAxisColor"));
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, xAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
 		// Draw X-axis
 		gl.glBegin(GL_LINES);
-		gl.glVertex3f(-50f, 0, 0);
-		gl.glVertex3f(50f, 0, 0);
+		gl.glVertex3f(-1f, 0, 0);
+		gl.glVertex3f(1f, 0, 0);
 		gl.glEnd();
 
-		float [] yAxisColor = CWUtils.convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.yAxisColor"));
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, yAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
 		// Draw Y-axis
 		gl.glBegin(GL_LINES);
-		gl.glVertex3f(0, -50f, 0);
-		gl.glVertex3f(0, 50f, 0);
+		gl.glVertex3f(0, -1f, 0);
+		gl.glVertex3f(0, 1f, 0);
 		gl.glEnd();
 
-		float [] zAxisColor = CWUtils.convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.zAxisColor"));
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, zAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
 		// Draw Z-axis
 		gl.glBegin(GL_LINES);
-		gl.glVertex3f(0, 0, -50f);
-		gl.glVertex3f(0, 0, 50f);
+		gl.glVertex3f(0, 0, -1f);
+		gl.glVertex3f(0, 0, 1f);
 		gl.glEnd();
 
 		// If the user has chosen to antialias axes we must disable this when
@@ -464,79 +429,6 @@ public class Scene
     public float[] getProj()
         { return proj; }
 
-	public void multiSelect(DataPoint point)
-	{
-		mSelect = point;
-		multiSelect = true;
-	}
-
-	public void finishedMultiSelect(int selectionType)
-	{
-		mSelect = null;
-		multiSelect = false;
-
-		switch (selectionType)
-		{
-			case MultiSelectPanel.SELECT:
-				for (DataPoint point : multiSelected)
-					point.setSelected(true);
-				break;
-			case MultiSelectPanel.DESELECT:
-				for (DataPoint point : multiSelected)
-					point.setSelected(false);
-				break;
-			case MultiSelectPanel.TOGGLE:
-				for (DataPoint point : multiSelected)
-					point.toggleSelection();
-				break;
-		}
-
-		multiSelected.clear();
-	}
-
-	public void cancelMultiSelect()
-	{
-		mSelect = null;
-		multiSelect = false;
-		multiSelected.clear();
-	}
-
-	public void setSelectPointSize(float selectPointSize)
-	{
-		this.selectPointSize = selectPointSize;
-	}
-
-	public float getSelectPointSize()
-	{
-		return selectPointSize;
-	}
-
-	public void detectMultiSelectedPoints()
-	{
-		if (mSelect == null)
-			return;
-
-		multiSelected.clear();
-		for (DataPoint point : dataSet)
-		{
-			float[] selectCoordinates = mSelect.getPosition(dataSet.getCurrentAxes());
-			float[] pointCoordinates = point.getPosition(dataSet.getCurrentAxes());
-
-			// Find the distance between our two points
-			float rX = map(selectCoordinates[0]) - map(pointCoordinates[0]);
-			float rY = map(selectCoordinates[1]) - map(pointCoordinates[1]);
-			float rZ = map(selectCoordinates[2]) - map(pointCoordinates[2]);
-			float dist = rX * rX + rY * rY + rZ * rZ;
-			// This should include poinSize but I've fudged it to ensure points
-			// look like they are included in the circle before they are selected.
-			float minDist = selectPointSize;
-			if (dist < minDist * minDist)
-				multiSelected.add(point);
-		}
-	}
-
-	public boolean isMultiSelecting()
-	{
-		return multiSelect;
-	}
+	public void setMultiSelected(HashSet<DataPoint> multiSelected)
+		{ this.multiSelected = multiSelected; }
 }
