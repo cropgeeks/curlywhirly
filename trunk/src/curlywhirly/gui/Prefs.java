@@ -68,6 +68,11 @@ public class Prefs extends XMLPreferences
 
 	public static int guiDataPanelFilter = 0;
 
+	public static boolean guiChkAnchorPoints = true;
+	public static boolean guiChkSelectionAxes = false;
+
+	public static float guiSelectionSphereSize = 4f;
+
 	// The local working directory for disk caching
 	public static String cacheFolder =
 		SystemUtils.getTempUserDirectory("jhi-curlywhirly").getPath();

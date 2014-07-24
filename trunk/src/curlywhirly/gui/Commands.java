@@ -144,7 +144,6 @@ public class Commands
 	{
 		// Start or stop the spinning
 		boolean isSpinning = winMain.getOpenGLPanel().getScene().toggleSpin();
-		System.out.println("Spinning: " + isSpinning);
 
 		JSlider slider = winMain.getToolbar().getSlider();
 		slider.setEnabled(isSpinning);
