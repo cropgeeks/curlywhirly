@@ -101,12 +101,15 @@ public class SelectionPanelNB extends JPanel implements ActionListener
 
         lblCategory.setText("Category selection:");
 
+        lblSelectAll.setForeground(new java.awt.Color(68, 106, 156));
         lblSelectAll.setText("Select all");
 
         lblPipe.setText("|");
 
+        lblSelectNone.setForeground(new java.awt.Color(68, 106, 156));
         lblSelectNone.setText("Select none");
 
+        lblExport.setForeground(new java.awt.Color(68, 106, 156));
         lblExport.setText("Export");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
