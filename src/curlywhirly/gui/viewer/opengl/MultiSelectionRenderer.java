@@ -99,7 +99,7 @@ public class MultiSelectionRenderer implements GLEventListener
 		// to translate our sphere to the correct location
 		float[] axes = selectedPoint.getPosition(dataSet.getCurrentAxes());
 		// Bring our translations into the correct coordinate space
-		gl.glTranslatef(map(axes[0]), map(axes[1]), map(axes[2]));
+		gl.glTranslatef(axes[0], axes[1], axes[2]);
 
 		// Scale our sphere to match the desired size set in the UI
 		gl.glScalef(selectionSphereSize, selectionSphereSize, selectionSphereSize);
@@ -126,8 +126,6 @@ public class MultiSelectionRenderer implements GLEventListener
 		gl.glMaterialf(GL_FRONT, GL_SHININESS, 128);
 
 		gl.glPushMatrix();
-		float lineScale = 1/(winMain.getOpenGLPanel().getScene().getPointSize());
-		gl.glScalef(lineScale, lineScale, lineScale);
 		// The datapoint at the centre of the selection sphere
 		float[] anchorPointPosition = selectedPoint.getPosition(dataSet.getCurrentAxes());
 		for (DataPoint point : multiSelectedPoints)
@@ -136,8 +134,8 @@ public class MultiSelectionRenderer implements GLEventListener
 			float[] selectedPointPosition = point.getPosition(dataSet.getCurrentAxes());
 			// Draw a line between the two points
 			gl.glBegin(GL_LINES);
-			gl.glVertex3f(map(anchorPointPosition[0]), map(anchorPointPosition[1]), map(anchorPointPosition[2]));
-			gl.glVertex3f(map(selectedPointPosition[0]), map(selectedPointPosition[1]), map(selectedPointPosition[2]));
+			gl.glVertex3fv(anchorPointPosition, 0);
+			gl.glVertex3f(selectedPointPosition[0], selectedPointPosition[1], selectedPointPosition[2]);
 			gl.glEnd();
 		}
 		gl.glPopMatrix();
@@ -151,7 +149,7 @@ public class MultiSelectionRenderer implements GLEventListener
 		gl.glPushMatrix();
 
 		float[] axes = selectedPoint.getPosition(dataSet.getCurrentAxes());
-		gl.glTranslatef(map(axes[0]), map(axes[1]), map(axes[2]));
+		gl.glTranslatef(axes[0], axes[1], axes[2]);
 		gl.glScalef(selectionSphereSize, selectionSphereSize, selectionSphereSize);
 		Color color = ColorPrefs.get("User.OpenGLPanel.multiSelectAxesColor");
 		float[] glColor = CWUtils.convertRgbToGl(color);
@@ -165,13 +163,6 @@ public class MultiSelectionRenderer implements GLEventListener
 	@Override
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height)
 	{
-	}
-
-	// Our translations are stored in a -1 to 1 range and we want to re-map these
-	// into our -50 to 50 coordinate space.
-	private float map(float number)
-	{
-		return ((number-(-1f))/(1f-(-1f)) * (50f-(-50f)) + -50f);
 	}
 
 	public void multiSelect(DataPoint point)
@@ -236,9 +227,9 @@ public class MultiSelectionRenderer implements GLEventListener
 			float[] pointCoordinates = point.getPosition(dataSet.getCurrentAxes());
 
 			// Find the distance between our two points
-			float rX = map(selectCoordinates[0]) - map(pointCoordinates[0]);
-			float rY = map(selectCoordinates[1]) - map(pointCoordinates[1]);
-			float rZ = map(selectCoordinates[2]) - map(pointCoordinates[2]);
+			float rX = selectCoordinates[0] - pointCoordinates[0];
+			float rY = selectCoordinates[1] - pointCoordinates[1];
+			float rZ = selectCoordinates[2] - pointCoordinates[2];
 			float dist = rX * rX + rY * rY + rZ * rZ;
 			// This should include poinSize but I've fudged it to ensure points
 			// look like they are included in the circle before they are selected.

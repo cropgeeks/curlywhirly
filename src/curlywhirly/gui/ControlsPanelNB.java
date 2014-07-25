@@ -154,7 +154,7 @@ public class ControlsPanelNB extends JPanel implements ActionListener, ChangeLis
 			float sliderVal = pointSizeSlider.getValue();
 			float min = pointSizeSlider.getMinimum();
 			float max = pointSizeSlider.getMaximum();
-			float pointSize = ((sliderVal-min)/(max-1f) * (2f-0.2f) + 0.2f);
+			float pointSize = ((sliderVal-min)/(max-1f) * (0.05f-0.009f) + 0.009f);
 			winMain.getOpenGLPanel().getScene().setPointSize(pointSize);
 		}
 	}

@@ -45,7 +45,7 @@ public class Scene
 	private float aspect;
     float[] proj = new float[16];
 
-    private float pointSize = 1f;
+    private float pointSize = 0.03f;
 
     private TextRenderer renderer;
 	private final CollisionDetection detector;
@@ -122,7 +122,7 @@ public class Scene
 
 		// perspective, aspect ratio, zNear, zFar
 		glu.gluPerspective(perspAngle, aspect, 1, 1000);
-		glu.gluLookAt(0, 0, 200, 0, 0, 0, 0, 1, 0);
+		glu.gluLookAt(0, 0, 4, 0, 0, 0, 0, 1, 0);
 
 		// Store the projection matrix for use in gluUnproject calls
 		gl.glGetFloatv(GL_PROJECTION_MATRIX, proj, 0);
@@ -178,7 +178,7 @@ public class Scene
 		// to translate our spheres to the correct location
 		float[] axes = point.getPosition(dataSet.getCurrentAxes());
 		// Bring our translations into the correct coordinate space
-		gl.glTranslatef(map(axes[0]), map(axes[1]), map(axes[2]));
+		gl.glTranslatef(axes[0], axes[1], axes[2]);
 
 		// Scale our unit sphere down to a more manageable scale
 		gl.glScalef(pointSize, pointSize, pointSize);
@@ -202,7 +202,7 @@ public class Scene
 		icosphereIndexID = bufferID[1];
 
 		// A single sphere object to be copied from
-		sphere = new IcoSphere(1);
+		sphere = new IcoSphere(3);
 
 		vertexBuffer = Buffers.newDirectFloatBuffer(sphere.vertexCount());
 		for (float vertex : sphere.getVertices())
@@ -218,7 +218,7 @@ public class Scene
     private void drawAxes(GL2 gl)
 	{
 		gl.glPushMatrix();
-		gl.glScalef(50f, 50f, 50f);
+//		gl.glScalef(50f, 50f, 50f);
 		float[] xAxisColor = CWUtils.convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.xAxisColor"));
 		float[] yAxisColor = CWUtils.convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.yAxisColor"));
 		float[] zAxisColor = CWUtils.convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.zAxisColor"));
@@ -283,7 +283,8 @@ public class Scene
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
 		// Draw the cylinders at the positive extent of each axis
 		gl.glPushMatrix();
-		gl.glTranslatef(50f, 0, 0);
+		gl.glTranslatef(1f, 0, 0);
+		gl.glScalef(0.05f, 0.05f, 0.05f);
 		gl.glPushMatrix();
 		gl.glRotatef(90, 0, 1, 0);
 		glu.gluCylinder(quadric, 1, 0, 2, 6, 6);
@@ -297,7 +298,8 @@ public class Scene
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, yAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
 		gl.glPushMatrix();
-		gl.glTranslatef(0, 50f, 0);
+		gl.glTranslatef(0, 1f, 0);
+		gl.glScalef(0.05f, 0.05f, 0.05f);
 		gl.glPushMatrix();
 		gl.glRotatef(-90, 1, 0, 0);
 		glu.gluCylinder(quadric, 1, 0, 2, 6, 6);
@@ -311,7 +313,8 @@ public class Scene
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, zAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
 		gl.glPushMatrix();
-		gl.glTranslatef(0, 0, 50f);
+		gl.glTranslatef(0, 0, 1f);
+		gl.glScalef(0.05f, 0.05f, 0.05f);
 		glu.gluCylinder(quadric, 1, 0, 2, 6, 6);
 
 		if (Prefs.guiChkAxisLabels)
@@ -404,13 +407,6 @@ public class Scene
 		perspAngle += zoom;
 		perspAngle = perspAngle < 1 ? 1 : perspAngle;
 		perspAngle = perspAngle > 90 ? 90 : perspAngle;
-	}
-
-    // Our translations are stored in a -1 to 1 range and we want to re-map these
-	// into our -50 to 50 coordinate space.
-	private float map(float number)
-	{
-		return ((number-(-1f))/(1f-(-1f)) * (50f-(-50f)) + -50f);
 	}
 
     void setAspect(float aspect)

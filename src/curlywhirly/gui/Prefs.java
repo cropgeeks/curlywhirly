@@ -71,7 +71,7 @@ public class Prefs extends XMLPreferences
 	public static boolean guiChkAnchorPoints = true;
 	public static boolean guiChkSelectionAxes = false;
 
-	public static float guiSelectionSphereSize = 4f;
+	public static float guiSelectionSphereSize = 0.06f;
 
 	// The local working directory for disk caching
 	public static String cacheFolder =
