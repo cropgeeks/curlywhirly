@@ -72,6 +72,7 @@ public class MultiSelectPanel extends JPanel implements ActionListener, ChangeLi
 		lblOptions = new HyperLinkLabel();
 		RB.setText(lblOptions, "gui.viewer.MultiSelectPanel.lblOptions");
 		lblOptions.addActionListener(this);
+		lblOptions.setForeground(new Color(68, 106, 156));
 
 		setupSlider();
 		setupComboBox();

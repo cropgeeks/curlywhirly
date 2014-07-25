@@ -77,6 +77,9 @@
     </Component>
     <Component class="scri.commons.gui.matisse.HyperLinkLabel" name="lblSelectAll">
       <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="9c" green="6a" red="44" type="rgb"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Select all"/>
       </Properties>
     </Component>
@@ -87,11 +90,17 @@
     </Component>
     <Component class="scri.commons.gui.matisse.HyperLinkLabel" name="lblSelectNone">
       <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="9c" green="6a" red="44" type="rgb"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Select none"/>
       </Properties>
     </Component>
     <Component class="scri.commons.gui.matisse.HyperLinkLabel" name="lblExport">
       <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="9c" green="6a" red="44" type="rgb"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Export"/>
       </Properties>
     </Component>
