@@ -117,7 +117,9 @@ public class MultiSelectPanel extends JPanel implements ActionListener, ChangeLi
 	@Override
 	public void setVisible(boolean visible)
 	{
-		selectionSlider.setValue((int) Prefs.guiSelectionSphereSize);
+		float pointSize = ((Prefs.guiSelectionSphereSize-0.06f)/(2f-0.06f) * (float)(selectionSlider.getMaximum()-selectionSlider.getMinimum()) + selectionSlider.getMinimum());
+		System.out.println("Point Size: " + pointSize + " Prefs Size: " + Prefs.guiSelectionSphereSize);
+		selectionSlider.setValue((int) pointSize);
 		super.setVisible(visible);
 		if (selectionRenderer != null)
 		{
@@ -150,10 +152,14 @@ public class MultiSelectPanel extends JPanel implements ActionListener, ChangeLi
 	{
 		if (e.getSource() == selectionSlider)
 		{
-			Prefs.guiSelectionSphereSize = selectionSlider.getValue();
 			if (selectionRenderer != null)
 			{
-				selectionRenderer.setSelectPointSize(selectionSlider.getValue());
+				float sliderVal = selectionSlider.getValue();
+				float min = selectionSlider.getMinimum();
+				float max = selectionSlider.getMaximum();
+				float pointSize = ((sliderVal-min)/(max-min) * (2f-0.06f) + 0.06f);
+				Prefs.guiSelectionSphereSize = pointSize;
+				selectionRenderer.setSelectPointSize(pointSize);
 				detectMultiSelectedPoints();
 
 				lblSelectionCount.setText(getSelectedPointsString());

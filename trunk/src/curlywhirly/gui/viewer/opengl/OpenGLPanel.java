@@ -234,7 +234,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		// vector to establish the direction of our ray
 		Vector3f dir = new Vector3f();
 		dir.sub(fVec, nVec);
-		Vector3f eye = new Vector3f(0, 0, 200);
+		Vector3f eye = new Vector3f(0, 0, 4);
 
 		Ray ray = new Ray(dir, eye);
 
