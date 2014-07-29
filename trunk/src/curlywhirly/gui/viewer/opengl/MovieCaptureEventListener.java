@@ -2,6 +2,7 @@ package curlywhirly.gui.viewer.opengl;
 
 import java.awt.image.*;
 import java.io.*;
+import java.util.concurrent.atomic.*;
 import javax.imageio.*;
 import javax.media.opengl.*;
 
@@ -13,7 +14,7 @@ public class MovieCaptureEventListener implements GLEventListener
 {
 	private AWTGLReadBufferUtil glBufferUtil;
 	private volatile boolean recordMovie = false;
-	private volatile int recordedFrames = 0;
+	private volatile AtomicInteger recordedFrames = new AtomicInteger();
 	private volatile int totalFrames = 0;
 
 	private File imageDir;
@@ -37,7 +38,7 @@ public class MovieCaptureEventListener implements GLEventListener
 	{
 		final GL gl = drawable.getGL();
 
-		if (recordMovie && recordedFrames < totalFrames)
+		if (recordMovie && recordedFrames.get() < totalFrames)
 		{
 			try
 			{
@@ -54,9 +55,9 @@ public class MovieCaptureEventListener implements GLEventListener
 			}
 			catch (IOException e) { e.printStackTrace(); }
 
-			recordedFrames++;
+			recordedFrames.incrementAndGet();
 
-			if (recordedFrames == totalFrames)
+			if (recordedFrames.get() == totalFrames)
 				finishMovieCapture();
 		}
 	}
@@ -83,7 +84,7 @@ public class MovieCaptureEventListener implements GLEventListener
 		this.totalFrames = totalFrames;
 		panel.getScene().toggleSpin();
 		recordMovie = true;
-		recordedFrames = 0;
+		recordedFrames = new AtomicInteger();
 
 		return imageDir;
 	}
@@ -97,5 +98,5 @@ public class MovieCaptureEventListener implements GLEventListener
 	}
 
 	public int getRenderedFrames()
-		{ return recordedFrames; }
+		{ return recordedFrames.get(); }
 }

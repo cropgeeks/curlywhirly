@@ -30,7 +30,7 @@ public class CategoryGroupSaver extends SimpleJob
 	{
 		maximum = catGroups.size();
 
-		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+		PrintWriter out = new PrintWriter(file, "UTF-8");
 		// Export the name of the category group and the count of slected / total points
 		for (CategoryGroup group : catGroups)
 		{

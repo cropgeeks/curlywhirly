@@ -143,7 +143,7 @@ public class DataPointInformationDialog extends JDialog implements ActionListene
 
 	// Table model for the value table, displays the coordinates and coordinate
 	// values for the current point
-	class ValueTableModel extends AbstractTableModel
+	static class ValueTableModel extends AbstractTableModel
 	{
 		private final String[] axisLabels;
 		private final DataPoint point;
@@ -187,7 +187,7 @@ public class DataPointInformationDialog extends JDialog implements ActionListene
 				return point.getValues().get(rowIndex);
 		}
 
-		class RightRenderer extends DefaultTableCellRenderer
+		static class RightRenderer extends DefaultTableCellRenderer
 		{
 			// Set the attributes of the class and return a reference
 			@Override
@@ -215,7 +215,7 @@ public class DataPointInformationDialog extends JDialog implements ActionListene
 
 	// The table model for the point's categories. Displays the category groups
 	// associated with the point and their category values
-	class CategoryTableModel extends AbstractTableModel
+	static class CategoryTableModel extends AbstractTableModel
 	{
 		private final ArrayList<CategoryGroup> categoryGroups;
 		private final DataPoint point;

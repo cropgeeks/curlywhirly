@@ -11,7 +11,6 @@ import javax.media.opengl.*;
 import javax.swing.*;
 
 import curlywhirly.data.*;
-import curlywhirly.gui.viewer.*;
 import curlywhirly.gui.viewer.opengl.*;
 
 import scri.commons.gui.*;
@@ -22,7 +21,6 @@ public class WinMain extends JFrame
 	private ControlsPanelNB controlsPanel;
 	private WinMainToolBar toolbar;
 	private StatusBar statusBar;
-	private CanvasController controller;
 
 	private OpenGLPanel canvas3D;
 	private StartPanel startPanel;
@@ -274,9 +272,6 @@ public class WinMain extends JFrame
 
 	DataPanel getDataPanel()
 		{ return dataPanel; }
-
-	public CanvasController getCanvasController()
-		{ return controller; }
 
 	public DataSet getDataSet()
 		{ return dataSet; }

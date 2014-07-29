@@ -423,7 +423,7 @@ public class Scene
         { return pointSize; }
 
     public float[] getProj()
-        { return proj; }
+        { return proj.clone(); }
 
 	public void setMultiSelected(HashSet<DataPoint> multiSelected)
 		{ this.multiSelected = multiSelected; }

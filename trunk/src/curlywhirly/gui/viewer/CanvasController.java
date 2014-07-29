@@ -8,17 +8,14 @@ import java.util.*;
 
 import curlywhirly.data.*;
 import curlywhirly.gui.*;
-import curlywhirly.gui.viewer.opengl.*;
 
 public class CanvasController
 {
-	private WinMain winMain;
-	private OpenGLPanel panel;
+	private final WinMain winMain;
 
 	public CanvasController(WinMain winMain)
 	{
 		this.winMain = winMain;
-		panel = winMain.getOpenGLPanel();
 	}
 
 	//update the current scene graph with new settings

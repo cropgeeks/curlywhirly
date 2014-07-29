@@ -63,11 +63,6 @@ public class DataPanelTableModel extends AbstractTableModel
 		}
 	}
 
-	public String[] getColumnNames()
-	{
-		return columnNames;
-	}
-
 	@Override
 	public int getColumnCount()
 	{

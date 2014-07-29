@@ -184,7 +184,7 @@ public class IcoSphere
 	public int faceNormalCount()
 		{ return faceNormals.size(); }
 
-	class FaceTriangle
+	static class FaceTriangle
 	{
 		final int v1;
 		final int v2;
