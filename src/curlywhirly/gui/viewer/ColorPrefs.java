@@ -124,7 +124,7 @@ public class ColorPrefs
 
 				colors.put(key, c);
 			}
-			catch (Exception e) {}
+			catch (NumberFormatException e) { e.printStackTrace(); }
 		}
 
 		initializeColors();

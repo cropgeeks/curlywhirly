@@ -27,7 +27,7 @@ public class DataSet implements Iterable<DataPoint>
 		// The sort ensures CategoryGroups are displayed in alphabetical order
 		Collections.sort(categoryGroups);
 		this.categoryGroups = categoryGroups;
-		this.axisLabels = axisLabels;
+		this.axisLabels = axisLabels.clone();
 
 		setDefaultAxes(axisLabels.length);
 
@@ -103,7 +103,7 @@ public class DataSet implements Iterable<DataPoint>
 		{ return categoryGroups; }
 
 	public String[] getAxisLabels()
-		{ return axisLabels; }
+		{ return axisLabels.clone(); }
 
 	public DBAssociation getDbAssociation()
 		{ return dbAssociation; }

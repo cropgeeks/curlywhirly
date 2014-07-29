@@ -42,8 +42,7 @@ public class DataPanelNB extends JPanel implements ActionListener, DocumentListe
 			@Override
 			public TableCellRenderer getCellRenderer(int row, int col)
 			{
-				TableCellRenderer tcr = DataPanelTableModel.getCellRenderer(col);
-				return (tcr != null) ? tcr : super.getCellRenderer(row, col);
+				return DataPanelTableModel.getCellRenderer(col);
 			}
 		};
 

@@ -25,8 +25,8 @@ public class DataPointSaver extends SimpleJob
 	{
 		this.file = file;
 		this.dataPoints = dataPoints;
-		this.currentAxes = currentAxes;
-		this.axisLabels = axisLabels;
+		this.currentAxes = currentAxes.clone();
+		this.axisLabels = axisLabels.clone();
 	}
 
 	public void runJob(int jobIndex)
@@ -34,14 +34,13 @@ public class DataPointSaver extends SimpleJob
 	{
 		maximum = dataPoints.size();
 
-		BufferedWriter out = new BufferedWriter(new FileWriter(file));
+		PrintWriter out = new PrintWriter(file, "UTF-8");
 
 		// Write the header for the file
-		out.write(RB.getString("analysis.DataPointSaver.label") + "\t"
+		out.println(RB.getString("analysis.DataPointSaver.label") + "\t"
 			+ RB.format("analysis.DataPointSaver.x", axisLabels[0]) + "\t"
 			+ RB.format("analysis.DataPointSaver.y", axisLabels[1]) + "\t"
 			+ RB.format("analysis.DataPointSaver.z", axisLabels[2]));
-		out.newLine();
 
 		// Then output each dataPoint in turn
 		for (DataPoint dataPoint: dataPoints)
@@ -50,8 +49,7 @@ public class DataPointSaver extends SimpleJob
 				break;
 
 			String pointString = buildDataPointString(dataPoint);
-			out.write(pointString);
-			out.newLine();
+			out.println(pointString);
 
 			progress++;
 		}

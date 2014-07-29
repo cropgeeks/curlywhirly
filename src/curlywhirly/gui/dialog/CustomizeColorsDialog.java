@@ -3,14 +3,15 @@
 
 package curlywhirly.gui.dialog;
 
-import java.awt.*;
-import java.awt.image.*;
-import java.awt.event.*;
-import java.util.*;
-import javax.swing.*;
-
 import curlywhirly.gui.*;
 import curlywhirly.gui.viewer.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.*;
+import java.util.*;
+import java.util.Map.Entry;
+import javax.swing.*;
+
 
 import scri.commons.gui.*;
 
@@ -97,11 +98,9 @@ public class CustomizeColorsDialog extends JDialog implements ActionListener
 				keys.add(key);
 		Collections.sort(keys);
 
-		for (String key: keys)
-		{
-			Color c = colors.get(key);
-			model.addElement(new EditableColor(c, key));
-		}
+
+		for (Entry<String, Color> entry : colors.entrySet())
+			model.addElement(new EditableColor(entry.getValue(), entry.getKey()));
 
 		list.setModel(model);
 		list.setCellRenderer(new ColorListRenderer());

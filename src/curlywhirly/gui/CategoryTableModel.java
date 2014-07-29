@@ -138,7 +138,7 @@ public class CategoryTableModel extends AbstractTableModel
 			{ return new Insets(0, 3, 0, 0); }
 	}
 
-	class RightRenderer extends DefaultTableCellRenderer
+	static class RightRenderer extends DefaultTableCellRenderer
 	{
 		// Set the attributes of the class and return a reference
 		@Override
@@ -159,7 +159,7 @@ public class CategoryTableModel extends AbstractTableModel
 		}
 	}
 
-	class CategoryRenderer extends DefaultTableCellRenderer
+	static class CategoryRenderer extends DefaultTableCellRenderer
 	{
 		// Set the attributes of the class and return a reference
 		@Override

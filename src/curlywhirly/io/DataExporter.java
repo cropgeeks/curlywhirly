@@ -26,7 +26,7 @@ public class DataExporter extends SimpleJob
     public void runJob(int jobId) throws Exception
     {
 		System.out.println("Exporting data");
-        try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(outputFile))))
+        try (PrintWriter writer = new PrintWriter(outputFile, "UTF-8"))
         {
             // Output a db URL for point lookup if there is one
             String dbUrl = dataSet.getDbAssociation().getDbPointUrl();

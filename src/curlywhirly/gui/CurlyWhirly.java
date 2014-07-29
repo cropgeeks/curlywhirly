@@ -18,9 +18,9 @@ import scri.commons.gui.*;
 
 public class CurlyWhirly
 {
-	private static File prefsFile = getPrefsFile();
+	private static final File prefsFile = getPrefsFile();
 	private static File mruFile;
-	public static Prefs prefs = new Prefs();
+	public static final Prefs prefs = new Prefs();
 
 	// Optional path to a file to be loaded when app opens
 	public static File initialFile = null;
@@ -170,7 +170,7 @@ public class CurlyWhirly
 			// Dock the menu bar at the top of the screen
 			System.setProperty("apple.laf.useScreenMenuBar", "true");
 		}
-		catch (Exception e) {}
+		catch (NoSuchMethodException | SecurityException e) { e.printStackTrace(); }
 	}
 
 	/** "Preferences" on the OS X system menu. */
