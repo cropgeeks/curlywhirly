@@ -53,13 +53,13 @@ public class DataExporter extends SimpleJob
 
         // Add categories to the header
         for (CategoryGroup group : dataSet.getCategoryGroups())
-            header.append(CATEGORY_IDENTIFIER).append(group.getName()).append("\t");
+            header.append(CATEGORY_IDENTIFIER).append(group.getName()).append('\t');
 
-        header.append(LABEL_IDENTIFIER).append("\t");
+        header.append(LABEL_IDENTIFIER).append('\t');
 
         // Add axis labels to the header
         for (String label : dataSet.getAxisLabels())
-            header.append(label).append("\t");
+            header.append(label).append('\t');
 
         return header.toString().trim();
     }
@@ -76,13 +76,13 @@ public class DataExporter extends SimpleJob
             // Missing categories are just blank in the data format so skip them
             if (category.getName().equals(MISSING_CATEGORY) == false)
                 point.append(category.getName());
-            point.append("\t");
+            point.append('\t');
         }
 
         // Add the name, followed by the original (non-normalized) datapoint values
-        point.append(dataPoint.getName()).append("\t");
+        point.append(dataPoint.getName()).append('\t');
         for (Float value : dataPoint.getValues())
-            point.append(value).append("\t");
+            point.append(value).append('\t');
 
         return point.toString().trim();
     }

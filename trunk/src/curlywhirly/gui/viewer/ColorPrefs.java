@@ -107,7 +107,7 @@ public class ColorPrefs
 			p.loadFromXML(in);
 			in.close();
 		}
-		catch (Throwable t) {}
+		catch (IOException t) { t.printStackTrace(); }
 
 		// Assign them to the main hashmap
 		for (Enumeration<?> keys = p.keys(); keys.hasMoreElements();)
@@ -149,6 +149,6 @@ public class ColorPrefs
 			p.storeToXML(os, null);
 			os.close();
 		}
-		catch (Throwable t) {}
+		catch (IOException t) { t.printStackTrace(); }
 	}
 }

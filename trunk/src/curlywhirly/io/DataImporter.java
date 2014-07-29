@@ -171,7 +171,7 @@ public class DataImporter extends SimpleJob
 			lineCount++;
 
 			// Only attempt to process lines which are likely to be data points.
-			if (str.isEmpty() == false && str.startsWith("#") == false &&
+			if (str.isEmpty() == false && str.charAt(0) != '#' &&
 				str.toLowerCase().startsWith(CATEGORY_IDENTIFIER) == false)
 			{
 				String[] tokens = str.split("\t");

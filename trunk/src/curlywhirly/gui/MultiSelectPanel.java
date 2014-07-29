@@ -178,8 +178,8 @@ public class MultiSelectPanel extends JPanel implements ActionListener, ChangeLi
 		// Pad out the selected string with zeros. Prevents component from
 		// resizing as the number increases / decreases
 		for (int i=0; i < diff; i++)
-			builder.append("0");
-		builder.append(selected).append(" / ").append(total).append(")");
+			builder.append('0');
+		builder.append(selected).append(" / ").append(total).append(')');
 
 		return builder.toString();
 	}
