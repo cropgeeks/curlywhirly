@@ -18,16 +18,24 @@ public class CurlyWhirlyFile
 	{
 	}
 
+	@Override
 	public boolean equals(Object obj)
 	{
-		if (obj == null || obj.getClass() != getClass())
-            return false;
+		if (this == obj)
+			return true;
+		if (!(obj instanceof CurlyWhirlyFile))
+			return false;
 
 		CurlyWhirlyFile o = (CurlyWhirlyFile) obj;
 
-		if ((dataFile == null ? o.dataFile == null : dataFile.equals(o.dataFile)) == false)
-			return false;
+		return (dataFile == null ? o.dataFile == null : dataFile.equals(o.dataFile)) != false;
+	}
 
-		return true;
+	@Override
+	public int hashCode()
+	{
+		int hash = 7;
+		hash = 59 * hash + Objects.hashCode(this.dataFile);
+		return hash;
 	}
 }

@@ -62,7 +62,7 @@ public class GUIUtils
 			Desktop desktop = Desktop.getDesktop();
 			desktop.mail(new URI("mailto:curlywhirly@hutton.ac.uk?subject=CurlyWhirly%20Feedback"));
 		}
-		catch (Exception e) { System.out.println(e); }
+		catch (URISyntaxException | IOException e) { System.out.println(e); }
 	}
 
 	/*

@@ -56,6 +56,6 @@ public class FileDropAdapter extends DropTargetAdapter
 
 			dtde.dropComplete(true);
 		}
-		catch (UnsupportedFlavorException | IOException e) {}
+		catch (UnsupportedFlavorException | IOException e) { e.printStackTrace(); }
 	}
 }

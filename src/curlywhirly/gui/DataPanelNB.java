@@ -117,7 +117,7 @@ public class DataPanelNB extends JPanel implements ActionListener, DocumentListe
 				rf = RowFilter.numberFilter(ComparisonType.BEFORE, number, 3);
 			}
 		}
-		catch (ParseException e) { }
+		catch (ParseException e) { e.printStackTrace(); }
 
 		parent.setTableFilter(rf);
 	}

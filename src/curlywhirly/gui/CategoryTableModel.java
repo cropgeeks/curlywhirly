@@ -150,7 +150,7 @@ public class CategoryTableModel extends AbstractTableModel
 
 			setHorizontalAlignment(SwingConstants.RIGHT);
 
-			if (((String)value).startsWith("0"))
+			if ((((String)value).charAt(0)) == '0')
 				setForeground(Color.GRAY);
 			else
 				setForeground(UIManager.getColor("Label.foreground"));

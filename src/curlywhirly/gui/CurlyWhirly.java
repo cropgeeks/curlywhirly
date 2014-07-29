@@ -148,7 +148,7 @@ public class CurlyWhirly
 
 		if (old.exists())
 			try { FileUtils.copyFile(old, file, true); }
-			catch (IOException e) {}
+			catch (IOException e) { e.printStackTrace(); }
 
 		return file;
 	}

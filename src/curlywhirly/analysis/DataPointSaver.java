@@ -69,14 +69,14 @@ public class DataPointSaver extends SimpleJob
 
 		// Add the name of the point to the string
 		StringBuilder builder = new StringBuilder();
-		builder.append(dataPoint.getName()).append("\t");
+		builder.append(dataPoint.getName()).append('\t');
 
 		// Followed by the value for each of the currently visible axes
 		for (int i=0; i < position.length; i++)
 		{
 			builder.append(position[i]);
 			if (i < position.length - 1)
-				builder.append("\t");
+				builder.append('\t');
 		}
 
 		return builder.toString();
