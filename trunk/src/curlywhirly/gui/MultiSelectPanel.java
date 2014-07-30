@@ -119,7 +119,6 @@ public class MultiSelectPanel extends JPanel implements ActionListener, ChangeLi
 	public void setVisible(boolean visible)
 	{
 		float pointSize = ((Prefs.guiSelectionSphereSize-0.06f)/(2f-0.06f) * (float)(selectionSlider.getMaximum()-selectionSlider.getMinimum()) + selectionSlider.getMinimum());
-		System.out.println("Point Size: " + pointSize + " Prefs Size: " + Prefs.guiSelectionSphereSize);
 		selectionSlider.setValue((int) pointSize);
 		super.setVisible(visible);
 		if (selectionRenderer != null)
