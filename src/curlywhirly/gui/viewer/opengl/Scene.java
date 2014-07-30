@@ -353,7 +353,7 @@ public class Scene
 
 		renderer.begin3DRendering();
 		renderer.setColor(ColorPrefs.get("User.OpenGLPanel.textColor"));
-		renderer.draw3D(text, 2f, -1f, 0, 0.1f);
+		renderer.draw3D(text, 2f, -0.6f, 0, 0.05f);
 		renderer.end3DRendering();
 	}
 
