@@ -12,6 +12,7 @@ import javax.swing.table.*;
 
 import curlywhirly.data.*;
 import curlywhirly.gui.*;
+import java.io.UnsupportedEncodingException;
 
 import scri.commons.gui.*;
 
@@ -20,6 +21,9 @@ public class DataPointInformationDialog extends JDialog implements ActionListene
 	private final ValueTableModel valuesModel;
 	private final CategoryTableModel categoriesModel;
 
+	private final DataSet dataSet;
+	private final DataPoint point;
+
 	public DataPointInformationDialog(DataSet dataSet, DataPoint point)
 	{
 		super(
@@ -27,6 +31,9 @@ public class DataPointInformationDialog extends JDialog implements ActionListene
 			RB.format("gui.dialog.DataPointInformationDialog.title", point.getName()),
 			true
 		);
+
+		this.dataSet = dataSet;
+		this.point = point;
 
 		// As we want to set a tablecellrenderer on a column of the valueTable
 		// we setup the model here and use custom creation code to set up
@@ -50,6 +57,7 @@ public class DataPointInformationDialog extends JDialog implements ActionListene
 		RB.setText(dataPointLinkLabel, "gui.dialog.DataPointInformationDialog.linkLabel");
 		dataPointLinkLabel.setIcon(Icons.getIcon("WEB"));
 		dataPointLinkLabel.setEnabled(dataSet.getDbAssociation().isPointSearchEnabled());
+		dataPointLinkLabel.addActionListener(this);
 
 		getRootPane().setDefaultButton(bClose);
 		SwingUtils.addCloseHandler(this, bClose);
@@ -77,6 +85,15 @@ public class DataPointInformationDialog extends JDialog implements ActionListene
 
 		else if (e.getSource() == bCopy)
 			copyToClipboard();
+
+		else if (e.getSource() == dataPointLinkLabel)
+		{
+			try
+			{
+				dataSet.getDbAssociation().visitUrlForPoint(point.getName());
+			}
+			catch (UnsupportedEncodingException ex) { ex.printStackTrace(); }
+		}
 	}
 
 	private void copyToClipboard()
