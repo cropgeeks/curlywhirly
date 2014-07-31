@@ -12,8 +12,8 @@ import curlywhirly.data.*;
 
 public class CategoryTableModel extends AbstractTableModel
 {
-	private CategoryGroup group;
-	private DataSet dataSet;
+	private final CategoryGroup group;
+	private final DataSet dataSet;
 
 	public static final int CHECK_BOX_COL = 0;
 
@@ -71,7 +71,7 @@ public class CategoryTableModel extends AbstractTableModel
 
 		switch (columnIndex)
 		{
-			case 0: return category.isSelected();
+			case 0: return category.getSelectedCount() == category.getTotal();
 			case 1: return category;
 			case 2: return category;
 			case 3: return category.getSelectedText();
@@ -111,7 +111,7 @@ public class CategoryTableModel extends AbstractTableModel
 
 			Color color = category.getColor();
 			GradientPaint paint;
-			if (category.getGroup() == dataSet.getCurrentCategoryGroup())
+			if (category.getGroup() == dataSet.getCurrentCategoryGroup() && category.getSelectedCount() > 0)
 				paint = new GradientPaint(0, 0, color.brighter(), 20, 10, color.darker());
 			else
 			{
