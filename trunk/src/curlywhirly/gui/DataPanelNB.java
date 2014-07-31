@@ -16,7 +16,7 @@ import scri.commons.gui.*;
 
 public class DataPanelNB extends JPanel implements ActionListener, DocumentListener, MouseListener
 {
-	private DataPanel parent;
+	private final DataPanel parent;
 
 	private DefaultComboBoxModel<String> filterModel;
 
@@ -47,6 +47,8 @@ public class DataPanelNB extends JPanel implements ActionListener, DocumentListe
 		};
 
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+		table.setRowSelectionAllowed(false);
 
 		return table;
 	}
