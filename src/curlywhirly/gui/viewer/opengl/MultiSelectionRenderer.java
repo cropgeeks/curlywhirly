@@ -192,6 +192,9 @@ public class MultiSelectionRenderer implements GLEventListener
 				break;
 		}
 
+		// Force a repaint of the selection UI
+		winMain.getControlPanel().repaint();
+
 		multiSelectedPoints.clear();
 	}
 

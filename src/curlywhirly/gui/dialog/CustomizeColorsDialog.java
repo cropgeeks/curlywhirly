@@ -98,7 +98,6 @@ public class CustomizeColorsDialog extends JDialog implements ActionListener
 				keys.add(key);
 		Collections.sort(keys);
 
-
 		for (String key : keys)
 			model.addElement(new EditableColor(colors.get(key), key));
 
