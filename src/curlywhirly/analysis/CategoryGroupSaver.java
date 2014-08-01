@@ -41,8 +41,12 @@ public class CategoryGroupSaver extends SimpleJob
 
 				// Export the category names and their selection state
 				for (Category cat : group)
-					if (cat.isSelected())
-						out.println("\t" + cat.getName() + "\t" + cat.getSelectedText());
+				{
+					String state = cat.isSelected() ?
+						RB.getString("analysis.CategoryGroupSaver.state.selected") :
+						RB.getString("analysis.CategoryGroupSaver.state.deselected");
+					out.println("\t" + state + "\t" + cat.getName() + "\t" + cat.getSelectedText());
+				}
 			}
 			progress++;
 		}

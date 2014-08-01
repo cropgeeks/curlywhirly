@@ -122,12 +122,15 @@ class CategoryTablePanel extends JPanel
 			if (catTable.getSelectedRows().length == 0 || catTable.getSelectedRows().length > 1)
 				return;
 
-			if (me.getClickCount() == 2)
+			int col = catTable.columnAtPoint(me.getPoint());
+			int row = catTable.rowAtPoint(me.getPoint());
+
+			if (me.getClickCount() == 2 && col != 0)
 			{
-				int row = catTable.getSelectedRow();
 				Category category = (Category) catTable.getValueAt(row, 2);
 
-				Color newColor = JColorChooser.showDialog(CurlyWhirly.winMain, RB.getString("gui.CategoryPanel.colourChooser"), category.getColor());
+				Color newColor = JColorChooser.showDialog(CurlyWhirly.winMain,
+					RB.getString("gui.CategoryPanel.colourChooser"), category.getColor());
 				if (newColor != null)
 				{
 					ColorPrefs.setColor(category.getColorKey(), newColor);
@@ -137,6 +140,9 @@ class CategoryTablePanel extends JPanel
 					catTable.repaint();
 				}
 			}
+
+			else if (col == 0)
+				catTable.setValueAt(catTable.getValueAt(row, col), row, col);
 		}
 	}
 }
