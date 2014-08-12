@@ -73,6 +73,8 @@ public class Prefs extends XMLPreferences
 
 	public static float guiSelectionSphereSize = 0.06f;
 
+	public static boolean guiChkLinkPointSizes = true;
+
 	// The local working directory for disk caching
 	public static String cacheFolder =
 		SystemUtils.getTempUserDirectory("jhi-curlywhirly").getPath();

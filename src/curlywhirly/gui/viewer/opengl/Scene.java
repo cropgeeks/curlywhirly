@@ -46,6 +46,7 @@ public class Scene
     float[] proj = new float[16];
 
     private float pointSize = 0.03f;
+	private float deselectedSize = 0.03f;
 
     private TextRenderer renderer;
 	private final CollisionDetection detector;
@@ -180,8 +181,10 @@ public class Scene
 		// Bring our translations into the correct coordinate space
 		gl.glTranslatef(axes[0], axes[1], axes[2]);
 
+		float size = point.isSelected() ? pointSize : deselectedSize;
+
 		// Scale our unit sphere down to a more manageable scale
-		gl.glScalef(pointSize, pointSize, pointSize);
+		gl.glScalef(size, size, size);
 
 		float[] modelView = new float[16];
 		gl.glGetFloatv(GL_MODELVIEW_MATRIX, modelView, 0);
@@ -417,6 +420,11 @@ public class Scene
     public void setPointSize(float pointSize)
 	{
 		this.pointSize = pointSize;
+	}
+
+	public void setDeselectedSize(float deselectedSize)
+	{
+		this.deselectedSize = deselectedSize;
 	}
 
     public float getPointSize()
