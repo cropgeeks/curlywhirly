@@ -49,7 +49,7 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="spherePanelLabel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="spherePanel" min="-2" max="-2" attributes="0"/>
+              <Component id="spherePanel" min="-2" pref="90" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -234,22 +234,38 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="sizeSliderLabel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="pointSizeSlider" pref="0" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="lblSizeSlider" min="-2" max="-2" attributes="0"/>
+                      <Component id="chkLinkPointSizes" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblDeselected" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="pointSizeSlider" pref="36" max="32767" attributes="0"/>
+                      <Component id="deselectedSizeSlider" pref="0" max="32767" attributes="0"/>
+                  </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="pointSizeSlider" min="-2" max="-2" attributes="0"/>
-                      <Component id="sizeSliderLabel" min="-2" max="-2" attributes="0"/>
-                  </Group>
+              <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="chkLinkPointSizes" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="lblSizeSlider" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Component id="pointSizeSlider" alignment="1" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="deselectedSizeSlider" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblDeselected" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -260,10 +276,28 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JLabel" name="sizeSliderLabel">
+        <Component class="javax.swing.JLabel" name="lblSizeSlider">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Size:"/>
+            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="pointSizeSlider"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Selected size:"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="chkLinkPointSizes">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Link"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblDeselected">
+          <Properties>
+            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="deselectedSizeSlider"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Deselected size:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JSlider" name="deselectedSizeSlider">
         </Component>
       </SubComponents>
     </Container>
