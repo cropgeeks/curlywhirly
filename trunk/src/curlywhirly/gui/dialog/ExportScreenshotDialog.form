@@ -26,10 +26,7 @@
           <Component id="dialogPanel1" max="32767" attributes="0"/>
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="settingsPanel" alignment="1" max="32767" attributes="0"/>
-                  <Component id="warningPanel" alignment="0" max="32767" attributes="0"/>
-              </Group>
+              <Component id="settingsPanel" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -39,8 +36,6 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="settingsPanel" max="32767" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="warningPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="dialogPanel1" min="-2" max="-2" attributes="0"/>
           </Group>
@@ -71,7 +66,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Capture settings:"/>
+            <TitledBorder title="Screenshot settings:"/>
           </Border>
         </Property>
       </Properties>
@@ -82,26 +77,18 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
+                      <Group type="102" attributes="0">
                           <Component id="filenameLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="filenameTextField" max="32767" attributes="0"/>
+                          <Component id="filenameTextField" pref="188" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="bBrowse" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Component id="frameRateLabel" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="frameRateSpinner" min="-2" pref="50" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="lengthLabel" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="lengthSpinner" min="-2" pref="50" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="sizeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="chkColourKey" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnSceneWithKey" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnScene" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnKey" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
@@ -112,44 +99,25 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="frameRateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="frameRateSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lengthLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lengthSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="btnScene" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="btnSceneWithKey" min="-2" pref="23" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="btnKey" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="filenameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="bBrowse" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="filenameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="sizeLabel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="chkColourKey" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JSpinner" name="frameRateSpinner">
-        </Component>
-        <Component class="javax.swing.JLabel" name="lengthLabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Length:"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="frameRateLabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Frame rate:"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JSpinner" name="lengthSpinner">
-        </Component>
         <Component class="javax.swing.JLabel" name="filenameLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Filename:"/>
@@ -165,47 +133,19 @@
             <Property name="text" type="java.lang.String" value="C:\u005cUsers\u005cblah\u005cdataset.avi" containsInvalidXMLChars="true"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="sizeLabel">
+        <Component class="javax.swing.JRadioButton" name="btnScene">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Estimated file size: 0 MB"/>
+            <Property name="text" type="java.lang.String" value="Screenshot of scene"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JCheckBox" name="chkColourKey">
+        <Component class="javax.swing.JRadioButton" name="btnSceneWithKey">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Include colour key"/>
+            <Property name="text" type="java.lang.String" value="Screenshot of scene with colour key"/>
           </Properties>
         </Component>
-      </SubComponents>
-    </Container>
-    <Container class="javax.swing.JPanel" name="warningPanel">
-      <Properties>
-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Notes:"/>
-          </Border>
-        </Property>
-      </Properties>
-
-      <Layout>
-        <DimensionLayout dim="0">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="fileSizeLabel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
-              </Group>
-          </Group>
-        </DimensionLayout>
-        <DimensionLayout dim="1">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="fileSizeLabel" alignment="1" min="-2" max="-2" attributes="0"/>
-          </Group>
-        </DimensionLayout>
-      </Layout>
-      <SubComponents>
-        <Component class="javax.swing.JLabel" name="fileSizeLabel">
+        <Component class="javax.swing.JRadioButton" name="btnKey">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Decrease the window size, frame rate, or length to reduce file size."/>
+            <Property name="text" type="java.lang.String" value="Standalone colour key"/>
           </Properties>
         </Component>
       </SubComponents>

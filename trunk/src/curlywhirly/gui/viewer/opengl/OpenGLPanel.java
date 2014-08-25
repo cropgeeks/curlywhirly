@@ -6,6 +6,7 @@ package curlywhirly.gui.viewer.opengl;
 import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
+import java.util.*;
 import javax.media.opengl.*;
 import javax.media.opengl.awt.*;
 import javax.media.opengl.glu.*;
@@ -176,7 +177,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	// Uses GLPanel's method of getting a screenshot on the EDT, other methods
     // of getting screenshots could clutter up the rendering code.
-	public BufferedImage getScreenShot()
+	public BufferedImage getScreenShot(boolean includeKey)
         throws Exception
 	{
         // Create an image of the correct proportions
@@ -189,6 +190,9 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
         // Called to release the panel from the EDT.
         releasePrint();
 
+		if (includeKey)
+			winMain.getColourKeyCreator().drawColorKey(dataSet.getCurrentCategoryGroup(), g);
+
         return image;
 	}
 
@@ -198,7 +202,14 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	{
 		gl.glFinish();
 
-		return readBufferUtil.readPixelsToBufferedImage(gl, true);
+		// Output the colour key on top of the movie's frames
+		BufferedImage image = readBufferUtil.readPixelsToBufferedImage(gl, true);
+		Graphics2D g = image.createGraphics();
+
+		if (Prefs.guiMovieChkColourKey)
+			winMain.getColourKeyCreator().drawColorKey(dataSet.getCurrentCategoryGroup(), g);
+
+		return image;
 	}
 
 	public void setMousePoint(Point point)
