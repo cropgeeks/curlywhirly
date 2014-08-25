@@ -86,4 +86,14 @@ public class CategoryGroup implements Comparable<CategoryGroup>, Iterable<Catego
 
 		return count;
 	}
+
+	public ArrayList<Category> getActiveCategories()
+	{
+		ArrayList<Category> activeCategories = new ArrayList<>();
+		for (Category cat : categories)
+			if (cat.isSelected())
+				activeCategories.add(cat);
+
+		return activeCategories;
+	}
 }

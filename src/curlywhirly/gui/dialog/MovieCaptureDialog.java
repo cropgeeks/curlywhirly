@@ -74,6 +74,10 @@ public class MovieCaptureDialog extends JDialog implements ActionListener, Chang
 		settingsPanel.setBackground(Color.WHITE);
 		warningPanel.setBackground(Color.WHITE);
 
+		chkColourKey.setSelected(Prefs.guiMovieChkColourKey);
+		chkColourKey.setText(RB.getString("gui.dialog.MovieCaptureDialog.chkColourKey"));
+		chkColourKey.addActionListener(this);
+
 		updateFileSize();
 	}
 
@@ -99,6 +103,9 @@ public class MovieCaptureDialog extends JDialog implements ActionListener, Chang
 			if (filename != null)
 				filenameTextField.setText(filename);
 		}
+
+		else if (e.getSource() == chkColourKey)
+			Prefs.guiMovieChkColourKey = !Prefs.guiMovieChkColourKey;
 	}
 
 	private void updateFileSize()
@@ -168,6 +175,7 @@ public class MovieCaptureDialog extends JDialog implements ActionListener, Chang
         bBrowse = new javax.swing.JButton();
         filenameTextField = new javax.swing.JTextField();
         sizeLabel = new javax.swing.JLabel();
+        chkColourKey = new javax.swing.JCheckBox();
         warningPanel = new javax.swing.JPanel();
         fileSizeLabel = new javax.swing.JLabel();
 
@@ -193,6 +201,8 @@ public class MovieCaptureDialog extends JDialog implements ActionListener, Chang
 
         sizeLabel.setText("Estimated file size: 0 MB");
 
+        chkColourKey.setText("Include colour key");
+
         javax.swing.GroupLayout settingsPanelLayout = new javax.swing.GroupLayout(settingsPanel);
         settingsPanel.setLayout(settingsPanelLayout);
         settingsPanelLayout.setHorizontalGroup(
@@ -216,7 +226,8 @@ public class MovieCaptureDialog extends JDialog implements ActionListener, Chang
                                 .addComponent(lengthLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(lengthSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(sizeLabel))
+                            .addComponent(sizeLabel)
+                            .addComponent(chkColourKey))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -236,6 +247,8 @@ public class MovieCaptureDialog extends JDialog implements ActionListener, Chang
                     .addComponent(filenameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(sizeLabel)
+                .addGap(18, 18, 18)
+                .addComponent(chkColourKey)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -288,17 +301,18 @@ public class MovieCaptureDialog extends JDialog implements ActionListener, Chang
     private javax.swing.JButton bBrowse;
     private javax.swing.JButton bCancel;
     private javax.swing.JButton bOK;
+    private javax.swing.JCheckBox chkColourKey;
     private scri.commons.gui.matisse.DialogPanel dialogPanel1;
-    javax.swing.JLabel fileSizeLabel;
+    private javax.swing.JLabel fileSizeLabel;
     private javax.swing.JLabel filenameLabel;
     private javax.swing.JTextField filenameTextField;
-    javax.swing.JLabel frameRateLabel;
-    javax.swing.JSpinner frameRateSpinner;
-    javax.swing.JLabel lengthLabel;
-    javax.swing.JSpinner lengthSpinner;
-    javax.swing.JPanel settingsPanel;
+    private javax.swing.JLabel frameRateLabel;
+    private javax.swing.JSpinner frameRateSpinner;
+    private javax.swing.JLabel lengthLabel;
+    private javax.swing.JSpinner lengthSpinner;
+    private javax.swing.JPanel settingsPanel;
     private javax.swing.JLabel sizeLabel;
-    javax.swing.JPanel warningPanel;
+    private javax.swing.JPanel warningPanel;
     // End of variables declaration//GEN-END:variables
 
 }

@@ -37,6 +37,8 @@ public class WinMain extends JFrame
 	private JPanel canvasContainer;
 	private MultiSelectPanel multiSelectPanel;
 
+	private ColourKeyCreator colourKeyCreator;
+
 	WinMain()
 	{
 		setTitle(RB.getString("gui.CurlyWhirly.title") + " - " + Install4j.VERSION);
@@ -132,6 +134,8 @@ public class WinMain extends JFrame
 		canvasContainer.add(canvas3D);
 		multiSelectPanel = new MultiSelectPanel(canvas3D.getSelectionOverlay(), canvas3D);
 		canvasContainer.add(multiSelectPanel, BorderLayout.SOUTH);
+
+		colourKeyCreator = new ColourKeyCreator();
 	}
 
 	public void setDataSet(DataSet dataSet)
@@ -142,6 +146,7 @@ public class WinMain extends JFrame
 		dataPanel.setDataSet(dataSet);
 		controlsPanel.setDataSet(dataSet);
 		multiSelectPanel.setDataSet(dataSet);
+		colourKeyCreator.setDataSet(dataSet);
 
 		//do the rest of the set up
 		//set the title of the window to the name of the dataset
@@ -295,4 +300,7 @@ public class WinMain extends JFrame
 
 	public MultiSelectPanel getMultiSelectPanel()
 		{ return multiSelectPanel; }
+
+	public ColourKeyCreator getColourKeyCreator()
+		{ return colourKeyCreator; }
 }

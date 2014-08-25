@@ -3,7 +3,6 @@
 
 package curlywhirly.gui;
 
-import java.awt.image.*;
 import java.io.*;
 import javax.imageio.*;
 import javax.swing.*;
@@ -164,35 +163,33 @@ public class Commands
 
 	void screenshot()
 	{
-		File saveAs = new File(Prefs.guiCurrentDir, winMain.getDataSet().getName() + ".png");
+		ExportScreenshotDialog screenshotDialog = new ExportScreenshotDialog(winMain);
 
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(
-			RB.getString("gui.Commands.exportImage.pngFiles"), "png");
-
-		// Ask the user for a filename to save the current view as
-		String filename = CWUtils.getSaveFilename(
-			RB.getString("gui.Commands.exportImage.saveDialog"), saveAs, filter);
-
-		// Quit if the user cancelled the file selection
-		if (filename == null)
-			return;
-
-		try
+		if (screenshotDialog.isOk())
 		{
-			File imageFile = new File(filename);
-            BufferedImage image = winMain.getOpenGLPanel().getScreenShot();
-			ImageIO.write(image, "png", imageFile);
+			// Ask the user for a filename to save the current view as
+			String filename = screenshotDialog.getFilename();
 
-			TaskDialog.showFileOpen(
-				RB.format("gui.Commands.exportImage.success", filename),
-				TaskDialog.INF, imageFile);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
+			// Quit if the user cancelled the file selection
+			if (filename == null)
+				return;
 
-			TaskDialog.showOpenLog(RB.format("gui.Commands.exportImage.exception",
-				e), null);
+			try
+			{
+				File imageFile = new File(filename);
+				ImageIO.write(screenshotDialog.getImage(), "png", imageFile);
+
+				TaskDialog.showFileOpen(
+					RB.format("gui.Commands.exportImage.success", filename),
+					TaskDialog.INF, imageFile);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+
+				TaskDialog.showOpenLog(RB.format("gui.Commands.exportImage.exception",
+					e), null);
+			}
 		}
 	}
 
