@@ -3,10 +3,10 @@
 
 package curlywhirly.gui.viewer.opengl;
 
+import java.awt.event.*;
 import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
-import java.util.*;
 import javax.media.opengl.*;
 import javax.media.opengl.awt.*;
 import javax.media.opengl.glu.*;
@@ -20,6 +20,7 @@ import curlywhirly.gui.viewer.*;
 
 import com.jogamp.opengl.util.*;
 import com.jogamp.opengl.util.awt.*;
+import java.awt.event.ActionEvent;
 
 import static javax.media.opengl.GL2.*;
 import static javax.media.opengl.fixedfunc.GLMatrixFunc.*;
@@ -66,6 +67,8 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		addGLEventListener(closeOverlay);
 		addGLEventListener(selectionOverlay);
 		addGLEventListener(movieCapture);
+
+		createKeyboardShortcuts();
 
 		ToolTipManager.sharedInstance().setInitialDelay(0);
 		setLayout(new BorderLayout());
@@ -277,6 +280,40 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 			underMouse.toggleSelection();
 			winMain.getControlPanel().repaint();
 		}
+	}
+
+	private void createKeyboardShortcuts()
+	{
+		int menuShortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+
+		// Zoom-in
+		Action zoomIn = new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				scene.zoom(-1);
+			}
+		};
+		mapKeyToAction(zoomIn, KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, menuShortcut), "zoomInMain");
+		mapKeyToAction(zoomIn, KeyStroke.getKeyStroke(KeyEvent.VK_ADD, menuShortcut), "zoomInNumPad");
+
+		// Zoom-out
+		Action zoomOut = new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				scene.zoom(1);
+			}
+		};
+		mapKeyToAction(zoomOut, KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, menuShortcut), "zoomOutMain");
+		mapKeyToAction(zoomOut, KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, menuShortcut), "zoomOutNumPad");
+	}
+
+	private void mapKeyToAction(Action action, KeyStroke keyStroke, String command)
+	{
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+			keyStroke, command);
+		getActionMap().put(command, action);
 	}
 
 	public CloseOverlay getCloseOverlay()
