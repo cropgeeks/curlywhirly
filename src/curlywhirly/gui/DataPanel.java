@@ -84,7 +84,7 @@ public class DataPanel extends JPanel
 		toggleEnabled(dataSet != null);
 	}
 
-	private void saveHighlightedReadsSummary()
+	private void saveReadsSummary(boolean onlyHighlighted)
 	{
 		// Loop over the table pulling out the data points to hand off to the
 		// DataPointSaver
@@ -93,23 +93,8 @@ public class DataPanel extends JPanel
 		{
 			int row = controls.pointsTable.convertRowIndexToModel(i);
 			DataPoint point = (DataPoint) model.getValueAt(row, 1);
-			if (point.isSelected())
+			if (onlyHighlighted && point.isSelected() || !onlyHighlighted)
 				dataPoints.add(point);
-		}
-
-		saveSummary(dataPoints);
-	}
-
-	private void saveReadsSummary()
-	{
-		// Loop over the table pulling out the data points to hand off to the
-		// DataPointSaver
-		ArrayList<DataPoint> dataPoints = new ArrayList<>();
-		for (int i=0; i < controls.pointsTable.getRowCount(); i++)
-		{
-			int row = controls.pointsTable.convertRowIndexToModel(i);
-			DataPoint point = (DataPoint) model.getValueAt(row, 1);
-			dataPoints.add(point);
 		}
 
 		saveSummary(dataPoints);
@@ -159,7 +144,7 @@ public class DataPanel extends JPanel
 		RB.setText(mSaveReads, "gui.DataPanel.mTableSave");
 		mSaveReads.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				saveReadsSummary();
+				saveReadsSummary(false);
 			}
 		});
 
@@ -167,7 +152,7 @@ public class DataPanel extends JPanel
 		RB.setText(mSaveHighlightedReads, "gui.DataPanel.mTableSaveHighlighted");
 		mSaveHighlightedReads.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				saveHighlightedReadsSummary();
+				saveReadsSummary(true);
 			}
 		});
 
