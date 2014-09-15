@@ -11,6 +11,7 @@ import javax.swing.RowFilter.*;
 import javax.swing.table.*;
 
 import curlywhirly.data.*;
+import curlywhirly.gui.DataPanelTableModel.*;
 
 import scri.commons.gui.*;
 
@@ -42,12 +43,11 @@ public class DataPanelNB extends JPanel implements ActionListener, DocumentListe
 			@Override
 			public TableCellRenderer getCellRenderer(int row, int col)
 			{
-				return DataPanelTableModel.getCellRenderer(col);
+				return ((DataPanelTableModel)getModel()).getCellRenderer(col);
 			}
 		};
 
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
 		table.setRowSelectionAllowed(false);
 
 		return table;
