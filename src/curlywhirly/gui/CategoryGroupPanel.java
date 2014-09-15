@@ -68,7 +68,8 @@ class CategoryGroupPanel extends JPanel implements TableModelListener
 	{
 		this.dataSet = dataSet;
 
-		categoryGroups = dataSet.getCategoryGroups();
+		if (dataSet != null)
+			categoryGroups = dataSet.getCategoryGroups();
 
 		// Because we tweak the height of the component ourselves so that it
 		// renders correctly we need to reset that here to make the scroll bar
