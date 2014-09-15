@@ -115,7 +115,9 @@ public class DataPanel extends JPanel
 		if (filename == null)
 			return;
 
-		DataPointSaver summary = new DataPointSaver(new File(filename), dataPoints,
+		saveAs = new File(filename);
+
+		DataPointSaver summary = new DataPointSaver(saveAs, dataPoints,
 			dataSet.getCurrentAxes(), dataSet.getCurrentAxisLabels());
 
 		ProgressDialog dialog = new ProgressDialog(summary,
@@ -133,6 +135,8 @@ public class DataPanel extends JPanel
 					dialog.getException()), null);
 			}
 		}
+
+		TaskDialog.showFileOpen(RB.getString("gui.DataPanel.saveDataPoints.openFile"), TaskDialog.INF, saveAs);
 	}
 
 	private void displayMenu(MouseEvent e)
