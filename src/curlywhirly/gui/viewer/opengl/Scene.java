@@ -53,6 +53,8 @@ public class Scene
 
 	private HashSet<DataPoint> multiSelected = new HashSet<>();
 
+	private float axisLabelSize = 0.05f;
+
     public Scene(DataSet dataSet, Rotation rotation, int perspAngle, float aspect, CollisionDetection detector)
     {
         this.dataSet = dataSet;
@@ -221,12 +223,12 @@ public class Scene
     private void drawAxes(GL2 gl)
 	{
 		gl.glPushMatrix();
-//		gl.glScalef(50f, 50f, 50f);
 		float[] xAxisColor = CWUtils.convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.xAxisColor"));
 		float[] yAxisColor = CWUtils.convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.yAxisColor"));
 		float[] zAxisColor = CWUtils.convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.zAxisColor"));
 		drawAxesLines(gl, xAxisColor, yAxisColor, zAxisColor);
 		gl.glPopMatrix();
+
 		drawAxesCones(gl);
 	}
 
@@ -287,7 +289,7 @@ public class Scene
 		// Draw the cylinders at the positive extent of each axis
 		gl.glPushMatrix();
 		gl.glTranslatef(1f, 0, 0);
-		gl.glScalef(0.05f, 0.05f, 0.05f);
+		gl.glScalef(axisLabelSize, axisLabelSize, axisLabelSize);
 		gl.glPushMatrix();
 		gl.glRotatef(90, 0, 1, 0);
 		glu.gluCylinder(quadric, 1, 0, 2, 6, 6);
@@ -302,7 +304,7 @@ public class Scene
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
 		gl.glPushMatrix();
 		gl.glTranslatef(0, 1f, 0);
-		gl.glScalef(0.05f, 0.05f, 0.05f);
+		gl.glScalef(axisLabelSize, axisLabelSize, axisLabelSize);
 		gl.glPushMatrix();
 		gl.glRotatef(-90, 1, 0, 0);
 		glu.gluCylinder(quadric, 1, 0, 2, 6, 6);
@@ -317,7 +319,7 @@ public class Scene
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
 		gl.glPushMatrix();
 		gl.glTranslatef(0, 0, 1f);
-		gl.glScalef(0.05f, 0.05f, 0.05f);
+		gl.glScalef(axisLabelSize, axisLabelSize, axisLabelSize);
 		glu.gluCylinder(quadric, 1, 0, 2, 6, 6);
 
 		if (Prefs.guiChkAxisLabels)
@@ -435,4 +437,7 @@ public class Scene
 
 	public void setMultiSelected(HashSet<DataPoint> multiSelected)
 		{ this.multiSelected = multiSelected; }
+
+	public void setAxisLabelSize(float axisLabelSize)
+		{ this.axisLabelSize = axisLabelSize; }
 }

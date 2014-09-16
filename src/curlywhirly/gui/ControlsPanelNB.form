@@ -19,17 +19,17 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="axisPanel" alignment="1" max="32767" attributes="0"/>
-                  <Component id="axisLabelPanel" alignment="0" max="32767" attributes="0"/>
+                  <Component id="axisPanel" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lblAxesTitle" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="lblAxesTitle" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="lblAxisLabelOptions" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="spherePanelLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="spherePanel" alignment="0" max="32767" attributes="0"/>
+                  <Component id="axisLabelPanel" alignment="0" max="32767" attributes="0"/>
+                  <Component id="spherePanel" alignment="1" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -178,10 +178,20 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="chkAxisLabels" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="chkDatasetLabels" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="lblLabelSizeSlider" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="labelSizeSlider" pref="0" max="32767" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="chkAxisLabels" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="chkDatasetLabels" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -192,7 +202,12 @@
                   <Component id="chkAxisLabels" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="chkDatasetLabels" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="lblLabelSizeSlider" min="-2" max="-2" attributes="0"/>
+                      <Component id="labelSizeSlider" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -207,6 +222,13 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Use dataset labels"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblLabelSizeSlider">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Size:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JSlider" name="labelSizeSlider">
         </Component>
       </SubComponents>
     </Container>
@@ -241,7 +263,7 @@
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="pointSizeSlider" pref="36" max="32767" attributes="0"/>
+                      <Component id="pointSizeSlider" pref="0" max="32767" attributes="0"/>
                       <Component id="deselectedSizeSlider" pref="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
