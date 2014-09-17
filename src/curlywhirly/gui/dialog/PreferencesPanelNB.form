@@ -139,6 +139,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="chkAntialias" min="-2" max="-2" attributes="0"/>
+                      <Component id="chkColorInput" min="-2" max="-2" attributes="0"/>
                       <Component id="bCustomizeColors" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
@@ -150,6 +151,8 @@
               <Group type="102" attributes="0">
                   <Component id="bCustomizeColors" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
+                  <Component id="chkColorInput" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
                   <Component id="chkAntialias" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -171,6 +174,12 @@
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="chkColorInput">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Use colours specified in input files"/>
+            <Property name="toolTipText" type="java.lang.String" value=""/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>

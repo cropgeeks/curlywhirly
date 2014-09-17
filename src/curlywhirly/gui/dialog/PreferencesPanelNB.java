@@ -47,6 +47,9 @@ class PreferencesPanelNB extends JPanel
         updateCombo.setModel(updateModel);
         updateCombo.setSelectedIndex(Prefs.guiUpdateSchedule);
 
+		RB.setText(chkColorInput, "gui.PreferencesPanelNB.colorInput");
+		chkColorInput.setSelected(Prefs.ioUseFileColors);
+
 		RB.setText(chkAntialias, "gui.PreferencesPanelNB.antialiasAxes");
 		chkAntialias.setSelected(Prefs.guiAntialiasAxes);
 
@@ -88,6 +91,7 @@ class PreferencesPanelNB extends JPanel
 
 		Prefs.guiUpdateSchedule = updateCombo.getSelectedIndex();
 		Prefs.guiAntialiasAxes = chkAntialias.isSelected();
+		Prefs.ioUseFileColors = chkColorInput.isSelected();
 	}
 
     /** This method is called from within the constructor to
@@ -107,6 +111,7 @@ class PreferencesPanelNB extends JPanel
         otherPanel = new javax.swing.JPanel();
         bCustomizeColors = new javax.swing.JButton();
         chkAntialias = new javax.swing.JCheckBox();
+        chkColorInput = new javax.swing.JCheckBox();
 
         generalPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("General options (restart to apply):"));
 
@@ -151,6 +156,9 @@ class PreferencesPanelNB extends JPanel
 
         chkAntialias.setText("Antialias axes");
 
+        chkColorInput.setText("Use colours specified in input files");
+        chkColorInput.setToolTipText("");
+
         javax.swing.GroupLayout otherPanelLayout = new javax.swing.GroupLayout(otherPanel);
         otherPanel.setLayout(otherPanelLayout);
         otherPanelLayout.setHorizontalGroup(
@@ -159,6 +167,7 @@ class PreferencesPanelNB extends JPanel
                 .addContainerGap()
                 .addGroup(otherPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(chkAntialias)
+                    .addComponent(chkColorInput)
                     .addComponent(bCustomizeColors))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -167,6 +176,8 @@ class PreferencesPanelNB extends JPanel
             .addGroup(otherPanelLayout.createSequentialGroup()
                 .addComponent(bCustomizeColors)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkColorInput)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(chkAntialias))
         );
 
@@ -195,6 +206,7 @@ class PreferencesPanelNB extends JPanel
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JButton bCustomizeColors;
     javax.swing.JCheckBox chkAntialias;
+    private javax.swing.JCheckBox chkColorInput;
     private javax.swing.JComboBox<String> displayCombo;
     private javax.swing.JLabel displayLabel;
     private javax.swing.JPanel generalPanel;

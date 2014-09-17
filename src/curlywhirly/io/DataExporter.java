@@ -12,6 +12,7 @@ public class DataExporter extends SimpleJob
 	private static final String CATEGORY_IDENTIFIER = "categories:";
 	private static final String MISSING_CATEGORY = "Uncategorised";
 	private static final String URL_IDENTIFIER = "#url=";
+	private static final String COLOR_IDENTIFIER = "#color=";
 
     private final DataSet dataSet;
     private final File outputFile;
@@ -32,6 +33,10 @@ public class DataExporter extends SimpleJob
             String dbUrl = dataSet.getDbAssociation().getDbPointUrl();
             if (dbUrl != null && dbUrl.isEmpty() == false)
                 writer.println(URL_IDENTIFIER + dbUrl);
+
+			for (CategoryGroup group : dataSet.getCategoryGroups())
+				for (Category category : group.getCategories())
+					writer.println(COLOR_IDENTIFIER + category.getColorKey() + "::CW::" + category.getColor().getRGB());
 
             // Output the header line
             String header = getHeaderString();

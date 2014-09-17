@@ -77,6 +77,8 @@ public class Prefs extends XMLPreferences
 
 	public static boolean guiMovieChkColourKey = true;
 
+	public static boolean ioUseFileColors = true;
+
 	// The local working directory for disk caching
 	public static String cacheFolder =
 		SystemUtils.getTempUserDirectory("jhi-curlywhirly").getPath();
