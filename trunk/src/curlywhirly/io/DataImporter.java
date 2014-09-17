@@ -16,10 +16,12 @@ import scri.commons.gui.*;
 
 public class DataImporter extends SimpleJob
 {
-	private static String LABEL_IDENTIFIER = "label";
-	private static String CATEGORY_IDENTIFIER = "categories:";
-	private static String MISSING_CATEGORY = "Uncategorised";
-	private static String URL_IDENTIFIER = "#url=";
+	private static final String LABEL_IDENTIFIER = "label";
+	private static final String CATEGORY_IDENTIFIER = "categories:";
+	private static final String MISSING_CATEGORY = "Uncategorised";
+	private static final String URL_IDENTIFIER = "#url=";
+	private static final String COLOR_IDENTIFIER = "#color=";
+	private static final String COLOR_DELIMITER = "::CW::";
 
 	private File file;
 	private ProgressInputStream is;
@@ -96,6 +98,16 @@ public class DataImporter extends SimpleJob
 			// TODO Consider what to do about URL lines
 			if (str.toLowerCase().startsWith(URL_IDENTIFIER))
 				dbURL = str.substring(str.indexOf('=')+1);
+
+			if (str.startsWith(COLOR_IDENTIFIER))
+			{
+				String colorString = str.substring(str.indexOf('=')+1);
+				String[] tokens = colorString.split(COLOR_DELIMITER);
+				String key = tokens[0];
+				Color color = new Color(Integer.parseInt(tokens[1]));
+				if (ColorPrefs.get(key) == null || Prefs.ioUseFileColors)
+					ColorPrefs.setColor(key, color);
+			}
 
 			// Is there a better way to identify the "header" line
 			else if (str.toLowerCase().startsWith(CATEGORY_IDENTIFIER))

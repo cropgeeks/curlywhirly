@@ -96,4 +96,7 @@ public class CategoryGroup implements Comparable<CategoryGroup>, Iterable<Catego
 
 		return activeCategories;
 	}
+
+	public ArrayList<Category> getCategories()
+		{ return categories; }
 }
