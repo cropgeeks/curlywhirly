@@ -49,18 +49,6 @@ public class CategoryTableModel extends AbstractTableModel
 			default: return null;
 		}
 	}
-//
-//	@Override
-//	public boolean isCellEditable(int rowIndex, int columnIndex)
-//	{
-//		switch (columnIndex)
-//		{
-//			case 0:
-//			case 1: return true;
-//
-//			default: return false;
-//		}
-//	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex)
@@ -106,6 +94,7 @@ public class CategoryTableModel extends AbstractTableModel
 			case 2: cat.setSelected(false);
 					break;
 			case 3: cat.setSelected(true);
+					break;
 		}
 
 		fireTableDataChanged();
