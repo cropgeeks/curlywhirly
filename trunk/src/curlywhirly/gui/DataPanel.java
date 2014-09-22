@@ -48,8 +48,13 @@ public class DataPanel extends JPanel
 		sorter.setComparator(0, model.getComparator());
 		// Need to toggle sort order twice to get a descending list with
 		// selected points at the top, ordered by colour
-		controls.pointsTable.getRowSorter().toggleSortOrder(0);
-		controls.pointsTable.getRowSorter().toggleSortOrder(0);
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run()
+			{
+				controls.pointsTable.getRowSorter().toggleSortOrder(0);
+				controls.pointsTable.getRowSorter().toggleSortOrder(0);
+			}
+		});
 
 		controls.lblPoints.setText(getTitle());
 
@@ -203,4 +208,6 @@ public class DataPanel extends JPanel
 		sorter.setRowFilter(rf);
 //		controls.contigsLabel.setText(getTitle(controls.table.getRowCount()));
 	}
+
+
 }
