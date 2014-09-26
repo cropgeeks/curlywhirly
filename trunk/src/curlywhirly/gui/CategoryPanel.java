@@ -61,6 +61,7 @@ class CategoryPanel extends JPanel implements ActionListener
 		{
 			dataSet.setCurrentCategoryGroup(catGroup);
 			setVisible(true);
+			parent.repaint();
 		}
 	}
 

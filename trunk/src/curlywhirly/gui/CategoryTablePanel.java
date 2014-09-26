@@ -64,10 +64,15 @@ class CategoryTablePanel extends JPanel
 		return table;
 	}
 
+	// This used to utilise the table's setValueAt, but the functionality of
+	// has changed to accomodate the three state check box, so now we just
+	// select the categories directly.
 	void setCategoriesSelected(boolean selected)
 	{
-		for (int row=0; row < catTable.getRowCount(); row++)
-			catTable.setValueAt(selected, row, CategoryTableModel.CHECK_BOX_COL);
+		for (Category cat : catGroup)
+			cat.setSelected(selected);
+
+		repaint();
 	}
 
 	JTable getCatTable()
