@@ -154,6 +154,8 @@ public class DataImporter extends SimpleJob
 			if (column.toLowerCase().trim().startsWith(CATEGORY_IDENTIFIER))
 			{
 				String name = column.substring(column.indexOf(':')+1, column.length());
+				if (name.isEmpty())
+					name = MISSING_CATEGORY;
 				categoryGroups.add(new CategoryGroup(name));
 			}
 		}

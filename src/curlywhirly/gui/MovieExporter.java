@@ -38,7 +38,7 @@ public class MovieExporter extends SimpleJob
 
 		// Determine variables which govern how the movie is captured
 		totalFrames = length * frameRate;
-		rotation = 360 / (float) totalFrames;
+		rotation = 180 / (float) totalFrames;
 
 		panel = winMain.getOpenGLPanel();
 
