@@ -275,7 +275,7 @@ public class WinMain extends JFrame
 	public OpenGLPanel getOpenGLPanel()
 		{ return canvas3D; }
 
-	DataPanel getDataPanel()
+	public DataPanel getDataPanel()
 		{ return dataPanel; }
 
 	public DataSet getDataSet()

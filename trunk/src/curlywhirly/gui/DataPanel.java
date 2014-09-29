@@ -19,7 +19,7 @@ import scri.commons.gui.*;
 
 public class DataPanel extends JPanel
 {
-	private DataPanelNB controls;
+	private final DataPanelNB controls;
 	private DataPanelTableModel model;
 
 	private DataSet dataSet;
@@ -38,7 +38,7 @@ public class DataPanel extends JPanel
 		toggleEnabled(false);
 	}
 
-	void updateTableModel()
+	public void updateTableModel()
 	{
 		model = new DataPanelTableModel(dataSet);
 		controls.pointsTable.setModel(model);
@@ -49,6 +49,7 @@ public class DataPanel extends JPanel
 		// Need to toggle sort order twice to get a descending list with
 		// selected points at the top, ordered by colour
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run()
 			{
 				controls.pointsTable.getRowSorter().toggleSortOrder(0);
