@@ -144,6 +144,7 @@ public class ControlsPanelNB extends JPanel implements ActionListener, ChangeLis
 		axisPanel.setEnabled(enabled);
 		chkAxisLabels.setEnabled(enabled);
 		chkDatasetLabels.setEnabled(enabled);
+		labelSizeSlider.setEnabled(enabled);
         pointSizeSlider.setEnabled(enabled);
         spherePanelLabel.setEnabled(enabled);
         spherePanel.setEnabled(enabled);

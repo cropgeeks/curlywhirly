@@ -81,7 +81,7 @@ public class CanvasMouseListener extends MouseInputAdapter
 		if (SwingUtilities.isLeftMouseButton(e))
 			startDrag(e.getPoint());
 
-		else if (e.isPopupTrigger() && panel.getUnderMouse() != null && panel.getSelectionOverlay().isMultiSelecting() == false)
+		if ((e.isPopupTrigger() || SwingUtils.isMetaClick(e)) && panel.getUnderMouse() != null && panel.getSelectionOverlay().isMultiSelecting() == false)
 		{
 			menu.display(e);
 			underMouse = panel.getUnderMouse();
@@ -94,7 +94,7 @@ public class CanvasMouseListener extends MouseInputAdapter
 		if (SwingUtilities.isLeftMouseButton(e))
 			rotation.updateCombinedRotation();
 
-		else if (e.isPopupTrigger() && panel.getUnderMouse() != null && panel.getSelectionOverlay().isMultiSelecting() == false)
+		if ((e.isPopupTrigger() || SwingUtils.isMetaClick(e)) && panel.getUnderMouse() != null && panel.getSelectionOverlay().isMultiSelecting() == false)
 		{
 			menu.display(e);
 			underMouse = panel.getUnderMouse();
