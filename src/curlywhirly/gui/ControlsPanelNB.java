@@ -179,7 +179,7 @@ public class ControlsPanelNB extends JPanel implements ActionListener, ChangeLis
 	{
 		if (e.getSource() == pointSizeSlider)
 		{
-			float size = scaleSliderValue(deselectedSizeSlider, 0.05f, 0.009f);
+			float size = scaleSliderValue(pointSizeSlider, 0.05f, 0.009f);
 			winMain.getOpenGLPanel().getScene().setPointSize(size);
 
 			if (Prefs.guiChkLinkPointSizes)
@@ -190,6 +190,9 @@ public class ControlsPanelNB extends JPanel implements ActionListener, ChangeLis
 		{
 			float size = scaleSliderValue(deselectedSizeSlider, 0.05f, 0.009f);
 			winMain.getOpenGLPanel().getScene().setDeselectedSize(size);
+
+			if (Prefs.guiChkLinkPointSizes)
+				pointSizeSlider.setValue(deselectedSizeSlider.getValue());
 		}
 
 		else if (e.getSource() == labelSizeSlider)
