@@ -79,7 +79,7 @@ public class DataExporter extends SimpleJob
         {
             Category category = dataPoint.getCategoryForGroup(group);
             // Missing categories are just blank in the data format so skip them
-            if (category.getName().equals(MISSING_CATEGORY) == false)
+//            if (category.getName().equals(MISSING_CATEGORY) == false)
                 point.append(category.getName());
             point.append('\t');
         }
