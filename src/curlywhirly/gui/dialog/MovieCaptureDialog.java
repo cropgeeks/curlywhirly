@@ -63,13 +63,16 @@ public class MovieCaptureDialog extends JDialog implements ActionListener, Chang
 
 		bBrowse.addActionListener(this);
 
-		filenameTextField.setText(Prefs.guiCurrentDir + System.getProperty("file.separator") + winMain.getDataSet().getName() + RB.getString("gui.MovieCaptureDialog.fileExtension"));
+		filenameTextField.setText(Prefs.guiCurrentDir
+			+ System.getProperty("file.separator")
+			+ winMain.getDataSet().getName()
+			+ RB.getString("gui.MovieCaptureDialog.fileExtension"));
 
 		frameRateSpinner.setModel(new SpinnerNumberModel(Prefs.guiMovieCaptureFrameRate, 1, 60, 1));
 		lengthSpinner.setModel(new SpinnerNumberModel(Prefs.guiMovieCaptureLength, 5, 30, 1));
 
 		frameRateSpinner.addChangeListener(this);
-		frameRateSpinner.addChangeListener(this);
+		lengthSpinner.addChangeListener(this);
 
 		settingsPanel.setBackground(Color.WHITE);
 		warningPanel.setBackground(Color.WHITE);
@@ -114,14 +117,14 @@ public class MovieCaptureDialog extends JDialog implements ActionListener, Chang
 		int length = (Integer) lengthSpinner.getValue();
 		OpenGLPanel panel = winMain.getOpenGLPanel();
 
-		int bytesPerFrame = panel.getWidth() * panel.getHeight() * 3;
-		int totalNumFrames = frameRate * length;
+		long bytesPerFrame = panel.getWidth() * panel.getHeight() * 3;
+		long totalNumFrames = frameRate * length;
 
-		int compressionRation = 15;
+		long compressionRation = 15;
 
 		// Calculate file size in megabytes
-		int fileSize = (bytesPerFrame * totalNumFrames) / compressionRation;
-		int fileSizeMB = fileSize/ 1024 / 1024;
+		long fileSize = (bytesPerFrame * totalNumFrames) / compressionRation;
+		int fileSizeMB = (int) (fileSize / 1024 / 1024);
 		sizeLabel.setText(RB.format("gui.MovieCaptureDialog.sizeLabel", fileSizeMB));
 	}
 
