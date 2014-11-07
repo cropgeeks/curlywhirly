@@ -34,7 +34,7 @@ public class CategoryGroupSaver extends SimpleJob
 		// Export the name of the category group and the count of slected / total points
 		for (CategoryGroup group : catGroups)
 		{
-			if (group.selectedCategoriesCount() > 0)
+			if (group.selectedDataPointCount() > 0)
 			{
 				String countString = group.selectedDataPointCount() + "/" + group.totalDataPoints();
 				out.println(group.getName() + "\t" + countString);
@@ -42,10 +42,14 @@ public class CategoryGroupSaver extends SimpleJob
 				// Export the category names and their selection state
 				for (Category cat : group)
 				{
-					String state = cat.isSelected() ?
-						RB.getString("analysis.CategoryGroupSaver.state.selected") :
-						RB.getString("analysis.CategoryGroupSaver.state.deselected");
-					out.println("\t" + state + "\t" + cat.getName() + "\t" + cat.getSelectedText());
+					// Only if the category has some data points selected
+					if (cat.getSelectedCount() > 0)
+					{
+						String state = cat.isSelected() ?
+							RB.getString("analysis.CategoryGroupSaver.state.selected") :
+							RB.getString("analysis.CategoryGroupSaver.state.deselected");
+						out.println("\t" + state + "\t" + cat.getName() + "\t" + cat.getSelectedText());
+					}
 				}
 			}
 			progress++;
