@@ -11,7 +11,6 @@ import javax.swing.RowFilter.*;
 import javax.swing.table.*;
 
 import curlywhirly.data.*;
-import curlywhirly.gui.DataPanelTableModel.*;
 
 import scri.commons.gui.*;
 

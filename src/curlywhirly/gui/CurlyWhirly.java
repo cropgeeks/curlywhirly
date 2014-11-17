@@ -173,11 +173,11 @@ public class CurlyWhirly
 		catch (NoSuchMethodException | SecurityException e) { e.printStackTrace(); }
 	}
 
-	/** "Preferences" on the OS X system menu. */
-	public void osxPreferences()
-	{
-		new PreferencesDialog(winMain);
-	}
+//	/** "Preferences" on the OS X system menu. */
+//	public void osxPreferences()
+//	{
+//		new PreferencesDialog(winMain);
+//	}
 
 	/** "About CurlyWhirly" on the OS X system menu. */
 	public void osxAbout()

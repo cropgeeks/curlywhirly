@@ -11,11 +11,6 @@ import scri.commons.gui.*;
 
 public class Prefs extends XMLPreferences
 {
-	//the number of the last version released
-	public static String lastVersion = null;
-
-	public static boolean isSCRIUser = false;
-
 	// Unique Curlywhirly ID for this user
 	public static String curlywhirlyID = SystemUtils.createGUID(32);
 
