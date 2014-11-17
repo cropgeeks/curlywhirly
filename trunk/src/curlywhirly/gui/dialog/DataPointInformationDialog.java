@@ -293,7 +293,7 @@ public class DataPointInformationDialog extends JDialog implements ActionListene
         nameLabel = new javax.swing.JLabel();
         valuesLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        valuesTable = valuesTable = createValueTable();
+        valuesTable = createValueTable();
         categoriesLabel = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         categoriesTable = new javax.swing.JTable();

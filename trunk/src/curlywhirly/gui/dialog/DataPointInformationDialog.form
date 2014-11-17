@@ -108,7 +108,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="valuesTable = createValueTable()"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="createValueTable()"/>
           </AuxValues>
         </Component>
       </SubComponents>
