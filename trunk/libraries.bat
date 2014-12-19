@@ -2,10 +2,10 @@
 
 SET lib=lib
 
-SET avcp=%lib%\
-SET avcp=%avcp%;%lib%\gluegen-rt.jar
-SET avcp=%avcp%;%lib%\jmf.jar
-SET avcp=%avcp%;%lib%\jogl-all.jar
-SET avcp=%avcp%;%lib%\monte-cc.jar
-SET avcp=%avcp%;%lib%\scri-commons.jar
-SET avcp=%avcp%;%lib%\vecmath.jar
+SET cwcp=%lib%\
+SET cwcp=%cwcp%;%lib%\gluegen-rt.jar
+SET cwcp=%cwcp%;%lib%\jmf.jar
+SET cwcp=%cwcp%;%lib%\jogl-all.jar
+SET cwcp=%cwcp%;%lib%\monte-cc.jar
+SET cwcp=%cwcp%;%lib%\scri-commons.jar
+SET cwcp=%cwcp%;%lib%\vecmath.jar

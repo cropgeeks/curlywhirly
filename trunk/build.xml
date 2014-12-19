@@ -5,6 +5,7 @@
 	<property name="src" location="src"/>
 	<property name="res" location="res"/>
 	<property name="lib" location="lib"/>
+	<property name="lib-devel" location="lib-devel"/>
 	<property name="data" location="data"/>
 	<property name="classes" location="classes"/>
 
@@ -31,6 +32,16 @@
 			<fileset dir="${classes}" includes="**/*"/>
 			<fileset file="${curlywhirly.jar}"/>
 		</delete>
+	</target>
+
+	<target name="test" depends="compile">
+		<junit printsummary="on" haltonerror="true" haltonfailure="true" dir="." fork="true">
+			<classpath refid="project.classpath"/>
+			<formatter type="plain" usefile="false"/>
+			<batchtest>
+				<fileset dir="${classes}" includes="**/*Test.class"/>
+			</batchtest>
+		</junit>
 	</target>
 
 	<target name="jar" depends="clean, compile">
