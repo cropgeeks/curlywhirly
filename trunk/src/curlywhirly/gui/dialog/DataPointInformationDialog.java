@@ -47,7 +47,7 @@ public class DataPointInformationDialog extends JDialog implements ActionListene
 
 		valuesTable.setModel(valuesModel);
 
-		categoriesModel = new CategoryTableModel(dataSet.getCategoryGroups(), point);
+		categoriesModel = new CategoryTableModel(dataSet.getCategoryGroups(), point, dataSet);
 		categoriesTable.setModel(categoriesModel);
 
 		nameLabel.setText(RB.format("gui.dialog.DataPointInformationDialog.nameLabel", point.getName()));
@@ -236,13 +236,15 @@ public class DataPointInformationDialog extends JDialog implements ActionListene
 	{
 		private final ArrayList<CategoryGroup> categoryGroups;
 		private final DataPoint point;
+		private final DataSet dataSet;
 
 		private final String[] columnNames;
 
-		CategoryTableModel(ArrayList<CategoryGroup> categoryGroups, DataPoint point)
+		CategoryTableModel(ArrayList<CategoryGroup> categoryGroups, DataPoint point, DataSet dataSet)
 		{
 			this.categoryGroups = categoryGroups;
 			this.point = point;
+			this.dataSet = dataSet;
 
 			columnNames = new String[] { RB.getString("gui.dialog.DataPointInformationDialog.CategoryTableModel.col1"),
 				RB.getString("gui.dialog.DataPointInformationDialog.ValueTableModel.col2") };
@@ -273,7 +275,7 @@ public class DataPointInformationDialog extends JDialog implements ActionListene
 				return categoryGroups.get(rowIndex);
 
 			else
-				return point.getCategoryForGroup(categoryGroups.get(rowIndex));
+				return dataSet.getPointCategories(point).get(categoryGroups.get(rowIndex));
 		}
 	}
 

@@ -3,15 +3,17 @@
 
 package curlywhirly.data;
 
+import java.awt.*;
 import java.util.*;
 
 public class DataSet implements Iterable<DataPoint>
 {
-	private String name;
+	private final String name;
 
 	private final ArrayList<DataPoint> dataPoints;
 	private final ArrayList<CategoryGroup> categoryGroups;
 	private final String[] axisLabels;
+	private final HashMap<DataPoint, HashMap<CategoryGroup, Category>> pointCategories;
 	private CategoryGroup currentGroup;
 
 	private int currX;
@@ -21,13 +23,15 @@ public class DataSet implements Iterable<DataPoint>
 	// DB-link/association data
 	private DBAssociation dbAssociation = new DBAssociation();
 
-	public DataSet(ArrayList<DataPoint> dataPoints, ArrayList<CategoryGroup> categoryGroups, String[] axisLabels)
+	public DataSet(String name, ArrayList<DataPoint> dataPoints, ArrayList<CategoryGroup> categoryGroups, String[] axisLabels, HashMap<DataPoint, HashMap<CategoryGroup, Category>> pointCategories)
 	{
+		this.name = name;
 		this.dataPoints = dataPoints;
 		// The sort ensures CategoryGroups are displayed in alphabetical order
 		Collections.sort(categoryGroups);
 		this.categoryGroups = categoryGroups;
 		this.axisLabels = axisLabels.clone();
+		this.pointCategories = pointCategories;
 
 		setDefaultAxes(axisLabels.length);
 
@@ -81,6 +85,16 @@ public class DataSet implements Iterable<DataPoint>
 		return new String[] { axisLabels[currX], axisLabels[currY], axisLabels[currZ] };
 	}
 
+	public Color getPointColor(DataPoint point)
+	{
+		return pointCategories.get(point).get(currentGroup).getColor();
+	}
+
+	public HashMap<CategoryGroup, Category> getPointCategories(DataPoint point)
+	{
+		return pointCategories.get(point);
+	}
+
 	public void setCurrX(int currX)
 		{ this.currX = currX; }
 
@@ -107,11 +121,6 @@ public class DataSet implements Iterable<DataPoint>
 
 	public DBAssociation getDbAssociation()
 		{ return dbAssociation; }
-
-	public void setName(String name)
-	{
-		this.name = name;
-	}
 
 	public String getName()
 		{ return name; }

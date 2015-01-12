@@ -158,7 +158,7 @@ public class Scene
 		// Color spheres appropriately
 		for (DataPoint point : dataSet)
 		{
-			Color color = point.isSelected() ? point.getColor(dataSet.getCurrentCategoryGroup()) : Color.DARK_GRAY;
+			Color color = point.isSelected() ? dataSet.getPointColor(point) : Color.DARK_GRAY;
 			if (multiSelected.contains(point))
 				color = mSelectColor;
 //			 Get each color component into the 0-1 range instead of 0-255
