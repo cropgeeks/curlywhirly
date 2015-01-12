@@ -35,6 +35,7 @@ public class DataImporter extends SimpleJob
 	private ArrayList<CategoryGroup> categoryGroups;
 	private String[] axisLabels;
 	private ArrayList<HashMap<String, Category>> categoriesToGroups;
+	private final HashMap<DataPoint, HashMap<CategoryGroup, Category>> pointCategories;
 
 	private int lineCount = 0;
 	private int expectedTokenCount = -1;
@@ -44,6 +45,8 @@ public class DataImporter extends SimpleJob
 	public DataImporter(File file)
 	{
 		this.file = file;
+
+		pointCategories = new HashMap<DataPoint, HashMap<CategoryGroup, Category>>();
 
 		maximum = 5555;
 	}
@@ -72,7 +75,7 @@ public class DataImporter extends SimpleJob
 			assignColorsToCategories(group);
 		}
 
-		dataSet = new DataSet(dataPoints, categoryGroups, axisLabels);
+		dataSet = new DataSet(file.getName(), dataPoints, categoryGroups, axisLabels, pointCategories);
 
 		// The values in the dataset can only been normalized once we've
 		// read all the values in the dataset
@@ -81,8 +84,6 @@ public class DataImporter extends SimpleJob
 
 		// Finally set the link to access the database
 		dataSet.getDbAssociation().setDbPointUrl(dbURL);
-
-		dataSet.setName(file.getName());
 	}
 
 	// Methods for processing the file's header
@@ -211,8 +212,9 @@ public class DataImporter extends SimpleJob
 		String[] valuesArray = Arrays.copyOfRange(tokens, labelColumn+1, tokens.length);
 		ArrayList<Float> values = getValuesForDataPoint(valuesArray);
 
-		DataPoint dataPoint = new DataPoint(name, values, categories);
+		DataPoint dataPoint = new DataPoint(name, values);
 		dataPoints.add(dataPoint);
+		pointCategories.put(dataPoint, categories);
 
 		// Categories also need to know which points they are associated with.
 		for (Category category : categories.values())

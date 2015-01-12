@@ -77,7 +77,7 @@ public class DataExporter extends SimpleJob
         // group order, hence the loop over the dataset's category groups)
         for (CategoryGroup group : dataSet.getCategoryGroups())
         {
-            Category category = dataPoint.getCategoryForGroup(group);
+            Category category = dataSet.getPointCategories(dataPoint).get(group); //dataPoint.getCategoryForGroup(group);
             // Missing categories are just blank in the data format so skip them
 //            if (category.getName().equals(MISSING_CATEGORY) == false)
                 point.append(category.getName());

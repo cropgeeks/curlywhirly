@@ -3,7 +3,6 @@
 
 package curlywhirly.data;
 
-import java.awt.*;
 import java.util.*;
 
 public class DataPoint
@@ -12,16 +11,12 @@ public class DataPoint
 	private final ArrayList<Float> values;
 	// Normalized values are used for rendering, values are displayed in tables
 	private ArrayList<Float> normalizedValues;
-	// Provides a quick method of querying for a Category by CategoryGroup.
-	// Useful for getting the colour to display for the point.
-	private final HashMap<CategoryGroup, Category> categories;
 	private boolean isSelected;
 
-	public DataPoint(String name, ArrayList<Float> values, HashMap<CategoryGroup, Category> categories)
+	public DataPoint(String name, ArrayList<Float> values)
 	{
 		this.name = name;
 		this.values = values;
-		this.categories = categories;
 
 		isSelected = true;
 	}
@@ -60,21 +55,6 @@ public class DataPoint
 	public void toggleSelection()
 	{
 		isSelected = !isSelected;
-	}
-
-	// Uses the supplied CategoryGroup to look for an appropriate Category. If
-	// one is found and the point is selected it returns the color of this
-	// Category. Otherwise it returns Dark Gray.
-	public Color getColor(CategoryGroup group)
-	{
-		Category cat = categories.get(group);
-
-		return cat.getColor();
-	}
-
-	public Category getCategoryForGroup(CategoryGroup group)
-	{
-		return categories.get(group);
 	}
 
 	@Override
