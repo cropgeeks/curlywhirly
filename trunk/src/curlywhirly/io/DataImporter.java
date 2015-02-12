@@ -9,7 +9,7 @@ import java.util.*;
 
 import curlywhirly.data.*;
 import curlywhirly.gui.*;
-import curlywhirly.gui.viewer.ColorPrefs;
+import curlywhirly.gui.viewer.*;
 
 import scri.commons.file.*;
 import scri.commons.gui.*;

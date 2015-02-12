@@ -13,6 +13,7 @@ import javax.swing.filechooser.*;
 
 import curlywhirly.analysis.*;
 import curlywhirly.data.*;
+import curlywhirly.util.*;
 
 import scri.commons.gui.*;
 
@@ -169,7 +170,7 @@ class CategoryGroupPanel extends JPanel implements TableModelListener
 			RB.getString("gui.text.formats.txt"), "txt");
 
 		// Ask the user for a filename to save the data to
-		String filename = CWUtils.getSaveFilename(
+		String filename = FileUtils.getSaveFilename(
 			RB.getString("gui.CategoryGroupPanel.saveCategoryGroups.saveDialog"), saveAs, filter);
 
 		// Quit if the user cancelled the file selection

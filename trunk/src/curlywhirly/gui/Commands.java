@@ -107,7 +107,7 @@ public class Commands
 			RB.getString("gui.Commands.exportDataSet.txtFiles"), "txt");
 
 		// Ask the user for a filename to save the current view as
-		String filename = CWUtils.getSaveFilename(
+		String filename = curlywhirly.util.FileUtils.getSaveFilename(
 			RB.getString("gui.Commands.exportDataSet.saveDialog"), saveAs, filter);
 
 		// Quit if the user cancelled the file selection
@@ -202,7 +202,7 @@ public class Commands
 			int frameRate = captureDialog.getFrameRate();
 			int length = captureDialog.getLength();
 			String name = captureDialog.getFilename();
-			MovieExporter exporter = new MovieExporter(winMain, frameRate, length, name);
+			MovieExporter exporter = new MovieExporter(winMain.getOpenGLPanel(), frameRate, length, name);
 
 			ProgressDialog dialog = new ProgressDialog(exporter,
 				RB.getString("gui.Commands.captureMovie.progressDialog.title"),

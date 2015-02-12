@@ -13,6 +13,7 @@ import curlywhirly.analysis.*;
 import curlywhirly.data.*;
 import curlywhirly.gui.dialog.*;
 import curlywhirly.gui.viewer.*;
+import curlywhirly.util.FileUtils;
 
 import scri.commons.gui.*;
 import scri.commons.gui.matisse.*;
@@ -186,7 +187,7 @@ public class MultiSelectPanel extends JPanel implements ActionListener, ChangeLi
 				RB.getString("gui.text.formats.txt"), "txt");
 
 		// Ask the user for a filename to save the data to
-		String filename = CWUtils.getSaveFilename(
+		String filename = FileUtils.getSaveFilename(
 				RB.getString("gui.viewer.MultiSelectPanel.saveDataPoints.saveDialog"), saveAs, filter);
 
 		// Quit if the user cancelled the file selection

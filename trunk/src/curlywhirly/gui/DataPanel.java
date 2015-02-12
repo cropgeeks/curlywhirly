@@ -14,6 +14,7 @@ import javax.swing.table.*;
 
 import curlywhirly.analysis.*;
 import curlywhirly.data.*;
+import curlywhirly.util.*;
 
 import scri.commons.gui.*;
 
@@ -114,7 +115,7 @@ public class DataPanel extends JPanel
 			RB.getString("gui.text.formats.txt"), "txt");
 
 		// Ask the user for a filename to save the data to
-		String filename = CWUtils.getSaveFilename(
+		String filename = FileUtils.getSaveFilename(
 			RB.getString("gui.DataPanel.saveDataPoints.saveDialog"), saveAs, filter);
 
 		// Quit if the user cancelled the file selection
