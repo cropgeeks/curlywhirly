@@ -11,7 +11,7 @@ import javax.swing.event.*;
 import javax.swing.filechooser.*;
 
 import curlywhirly.gui.*;
-import curlywhirly.gui.viewer.opengl.*;
+import curlywhirly.gui.viewer.*;
 
 import scri.commons.gui.*;
 

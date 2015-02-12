@@ -12,7 +12,6 @@ import javax.vecmath.*;
 
 import curlywhirly.data.*;
 import curlywhirly.gui.*;
-import curlywhirly.gui.viewer.opengl.*;
 
 import scri.commons.gui.*;
 

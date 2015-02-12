@@ -1,7 +1,7 @@
 // Copyright 2009-2014 Information & Computational Sciences, JHI. All rights
 // reserved. Use is subject to the accompanying licence terms.
 
-package curlywhirly.gui.viewer.opengl;
+package curlywhirly.gui.viewer;
 
 import java.util.*;
 import javax.vecmath.*;

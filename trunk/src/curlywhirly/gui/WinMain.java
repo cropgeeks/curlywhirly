@@ -11,7 +11,7 @@ import javax.media.opengl.*;
 import javax.swing.*;
 
 import curlywhirly.data.*;
-import curlywhirly.gui.viewer.opengl.*;
+import curlywhirly.gui.viewer.*;
 
 import scri.commons.gui.*;
 

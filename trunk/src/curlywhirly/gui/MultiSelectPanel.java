@@ -12,7 +12,7 @@ import javax.swing.filechooser.*;
 import curlywhirly.analysis.*;
 import curlywhirly.data.*;
 import curlywhirly.gui.dialog.*;
-import curlywhirly.gui.viewer.opengl.*;
+import curlywhirly.gui.viewer.*;
 
 import scri.commons.gui.*;
 import scri.commons.gui.matisse.*;
