@@ -9,16 +9,16 @@ import java.util.*;
 public class Category implements Comparable<Category>
 {
 	private final String name;
+	private final String groupName;
 	private Color color;
 	private boolean selected;
-	private CategoryGroup group;
 
 	private final ArrayList<DataPoint> dataPoints;
 
-	public Category(String name, CategoryGroup group)
+	public Category(String name, String groupName)
 	{
 		this.name = name;
-		this.group = group;
+		this.groupName = groupName;
 
 		selected = true;
 		dataPoints = new ArrayList<DataPoint>();
@@ -65,14 +65,6 @@ public class Category implements Comparable<Category>
 	public Color getColor()
 		{ return color; }
 
-	public void setGroup(CategoryGroup group)
-	{
-		this.group = group;
-	}
-
-	public CategoryGroup getGroup()
-		{ return group; }
-
 	@Override
 	public String toString()
 	{
@@ -82,7 +74,7 @@ public class Category implements Comparable<Category>
 	// Utility method used to get the ColorPrefs key for this category
 	public String getColorKey()
 	{
-		return group.getName() + "." + name;
+		return groupName + "." + name;
 	}
 
 	@Override

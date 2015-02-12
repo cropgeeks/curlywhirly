@@ -129,7 +129,7 @@ public class CategoryTableModel extends AbstractTableModel
 
 			Color color = category.getColor();
 			GradientPaint paint;
-			if (category.getGroup() == dataSet.getCurrentCategoryGroup() && category.getSelectedCount() > 0)
+			if (dataSet.getCurrentCategoryGroup().getCategories().contains(category) && category.getSelectedCount() > 0)
 				paint = new GradientPaint(0, 0, color.brighter(), 20, 10, color.darker());
 			else
 			{
