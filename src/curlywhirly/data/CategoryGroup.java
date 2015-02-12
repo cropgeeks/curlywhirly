@@ -73,7 +73,7 @@ public class CategoryGroup implements Comparable<CategoryGroup>, Iterable<Catego
 
 	public int selectedCategoriesCount()
 	{
-		return (int) categories.stream().filter(Category::isSelected).count();
+		return (int) getActiveCategories().count();
 	}
 
 	public Stream<Category> getActiveCategories()

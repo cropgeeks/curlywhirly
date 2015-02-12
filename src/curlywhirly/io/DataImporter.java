@@ -243,11 +243,11 @@ public class DataImporter extends SimpleJob
 			Category found = groupCategories.get(name);
 			if (found == null)
 			{
-				found = new Category(name, group);
+				found = new Category(name, group.getName());
 				groupCategories.put(name, found);
 				group.add(found);
 			}
-			categories.put(found.getGroup(), found);
+			categories.put(group, found);
 		}
 
 		return categories;

@@ -28,7 +28,7 @@ public class ColourKeyCreator
 		int width = getKeyWidth(metrics, group);
 
 		int lineheight = metrics.getHeight() + 2;
-		int categories = (int) dataSet.getCurrentCategoryGroup().getActiveCategories().count();
+		int categories = dataSet.getCurrentCategoryGroup().selectedCategoriesCount();
 		int height = lineheight * categories + lineheight;
 
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
