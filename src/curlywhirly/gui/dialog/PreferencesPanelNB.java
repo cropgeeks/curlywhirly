@@ -3,6 +3,7 @@
 
 package curlywhirly.gui.dialog;
 
+import java.awt.event.*;
 import javax.swing.*;
 
 import curlywhirly.gui.*;
@@ -14,7 +15,7 @@ class PreferencesPanelNB extends JPanel
 	private final DefaultComboBoxModel<String> displayModel;
 	private final DefaultComboBoxModel<String> updateModel;
 
-    public PreferencesPanelNB(WinMain winMain, PreferencesDialog parent)
+    public PreferencesPanelNB(ActionListener listener)
     {
         initComponents();
 
@@ -57,7 +58,7 @@ class PreferencesPanelNB extends JPanel
 		otherPanel.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.PreferencesPanelNB.otherPanelTitle")));
 
 		RB.setText(bCustomizeColors, "gui.PreferencesPanelNB.customizeColors");
-		bCustomizeColors.addActionListener(parent);
+		bCustomizeColors.addActionListener(listener);
 	}
 
     private int getLocaleIndex()

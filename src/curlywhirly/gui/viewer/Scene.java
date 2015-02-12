@@ -8,7 +8,6 @@ import javax.media.opengl.glu.*;
 
 import curlywhirly.data.*;
 import curlywhirly.gui.*;
-import curlywhirly.gui.viewer.*;
 
 import com.jogamp.common.nio.*;
 import com.jogamp.opengl.util.awt.*;
