@@ -31,16 +31,15 @@ public class MovieExporter extends SimpleJob
 	private static final int CAPTURING = 0;
 	private static final int EXPORTING = 1;
 
-	MovieExporter(WinMain winMain, int frameRate, int length, String name)
+	MovieExporter(OpenGLPanel panel, int frameRate, int length, String name)
 	{
 		this.name = name;
 		this.frameRate = frameRate;
+		this.panel = panel;
 
 		// Determine variables which govern how the movie is captured
 		totalFrames = length * frameRate;
 		rotation = 180 / (float) totalFrames;
-
-		panel = winMain.getOpenGLPanel();
 
 		// Maximum is totalFrames x 2 as we first capture the images, then
 		// export them as movie frames

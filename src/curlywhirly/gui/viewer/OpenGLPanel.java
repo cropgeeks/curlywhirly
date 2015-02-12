@@ -16,7 +16,6 @@ import javax.vecmath.*;
 import curlywhirly.data.*;
 import curlywhirly.gui.*;
 import curlywhirly.gui.dialog.*;
-import curlywhirly.gui.viewer.*;
 
 import com.jogamp.opengl.util.*;
 import com.jogamp.opengl.util.awt.*;

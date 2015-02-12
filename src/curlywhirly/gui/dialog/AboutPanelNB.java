@@ -3,16 +3,17 @@
 
 package curlywhirly.gui.dialog;
 
-import curlywhirly.gui.CWUtils;
 import java.awt.*;
 import java.awt.event.*;
 import java.lang.management.*;
 import java.text.*;
 import javax.swing.*;
 
+import curlywhirly.util.*;
+
 import scri.commons.gui.*;
 
-class AboutPanelNB extends JPanel implements ActionListener
+class AboutPanelNB extends JPanel
 {
 	public AboutPanelNB()
 	{
@@ -22,8 +23,6 @@ class AboutPanelNB extends JPanel implements ActionListener
 		setBackground(Color.white);
 		p2.setBackground(Color.white);
 		iconPanel.setBackground(Color.white);
-
-		webLabel.addActionListener(this);
 
 		String javaVer = System.getProperty("java.version");
 		long freeMem = (ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax()
@@ -49,7 +48,7 @@ class AboutPanelNB extends JPanel implements ActionListener
 		jhiIcon.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent event)
 			{
-				CWUtils.visitURL("http://www.hutton.ac.uk");
+				NetworkUtils.visitURL("http://www.hutton.ac.uk");
 			}
 		});
 
@@ -57,17 +56,11 @@ class AboutPanelNB extends JPanel implements ActionListener
 		cimmytIcon.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent event)
 			{
-				CWUtils.visitURL("http://masagro.cimmyt.org");
+				NetworkUtils.visitURL("http://masagro.cimmyt.org");
 			}
 		});
-	}
 
-	public void actionPerformed(ActionEvent e)
-	{
-		final String curlyHTML = "http://bioinf.hutton.ac.uk/curlywhirly";
-
-		if(e.getSource() == webLabel)
-			CWUtils.visitURL(curlyHTML);
+		webLabel.addActionListener(e -> NetworkUtils.visitURL("http://bioinf.hutton.ac.uk/curlywhirly"));
 	}
 
     /** This method is called from within the constructor to

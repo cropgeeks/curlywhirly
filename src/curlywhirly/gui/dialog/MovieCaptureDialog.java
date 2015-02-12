@@ -12,6 +12,7 @@ import javax.swing.filechooser.*;
 
 import curlywhirly.gui.*;
 import curlywhirly.gui.viewer.*;
+import curlywhirly.util.FileUtils;
 
 import scri.commons.gui.*;
 
@@ -102,7 +103,7 @@ public class MovieCaptureDialog extends JDialog implements ActionListener, Chang
 		{
 			FileNameExtensionFilter filter = new FileNameExtensionFilter(
 			RB.getString("other.Filters.avi"), RB.getString("gui.MovieCaptureDialog.fileExtension"));
-			String filename = CWUtils.getSaveFilename(RB.getString("gui.dialog.MovieCaptureDialog.saveAs"), null, filter);
+			String filename = FileUtils.getSaveFilename(RB.getString("gui.dialog.MovieCaptureDialog.saveAs"), null, filter);
 			if (filename != null)
 				filenameTextField.setText(filename);
 		}

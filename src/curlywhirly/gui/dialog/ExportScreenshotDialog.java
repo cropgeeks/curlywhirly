@@ -11,6 +11,7 @@ import javax.swing.border.*;
 import javax.swing.filechooser.*;
 
 import curlywhirly.gui.*;
+import curlywhirly.util.*;
 
 import scri.commons.gui.*;
 
@@ -105,7 +106,7 @@ public class ExportScreenshotDialog extends JDialog implements ActionListener
 		{
 			FileNameExtensionFilter filter = new FileNameExtensionFilter(
 			RB.getString("other.Filters.png"), RB.getString("gui.ExportScreenshotDialog.fileExtension"));
-			String filename = CWUtils.getSaveFilename(RB.getString("gui.dialog.ExportScreenshotDialog.saveAs"), null, filter);
+			String filename = FileUtils.getSaveFilename(RB.getString("gui.dialog.ExportScreenshotDialog.saveAs"), null, filter);
 			if (filename != null)
 				filenameTextField.setText(filename);
 		}

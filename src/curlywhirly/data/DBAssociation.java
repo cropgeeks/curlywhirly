@@ -6,7 +6,7 @@ package curlywhirly.data;
 import java.io.*;
 import java.net.*;
 
-import curlywhirly.gui.*;
+import curlywhirly.util.*;
 
 /**
  * Holds information needed by CurlyWhirly to associate the dataset with a database
@@ -38,6 +38,6 @@ public class DBAssociation
 		throws UnsupportedEncodingException
 	{
 		if (isPointSearchEnabled())
-			CWUtils.visitURL(dbPointBaseUrl + URLEncoder.encode(pointName, "UTF-8"));
+			NetworkUtils.visitURL(dbPointBaseUrl + URLEncoder.encode(pointName, "UTF-8"));
 	}
 }
