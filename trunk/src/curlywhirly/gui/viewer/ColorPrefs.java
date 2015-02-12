@@ -29,6 +29,18 @@ public class ColorPrefs
 		}
 	}
 
+	public static float[] getAsRGB(String key)
+	{
+		try
+		{
+			return colors.get(key).getRGBColorComponents(new float[3]);
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
+	}
+
 	public static HashMap<String,Color> getColors()
 	{
 		return colors;

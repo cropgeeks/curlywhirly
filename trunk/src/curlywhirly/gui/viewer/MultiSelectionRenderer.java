@@ -120,7 +120,7 @@ public class MultiSelectionRenderer implements GLEventListener
 		if (selectedPoint == null || !Prefs.guiChkAnchorPoints)
 			return;
 
-		float [] rgba = CWUtils.convertRgbToGl(Color.RED);
+		float [] rgba = ColorPrefs.getAsRGB("User.OpenGLPanel.multiSelectLineColor");
 
 		gl.glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rgba, 0);
 		gl.glMaterialf(GL_FRONT, GL_SHININESS, 128);
@@ -151,8 +151,7 @@ public class MultiSelectionRenderer implements GLEventListener
 		float[] axes = selectedPoint.getPosition(dataSet.getCurrentAxes());
 		gl.glTranslatef(axes[0], axes[1], axes[2]);
 		gl.glScalef(selectionSphereSize, selectionSphereSize, selectionSphereSize);
-		Color color = ColorPrefs.get("User.OpenGLPanel.multiSelectAxesColor");
-		float[] glColor = CWUtils.convertRgbToGl(color);
+		float[] glColor = ColorPrefs.getAsRGB("User.OpenGLPanel.multiSelectAxesColor");
 
 		// Re-use the axes drawing code from the scene
 		winMain.getOpenGLPanel().getScene().drawAxesLines(gl, glColor, glColor, glColor);

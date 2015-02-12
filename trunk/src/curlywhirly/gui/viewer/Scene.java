@@ -161,8 +161,8 @@ public class Scene
 			Color color = point.isSelected() ? dataSet.getPointColor(point) : Color.DARK_GRAY;
 			if (multiSelected.contains(point))
 				color = mSelectColor;
-//			 Get each color component into the 0-1 range instead of 0-255
-			float [] rgba = CWUtils.convertRgbToGl(color);
+			// Get each color component into the 0-1 range instead of 0-255
+			float [] rgba = color.getRGBColorComponents(new float[3]);
 
 			gl.glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rgba, 0);
 			gl.glMaterialf(GL_FRONT, GL_SHININESS, 128);
@@ -223,9 +223,9 @@ public class Scene
     private void drawAxes(GL2 gl)
 	{
 		gl.glPushMatrix();
-		float[] xAxisColor = CWUtils.convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.xAxisColor"));
-		float[] yAxisColor = CWUtils.convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.yAxisColor"));
-		float[] zAxisColor = CWUtils.convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.zAxisColor"));
+		float[] xAxisColor = ColorPrefs.getAsRGB("User.OpenGLPanel.xAxisColor");
+		float[] yAxisColor = ColorPrefs.getAsRGB("User.OpenGLPanel.yAxisColor");
+		float[] zAxisColor = ColorPrefs.getAsRGB("User.OpenGLPanel.zAxisColor");
 		drawAxesLines(gl, xAxisColor, yAxisColor, zAxisColor);
 		gl.glPopMatrix();
 
@@ -283,7 +283,7 @@ public class Scene
 	{
 		GLUquadric quadric = glu.gluNewQuadric();
 
-		float[] xAxisColor = CWUtils.convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.xAxisColor"));
+		float[] xAxisColor = ColorPrefs.getAsRGB("User.OpenGLPanel.xAxisColor");
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, xAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
 		// Draw the cylinders at the positive extent of each axis
@@ -299,7 +299,7 @@ public class Scene
 			billboardText(gl, getAxisLabel(X_AXIS));
 		gl.glPopMatrix();
 
-		float [] yAxisColor = CWUtils.convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.yAxisColor"));
+		float [] yAxisColor = ColorPrefs.getAsRGB("User.OpenGLPanel.yAxisColor");
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, yAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
 		gl.glPushMatrix();
@@ -314,7 +314,7 @@ public class Scene
 			billboardText(gl, getAxisLabel(Y_AXIS));
 		gl.glPopMatrix();
 
-		float [] zAxisColor = CWUtils.convertRgbToGl(ColorPrefs.get("User.OpenGLPanel.zAxisColor"));
+		float [] zAxisColor = ColorPrefs.getAsRGB("User.OpenGLPanel.zAxisColor");
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, zAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
 		gl.glPushMatrix();
