@@ -4,6 +4,7 @@
 package curlywhirly.data;
 
 import java.util.*;
+import java.util.stream.*;
 
 public class CategoryGroup implements Comparable<CategoryGroup>, Iterable<Category>
 {
@@ -62,39 +63,22 @@ public class CategoryGroup implements Comparable<CategoryGroup>, Iterable<Catego
 
 	public int selectedDataPointCount()
 	{
-		int selected = 0;
-		for (Category cat : categories)
-			selected += cat.getSelectedCount();
-
-		return selected;
+		return categories.stream().mapToInt(Category::getSelectedCount).sum();
 	}
 
 	public int totalDataPoints()
 	{
-		int total = 0;
-		for (Category cat : categories)
-			total += cat.getTotal();
-
-		return total;
+		return categories.stream().mapToInt(Category::getTotal).sum();
 	}
 
 	public int selectedCategoriesCount()
 	{
-		int count = 0;
-		for (Category cat : categories)
-			count = cat.isSelected() ? count+1 : count;
-
-		return count;
+		return (int) categories.stream().filter(Category::isSelected).count();
 	}
 
-	public ArrayList<Category> getActiveCategories()
+	public Stream<Category> getActiveCategories()
 	{
-		ArrayList<Category> activeCategories = new ArrayList<>();
-		for (Category cat : categories)
-			if (cat.isSelected())
-				activeCategories.add(cat);
-
-		return activeCategories;
+		return categories.stream().filter(Category::isSelected);
 	}
 
 	public ArrayList<Category> getCategories()
