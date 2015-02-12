@@ -1,4 +1,4 @@
-package curlywhirly.gui.viewer.opengl;
+package curlywhirly.gui.viewer;
 
 import java.awt.*;
 import java.util.*;
