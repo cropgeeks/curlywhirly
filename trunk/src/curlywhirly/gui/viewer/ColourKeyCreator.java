@@ -3,9 +3,9 @@ package curlywhirly.gui.viewer;
 import java.awt.*;
 import java.awt.image.*;
 import java.util.*;
+import java.util.stream.*;
 
 import curlywhirly.data.*;
-import curlywhirly.gui.viewer.*;
 
 public class ColourKeyCreator
 {
@@ -28,7 +28,7 @@ public class ColourKeyCreator
 		int width = getKeyWidth(metrics, group);
 
 		int lineheight = metrics.getHeight() + 2;
-		int categories = dataSet.getCurrentCategoryGroup().getActiveCategories().size();
+		int categories = (int) dataSet.getCurrentCategoryGroup().getActiveCategories().count();
 		int height = lineheight * categories + lineheight;
 
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -62,7 +62,7 @@ public class ColourKeyCreator
 		// Draw key's title string
 		g.drawString(group.getName(), titleX, height);
 
-		ArrayList<Category> activeCats = group.getActiveCategories();
+		ArrayList<Category> activeCats = group.getActiveCategories().collect(Collectors.toCollection(ArrayList::new));
 
 		// Draw category colors
 		for (int i=0; i < activeCats.size(); i++)

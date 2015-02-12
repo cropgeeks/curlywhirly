@@ -13,7 +13,7 @@ public class Category implements Comparable<Category>
 	private boolean selected;
 	private CategoryGroup group;
 
-	private ArrayList<DataPoint> dataPoints;
+	private final ArrayList<DataPoint> dataPoints;
 
 	public Category(String name, CategoryGroup group)
 	{
@@ -31,12 +31,7 @@ public class Category implements Comparable<Category>
 
 	public int getSelectedCount()
 	{
-		int count = 0;
-		for (DataPoint point : dataPoints)
-			if (point.isSelected())
-				count++;
-
-		return count;
+		return (int) dataPoints.stream().filter(DataPoint::isSelected).count();
 	}
 
 	public String getSelectedText()
@@ -51,8 +46,7 @@ public class Category implements Comparable<Category>
 	{
 		this.selected = selected;
 
-		for (DataPoint dataPoint : dataPoints)
-			dataPoint.setSelected(selected);
+		dataPoints.forEach(point -> point.setSelected(selected));
 	}
 
 	public boolean isSelected()
