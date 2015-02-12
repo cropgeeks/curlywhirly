@@ -15,7 +15,6 @@ import scri.commons.gui.*;
 
 public class CWUtils
 {
-
 	public static JPanel getButtonPanel()
 	{
 		JPanel p1 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
@@ -120,10 +119,5 @@ public class CWUtils
 		StringSelection selection = new StringSelection(text.toString());
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
 			selection, null);
-	}
-
-	public static float[] convertRgbToGl(Color color)
-	{
-		return new float[] { color.getRed()/255f, color.getGreen()/255f, color.getBlue()/255f, 1f };
 	}
 }
