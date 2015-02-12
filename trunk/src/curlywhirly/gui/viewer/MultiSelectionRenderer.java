@@ -1,12 +1,10 @@
 package curlywhirly.gui.viewer;
 
-import java.awt.*;
 import java.util.*;
 import javax.media.opengl.*;
 
 import curlywhirly.data.*;
 import curlywhirly.gui.*;
-import curlywhirly.gui.viewer.*;
 
 import com.jogamp.opengl.util.gl2.*;
 

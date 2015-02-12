@@ -9,7 +9,8 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 import curlywhirly.data.*;
-import scri.commons.gui.Icons;
+
+import scri.commons.gui.*;
 
 public class CategoryTableModel extends AbstractTableModel
 {

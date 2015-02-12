@@ -25,7 +25,7 @@ public class PreferencesDialog extends JDialog implements ActionListener
 	{
 		super(winMain, RB.getString("gui.PreferencesDialog.title"), true);
 
-		nbPanel = new PreferencesPanelNB(winMain, this);
+		nbPanel = new PreferencesPanelNB(this);
 		nbWarning = new WarningTabNB();
 
 		tabs = new JTabbedPane();
