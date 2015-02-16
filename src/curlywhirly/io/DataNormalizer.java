@@ -3,9 +3,10 @@
 
 package curlywhirly.io;
 
-import curlywhirly.data.DataPoint;
-import curlywhirly.data.DataSet;
 import java.util.*;
+import java.util.stream.*;
+
+import curlywhirly.data.*;
 
 public class DataNormalizer
 {
@@ -14,48 +15,39 @@ public class DataNormalizer
 		float min = getMinimumValue(dataSet);
 		float max = getMaximumValue(dataSet);
 
-		for (DataPoint dataPoint : dataSet)
-		{
-			ArrayList<Float> values = getNormalizedValues(dataPoint, min, max);
-			dataPoint.setNormalizedValues(values);
-		}
+		normalizeDataPointValues(dataSet, min, max);
 
 		return dataSet;
 	}
 
 	private float getMinimumValue(DataSet dataSet)
 	{
-		float min = Float.MAX_VALUE;
-
-		for (DataPoint dp : dataSet)
-		{
-			for (Float value : dp.getValues())
-				min = Math.min(min, value);
-		}
-
-		return min;
+		return dataSet.getDataPoints().stream()
+			.flatMap(point -> point.getValues().stream())
+			.min(Comparator.naturalOrder()).get();
 	}
 
 	private float getMaximumValue(DataSet dataSet)
 	{
-		float max = -Float.MAX_VALUE;
+		return dataSet.getDataPoints().stream()
+			.flatMap(point -> point.getValues().stream())
+			.max(Comparator.naturalOrder()).get();
+	}
 
-		for (DataPoint dp : dataSet)
+	private void normalizeDataPointValues(DataSet dataSet, float min, float max)
+	{
+		for (DataPoint dataPoint : dataSet)
 		{
-			for (Float value : dp.getValues())
-				max = Math.max(max, value);
+			ArrayList<Float> values = getNormalizedValues(dataPoint, min, max);
+			dataPoint.setNormalizedValues(values);
 		}
-
-		return max;
 	}
 
 	private ArrayList<Float> getNormalizedValues(DataPoint dataPoint, float min, float max)
 	{
-		ArrayList<Float> normalized = new ArrayList<>();
-		for (float value : dataPoint.getValues())
-			normalized.add(normalizeValue(value, min, max));
-
-		return normalized;
+		return dataPoint.getValues().stream()
+			.map(value -> normalizeValue(value, min, max))
+			.collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	private float normalizeValue(float value, float min, float max)
