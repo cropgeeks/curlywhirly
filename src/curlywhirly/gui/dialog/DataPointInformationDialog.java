@@ -38,7 +38,7 @@ public class DataPointInformationDialog extends JDialog implements ActionListene
 		// As we want to set a tablecellrenderer on a column of the valueTable
 		// we setup the model here and use custom creation code to set up
 		// the table with the model and the cellrenderer
-		valuesModel = new ValueTableModel(dataSet.getAxisLabels(), point);
+		valuesModel = new ValueTableModel(dataSet.getAxes().getAxisLabels(), point);
 
 		// Tables created here
 		initComponents();

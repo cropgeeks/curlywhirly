@@ -15,7 +15,7 @@ import scri.commons.gui.*;
 public class ControlsPanelNB extends JPanel implements ActionListener, ChangeListener
 {
 	private final WinMain winMain;
-	private DataSet dataSet;
+	private Axes axes;
 
     /** Creates new form ControlsPanelNB */
     public ControlsPanelNB(WinMain winMain)
@@ -69,7 +69,7 @@ public class ControlsPanelNB extends JPanel implements ActionListener, ChangeLis
 
 	private void addComboModels()
 	{
-		String[] axisLabels = dataSet.getAxisLabels();
+		String[] axisLabels = axes.getAxisLabels();
 		// set the data headers as the model for the combo boxes that allow selection of variables
 		xCombo.setModel(new DefaultComboBoxModel<String>(axisLabels));
 		yCombo.setModel(new DefaultComboBoxModel<String>(axisLabels));
@@ -85,9 +85,9 @@ public class ControlsPanelNB extends JPanel implements ActionListener, ChangeLis
 	public void resetComboBoxes()
 	{
 		// set the combos to display the currently selected index of the variables they display
-		xCombo.setSelectedIndex(0);
-		yCombo.setSelectedIndex(1);
-		zCombo.setSelectedIndex(2);
+		xCombo.setSelectedIndex(axes.getX());
+		yCombo.setSelectedIndex(axes.getY());
+		zCombo.setSelectedIndex(axes.getZ());
 	}
 
 	@Override
@@ -96,21 +96,21 @@ public class ControlsPanelNB extends JPanel implements ActionListener, ChangeLis
 		if (e.getSource() == xCombo)
 		{
 			int index = xCombo.getSelectedIndex();
-			dataSet.setCurrX(index);
+			axes.setX(index);
 			winMain.getDataPanel().updateTableModel();
 		}
 
 		else if (e.getSource() == yCombo)
 		{
 			int index = yCombo.getSelectedIndex();
-			dataSet.setCurrY(index);
+			axes.setY(index);
 			winMain.getDataPanel().updateTableModel();
 		}
 
 		else if (e.getSource() == zCombo)
 		{
 			int index = zCombo.getSelectedIndex();
-			dataSet.setCurrZ(index);
+			axes.setZ(index);
 			winMain.getDataPanel().updateTableModel();
 		}
 
@@ -159,8 +159,6 @@ public class ControlsPanelNB extends JPanel implements ActionListener, ChangeLis
 
 	public void setDataSet(DataSet dataSet)
 	{
-		this.dataSet = dataSet;
-
 		if (dataSet == null)
 		{
 			// Blank out the combo boxes if we don't have a dataset
@@ -169,7 +167,10 @@ public class ControlsPanelNB extends JPanel implements ActionListener, ChangeLis
 			zCombo.setModel(new DefaultComboBoxModel<String>());
 		}
 		else
+		{
+			this.axes = dataSet.getAxes();
 			addComboModels();
+		}
 
 		toggleEnabled(dataSet != null);
 	}
