@@ -63,7 +63,7 @@ public class DataExporter extends SimpleJob
         header.append(LABEL_IDENTIFIER).append('\t');
 
         // Add axis labels to the header
-        for (String label : dataSet.getAxisLabels())
+        for (String label : dataSet.getAxes().getAxisLabels())
             header.append(label).append('\t');
 
         return header.toString().trim();

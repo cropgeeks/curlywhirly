@@ -18,22 +18,20 @@ public class DataPanelTableModel extends AbstractTableModel
 	private final String[] columnNames;
 	private final ArrayList<DataPoint> dataPoints;
 	private final DataSet dataSet;
+	private final Axes axes;
 
-	DataPanelTableModel(DataSet dataSet)
+	DataPanelTableModel(DataSet dataSet, Axes axes)
 	{
 		this.dataSet = dataSet;
+		this.axes = axes;
 
 		dataPoints = dataSet.getDataPoints();
 
-		// Retrieve the axis labels for the current x, y and z axes so that they
-		// can be displayed in the table header.
-		String[] axisLabels = dataSet.getCurrentAxisLabels();
-
 		columnNames = new String[] { RB.getString("gui.DataPanelTableModel.headers.col1"),
 									RB.getString("gui.DataPanelTableModel.headers.col2"),
-									RB.format("gui.DataPanelTableModel.headers.col3", axisLabels[0]),
-									RB.format("gui.DataPanelTableModel.headers.col4", axisLabels[1]),
-									RB.format("gui.DataPanelTableModel.headers.col5", axisLabels[2]) };
+									RB.format("gui.DataPanelTableModel.headers.col3", axes.getXYZLabels()[0]),
+									RB.format("gui.DataPanelTableModel.headers.col4", axes.getXYZLabels()[1]),
+									RB.format("gui.DataPanelTableModel.headers.col5", axes.getXYZLabels()[2]) };
 	}
 
 	@Override
@@ -80,9 +78,9 @@ public class DataPanelTableModel extends AbstractTableModel
 		{
 			case 0: return point;
 			case 1: return point;
-			case 2: return point.getValues().get(dataSet.getCurrX());
-			case 3: return point.getValues().get(dataSet.getCurrY());
-			case 4: return point.getValues().get(dataSet.getCurrZ());
+			case 2: return point.getValues().get(axes.getX());
+			case 3: return point.getValues().get(axes.getY());
+			case 4: return point.getValues().get(axes.getZ());
 		}
 
 		return null;
@@ -90,12 +88,7 @@ public class DataPanelTableModel extends AbstractTableModel
 
 	public int selectedPointsCount()
 	{
-		int count = 0;
-		for (DataPoint dataPoint : dataPoints)
-			if (dataPoint.isSelected())
-				count++;
-
-		return count;
+		return (int) dataPoints.stream().filter(DataPoint::isSelected).count();
 	}
 
 	class ColorListRenderer extends DefaultTableCellRenderer

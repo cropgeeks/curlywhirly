@@ -41,7 +41,7 @@ public class DataPanel extends JPanel
 
 	public void updateTableModel()
 	{
-		model = new DataPanelTableModel(dataSet);
+		model = new DataPanelTableModel(dataSet, dataSet.getAxes());
 		controls.pointsTable.setModel(model);
 
 		sorter = new TableRowSorter<DataPanelTableModel>(model);
@@ -125,7 +125,7 @@ public class DataPanel extends JPanel
 		saveAs = new File(filename);
 
 		DataPointSaver summary = new DataPointSaver(saveAs, dataPoints,
-			dataSet.getCurrentAxes(), dataSet.getCurrentAxisLabels());
+			dataSet.getAxes().getXYZ(), dataSet.getAxes().getXYZLabels());
 
 		ProgressDialog dialog = new ProgressDialog(summary,
 			RB.getString("gui.DataPanel.saveDataPoints.title"),

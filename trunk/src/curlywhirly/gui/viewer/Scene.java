@@ -178,7 +178,7 @@ public class Scene
 
 		// Get the position information for each axis so that these can be used
 		// to translate our spheres to the correct location
-		float[] axes = point.getPosition(dataSet.getCurrentAxes());
+		float[] axes = point.getPosition(dataSet.getAxes().getXYZ());
 		// Bring our translations into the correct coordinate space
 		gl.glTranslatef(axes[0], axes[1], axes[2]);
 
@@ -332,9 +332,9 @@ public class Scene
 	{
 		switch (axis)
 		{
-			case X_AXIS: return Prefs.guiChkDatasetLabels ? dataSet.getCurrentAxisLabels()[0] : "X";
-			case Y_AXIS: return Prefs.guiChkDatasetLabels ? dataSet.getCurrentAxisLabels()[1] : "Y";
-			case Z_AXIS: return Prefs.guiChkDatasetLabels ? dataSet.getCurrentAxisLabels()[2] : "Z";
+			case X_AXIS: return Prefs.guiChkDatasetLabels ? dataSet.getAxes().getXYZLabels()[0] : "X";
+			case Y_AXIS: return Prefs.guiChkDatasetLabels ? dataSet.getAxes().getXYZLabels()[1] : "Y";
+			case Z_AXIS: return Prefs.guiChkDatasetLabels ? dataSet.getAxes().getXYZLabels()[2] : "Z";
 
 			default: return null;
 		}
