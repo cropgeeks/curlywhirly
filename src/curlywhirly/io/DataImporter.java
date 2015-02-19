@@ -6,6 +6,7 @@ package curlywhirly.io;
 import java.awt.*;
 import java.io.*;
 import java.util.*;
+import java.util.stream.*;
 
 import curlywhirly.data.*;
 import curlywhirly.gui.*;
@@ -35,7 +36,11 @@ public class DataImporter extends SimpleJob
 	private ArrayList<CategoryGroup> categoryGroups;
 	private String[] axisLabels;
 	private ArrayList<HashMap<String, Category>> categoriesToGroups;
-	private final HashMap<DataPoint, HashMap<CategoryGroup, Category>> pointCategories;
+	private final HashMap<String, HashMap<CategoryGroup, Category>> pointCategories;
+
+	private final HashMap<String, ArrayList<Float>> pointValues = new HashMap<>();
+	private final HashMap<Category, ArrayList<String>> categoryPoints = new HashMap<>();
+	private final HashMap<String, DataPoint> pointsByName = new HashMap<>();
 
 	private int lineCount = 0;
 	private int expectedTokenCount = -1;
@@ -46,7 +51,7 @@ public class DataImporter extends SimpleJob
 	{
 		this.file = file;
 
-		pointCategories = new HashMap<DataPoint, HashMap<CategoryGroup, Category>>();
+		pointCategories = new HashMap<String, HashMap<CategoryGroup, Category>>();
 
 		maximum = 5555;
 	}
@@ -75,15 +80,38 @@ public class DataImporter extends SimpleJob
 			assignColorsToCategories(group);
 		}
 
-		dataSet = new DataSet(file.getName(), dataPoints, categoryGroups, axisLabels, pointCategories);
+		createDataPoints();
+		addDataPointsToCategories();
 
-		// The values in the dataset can only been normalized once we've
-		// read all the values in the dataset
-		DataNormalizer normalizer = new DataNormalizer();
-		normalizer.normalize(dataSet);
+		dataSet = new DataSet(file.getName(), dataPoints, categoryGroups, axisLabels, pointCategories);
 
 		// Finally set the link to access the database
 		dataSet.getDbAssociation().setDbPointUrl(dbURL);
+	}
+
+	private void createDataPoints()
+	{
+		DataNormalizer dataNormalizer = new DataNormalizer(pointValues.values().stream()
+			.flatMap(values -> values.stream()).collect(Collectors.toCollection(ArrayList::new)));
+
+		HashMap<String, ArrayList<Float>> normalizedValues = (HashMap<String, ArrayList<Float>>)pointValues.entrySet().stream()
+			.collect(Collectors.toMap(e -> e.getKey(), e -> dataNormalizer.normalizeValues(e.getValue().stream())));
+
+		pointValues.keySet().forEach(name ->
+		{
+			DataPoint point = new DataPoint(name, pointValues.get(name), normalizedValues.get(name));
+			dataPoints.add(point);
+			pointsByName.put(name, point);
+		});
+	}
+
+	private void addDataPointsToCategories()
+	{
+		for (Category category : categoryPoints.keySet())
+		{
+			for (String name : categoryPoints.get(category))
+				category.addDataPoint(pointsByName.get(name));
+		}
 	}
 
 	// Methods for processing the file's header
@@ -212,13 +240,20 @@ public class DataImporter extends SimpleJob
 		String[] valuesArray = Arrays.copyOfRange(tokens, labelColumn+1, tokens.length);
 		ArrayList<Float> values = getValuesForDataPoint(valuesArray);
 
-		DataPoint dataPoint = new DataPoint(name, values);
-		dataPoints.add(dataPoint);
-		pointCategories.put(dataPoint, categories);
+//		DataPoint dataPoint = new DataPoint(name, values);
+//		dataPoints.add(dataPoint);
+		pointCategories.put(name, categories);
+
+		pointValues.put(name, values);
 
 		// Categories also need to know which points they are associated with.
 		for (Category category : categories.values())
-			category.addDataPoint(dataPoint);
+		{
+			categoryPoints.putIfAbsent(category, new ArrayList<String>());
+			ArrayList<String> points = categoryPoints.get(category);
+			points.add(name);
+			categoryPoints.put(category, points);
+		}
 	}
 
 	private HashMap<CategoryGroup, Category> getCategoriesForDataPoint(String[] names)

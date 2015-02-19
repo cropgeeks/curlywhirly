@@ -12,14 +12,14 @@ public class DataSet implements Iterable<DataPoint>
 
 	private final ArrayList<DataPoint> dataPoints;
 	private final ArrayList<CategoryGroup> categoryGroups;
-	private final HashMap<DataPoint, HashMap<CategoryGroup, Category>> pointCategories;
+	private final HashMap<String, HashMap<CategoryGroup, Category>> pointCategories;
 	private final Axes axes;
 	private CategoryGroup currentGroup;
 
 	// DB-link/association data
 	private DBAssociation dbAssociation = new DBAssociation();
 
-	public DataSet(String name, ArrayList<DataPoint> dataPoints, ArrayList<CategoryGroup> categoryGroups, String[] axisLabels, HashMap<DataPoint, HashMap<CategoryGroup, Category>> pointCategories)
+	public DataSet(String name, ArrayList<DataPoint> dataPoints, ArrayList<CategoryGroup> categoryGroups, String[] axisLabels, HashMap<String, HashMap<CategoryGroup, Category>> pointCategories)
 	{
 		this.name = name;
 		this.dataPoints = dataPoints;
@@ -53,12 +53,12 @@ public class DataSet implements Iterable<DataPoint>
 
 	public Color getPointColor(DataPoint point)
 	{
-		return pointCategories.get(point).get(currentGroup).getColor();
+		return pointCategories.get(point.getName()).get(currentGroup).getColor();
 	}
 
 	public HashMap<CategoryGroup, Category> getPointCategories(DataPoint point)
 	{
-		return pointCategories.get(point);
+		return pointCategories.get(point.getName());
 	}
 
 	public ArrayList<CategoryGroup> getCategoryGroups()
