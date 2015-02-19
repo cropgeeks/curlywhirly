@@ -10,13 +10,14 @@ public class DataPoint
 	private final String name;
 	private final ArrayList<Float> values;
 	// Normalized values are used for rendering, values are displayed in tables
-	private ArrayList<Float> normalizedValues;
+	private final ArrayList<Float> normalizedValues;
 	private boolean isSelected;
 
-	public DataPoint(String name, ArrayList<Float> values)
+	public DataPoint(String name, ArrayList<Float> values, ArrayList<Float> normalizedValues)
 	{
 		this.name = name;
 		this.values = values;
+		this.normalizedValues = normalizedValues;
 
 		isSelected = true;
 	}
@@ -33,11 +34,6 @@ public class DataPoint
 
 	public String getName()
 		{ return name; }
-
-	public void setNormalizedValues(ArrayList<Float> normalizedValues)
-	{
-		this.normalizedValues = normalizedValues;
-	}
 
 	public ArrayList<Float> getValues()
 		{ return values; }
