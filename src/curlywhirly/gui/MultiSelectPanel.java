@@ -197,7 +197,7 @@ public class MultiSelectPanel extends JPanel implements ActionListener, ChangeLi
 
 			HashSet<DataPoint> multiSelected = selectionRenderer.detectMultiSelectedPoints();
 
-			DataPointSaver saver = new DataPointSaver(saveAs, new ArrayList<DataPoint>(multiSelected), dataSet.getAxes().getXYZ(), dataSet.getAxes().getXYZLabels());
+			DataPointSaver saver = new DataPointSaver(saveAs, new ArrayList<DataPoint>(multiSelected), dataSet.getAxes().getXYZLabels());
 
 			ProgressDialog dialog = new ProgressDialog(saver,
 					RB.getString("gui.viewer.MultiSelectPanel.saveDataPoints.title"),

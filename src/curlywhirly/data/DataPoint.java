@@ -13,6 +13,8 @@ public class DataPoint
 	private final ArrayList<Float> normalizedValues;
 	private boolean isSelected;
 
+	private final Position3D position;
+
 	public DataPoint(String name, ArrayList<Float> values, ArrayList<Float> normalizedValues)
 	{
 		this.name = name;
@@ -20,16 +22,22 @@ public class DataPoint
 		this.normalizedValues = normalizedValues;
 
 		isSelected = true;
+		position = new Position3D();
 	}
 
 	// Accepts as input an int array of the axes that are currently being
 	// displayed. This array needs to be exactly 3 elements long. getPosition
 	// will return a 3 element float array.
-	public float[] getPosition(int[] currAxes)
+	public float[] getPosition()
 	{
-		return new float[] { normalizedValues.get(currAxes[0]),
-							 normalizedValues.get(currAxes[1]),
-							 normalizedValues.get(currAxes[2]) };
+		return position.getPosition();
+	}
+
+	public void setPositionForAxes(int[] axes)
+	{
+		position.setX(normalizedValues.get(axes[0]));
+		position.setY(normalizedValues.get(axes[1]));
+		position.setZ(normalizedValues.get(axes[2]));
 	}
 
 	public String getName()

@@ -97,6 +97,7 @@ public class ControlsPanelNB extends JPanel implements ActionListener, ChangeLis
 		{
 			int index = xCombo.getSelectedIndex();
 			axes.setX(index);
+			winMain.getDataSet().updatePointPositions();
 			winMain.getDataPanel().updateTableModel();
 		}
 
@@ -104,6 +105,7 @@ public class ControlsPanelNB extends JPanel implements ActionListener, ChangeLis
 		{
 			int index = yCombo.getSelectedIndex();
 			axes.setY(index);
+			winMain.getDataSet().updatePointPositions();
 			winMain.getDataPanel().updateTableModel();
 		}
 
@@ -111,6 +113,7 @@ public class ControlsPanelNB extends JPanel implements ActionListener, ChangeLis
 		{
 			int index = zCombo.getSelectedIndex();
 			axes.setZ(index);
+			winMain.getDataSet().updatePointPositions();
 			winMain.getDataPanel().updateTableModel();
 		}
 

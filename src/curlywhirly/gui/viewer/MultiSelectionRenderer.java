@@ -95,7 +95,7 @@ public class MultiSelectionRenderer implements GLEventListener
 		gl.glPushMatrix();
 		// Get the position information for each axis so that these can be used
 		// to translate our sphere to the correct location
-		float[] axes = selectedPoint.getPosition(dataSet.getAxes().getXYZ());
+		float[] axes = selectedPoint.getPosition();
 		// Bring our translations into the correct coordinate space
 		gl.glTranslatef(axes[0], axes[1], axes[2]);
 
@@ -125,11 +125,11 @@ public class MultiSelectionRenderer implements GLEventListener
 
 		gl.glPushMatrix();
 		// The datapoint at the centre of the selection sphere
-		float[] anchorPointPosition = selectedPoint.getPosition(dataSet.getAxes().getXYZ());
+		float[] anchorPointPosition = selectedPoint.getPosition();
 		for (DataPoint point : multiSelectedPoints)
 		{
 			// A point which has been caught within the selection sphere
-			float[] selectedPointPosition = point.getPosition(dataSet.getAxes().getXYZ());
+			float[] selectedPointPosition = point.getPosition();
 			// Draw a line between the two points
 			gl.glBegin(GL_LINES);
 			gl.glVertex3fv(anchorPointPosition, 0);
@@ -146,7 +146,7 @@ public class MultiSelectionRenderer implements GLEventListener
 
 		gl.glPushMatrix();
 
-		float[] axes = selectedPoint.getPosition(dataSet.getAxes().getXYZ());
+		float[] axes = selectedPoint.getPosition();
 		gl.glTranslatef(axes[0], axes[1], axes[2]);
 		gl.glScalef(selectionSphereSize, selectionSphereSize, selectionSphereSize);
 		float[] glColor = ColorPrefs.getAsRGB("User.OpenGLPanel.multiSelectAxesColor");
@@ -224,8 +224,8 @@ public class MultiSelectionRenderer implements GLEventListener
 
 		for (DataPoint point : dataSet)
 		{
-			float[] selectCoordinates = selectedPoint.getPosition(dataSet.getAxes().getXYZ());
-			float[] pointCoordinates = point.getPosition(dataSet.getAxes().getXYZ());
+			float[] selectCoordinates = selectedPoint.getPosition();
+			float[] pointCoordinates = point.getPosition();
 
 			// Find the distance between our two points
 			float rX = selectCoordinates[0] - pointCoordinates[0];
