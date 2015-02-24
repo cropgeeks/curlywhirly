@@ -124,8 +124,7 @@ public class DataPanel extends JPanel
 
 		saveAs = new File(filename);
 
-		DataPointSaver summary = new DataPointSaver(saveAs, dataPoints,
-			dataSet.getAxes().getXYZ(), dataSet.getAxes().getXYZLabels());
+		DataPointSaver summary = new DataPointSaver(saveAs, dataPoints, dataSet.getAxes().getXYZLabels());
 
 		ProgressDialog dialog = new ProgressDialog(summary,
 			RB.getString("gui.DataPanel.saveDataPoints.title"),

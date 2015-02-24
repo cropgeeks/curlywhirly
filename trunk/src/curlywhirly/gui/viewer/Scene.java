@@ -178,7 +178,7 @@ public class Scene
 
 		// Get the position information for each axis so that these can be used
 		// to translate our spheres to the correct location
-		float[] axes = point.getPosition(dataSet.getAxes().getXYZ());
+		float[] axes = point.getPosition();
 		// Bring our translations into the correct coordinate space
 		gl.glTranslatef(axes[0], axes[1], axes[2]);
 

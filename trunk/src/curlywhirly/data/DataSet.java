@@ -10,7 +10,7 @@ public class DataSet implements Iterable<DataPoint>
 {
 	private final String name;
 
-	private final ArrayList<DataPoint> dataPoints;
+	private final DataSetPoints dataPoints;
 	private final ArrayList<CategoryGroup> categoryGroups;
 	private final HashMap<String, HashMap<CategoryGroup, Category>> pointCategories;
 	private final Axes axes;
@@ -22,11 +22,12 @@ public class DataSet implements Iterable<DataPoint>
 	public DataSet(String name, ArrayList<DataPoint> dataPoints, ArrayList<CategoryGroup> categoryGroups, String[] axisLabels, HashMap<String, HashMap<CategoryGroup, Category>> pointCategories)
 	{
 		this.name = name;
-		this.dataPoints = dataPoints;
 		// The sort ensures CategoryGroups are displayed in alphabetical order
 		Collections.sort(categoryGroups);
 		this.categoryGroups = categoryGroups;
 		this.pointCategories = pointCategories;
+
+		this.dataPoints = new DataSetPoints(dataPoints);
 
 		axes = new Axes(axisLabels);
 
@@ -36,7 +37,12 @@ public class DataSet implements Iterable<DataPoint>
 	@Override
 	public Iterator<DataPoint> iterator()
 	{
-		return dataPoints.iterator();
+		return dataPoints.createIterator();
+	}
+
+	public void updatePointPositions()
+	{
+		dataPoints.updatePositions(axes.getXYZ());
 	}
 
 	public void setCurrentCategoryGroup(CategoryGroup currentGroup)
@@ -71,7 +77,7 @@ public class DataSet implements Iterable<DataPoint>
 		{ return name; }
 
 	public ArrayList<DataPoint> getDataPoints()
-		{ return dataPoints; }
+		{ return (ArrayList<DataPoint>) dataPoints.getDataPoints(); }
 
 	public int size()
 	{	return dataPoints.size(); }

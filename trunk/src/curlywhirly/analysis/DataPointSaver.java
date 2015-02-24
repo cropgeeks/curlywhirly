@@ -12,23 +12,22 @@ import scri.commons.gui.*;
 
 public class DataPointSaver extends SimpleJob
 {
-	private File file;
-	private ArrayList<DataPoint> dataPoints;
+	private final File file;
+	private final ArrayList<DataPoint> dataPoints;
 
-	private int[] currentAxes;
-	private String[] axisLabels;
+	private final String[] axisLabels;
 
 	// Accepts a file to save to, a list of data points to be saved to that file
 	// the integer indices of the currently displayed axes and the axis labels
 	// of the currently display axes.
-	public DataPointSaver(File file, ArrayList<DataPoint> dataPoints, int[] currentAxes, String[] axisLabels)
+	public DataPointSaver(File file, ArrayList<DataPoint> dataPoints, String[] axisLabels)
 	{
 		this.file = file;
 		this.dataPoints = dataPoints;
-		this.currentAxes = currentAxes.clone();
 		this.axisLabels = axisLabels.clone();
 	}
 
+	@Override
 	public void runJob(int jobIndex)
 		throws Exception
 	{
@@ -57,6 +56,7 @@ public class DataPointSaver extends SimpleJob
 		out.close();
 	}
 
+	@Override
 	public String getMessage()
 	{
 		return RB.format("analysis.DataPointSaver.status", progress, maximum);
@@ -65,7 +65,7 @@ public class DataPointSaver extends SimpleJob
 	private String buildDataPointString(DataPoint dataPoint)
 		throws IOException
 	{
-		float[] position = dataPoint.getPosition(currentAxes);
+		float[] position = dataPoint.getPosition();
 
 		// Add the name of the point to the string
 		StringBuilder builder = new StringBuilder();
