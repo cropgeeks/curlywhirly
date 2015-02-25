@@ -102,7 +102,7 @@ public class DataPanelTableModel extends AbstractTableModel
 				hasFocus, row, column);
 
 			DataPoint point = (DataPoint) value;
-			Color color = dataSet.getPointColor(point);
+			Color color = point.getColor();
 
 			// Set the icon
 			BufferedImage image = new BufferedImage(20, 10, BufferedImage.TYPE_INT_RGB);
@@ -178,8 +178,8 @@ public class DataPanelTableModel extends AbstractTableModel
 		@Override
 		public int compare(DataPoint p1, DataPoint p2)
 		{
-			Color color1 = dataSet.getPointColor(p1);
-			Color color2 = dataSet.getPointColor(p2);
+			Color color1 = p1.getColor();
+			Color color2 = p2.getColor();
 
 			if (p1.isSelected() && !p2.isSelected())
 			{

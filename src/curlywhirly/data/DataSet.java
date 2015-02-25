@@ -3,7 +3,6 @@
 
 package curlywhirly.data;
 
-import java.awt.*;
 import java.util.*;
 
 public class DataSet implements Iterable<DataPoint>
@@ -12,26 +11,24 @@ public class DataSet implements Iterable<DataPoint>
 
 	private final DataSetPoints dataPoints;
 	private final ArrayList<CategoryGroup> categoryGroups;
-	private final HashMap<String, HashMap<CategoryGroup, Category>> pointCategories;
 	private final Axes axes;
 	private CategoryGroup currentGroup;
 
 	// DB-link/association data
 	private DBAssociation dbAssociation = new DBAssociation();
 
-	public DataSet(String name, ArrayList<DataPoint> dataPoints, ArrayList<CategoryGroup> categoryGroups, String[] axisLabels, HashMap<String, HashMap<CategoryGroup, Category>> pointCategories)
+	public DataSet(String name, ArrayList<DataPoint> dataPoints, ArrayList<CategoryGroup> categoryGroups, String[] axisLabels)
 	{
 		this.name = name;
 		// The sort ensures CategoryGroups are displayed in alphabetical order
 		Collections.sort(categoryGroups);
 		this.categoryGroups = categoryGroups;
-		this.pointCategories = pointCategories;
 
 		this.dataPoints = new DataSetPoints(dataPoints);
 
 		axes = new Axes(axisLabels);
 
-		currentGroup = categoryGroups.get(0);
+		setCurrentCategoryGroup(categoryGroups.get(0));
 	}
 
 	@Override
@@ -48,7 +45,10 @@ public class DataSet implements Iterable<DataPoint>
 	public void setCurrentCategoryGroup(CategoryGroup currentGroup)
 	{
 		if (categoryGroups.isEmpty() == false)
+		{
 			this.currentGroup = currentGroup;
+			currentGroup.colorPointsByCategories();
+		}
 	}
 
 	public CategoryGroup getCurrentCategoryGroup()
@@ -56,16 +56,6 @@ public class DataSet implements Iterable<DataPoint>
 
 	public Axes getAxes()
 		{ return axes; }
-
-	public Color getPointColor(DataPoint point)
-	{
-		return pointCategories.get(point.getName()).get(currentGroup).getColor();
-	}
-
-	public HashMap<CategoryGroup, Category> getPointCategories(DataPoint point)
-	{
-		return pointCategories.get(point.getName());
-	}
 
 	public ArrayList<CategoryGroup> getCategoryGroups()
 		{ return categoryGroups; }

@@ -3,6 +3,7 @@
 
 package curlywhirly.data;
 
+import java.awt.*;
 import java.util.*;
 
 public class DataPoint
@@ -14,6 +15,8 @@ public class DataPoint
 	private boolean isSelected;
 
 	private final Position3D position;
+
+	private Color color = Color.DARK_GRAY;
 
 	public DataPoint(String name, ArrayList<Float> values, ArrayList<Float> normalizedValues)
 	{
@@ -59,6 +62,23 @@ public class DataPoint
 	public void toggleSelection()
 	{
 		isSelected = !isSelected;
+	}
+
+	public void setColor(Color color)
+	{
+		this.color = color;
+	}
+
+	// getRawColor to offers a non-selected state dependent version of this
+	// accessor
+	public Color getColorBySelection()
+	{
+		return isSelected ? color : Color.DARK_GRAY;
+	}
+
+	public Color getColor()
+	{
+		return color;
 	}
 
 	@Override
