@@ -13,11 +13,14 @@ public class CategoryGroup implements Comparable<CategoryGroup>, Iterable<Catego
 	private final String name;
 	private final ArrayList<Category> categories;
 
+	private final Map<Category, ArrayList<DataPoint>> pointsForCategories;
+
 	public CategoryGroup(String name)
 	{
 		this.name = name;
 
 		categories = new ArrayList<Category>();
+		pointsForCategories = new HashMap<Category, ArrayList<DataPoint>>();
 	}
 
 	public String getName()
@@ -36,6 +39,25 @@ public class CategoryGroup implements Comparable<CategoryGroup>, Iterable<Catego
 	public void add(Category category)
 	{
 		categories.add(category);
+	}
+
+	public void addPointsForCategory(Category category, ArrayList<DataPoint> points)
+	{
+		pointsForCategories.put(category, points);
+	}
+
+	public void colorPointsByCategories()
+	{
+		pointsForCategories.forEach((k, v) -> v.forEach(p -> p.setColor(k.getColor())));
+	}
+
+	public Category getCategoryForPoint(DataPoint point)
+	{
+		for (Category cat : pointsForCategories.keySet())
+			if (pointsForCategories.get(cat).contains(point))
+				return cat;
+
+		return null;
 	}
 
 	@Override
@@ -63,12 +85,16 @@ public class CategoryGroup implements Comparable<CategoryGroup>, Iterable<Catego
 
 	public int selectedDataPointCount()
 	{
-		return categories.stream().mapToInt(Category::getSelectedCount).sum();
+		return (int) pointsForCategories.values().stream()
+			.flatMap(values -> values.stream())
+			.filter(DataPoint::isSelected).count();
 	}
 
 	public int totalDataPoints()
 	{
-		return categories.stream().mapToInt(Category::getTotal).sum();
+		return pointsForCategories.values().stream()
+			.mapToInt(values -> values.size())
+			.sum();
 	}
 
 	public int selectedCategoriesCount()

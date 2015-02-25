@@ -36,7 +36,6 @@ public class DataImporter extends SimpleJob
 	private ArrayList<CategoryGroup> categoryGroups;
 	private String[] axisLabels;
 	private ArrayList<HashMap<String, Category>> categoriesToGroups;
-	private final HashMap<String, HashMap<CategoryGroup, Category>> pointCategories;
 
 	private final HashMap<String, ArrayList<Float>> pointValues = new HashMap<>();
 	private final HashMap<Category, ArrayList<String>> categoryPoints = new HashMap<>();
@@ -50,8 +49,6 @@ public class DataImporter extends SimpleJob
 	public DataImporter(File file)
 	{
 		this.file = file;
-
-		pointCategories = new HashMap<String, HashMap<CategoryGroup, Category>>();
 
 		maximum = 5555;
 	}
@@ -82,8 +79,9 @@ public class DataImporter extends SimpleJob
 
 		createDataPoints();
 		addDataPointsToCategories();
+		addDataPointsToCategoryGroups();
 
-		dataSet = new DataSet(file.getName(), dataPoints, categoryGroups, axisLabels, pointCategories);
+		dataSet = new DataSet(file.getName(), dataPoints, categoryGroups, axisLabels);
 
 		// Finally set the link to access the database
 		dataSet.getDbAssociation().setDbPointUrl(dbURL);
@@ -111,6 +109,20 @@ public class DataImporter extends SimpleJob
 		{
 			for (String name : categoryPoints.get(category))
 				category.addDataPoint(pointsByName.get(name));
+		}
+	}
+
+	private void addDataPointsToCategoryGroups()
+	{
+		for (CategoryGroup group : categoryGroups)
+		{
+			for (Category category : group.getCategories())
+			{
+				ArrayList<DataPoint> points = new ArrayList<DataPoint>();
+				for (String name : categoryPoints.get(category))
+					points.add(pointsByName.get(name));
+				group.addPointsForCategory(category, points);
+			}
 		}
 	}
 
@@ -239,10 +251,6 @@ public class DataImporter extends SimpleJob
 		// Read all the values associated with the data point
 		String[] valuesArray = Arrays.copyOfRange(tokens, labelColumn+1, tokens.length);
 		ArrayList<Float> values = getValuesForDataPoint(valuesArray);
-
-//		DataPoint dataPoint = new DataPoint(name, values);
-//		dataPoints.add(dataPoint);
-		pointCategories.put(name, categories);
 
 		pointValues.put(name, values);
 

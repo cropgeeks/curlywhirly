@@ -275,7 +275,7 @@ public class DataPointInformationDialog extends JDialog implements ActionListene
 				return categoryGroups.get(rowIndex);
 
 			else
-				return dataSet.getPointCategories(point).get(categoryGroups.get(rowIndex));
+				return categoryGroups.get(rowIndex).getCategoryForPoint(point);
 		}
 	}
 

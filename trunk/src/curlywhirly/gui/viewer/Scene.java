@@ -152,14 +152,12 @@ public class Scene
 		gl.glEnableClientState(GL_VERTEX_ARRAY);
 		gl.glEnableClientState(GL_NORMAL_ARRAY);
 
-		Color mSelectColor = ColorPrefs.get("User.OpenGLPanel.multiSelectColor");
-
 		// Color spheres appropriately
 		for (DataPoint point : dataSet)
 		{
-			Color color = point.isSelected() ? dataSet.getPointColor(point) : Color.DARK_GRAY;
+			Color color = point.getColorBySelection();
 			if (multiSelected.contains(point))
-				color = mSelectColor;
+				color = ColorPrefs.get("User.OpenGLPanel.multiSelectColor");
 			// Get each color component into the 0-1 range instead of 0-255
 			float [] rgba = color.getRGBColorComponents(new float[3]);
 
