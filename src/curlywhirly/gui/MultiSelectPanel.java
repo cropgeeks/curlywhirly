@@ -257,6 +257,6 @@ public class MultiSelectPanel extends JPanel implements ActionListener, ChangeLi
 	private void detectMultiSelectedPoints()
 	{
 		HashSet<DataPoint> multiSelected = selectionRenderer.detectMultiSelectedPoints();
-		glPanel.getScene().setMultiSelected(multiSelected);
+		glPanel.getSphereRenderer().setMultiSelected(multiSelected);
 	}
 }
