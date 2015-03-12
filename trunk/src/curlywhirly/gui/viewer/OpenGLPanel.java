@@ -45,6 +45,8 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	private final CloseOverlay closeOverlay;
 	private final MultiSelectionRenderer selectionOverlay;
+	private final SphereRenderer sphereRenderer;
+	private final AxesRenderer axesRenderer;
 	private final MovieCaptureEventListener movieCapture;
 
 	private DataPoint underMouse = null;
@@ -60,11 +62,15 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 		closeOverlay = new CloseOverlay(winMain);
 		selectionOverlay = new MultiSelectionRenderer(winMain);
+		axesRenderer = new AxesRenderer();
+		sphereRenderer = new SphereRenderer();
 		movieCapture = new MovieCaptureEventListener(this);
 
 		addGLEventListener(this);
-		addGLEventListener(closeOverlay);
+		addGLEventListener(axesRenderer);
+		addGLEventListener(sphereRenderer);
 		addGLEventListener(selectionOverlay);
+		addGLEventListener(closeOverlay);
 		addGLEventListener(movieCapture);
 
 		createKeyboardShortcuts();
@@ -79,10 +85,12 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
         Rotation rotation = new Rotation();
 		detector = new CollisionDetection();
         int perspectiveAngle = 45;
-        scene = new Scene(dataSet, rotation, perspectiveAngle, (float)CANVAS_WIDTH / CANVAS_HEIGHT, detector);
+        scene = new Scene(rotation, perspectiveAngle, (float)CANVAS_WIDTH / CANVAS_HEIGHT);
 		mouseListener = new CanvasMouseListener(this, rotation, dataSet, winMain);
 
 		selectionOverlay.setDataSet(dataSet, rotation);
+		axesRenderer.setDataSet(dataSet, rotation);
+		sphereRenderer.setDataSet(dataSet, rotation, detector);
 
 		scene.reset();
 	}
@@ -258,7 +266,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	{
 		// Mouse over code looking for sphere's under the mouse
 		Ray ray = getRay(gl);
-		underMouse = detector.findSphereRayIntersection(ray, scene.getPointSize());
+		underMouse = detector.findSphereRayIntersection(ray, sphereRenderer.getPointSize());
 
 		// If we have found a spehre, display this sphere's name in a tooltip
 		String text = underMouse != null ? underMouse.getName() : null;
@@ -323,6 +331,12 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	public MovieCaptureEventListener getMovieCapture()
 		{ return movieCapture; }
+
+	public SphereRenderer getSphereRenderer()
+		{ return sphereRenderer; }
+
+	public AxesRenderer getAxesRenderer()
+		{ return axesRenderer; }
 
     public Scene getScene()
         { return scene; }

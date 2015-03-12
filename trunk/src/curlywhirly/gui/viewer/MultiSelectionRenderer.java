@@ -18,7 +18,7 @@ import static javax.media.opengl.fixedfunc.GLLightingFunc.*;
  * selection sphere, and can optionally render axes from the point at the centre
  * of the selection.
  */
-public class MultiSelectionRenderer implements GLEventListener
+public class MultiSelectionRenderer extends SceneRenderable implements GLEventListener
 {
 	private final WinMain winMain;
 	private DataSet dataSet;
@@ -57,27 +57,15 @@ public class MultiSelectionRenderer implements GLEventListener
 	@Override
 	public void display(GLAutoDrawable drawable)
 	{
-		GL2 gl = drawable.getGL().getGL2();
+		displayRenderable(drawable, rotation);
+	}
 
-		// We need to apply rotations in this renderer as well as the main scene
-		gl.glPushMatrix();
-		applyUserRotations(gl);
-
+	@Override
+	public void render(GL2 gl)
+	{
 		drawSelectLines(gl);
 		drawSelectAxes(gl);
 		drawSelectSphere(gl);
-
-		gl.glPopMatrix();
-
-		// Does the automatic spinning of the scene
-		rotation.automaticallyRotate();
-	}
-
-	private void applyUserRotations(GL2 gl)
-	{
-		// Apply user rotation first.
-		gl.glMultMatrixf(rotation.getDragArray(), 0);
-		gl.glMultMatrixf(rotation.getCumulativeRotationArray(), 0);
 	}
 
 	private void drawSelectSphere(GL2 gl)
@@ -152,7 +140,7 @@ public class MultiSelectionRenderer implements GLEventListener
 		float[] glColor = ColorPrefs.getAsRGB("User.OpenGLPanel.multiSelectAxesColor");
 
 		// Re-use the axes drawing code from the scene
-		winMain.getOpenGLPanel().getScene().drawAxesLines(gl, glColor, glColor, glColor);
+		winMain.getOpenGLPanel().getAxesRenderer().drawAxesLines(gl, glColor, glColor, glColor);
 
 		gl.glPopMatrix();
 	}
