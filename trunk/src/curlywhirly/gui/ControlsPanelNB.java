@@ -190,7 +190,7 @@ public class ControlsPanelNB extends JPanel
 			chkDatasetLabels.setEnabled(Prefs.guiChkAxisLabels);
 	}
 
-	private float scaleSliderValue(JSlider slider, float sceneMax, float sceneMin)
+	private float scaleSliderValue(JSlider slider, float sceneMin, float sceneMax)
 	{
 		float sliderVal = slider.getValue();
 		float min = slider.getMinimum();
@@ -238,13 +238,13 @@ public class ControlsPanelNB extends JPanel
 
 	private void axisLabelSizeSliderChanged()
 	{
-		float size = scaleSliderValue(axisLabelSizeSlider, 0.06f, 0.01f);
+		float size = scaleSliderValue(axisLabelSizeSlider, 0.01f, 0.06f);
 		winMain.getOpenGLPanel().getAxesRenderer().setAxisLabelSize(size);
 	}
 
 	private void pointSizeSliderChanged()
 	{
-		float size = scaleSliderValue(pointSizeSlider, 0.05f, 0.009f);
+		float size = scaleSliderValue(pointSizeSlider, 0.002f, 0.05f);
 		winMain.getOpenGLPanel().getSphereRenderer().setPointSize(size);
 
 //		deselectedSizeSlider.setValue(pointSizeSlider.getValue());
@@ -252,7 +252,7 @@ public class ControlsPanelNB extends JPanel
 
 	private void deselectedSliderChanged()
 	{
-		float size = scaleSliderValue(deselectedSizeSlider, 0.05f, 0.009f);
+		float size = scaleSliderValue(deselectedSizeSlider, 0.002f, 0.05f);
 		winMain.getOpenGLPanel().getSphereRenderer().setDeselectedSize(size);
 
 //		pointSizeSlider.setValue(deselectedSizeSlider.getValue());
