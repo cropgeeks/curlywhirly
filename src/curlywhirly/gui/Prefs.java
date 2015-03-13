@@ -68,8 +68,6 @@ public class Prefs extends XMLPreferences
 
 	public static float guiSelectionSphereSize = 0.06f;
 
-	public static boolean guiChkLinkPointSizes = true;
-
 	public static boolean guiMovieChkColourKey = true;
 
 	public static boolean ioUseFileColors = true;

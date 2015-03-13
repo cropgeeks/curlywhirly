@@ -14,7 +14,7 @@ import static javax.media.opengl.fixedfunc.GLPointerFunc.*;
 
 public class SphereRenderer extends SceneRenderable implements GLEventListener
 {
-	public static int SPHERE_DETAIL_LEVEL = 3;
+	public int sphereDetailLevel = 2;
 
 	private GLIcoSphere glSphere;
 
@@ -26,6 +26,8 @@ public class SphereRenderer extends SceneRenderable implements GLEventListener
 
 	private CollisionDetection detector;
 	private HashSet<DataPoint> multiSelected = new HashSet<>();
+
+	boolean sphereDetailChanged = false;
 
 	public void setDataSet(DataSet dataSet, Rotation rotation, CollisionDetection detector)
 	{
@@ -96,7 +98,7 @@ public class SphereRenderer extends SceneRenderable implements GLEventListener
 	@Override
 	public void init(GLAutoDrawable drawable)
 	{
-		glSphere = new GLIcoSphere(drawable.getGL(), SPHERE_DETAIL_LEVEL);
+		glSphere = new GLIcoSphere(drawable.getGL(), sphereDetailLevel);
 	}
 
 	@Override
@@ -107,6 +109,11 @@ public class SphereRenderer extends SceneRenderable implements GLEventListener
 	@Override
 	public void display(GLAutoDrawable drawable)
 	{
+		if (sphereDetailChanged)
+		{
+			glSphere = new GLIcoSphere(drawable.getGL(), sphereDetailLevel);
+			sphereDetailChanged = false;
+		}
 		displayRenderable(drawable, rotation);
 	}
 
@@ -136,4 +143,10 @@ public class SphereRenderer extends SceneRenderable implements GLEventListener
 
 	public void setMultiSelected(HashSet<DataPoint> multiSelected)
 		{ this.multiSelected = multiSelected; }
+
+	public void setSphereDetailLevel(int sphereDetailLevel)
+	{
+		this.sphereDetailLevel = sphereDetailLevel;
+		sphereDetailChanged = true;
+	}
 }
