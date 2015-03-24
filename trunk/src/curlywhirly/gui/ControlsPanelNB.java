@@ -6,6 +6,7 @@ package curlywhirly.gui;
 import javax.swing.*;
 
 import curlywhirly.data.*;
+import curlywhirly.gui.viewer.*;
 
 import scri.commons.gui.*;
 
@@ -23,6 +24,7 @@ public class ControlsPanelNB extends JPanel
 
 		setupCoordinatesPanel();
 		setupAdvancedPanel();
+		setupDeselectedPanel();
 
 		toggleEnabled(false);
     }
@@ -104,6 +106,25 @@ public class ControlsPanelNB extends JPanel
 		hlblReset.addActionListener(e -> reset());
 	}
 
+	private void setupDeselectedPanel()
+	{
+		ButtonGroup bg = new ButtonGroup();
+		bg.add(rbGrey);
+		bg.add(rbTransparent);
+		bg.add(rbInvisible);
+
+		RB.setText(rbGrey, "gui.ControlPanel.rbGrey");
+		rbGrey.addActionListener(e -> rbGreyListener());
+
+		RB.setText(rbTransparent, "gui.ControlPanel.rbTransparent");
+		rbTransparent.addActionListener(e -> rbTransparentListener());
+
+		RB.setText(rbInvisible, "gui.ControlPanel.rbInvisible");
+		rbInvisible.addActionListener(e -> rbInvisibleListener());
+
+		rbGrey.setSelected(true);
+	}
+
 	public void setDataSet(DataSet dataSet)
 	{
 		if (dataSet == null)
@@ -168,6 +189,7 @@ public class ControlsPanelNB extends JPanel
 
 	private void toggleEnabled(boolean enabled)
 	{
+		// Data panel variables
 		lblX.setEnabled(enabled);
 		lblY.setEnabled(enabled);
 		lblZ.setEnabled(enabled);
@@ -175,9 +197,11 @@ public class ControlsPanelNB extends JPanel
 		xCombo.setEnabled(enabled);
 		yCombo.setEnabled(enabled);
 		zCombo.setEnabled(enabled);
-		dataPanel.setEnabled(enabled);
+		// Advanced panel variables
+		advancedPanel.setEnabled(enabled);
 		chkAxisLabels.setEnabled(enabled);
 		chkDatasetLabels.setEnabled(enabled);
+		lblAxislLabelSize.setEnabled(enabled);
 		axisLabelSizeSlider.setEnabled(enabled);
         pointSizeSlider.setEnabled(enabled);
         lblSizeSlider.setEnabled(enabled);
@@ -185,6 +209,11 @@ public class ControlsPanelNB extends JPanel
 		lblDeselected.setEnabled(enabled);
 		lblSphereDetail.setEnabled(enabled);
 		sphereDetailSlider.setEnabled(enabled);
+		// Deselected panel variables
+		deselectedPanel.setEnabled(enabled);
+		rbGrey.setEnabled(enabled);
+		rbTransparent.setEnabled(enabled);
+		rbInvisible.setEnabled(enabled);
 
 		if (enabled)
 			chkDatasetLabels.setEnabled(Prefs.guiChkAxisLabels);
@@ -234,6 +263,21 @@ public class ControlsPanelNB extends JPanel
 		Prefs.guiChkDatasetLabels = !Prefs.guiChkDatasetLabels;
 	}
 
+	private void rbGreyListener()
+	{
+		winMain.getOpenGLPanel().setDeselectedSphereRenderer(new DeselectedSphereRendererGrey());
+	}
+
+	private void rbTransparentListener()
+	{
+		winMain.getOpenGLPanel().setDeselectedSphereRenderer(new DeselectedSphereRendererTransparent());
+	}
+
+	private void rbInvisibleListener()
+	{
+		winMain.getOpenGLPanel().setDeselectedSphereRenderer(new NullSphereRenderer());
+	}
+
 	// ChangeEvent listeners
 
 	private void axisLabelSizeSliderChanged()
@@ -253,7 +297,7 @@ public class ControlsPanelNB extends JPanel
 	private void deselectedSliderChanged()
 	{
 		float size = scaleSliderValue(deselectedSizeSlider, 0.002f, 0.05f);
-		winMain.getOpenGLPanel().getSphereRenderer().setDeselectedSize(size);
+		winMain.getOpenGLPanel().getDeselectedSphereRenderer().setPointSize(size);
 
 //		pointSizeSlider.setValue(deselectedSizeSlider.getValue());
 	}
@@ -292,6 +336,10 @@ public class ControlsPanelNB extends JPanel
         lblSphereDetail = new javax.swing.JLabel();
         sphereDetailSlider = new javax.swing.JSlider();
         hlblReset = new scri.commons.gui.matisse.HyperLinkLabel();
+        deselectedPanel = new javax.swing.JPanel();
+        rbTransparent = new javax.swing.JRadioButton();
+        rbGrey = new javax.swing.JRadioButton();
+        rbInvisible = new javax.swing.JRadioButton();
 
         dataPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Coordinate options:"));
 
@@ -420,6 +468,37 @@ public class ControlsPanelNB extends JPanel
                 .addComponent(hlblReset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        deselectedPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Deselected colouring options:"));
+
+        rbTransparent.setText("Transparent");
+
+        rbGrey.setText("Greyscale");
+
+        rbInvisible.setText("Invisible");
+
+        javax.swing.GroupLayout deselectedPanelLayout = new javax.swing.GroupLayout(deselectedPanel);
+        deselectedPanel.setLayout(deselectedPanelLayout);
+        deselectedPanelLayout.setHorizontalGroup(
+            deselectedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(deselectedPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(deselectedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(rbInvisible)
+                    .addComponent(rbTransparent)
+                    .addComponent(rbGrey))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        deselectedPanelLayout.setVerticalGroup(
+            deselectedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(deselectedPanelLayout.createSequentialGroup()
+                .addComponent(rbGrey)
+                .addGap(3, 3, 3)
+                .addComponent(rbTransparent)
+                .addGap(4, 4, 4)
+                .addComponent(rbInvisible)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -428,7 +507,8 @@ public class ControlsPanelNB extends JPanel
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(dataPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(advancedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(advancedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(deselectedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -438,6 +518,8 @@ public class ControlsPanelNB extends JPanel
                 .addComponent(dataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(advancedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(deselectedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -449,6 +531,7 @@ public class ControlsPanelNB extends JPanel
     private javax.swing.JCheckBox chkAxisLabels;
     private javax.swing.JCheckBox chkDatasetLabels;
     private javax.swing.JPanel dataPanel;
+    private javax.swing.JPanel deselectedPanel;
     private javax.swing.JSlider deselectedSizeSlider;
     private scri.commons.gui.matisse.HyperLinkLabel hlblReset;
     private javax.swing.JLabel lblAxislLabelSize;
@@ -459,6 +542,9 @@ public class ControlsPanelNB extends JPanel
     private javax.swing.JLabel lblY;
     private javax.swing.JLabel lblZ;
     private javax.swing.JSlider pointSizeSlider;
+    private javax.swing.JRadioButton rbGrey;
+    private javax.swing.JRadioButton rbInvisible;
+    private javax.swing.JRadioButton rbTransparent;
     private javax.swing.JSlider sphereDetailSlider;
     private javax.swing.JComboBox<String> xCombo;
     private javax.swing.JComboBox<String> yCombo;

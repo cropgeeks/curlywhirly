@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
+import java.util.stream.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
@@ -13,7 +14,7 @@ import curlywhirly.analysis.*;
 import curlywhirly.data.*;
 import curlywhirly.gui.dialog.*;
 import curlywhirly.gui.viewer.*;
-import curlywhirly.util.FileUtils;
+import curlywhirly.util.*;
 
 import scri.commons.gui.*;
 import scri.commons.gui.matisse.*;
@@ -21,7 +22,6 @@ import scri.commons.gui.matisse.*;
 public class MultiSelectPanel extends JPanel implements ActionListener, ChangeListener
 {
 	private final MultiSelectionRenderer selectionRenderer;
-	private final OpenGLPanel glPanel;
 	private DataSet dataSet;
 
 	private JLabel lblAction;
@@ -40,7 +40,7 @@ public class MultiSelectPanel extends JPanel implements ActionListener, ChangeLi
 	public static final int DESELECT = 1;
 	public static final int TOGGLE = 2;
 
-	public MultiSelectPanel(MultiSelectionRenderer selectionOverlay, OpenGLPanel glPanel)
+	public MultiSelectPanel(MultiSelectionRenderer selectionOverlay)
 	{
 		setLayout(new BorderLayout());
 		setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
@@ -53,7 +53,6 @@ public class MultiSelectPanel extends JPanel implements ActionListener, ChangeLi
 		add(eastPanel, BorderLayout.EAST);
 //		add(lblOptions, BorderLayout.EAST);
 
-		this.glPanel = glPanel;
 		this.selectionRenderer = selectionOverlay;
 	}
 
@@ -195,9 +194,7 @@ public class MultiSelectPanel extends JPanel implements ActionListener, ChangeLi
 		{
 			saveAs = new File(filename);
 
-			HashSet<DataPoint> multiSelected = selectionRenderer.detectMultiSelectedPoints();
-
-			DataPointSaver saver = new DataPointSaver(saveAs, new ArrayList<DataPoint>(multiSelected), dataSet.getAxes().getXYZLabels());
+			DataPointSaver saver = new DataPointSaver(saveAs, dataSet.multiSelectedPoints().collect(Collectors.toCollection(ArrayList::new)), dataSet.getAxes().getXYZLabels());
 
 			ProgressDialog dialog = new ProgressDialog(saver,
 					RB.getString("gui.viewer.MultiSelectPanel.saveDataPoints.title"),
@@ -240,7 +237,7 @@ public class MultiSelectPanel extends JPanel implements ActionListener, ChangeLi
 
 	private String getSelectedPointsString()
 	{
-		String selected = "" + selectionRenderer.getMultiSelectedPoints().size();
+		String selected = "" + selectionRenderer.multiSelectedPointsCount();
 		String total = "" + dataSet.size();
 		int diff = total.length() - selected.length();
 		StringBuilder builder = new StringBuilder();
@@ -256,7 +253,6 @@ public class MultiSelectPanel extends JPanel implements ActionListener, ChangeLi
 
 	private void detectMultiSelectedPoints()
 	{
-		HashSet<DataPoint> multiSelected = selectionRenderer.detectMultiSelectedPoints();
-		glPanel.getSphereRenderer().setMultiSelected(multiSelected);
+		selectionRenderer.detectMultiSelectedPoints();
 	}
 }

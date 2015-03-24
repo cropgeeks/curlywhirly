@@ -12,7 +12,7 @@ import scri.commons.gui.*;
 
 class PreferencesPanelNB extends JPanel
 {
-	private final DefaultComboBoxModel<String> displayModel;
+	private final DefaultComboBoxModel<String> languageModel;
 	private final DefaultComboBoxModel<String> updateModel;
 
     public PreferencesPanelNB(ActionListener listener)
@@ -23,42 +23,49 @@ class PreferencesPanelNB extends JPanel
         GUIUtils.setPanelColor(generalPanel, false);
 		GUIUtils.setPanelColor(otherPanel, false);
 
-		// Interface settings
-		generalPanel.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.PreferencesPanelNB.generalPanelTitle")));
-		RB.setText(displayLabel, "gui.PreferencesPanelNB.displayLabel");
+		languageModel = new DefaultComboBoxModel<String>();
+		setupLanguageSettings();
 
-        displayModel = new DefaultComboBoxModel<String>();
-        displayModel.addElement(RB.getString("gui.PreferencesPanelNB.auto"));
-        displayModel.addElement(RB.getString("gui.PreferencesPanelNB.en_GB"));
-        displayModel.addElement(RB.getString("gui.PreferencesPanelNB.en_US"));
-        displayModel.addElement(RB.getString("gui.PreferencesPanelNB.de_DE"));
-        displayModel.addElement(RB.getString("gui.PreferencesPanelNB.es_MX"));
-        displayCombo.setModel(displayModel);
-		displayCombo.setSelectedIndex(getLocaleIndex());
-
-        // Update settings
-        RB.setText(updateLabel, "gui.PreferencesPanelNB.updateLabel");
-
-        updateModel = new DefaultComboBoxModel<String>();
-        updateModel.addElement(RB.getString("gui.PreferencesPanelNB.updateNever"));
-        updateModel.addElement(RB.getString("gui.PreferencesPanelNB.updateStartup"));
-        updateModel.addElement(RB.getString("gui.PreferencesPanelNB.updateDaily"));
-        updateModel.addElement(RB.getString("gui.PreferencesPanelNB.updateWeekly"));
-        updateModel.addElement(RB.getString("gui.PreferencesPanelNB.updateMonthly"));
-        updateCombo.setModel(updateModel);
-        updateCombo.setSelectedIndex(Prefs.guiUpdateSchedule);
+		updateModel = new DefaultComboBoxModel<String>();
+        setupUpdateSettings();
 
 		RB.setText(chkColorInput, "gui.PreferencesPanelNB.colorInput");
 		chkColorInput.setSelected(Prefs.ioUseFileColors);
-
-		RB.setText(chkAntialias, "gui.PreferencesPanelNB.antialiasAxes");
-		chkAntialias.setSelected(Prefs.guiAntialiasAxes);
 
 		// Other settings
 		otherPanel.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.PreferencesPanelNB.otherPanelTitle")));
 
 		RB.setText(bCustomizeColors, "gui.PreferencesPanelNB.customizeColors");
 		bCustomizeColors.addActionListener(listener);
+	}
+
+	private void setupLanguageSettings()
+	{
+		// Interface settings
+		generalPanel.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.PreferencesPanelNB.generalPanelTitle")));
+		RB.setText(displayLabel, "gui.PreferencesPanelNB.displayLabel");
+
+		languageModel.addElement(RB.getString("gui.PreferencesPanelNB.auto"));
+		languageModel.addElement(RB.getString("gui.PreferencesPanelNB.en_GB"));
+		languageModel.addElement(RB.getString("gui.PreferencesPanelNB.en_US"));
+		languageModel.addElement(RB.getString("gui.PreferencesPanelNB.de_DE"));
+		languageModel.addElement(RB.getString("gui.PreferencesPanelNB.es_MX"));
+		displayCombo.setModel(languageModel);
+		displayCombo.setSelectedIndex(getLocaleIndex());
+	}
+
+	private void setupUpdateSettings()
+	{
+		// Update settings
+		RB.setText(updateLabel, "gui.PreferencesPanelNB.updateLabel");
+
+		updateModel.addElement(RB.getString("gui.PreferencesPanelNB.updateNever"));
+		updateModel.addElement(RB.getString("gui.PreferencesPanelNB.updateStartup"));
+		updateModel.addElement(RB.getString("gui.PreferencesPanelNB.updateDaily"));
+		updateModel.addElement(RB.getString("gui.PreferencesPanelNB.updateWeekly"));
+		updateModel.addElement(RB.getString("gui.PreferencesPanelNB.updateMonthly"));
+		updateCombo.setModel(updateModel);
+		updateCombo.setSelectedIndex(Prefs.guiUpdateSchedule);
 	}
 
     private int getLocaleIndex()
@@ -91,7 +98,6 @@ class PreferencesPanelNB extends JPanel
 		}
 
 		Prefs.guiUpdateSchedule = updateCombo.getSelectedIndex();
-		Prefs.guiAntialiasAxes = chkAntialias.isSelected();
 		Prefs.ioUseFileColors = chkColorInput.isSelected();
 	}
 
@@ -111,7 +117,6 @@ class PreferencesPanelNB extends JPanel
         updateLabel = new javax.swing.JLabel();
         otherPanel = new javax.swing.JPanel();
         bCustomizeColors = new javax.swing.JButton();
-        chkAntialias = new javax.swing.JCheckBox();
         chkColorInput = new javax.swing.JCheckBox();
 
         generalPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("General options (restart to apply):"));
@@ -155,8 +160,6 @@ class PreferencesPanelNB extends JPanel
 
         bCustomizeColors.setText("Customize colours");
 
-        chkAntialias.setText("Antialias axes");
-
         chkColorInput.setText("Use colours specified in input files");
         chkColorInput.setToolTipText("");
 
@@ -167,7 +170,6 @@ class PreferencesPanelNB extends JPanel
             .addGroup(otherPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(otherPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(chkAntialias)
                     .addComponent(chkColorInput)
                     .addComponent(bCustomizeColors))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -177,9 +179,7 @@ class PreferencesPanelNB extends JPanel
             .addGroup(otherPanelLayout.createSequentialGroup()
                 .addComponent(bCustomizeColors)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(chkColorInput)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(chkAntialias))
+                .addComponent(chkColorInput))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -206,7 +206,6 @@ class PreferencesPanelNB extends JPanel
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JButton bCustomizeColors;
-    javax.swing.JCheckBox chkAntialias;
     private javax.swing.JCheckBox chkColorInput;
     private javax.swing.JComboBox<String> displayCombo;
     private javax.swing.JLabel displayLabel;

@@ -21,6 +21,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="dataPanel" max="32767" attributes="0"/>
                   <Component id="advancedPanel" alignment="0" max="32767" attributes="0"/>
+                  <Component id="deselectedPanel" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -33,6 +34,8 @@
               <Component id="dataPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="advancedPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="deselectedPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -275,6 +278,60 @@
               <Color blue="9c" green="6a" red="44" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Reset"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JPanel" name="deselectedPanel">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Deselected colouring options:"/>
+          </Border>
+        </Property>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="rbInvisible" min="-2" max="-2" attributes="0"/>
+                      <Component id="rbTransparent" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="rbGrey" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <Component id="rbGrey" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                  <Component id="rbTransparent" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                  <Component id="rbInvisible" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JRadioButton" name="rbTransparent">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Transparent"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="rbGrey">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Greyscale"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="rbInvisible">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Invisible"/>
           </Properties>
         </Component>
       </SubComponents>
