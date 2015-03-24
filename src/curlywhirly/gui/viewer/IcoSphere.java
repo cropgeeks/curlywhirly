@@ -53,35 +53,29 @@ public class IcoSphere
 	}
 
 	// Create the default 20 faces of the icosahedron
+	// Each number represents the index of the vertices created in setupVertices.
 	private void setupFaces()
 	{
-		// 5 faces around point 0
-		icoFaces.add(new FaceTriangle(0, 11, 5));
-		icoFaces.add(new FaceTriangle(0, 5, 1));
-		icoFaces.add(new FaceTriangle(0, 1, 7));
-		icoFaces.add(new FaceTriangle(0, 7, 10));
-		icoFaces.add(new FaceTriangle(0, 10, 11));
-
-		// 5 adjacent faces
-		icoFaces.add(new FaceTriangle(1, 5, 9));
-		icoFaces.add(new FaceTriangle(5, 11, 4));
-		icoFaces.add(new FaceTriangle(11, 10, 2));
 		icoFaces.add(new FaceTriangle(10, 7, 6));
 		icoFaces.add(new FaceTriangle(7, 1, 8));
-
-		// 5 faces around point 3
-		icoFaces.add(new FaceTriangle(3, 9, 4));
-		icoFaces.add(new FaceTriangle(3, 4, 2));
 		icoFaces.add(new FaceTriangle(3, 2, 6));
 		icoFaces.add(new FaceTriangle(3, 6, 8));
-		icoFaces.add(new FaceTriangle(3, 8, 9));
-
-		// 5 adjacent faces
-		icoFaces.add(new FaceTriangle(4, 9, 5));
-		icoFaces.add(new FaceTriangle(2, 4, 11));
 		icoFaces.add(new FaceTriangle(6, 2, 10));
 		icoFaces.add(new FaceTriangle(8, 6, 7));
+		icoFaces.add(new FaceTriangle(0, 7, 10));
+		icoFaces.add(new FaceTriangle(0, 10, 11));
 		icoFaces.add(new FaceTriangle(9, 8, 1));
+		icoFaces.add(new FaceTriangle(11, 10, 2));
+		icoFaces.add(new FaceTriangle(3, 8, 9));
+		icoFaces.add(new FaceTriangle(3, 9, 4));
+		icoFaces.add(new FaceTriangle(3, 4, 2));
+		icoFaces.add(new FaceTriangle(0, 1, 7));
+		icoFaces.add(new FaceTriangle(1, 5, 9));
+		icoFaces.add(new FaceTriangle(2, 4, 11));
+		icoFaces.add(new FaceTriangle(0, 11, 5));
+		icoFaces.add(new FaceTriangle(0, 5, 1));
+		icoFaces.add(new FaceTriangle(5, 11, 4));
+		icoFaces.add(new FaceTriangle(4, 9, 5));
 	}
 
 	private void makeIcosphere(int subdivision)
@@ -94,7 +88,7 @@ public class IcoSphere
 			{
 				// Subdivide triangle into 4 trianlges
 				int a = getMiddlePoint(face.v1, face.v2);
-				int b = getMiddlePoint(face.v2, face .v3);
+				int b = getMiddlePoint(face.v2, face.v3);
 				int c = getMiddlePoint(face.v3, face.v1);
 
 				// Add our subdivided faces
@@ -115,19 +109,18 @@ public class IcoSphere
 
 	private void createFaceNormalList()
 	{
-		for (FaceTriangle face : icoFaces)
+		icoFaces.stream().forEach(face ->
 		{
 			faceNormals.add(face.v1);
 			faceNormals.add(face.v2);
 			faceNormals.add(face.v3);
-		}
+		});
 	}
 
 	private void createVertexList()
 	{
 		for (Float[] vertices : icoVertices)
-			for (float vertex : vertices)
-				vertexIndices.add(vertex);
+			vertexIndices.addAll(Arrays.asList(vertices));
 	}
 
 	private int getMiddlePoint(int p1, int p2)

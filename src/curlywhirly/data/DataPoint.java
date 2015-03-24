@@ -13,10 +13,12 @@ public class DataPoint
 	// Normalized values are used for rendering, values are displayed in tables
 	private final ArrayList<Float> normalizedValues;
 	private boolean isSelected;
+	private boolean isMultiSelected;
 
 	private final Position3D position;
 
 	private Color color = Color.DARK_GRAY;
+
 
 	public DataPoint(String name, ArrayList<Float> values, ArrayList<Float> normalizedValues)
 	{
@@ -25,6 +27,7 @@ public class DataPoint
 		this.normalizedValues = normalizedValues;
 
 		isSelected = true;
+		isMultiSelected = false;
 		position = new Position3D();
 	}
 
@@ -59,6 +62,16 @@ public class DataPoint
 		isSelected = selected;
 	}
 
+	public boolean isMultiSelected()
+	{
+		return isMultiSelected;
+	}
+
+	public void setMultiSelected(boolean isMultiSelected)
+	{
+		this.isMultiSelected = isMultiSelected;
+	}
+
 	public void toggleSelection()
 	{
 		isSelected = !isSelected;
@@ -67,13 +80,6 @@ public class DataPoint
 	public void setColor(Color color)
 	{
 		this.color = color;
-	}
-
-	// getRawColor to offers a non-selected state dependent version of this
-	// accessor
-	public Color getColorBySelection()
-	{
-		return isSelected ? color : Color.DARK_GRAY;
 	}
 
 	public Color getColor()

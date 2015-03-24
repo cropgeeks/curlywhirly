@@ -10,7 +10,7 @@ public class GLIcoSphere
 	// An custom made sphere object (faster than gluSphere)
 	private IcoSphere sphere;
 
-	private int sphereDetailLevel;
+	private final int sphereDetailLevel;
 
 	// GL 1.5+, VBO ID for vertex data
 	private int vertexBufferId;
@@ -55,14 +55,14 @@ public class GLIcoSphere
 	private void createIndexBuffer()
 	{
 		indexBuffer = Buffers.newDirectIntBuffer(sphere.faceNormalCount());
-		sphere.getFaceNormals().stream().forEach(n -> indexBuffer.put(n));
+		sphere.getFaceNormals().stream().forEachOrdered(n -> indexBuffer.put(n));
 		indexBuffer.rewind();
 	}
 
 	private void createVertexBuffer()
 	{
 		vertexBuffer = Buffers.newDirectFloatBuffer(sphere.vertexCount());
-		sphere.getVertices().stream().forEach(v -> vertexBuffer.put(v));
+		sphere.getVertices().stream().forEachOrdered(v -> vertexBuffer.put(v));
 		vertexBuffer.rewind();
 	}
 

@@ -4,6 +4,7 @@
 package curlywhirly.data;
 
 import java.util.*;
+import java.util.stream.*;
 
 public class DataSet implements Iterable<DataPoint>
 {
@@ -51,6 +52,31 @@ public class DataSet implements Iterable<DataPoint>
 		}
 	}
 
+	public void selectMultiSelected()
+	{
+		dataPoints.selectMultiSelected();
+	}
+
+	public void deselectMultiSelected()
+	{
+		dataPoints.deselectMultiSelected();
+	}
+
+	public void toggleMultiSelected()
+	{
+		dataPoints.toggleMultiSelected();
+	}
+
+	public void clearMultiSelection()
+	{
+		dataPoints.clearMultiSelection();
+	}
+
+	public void detecteOverlappingPoints(DataPoint selectedPoint, float minDist)
+	{
+		dataPoints.detectOverlappingPoints(selectedPoint, minDist);
+	}
+
 	public CategoryGroup getCurrentCategoryGroup()
 		{ return currentGroup; }
 
@@ -68,6 +94,21 @@ public class DataSet implements Iterable<DataPoint>
 
 	public ArrayList<DataPoint> getDataPoints()
 		{ return (ArrayList<DataPoint>) dataPoints.getDataPoints(); }
+
+	public Stream<DataPoint> selectedPoints()
+	{
+		return dataPoints.selectedPoints();
+	}
+
+	public Stream<DataPoint> deselectedPoints()
+	{
+		return dataPoints.deselectedPoints();
+	}
+
+	public Stream<DataPoint> multiSelectedPoints()
+	{
+		return dataPoints.multiSelectedPoints();
+	}
 
 	public int size()
 	{	return dataPoints.size(); }
