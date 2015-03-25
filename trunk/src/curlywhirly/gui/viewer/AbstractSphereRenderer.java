@@ -1,15 +1,11 @@
 package curlywhirly.gui.viewer;
 
 import java.util.stream.*;
-import javax.media.opengl.GL2;
-import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLEventListener;
+import javax.media.opengl.*;
 
 import curlywhirly.data.*;
 
-import static javax.media.opengl.GL.*;
 import static javax.media.opengl.fixedfunc.GLMatrixFunc.*;
-import static javax.media.opengl.fixedfunc.GLPointerFunc.*;
 
 /**
  * Defines the generic state of a SphereRenderer which can be extended to provide
@@ -21,9 +17,8 @@ import static javax.media.opengl.fixedfunc.GLPointerFunc.*;
  */
 public abstract class AbstractSphereRenderer extends SceneRenderable implements GLEventListener
 {
+	private Sphere sphere;
 	public int sphereDetailLevel = 2;
-
-	private GLIcoSphere glSphere;
 
 	protected DataSet dataSet;
 	protected Rotation rotation;
@@ -46,22 +41,11 @@ public abstract class AbstractSphereRenderer extends SceneRenderable implements 
 	protected void drawSpheres(GL2 gl)
 	{
 		// Vertex buffer setup code
-		gl.glBindBuffer(GL_ARRAY_BUFFER, glSphere.getVertexBufferId());
-		gl.glBufferData(GL_ARRAY_BUFFER, glSphere.getVertexBufferSize(), glSphere.getVertexBuffer(), GL_STATIC_DRAW);
-		gl.glVertexPointer(3, GL_FLOAT, 0, 0);
-		gl.glNormalPointer(GL_FLOAT, 0, 0);
-		gl.glBindBuffer(GL_ARRAY_BUFFER, 0);
-		gl.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, glSphere.getIndexBufferId());
-		gl.glBufferData(GL_ELEMENT_ARRAY_BUFFER, glSphere.getIndexBufferSize(), glSphere.getIndexBuffer(), GL_STATIC_DRAW);
-		gl.glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-		gl.glEnableClientState(GL_VERTEX_ARRAY);
-		gl.glEnableClientState(GL_NORMAL_ARRAY);
+		sphere.preRender(gl);
 
 		renderSpheres(gl);
 
-		gl.glDisableClientState(GL_VERTEX_ARRAY);
-		gl.glDisableClientState(GL_NORMAL_ARRAY);
+		sphere.postRender(gl);
 	}
 
 	protected void renderPoints(GL2 gl, Stream<DataPoint> dataPoints)
@@ -88,16 +72,14 @@ public abstract class AbstractSphereRenderer extends SceneRenderable implements 
 		gl.glGetFloatv(GL_MODELVIEW_MATRIX, modelView, 0);
 		detector.updatePointLocation(modelView, point);
 
-		// Draw the triangles using the isosphereIndexBuffer VBO for the
-		// element data (as well as the isosphereVertexBuffer).
-		gl.glDrawElements(GL_TRIANGLES, glSphere.getIndexCount(), GL_UNSIGNED_INT, 0);
+		sphere.render(gl);
 		gl.glPopMatrix();
 	}
 
 	@Override
 	public void init(GLAutoDrawable drawable)
 	{
-		glSphere = new GLIcoSphere(drawable.getGL(), sphereDetailLevel);
+		sphere = new SphereFactory().createSphere(drawable.getGL(), sphereDetailLevel);
 	}
 
 	@Override
@@ -110,7 +92,7 @@ public abstract class AbstractSphereRenderer extends SceneRenderable implements 
 	{
 		if (sphereDetailChanged)
 		{
-			glSphere = new GLIcoSphere(drawable.getGL(), sphereDetailLevel);
+			sphere = new SphereFactory().createSphere(drawable.getGL(), sphereDetailLevel);
 			sphereDetailChanged = false;
 		}
 		displayRenderable(drawable, rotation);

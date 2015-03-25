@@ -157,7 +157,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 		gl.glLineWidth(1.5f);
 		gl.setSwapInterval(1);
-		gl.glEnable(GL_RESCALE_NORMAL);
+		gl.glEnable(GL_NORMALIZE);
 		gl.glEnable(GL_CULL_FACE);
 
         scene.init(gl);
