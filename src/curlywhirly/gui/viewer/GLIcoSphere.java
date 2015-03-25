@@ -5,7 +5,10 @@ import javax.media.opengl.*;
 
 import com.jogamp.common.nio.*;
 
-public class GLIcoSphere
+import static javax.media.opengl.GL.*;
+import static javax.media.opengl.fixedfunc.GLPointerFunc.*;
+
+public class GLIcoSphere implements Sphere
 {
 	// An custom made sphere object (faster than gluSphere)
 	private IcoSphere sphere;
@@ -66,11 +69,37 @@ public class GLIcoSphere
 		vertexBuffer.rewind();
 	}
 
-	public int getVertexBufferId()
-		{ return vertexBufferId; }
+	@Override
+	public void preRender(GL2 gl)
+	{
+		// Vertex buffer setup code
+		gl.glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
+		gl.glBufferData(GL_ARRAY_BUFFER, getVertexBufferSize(), vertexBuffer, GL_STATIC_DRAW);
+		gl.glVertexPointer(3, GL_FLOAT, 0, 0);
+		gl.glNormalPointer(GL_FLOAT, 0, 0);
+		gl.glBindBuffer(GL_ARRAY_BUFFER, 0);
+		gl.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferId);
+		gl.glBufferData(GL_ELEMENT_ARRAY_BUFFER, getIndexBufferSize(), indexBuffer, GL_STATIC_DRAW);
+		gl.glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	public int getIndexBufferId()
-		{ return indexBufferId; }
+		gl.glEnableClientState(GL_VERTEX_ARRAY);
+		gl.glEnableClientState(GL_NORMAL_ARRAY);
+	}
+
+	@Override
+	public void render(GL2 gl)
+	{
+		// Draw the triangles using the isosphereIndexBuffer VBO for the
+		// element data (as well as the isosphereVertexBuffer).
+		gl.glDrawElements(GL_TRIANGLES, getIndexCount(), GL_UNSIGNED_INT, 0);
+	}
+
+	@Override
+	public void postRender(GL2 gl)
+	{
+		gl.glDisableClientState(GL_VERTEX_ARRAY);
+		gl.glDisableClientState(GL_NORMAL_ARRAY);
+	}
 
 	public int getVertexBufferSize()
 		{ return sphere.vertexCount() * 4; }
@@ -80,10 +109,4 @@ public class GLIcoSphere
 
 	public int getIndexCount()
 		{ return sphere.faceNormalCount(); }
-
-	public FloatBuffer getVertexBuffer()
-		{ return vertexBuffer; }
-
-	public IntBuffer getIndexBuffer()
-		{ return indexBuffer; }
 }
