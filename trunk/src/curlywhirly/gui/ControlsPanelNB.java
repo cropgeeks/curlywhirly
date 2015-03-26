@@ -108,6 +108,8 @@ public class ControlsPanelNB extends JPanel
 
 	private void setupDeselectedPanel()
 	{
+		deselectedPanel.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.ControlPanel.deslectedPanelTitle")));
+
 		ButtonGroup bg = new ButtonGroup();
 		bg.add(rbGrey);
 		bg.add(rbTransparent);
@@ -209,6 +211,7 @@ public class ControlsPanelNB extends JPanel
 		lblDeselected.setEnabled(enabled);
 		lblSphereDetail.setEnabled(enabled);
 		sphereDetailSlider.setEnabled(enabled);
+		hlblReset.setEnabled(enabled);
 		// Deselected panel variables
 		deselectedPanel.setEnabled(enabled);
 		rbGrey.setEnabled(enabled);
@@ -408,7 +411,7 @@ public class ControlsPanelNB extends JPanel
         lblSphereDetail.setText("Point quality:");
 
         hlblReset.setForeground(new java.awt.Color(68, 106, 156));
-        hlblReset.setText("Reset");
+        hlblReset.setText("Reset to defaults");
 
         javax.swing.GroupLayout advancedPanelLayout = new javax.swing.GroupLayout(advancedPanel);
         advancedPanel.setLayout(advancedPanelLayout);
@@ -468,7 +471,7 @@ public class ControlsPanelNB extends JPanel
                 .addComponent(hlblReset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        deselectedPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Deselected colouring options:"));
+        deselectedPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Deselected points:"));
 
         rbTransparent.setText("Transparent");
 
