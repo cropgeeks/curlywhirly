@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="6.0.1" transformSequenceNumber="5">
+<install4j version="6.0.2" transformSequenceNumber="5">
   <directoryPresets config="../keys/OS201306044993.pfx" />
-  <application name="CurlyWhirly" distributionSourceDir="" applicationId="7308-4813-7424-6439" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="false" shortName="curlywhirly" publisher="The James Hutton Institute" publisherWeb="http://www.hutton.ac.uk" version="x.xx.xx.xx" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" macVolumeId="2dd482938c2af94a" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="true" jdkMode="runtimeJre" jdkName="">
+  <application name="CurlyWhirly" distributionSourceDir="" applicationId="7308-4813-7424-6439" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="false" shortName="curlywhirly" publisher="The James Hutton Institute" publisherWeb="http://www.hutton.ac.uk" version="x.xx.xx.xx" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" macVolumeId="2dd482938c2af94a" javaMinVersion="1.8" javaMaxVersion="" allowBetaVM="true" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="true" languageSelectionInPrincipalLanguage="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages>
@@ -14,8 +14,8 @@
       <envVar name="JDK_HOME" />
     </searchSequence>
     <variables>
-      <variable name="urlWebsite" value="http://bioinf.hutton.ac.uk/curlywhirly" description="" category="" />
-      <variable name="urlWhatsNew" value="http://bioinf.hutton.ac.uk/curlywhirly/whatsnew.shtml" description="" category="" />
+      <variable name="urlWebsite" value="http://ics.hutton.ac.uk/curlywhirly" description="" category="" />
+      <variable name="urlWhatsNew" value="http://ics.hutton.ac.uk/curlywhirly/download-curlywhirly/curlywhirly-release-notes/" description="" category="" />
       <variable name="changeLog" value="Show change log" description="" category="" />
     </variables>
     <mergedProjects />
@@ -1334,11 +1334,6 @@ if (wizardContext != null) {
         <entry location="lib/jogl-all-natives-macosx-universal.jar" fileType="regular" />
         <entry location="lib/jogl-all-natives-windows-amd64.jar" fileType="regular" />
         <entry location="lib/osxadapter.jar" fileType="regular" />
-        <entry location="system/linux_x64" fileType="regular" />
-        <entry location="system/linux_x86" fileType="regular" />
-        <entry location="system/macosx" fileType="regular" />
-        <entry location="system/windows_x64" fileType="regular" />
-        <entry location="system/windows_x86" fileType="regular" />
       </exclude>
       <variables />
       <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
