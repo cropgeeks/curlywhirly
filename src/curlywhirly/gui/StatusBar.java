@@ -10,35 +10,54 @@ import scri.commons.gui.*;
 
 public class StatusBar extends JPanel
 {
-	JLabel label;
-	public JProgressBar progressBar;
+	private final JLabel label;
+	private final JLabel fpsLabel;
 
 	public StatusBar()
 	{
-		super(new BorderLayout());
+		setLayout(new BorderLayout());
+		setBorder(BorderFactory.createCompoundBorder(
+			BorderFactory.createLineBorder(Color.LIGHT_GRAY),
+			BorderFactory.createEmptyBorder(1, 2, 2, 2)));
 
+		JPanel helpPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 2));
 		label = new JLabel();
-		label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
-		label.setBackground(Color.green);
-		progressBar = new JProgressBar();
-		progressBar.setPreferredSize(new Dimension(progressBar.getWidth(), 5));
+		helpPanel.add(label);
+		add(helpPanel, BorderLayout.WEST);
 
-		add(progressBar,BorderLayout.CENTER);
-		add(label, BorderLayout.WEST);
-		progressBar.setVisible(false);
+		JPanel renderPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 2));
+		fpsLabel = new JLabel();
+		renderPanel.add(fpsLabel);
+		add(renderPanel, BorderLayout.EAST);
 
-		setMessage(RB.getString("gui.StatusBar.ready"));
-		setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-
+		setReadyText();
 	}
 
-	public void setMessage(String message)
+	private void setMessage(String message)
 	{
 		label.setText(" " + message);
+	}
+
+	public void setReadyText()
+	{
+		setMessage(RB.getString("gui.StatusBar.ready"));
 	}
 
 	public void setDefaultText()
 	{
 		setMessage(RB.getString("gui.StatusBar.default"));
+	}
+
+	public void updateFps(int fps)
+	{
+		clearFps();
+
+		if (fps != 0)
+			fpsLabel.setText(fps + " FPS");
+	}
+
+	void clearFps()
+	{
+		fpsLabel.setText("");
 	}
 }

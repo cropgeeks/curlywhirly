@@ -55,6 +55,8 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	private WinMain winMain;
 
+	private Timer fpsTimer;
+
 	public OpenGLPanel(WinMain winMain, GLCapabilities caps)
 	{
 		super(caps);
@@ -124,9 +126,11 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 			animator.remove(this);
 
 		animator = new Animator(this);
-//		animator.setUpdateFPSFrames(200, System.out);
+		animator.setUpdateFPSFrames(10, null);
 		animator.setPrintExceptions(true);
 		animator.start();
+
+		setupFpsTimer();
 	}
 
 	// Stop the animator in situations where you need the display to pause
@@ -137,7 +141,15 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		{
 			animator.stop();
 			animator.pause();
+			fpsTimer.stop();
 		}
+	}
+
+	private void setupFpsTimer()
+	{
+		fpsTimer = new Timer(2500, e -> winMain.updateStatusBarFps((int)animator.getLastFPS()));
+		fpsTimer.setInitialDelay(0);
+		fpsTimer.start();
 	}
 
 	@Override

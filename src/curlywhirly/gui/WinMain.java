@@ -161,6 +161,7 @@ public class WinMain extends JFrame
 		}
 		else
 		{
+			statusBar.clearFps();
 			setTitle(RB.getString("gui.CurlyWhirly.title") + " - " + Install4j.VERSION);
 			Actions.openedNoData();
 		}
@@ -269,6 +270,11 @@ public class WinMain extends JFrame
 		return response == 0;
 	}
 
+	public void updateStatusBarFps(int fps)
+	{
+		statusBar.updateFps(fps);
+	}
+
 	WinMainToolBar getToolbar()
 		{ return toolbar; }
 
@@ -286,9 +292,6 @@ public class WinMain extends JFrame
 
 	public SelectionPanelNB getControlPanel()
 		{ return selectionPanel; }
-
-	public StatusBar getStatusBar()
-		{ return statusBar; }
 
 	public JSplitPane getSplitPane()
 	{
