@@ -90,7 +90,7 @@ class AboutPanelNB extends JPanel
 
         nameLabel.setText("Gordon Stephen, Iain Milne, Micha Bayer,Paul Shaw and David Marshall");
 
-        copyrightLabel.setText("Copyright (C) 2009-2014, Information & Computational Sciences, JHI");
+        copyrightLabel.setText("Copyright (C) 2009-2015, Information & Computational Sciences, JHI");
 
         versionLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         versionLabel.setText("CurlyWhirly - x.xx.xx.xx");
