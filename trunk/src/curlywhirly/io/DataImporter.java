@@ -3,6 +3,7 @@
 
 package curlywhirly.io;
 
+import curlywhirly.util.ColorPrefs;
 import java.awt.*;
 import java.io.*;
 import java.util.*;
@@ -322,7 +323,7 @@ public class DataImporter extends SimpleJob
 			// Check if a color preference already exists for this category
 			// in this category group
 			String key = category.getColorKey();
-			Color color = ColorPrefs.get(key);
+			Color color = ColorPrefs.getColor(key);
 			if (color == null)
 			{
 				color = colours[i++];

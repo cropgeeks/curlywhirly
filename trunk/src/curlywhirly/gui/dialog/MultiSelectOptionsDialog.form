@@ -97,7 +97,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;SimpleEntry&lt;String, Color&gt;&gt;"/>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;ColorPref&gt;"/>
           </AuxValues>
         </Component>
       </SubComponents>

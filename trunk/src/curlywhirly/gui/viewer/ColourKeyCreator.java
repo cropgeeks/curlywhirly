@@ -1,5 +1,6 @@
 package curlywhirly.gui.viewer;
 
+import curlywhirly.util.ColorPrefs;
 import java.awt.*;
 import java.awt.image.*;
 import java.util.*;
@@ -34,7 +35,7 @@ public class ColourKeyCreator
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics imageG = image.createGraphics();
 
-		imageG.setColor(ColorPrefs.get("User.OpenGLPanel.background"));
+		imageG.setColor(ColorPrefs.getColor("User.OpenGLPanel.background"));
 		imageG.fillRect(0, 0, width, height);
 
 		drawColorKey(group, imageG);

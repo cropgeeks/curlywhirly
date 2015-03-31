@@ -4,13 +4,12 @@
 package curlywhirly.gui.dialog;
 
 import java.awt.*;
-import java.awt.image.*;
 import java.awt.event.*;
-import java.util.AbstractMap.*;
 import javax.swing.*;
 
 import curlywhirly.gui.*;
-import curlywhirly.gui.viewer.ColorPrefs;
+import curlywhirly.util.*;
+import curlywhirly.util.ColorPrefs.*;
 
 import scri.commons.gui.*;
 
@@ -52,11 +51,11 @@ public class MultiSelectOptionsDialog extends JDialog implements ActionListener
 		chkSelectOrigin.setSelected(Prefs.guiChkAnchorPoints);
 		chkSelectOrigin.addActionListener(this);
 
-		DefaultListModel<SimpleEntry<String, Color>> colourModel = new DefaultListModel<>();
-		colourModel.addElement(new SimpleEntry<String, Color>("User.OpenGLPanel.multiSelectColor", ColorPrefs.get("User.OpenGLPanel.multiSelectColor")));
-		colourModel.addElement(new SimpleEntry<String, Color>("User.OpenGLPanel.multiSelectSphereColor", ColorPrefs.get("User.OpenGLPanel.multiSelectSphereColor")));
-		colourModel.addElement(new SimpleEntry<String, Color>("User.OpenGLPanel.multiSelectLineColor", ColorPrefs.get("User.OpenGLPanel.multiSelectLineColor")));
-		colourModel.addElement(new SimpleEntry<String, Color>("User.OpenGLPanel.multiSelectAxesColor", ColorPrefs.get("User.OpenGLPanel.multiSelectAxesColor")));
+		DefaultListModel<ColorPref> colourModel = new DefaultListModel<>();
+		colourModel.addElement(ColorPrefs.get("User.OpenGLPanel.multiSelectColor"));
+		colourModel.addElement(ColorPrefs.get("User.OpenGLPanel.multiSelectSphereColor"));
+		colourModel.addElement(ColorPrefs.get("User.OpenGLPanel.multiSelectLineColor"));
+		colourModel.addElement(ColorPrefs.get("User.OpenGLPanel.multiSelectAxesColor"));
 		lstColour.setModel(colourModel);
 		lstColour.setCellRenderer(new ColorListRenderer());
 	}
@@ -74,39 +73,6 @@ public class MultiSelectOptionsDialog extends JDialog implements ActionListener
 			Prefs.guiChkAnchorPoints = !Prefs.guiChkAnchorPoints;
 	}
 
-	static class ColorListRenderer implements ListCellRenderer<SimpleEntry<String, Color>>
-	{
-		// Set the attributes of the class and return a reference
-		@Override
-		public Component getListCellRendererComponent(JList<? extends SimpleEntry<String, Color>> list,
-			SimpleEntry<String, Color> value, int index, boolean isSelected, boolean cellHasFocus)
-		{
-			DefaultListCellRenderer renderer = new DefaultListCellRenderer();
-			JLabel component = (JLabel) renderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-
-			// Set the text
-			component.setText(value.getKey());
-
-			// Set the icon
-			BufferedImage image = new BufferedImage(20, 10, BufferedImage.TYPE_INT_RGB);
-			Graphics2D g = image.createGraphics();
-
-			Color c1 = value.getValue().brighter();
-			Color c2 = value.getValue().darker();
-
-			g.setPaint(new GradientPaint(0, 0, c1, 20, 10, c2));
-			g.fillRect(0, 0, 20, 10);
-			g.setColor(Color.BLACK);
-			g.drawRect(0, 0, 20, 10);
-			g.dispose();
-
-			component.setIcon(new ImageIcon(image));
-			component.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 0));
-
-			return component;
-		}
-	}
-
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -122,7 +88,7 @@ public class MultiSelectOptionsDialog extends JDialog implements ActionListener
         chkSelectOrigin = new javax.swing.JCheckBox();
         chkAxes = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstColour = new javax.swing.JList<SimpleEntry<String, Color>>();
+        lstColour = new javax.swing.JList<ColorPref>();
         lblColours = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -181,7 +147,7 @@ public class MultiSelectOptionsDialog extends JDialog implements ActionListener
     private scri.commons.gui.matisse.DialogPanel dialogPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblColours;
-    private javax.swing.JList<SimpleEntry<String, Color>> lstColour;
+    private javax.swing.JList<ColorPref> lstColour;
     // End of variables declaration//GEN-END:variables
 
 }

@@ -1,7 +1,7 @@
 // Copyright 2009-2014 Information & Computational Sciences, JHI. All rights
 // reserved. Use is subject to the accompanying licence terms.
 
-package curlywhirly.gui.viewer;
+package curlywhirly.util;
 
 import java.awt.*;
 import java.io.*;
@@ -9,15 +9,15 @@ import java.util.*;
 
 public class ColorPrefs
 {
-	private static HashMap<String,Color> colors = new HashMap<>();
+	private static final HashMap<String, ColorPref> colors = new HashMap<>();
+	private static final Properties p = new Properties();
 
 	private static File file;
-	private static Properties p = new Properties();
 
 	/**
 	 * Returns a color (via a name key) from the database.
 	 */
-	public static Color get(String key)
+	public static ColorPref get(String key)
 	{
 		try
 		{
@@ -29,11 +29,11 @@ public class ColorPrefs
 		}
 	}
 
-	public static float[] getAsRGB(String key)
+	public static Color getColor(String key)
 	{
 		try
 		{
-			return colors.get(key).getRGBColorComponents(new float[3]);
+			return colors.get(key).getColor();
 		}
 		catch (Exception e)
 		{
@@ -41,7 +41,19 @@ public class ColorPrefs
 		}
 	}
 
-	public static HashMap<String,Color> getColors()
+	public static float[] getColorAsRGB(String key)
+	{
+		try
+		{
+			return colors.get(key).getColor().getRGBColorComponents(new float[3]);
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
+	}
+
+	public static HashMap<String, ColorPref> getColors()
 	{
 		return colors;
 	}
@@ -67,7 +79,7 @@ public class ColorPrefs
 		initColor("User.OpenGLPanel.yAxisColor", Color.GREEN);
 		initColor("User.OpenGLPanel.zAxisColor", Color.GREEN);
 		initColor("User.OpenGLPanel.background", Color.BLACK);
-		initColor("User.OpenGLPanel.textColor", Color.WHITE);
+		initColor("User.OpenGLPanel.axisLabels", Color.WHITE);
 		initColor("User.OpenGLPanel.closeButtonColor", Color.DARK_GRAY);
 		initColor("User.OpenGLPanel.multiSelectColor", Color.WHITE);
 		initColor("User.OpenGLPanel.multiSelectSphereColor", new Color(0.5f, 0.5f, 1.0f, 0.4f));
@@ -75,24 +87,23 @@ public class ColorPrefs
 		initColor("User.OpenGLPanel.multiSelectAxesColor", Color.BLUE);
 	}
 
-
 	/**
 	 * Ensures the given color (via its key) is in the database, setting it to
 	 * the supplied default if it's not.
 	 */
-	private static void initColor(String key, Color defaultColor)
+	private static void initColor(String key, Color color)
 	{
-		Color color = get(key);
+		Color prevColor = getColor(key);
 
-		if (color == null)
-			colors.put(key, defaultColor);
+		if (prevColor == null)
+			colors.put(key, new ColorPref(key, color));
 	}
 
 	// Helper methods used by the ReadGroupScheme for direct access to the DB
 	////////////////////////////////////////////////////////////////////////////
 	public static void setColor(String key, Color color)
 	{
-		colors.put(key, color);
+		colors.get(key).setColor(color);
 	}
 
 	public static void removeColor(String key)
@@ -134,7 +145,13 @@ public class ColorPrefs
 					Integer.parseInt(s[1]),
 					Integer.parseInt(s[2]));
 
-				colors.put(key, c);
+				// This conditional should be removed after the first release
+				// after 31/03/2015. It's being used to remove a now unused
+				// key from the color preferences on users machines.
+				if (key.equals("User.OpenGLPanel.textColor"))
+					continue;
+
+				initColor(key, c);
 			}
 			catch (NumberFormatException e) { e.printStackTrace(); }
 		}
@@ -151,7 +168,7 @@ public class ColorPrefs
 			// Dump the hashmap back into a properties object
 			for (String key: colors.keySet())
 			{
-				Color c = colors.get(key);
+				Color c = colors.get(key).getColor();
 				p.setProperty(key, c.getRed() + "," + c.getGreen() + "," + c.getBlue());
 			}
 
@@ -162,5 +179,32 @@ public class ColorPrefs
 			os.close();
 		}
 		catch (IOException t) { t.printStackTrace(); }
+	}
+
+	public static class ColorPref
+	{
+		private final String key;
+		private Color color;
+
+		ColorPref(String key, Color color)
+		{
+			this.key = key;
+			this.color = color;
+		}
+
+		public String getKey()
+		{
+			return key;
+		}
+
+		public Color getColor()
+		{
+			return color;
+		}
+
+		public void setColor(Color color)
+		{
+			this.color = color;
+		}
 	}
 }
