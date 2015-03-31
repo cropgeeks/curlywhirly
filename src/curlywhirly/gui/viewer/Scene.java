@@ -1,5 +1,6 @@
 package curlywhirly.gui.viewer;
 
+import curlywhirly.util.ColorPrefs;
 import javax.media.opengl.*;
 import javax.media.opengl.glu.*;
 
@@ -43,7 +44,7 @@ public class Scene
 
     private void clearColor(GL2 gl)
 	{
-		float[] clearColor = ColorPrefs.getAsRGB("User.OpenGLPanel.background");
+		float[] clearColor = ColorPrefs.getColorAsRGB("User.OpenGLPanel.background");
 		gl.glClearColor(clearColor[0], clearColor[1], clearColor[2], 0);
 	}
 

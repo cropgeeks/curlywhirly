@@ -1,5 +1,6 @@
 package curlywhirly.gui.viewer;
 
+import curlywhirly.util.ColorPrefs;
 import java.awt.*;
 import javax.media.opengl.*;
 import javax.media.opengl.glu.GLU;
@@ -36,9 +37,9 @@ public class AxesRenderer extends SceneRenderable implements GLEventListener
 
 	private void drawAxes(GL2 gl)
 	{
-		float[] xAxisColor = ColorPrefs.getAsRGB("User.OpenGLPanel.xAxisColor");
-		float[] yAxisColor = ColorPrefs.getAsRGB("User.OpenGLPanel.yAxisColor");
-		float[] zAxisColor = ColorPrefs.getAsRGB("User.OpenGLPanel.zAxisColor");
+		float[] xAxisColor = ColorPrefs.getColorAsRGB("User.OpenGLPanel.xAxisColor");
+		float[] yAxisColor = ColorPrefs.getColorAsRGB("User.OpenGLPanel.yAxisColor");
+		float[] zAxisColor = ColorPrefs.getColorAsRGB("User.OpenGLPanel.zAxisColor");
 		drawAxesLines(gl, xAxisColor, yAxisColor, zAxisColor);
 
 		drawAxesCones(gl);
@@ -75,7 +76,7 @@ public class AxesRenderer extends SceneRenderable implements GLEventListener
 	{
 		GLUquadric quadric = glu.gluNewQuadric();
 
-		float[] xAxisColor = ColorPrefs.getAsRGB("User.OpenGLPanel.xAxisColor");
+		float[] xAxisColor = ColorPrefs.getColorAsRGB("User.OpenGLPanel.xAxisColor");
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, xAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
 		// Draw the cylinders at the positive extent of each axis
@@ -91,7 +92,7 @@ public class AxesRenderer extends SceneRenderable implements GLEventListener
 			billboardText(gl, getAxisLabel(X_AXIS));
 		gl.glPopMatrix();
 
-		float [] yAxisColor = ColorPrefs.getAsRGB("User.OpenGLPanel.yAxisColor");
+		float [] yAxisColor = ColorPrefs.getColorAsRGB("User.OpenGLPanel.yAxisColor");
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, yAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
 		gl.glPushMatrix();
@@ -106,7 +107,7 @@ public class AxesRenderer extends SceneRenderable implements GLEventListener
 			billboardText(gl, getAxisLabel(Y_AXIS));
 		gl.glPopMatrix();
 
-		float [] zAxisColor = ColorPrefs.getAsRGB("User.OpenGLPanel.zAxisColor");
+		float [] zAxisColor = ColorPrefs.getColorAsRGB("User.OpenGLPanel.zAxisColor");
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, zAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
 		gl.glPushMatrix();
@@ -149,7 +150,7 @@ public class AxesRenderer extends SceneRenderable implements GLEventListener
 		gl.glMultMatrixf(invMat, 0);
 
 		renderer.begin3DRendering();
-		renderer.setColor(ColorPrefs.get("User.OpenGLPanel.textColor"));
+		renderer.setColor(ColorPrefs.getColor("User.OpenGLPanel.axisLabels"));
 		renderer.draw3D(text, 2f, -0.6f, 0, 0.05f);
 		renderer.end3DRendering();
 	}

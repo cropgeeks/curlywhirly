@@ -1,5 +1,6 @@
 package curlywhirly.gui.viewer;
 
+import curlywhirly.util.ColorPrefs;
 import java.awt.*;
 import javax.media.opengl.*;
 
@@ -47,7 +48,7 @@ public class MultiSelectionRenderer extends AbstractSphereRenderer
 	@Override
 	public void renderSpheres(GL2 gl)
 	{
-		Color color = ColorPrefs.get("User.OpenGLPanel.multiSelectColor");
+		Color color = ColorPrefs.getColor("User.OpenGLPanel.multiSelectColor");
 
 		// Get each color component into the 0-1 range instead of 0-255
 		float [] rgba = color.getRGBColorComponents(new float[3]);
@@ -63,7 +64,7 @@ public class MultiSelectionRenderer extends AbstractSphereRenderer
 		if (selectedPoint == null || !Prefs.guiChkAnchorPoints)
 			return;
 
-		float [] rgba = ColorPrefs.getAsRGB("User.OpenGLPanel.multiSelectLineColor");
+		float [] rgba = ColorPrefs.getColorAsRGB("User.OpenGLPanel.multiSelectLineColor");
 
 		gl.glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rgba, 0);
 		gl.glMaterialf(GL_FRONT, GL_SHININESS, 128);
@@ -94,7 +95,7 @@ public class MultiSelectionRenderer extends AbstractSphereRenderer
 		float[] axes = selectedPoint.getPosition();
 		gl.glTranslatef(axes[0], axes[1], axes[2]);
 		gl.glScalef(selectionSphereSize, selectionSphereSize, selectionSphereSize);
-		float[] glColor = ColorPrefs.getAsRGB("User.OpenGLPanel.multiSelectAxesColor");
+		float[] glColor = ColorPrefs.getColorAsRGB("User.OpenGLPanel.multiSelectAxesColor");
 
 		// Re-use the axes drawing code from the scene
 		winMain.getOpenGLPanel().getAxesRenderer().drawAxesLines(gl, glColor, glColor, glColor);
@@ -134,7 +135,7 @@ public class MultiSelectionRenderer extends AbstractSphereRenderer
 		gl.glEnable(GL_CULL_FACE);
 		gl.glDisable(GL_BLEND);
 	}
-	
+
 	@Override
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height)
 	{

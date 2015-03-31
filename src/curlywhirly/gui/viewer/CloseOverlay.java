@@ -3,13 +3,13 @@
 
 package curlywhirly.gui.viewer;
 
+import curlywhirly.util.ColorPrefs;
 import java.awt.*;
 import javax.media.opengl.*;
 
 import com.jogamp.opengl.util.awt.*;
 
 import curlywhirly.gui.*;
-import curlywhirly.gui.viewer.*;
 
 /**
  * Renders the X in the top right hand corner of the screen which the user can
@@ -58,7 +58,7 @@ public class CloseOverlay implements GLEventListener
 		 yHigh = 10;
 		 yLow = 20;
 
-		g2d.setColor(ColorPrefs.get("User.OpenGLPanel.closeButtonColor"));
+		g2d.setColor(ColorPrefs.getColor("User.OpenGLPanel.closeButtonColor"));
 		g2d.setStroke(new BasicStroke(3));
 		// Top left to bottom right stroke of X
 		g2d.drawLine(xLeft, yHigh, xRight, yLow);

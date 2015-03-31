@@ -1,5 +1,6 @@
 package curlywhirly.gui;
 
+import curlywhirly.util.ColorPrefs;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;

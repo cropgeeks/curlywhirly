@@ -3,14 +3,15 @@
 
 package curlywhirly.gui.dialog;
 
-import curlywhirly.gui.*;
-import curlywhirly.gui.viewer.*;
+import curlywhirly.util.ColorPrefs;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.*;
 import java.util.*;
 import javax.swing.*;
 
+import curlywhirly.gui.*;
+import curlywhirly.util.*;
+import curlywhirly.util.ColorPrefs.*;
 
 import scri.commons.gui.*;
 
@@ -88,92 +89,33 @@ public class CustomizeColorsDialog extends JDialog implements ActionListener
 
 	void initializeList()
 	{
-		HashMap<String, Color> colors = ColorPrefs.getColors();
-		DefaultListModel<EditableColor> model = new DefaultListModel<>();
+		HashMap<String, ColorPref> colors = ColorPrefs.getColors();
+		DefaultListModel<ColorPref> model = new DefaultListModel<>();
 
-		ArrayList<String> keys = new ArrayList<>();
-		for (String key: colors.keySet())
-			if (key.startsWith("User."))
-				keys.add(key);
-		Collections.sort(keys);
-
-		for (String key : keys)
-			model.addElement(new EditableColor(colors.get(key), key));
+		colors.values().stream()
+			.filter(v -> v.getKey().startsWith("User."))
+			.sorted(Comparator.comparing(ColorPref::getKey))
+			.forEach(v -> model.addElement(colors.get(v.getKey())));
 
 		list.setModel(model);
 		list.setCellRenderer(new ColorListRenderer());
 	}
 
-	private void selectColor(JList<EditableColor> list)
+	private void selectColor(JList<ColorPref> list)
 	{
-		EditableColor ec = list.getSelectedValue();
-		if (ec == null) return;
+		ColorPref cp = list.getSelectedValue();
+		if (cp == null) return;
 
 		Color newColor = JColorChooser.showDialog(this,
-				RB.getString("gui.dialog.CustomizeColorsDialog.dialog"),
-				ec.color);
+			RB.getString("gui.dialog.CustomizeColorsDialog.dialog"),
+			cp.getColor());
 
 		if (newColor == null) return;
 
 		// Update the color in the list
-		ec.color = newColor;
+		cp.setColor(newColor);
 		// And back in the hashmap (in ColorPrefs)
-		ColorPrefs.getColors().put(ec.name, ec.color);
-	}
-
-	static class ColorListRenderer extends DefaultListCellRenderer
-	{
-		// Set the attributes of the class and return a reference
-		@Override
-		public Component getListCellRendererComponent(JList list, Object o,
-				int i, boolean iss, boolean chf)
-		{
-			super.getListCellRendererComponent(list, o, i, iss, chf);
-
-			EditableColor ec = (EditableColor) o;
-
-			// Set the text
-			setText(ec.name.substring(5));
-
-			// Set the icon
-			BufferedImage image = new BufferedImage(20, 10, BufferedImage.TYPE_INT_RGB);
-			Graphics2D g = image.createGraphics();
-
-			Color c1 = ec.color.brighter();
-			Color c2 = ec.color.darker();
-
-			g.setPaint(new GradientPaint(0, 0, c1, 20, 10, c2));
-			g.fillRect(0, 0, 20, 10);
-			g.setColor(Color.black);
-			g.drawRect(0, 0, 20, 10);
-			g.dispose();
-
-			setIcon(new ImageIcon(image));
-
-			return this;
-		}
-
-		@Override
-		public Insets getInsets(Insets i)
-			{ return new Insets(0, 3, 0, 0); }
-	}
-
-	private static class EditableColor
-	{
-		public Color color;
-		public String name;
-
-		EditableColor(Color color, String name)
-		{
-			this.color = color;
-			this.name = name;
-		}
-
-		@Override
-		public String toString()
-		{
-			return name;
-		}
+		ColorPrefs.setColor(cp.getKey(), newColor);
 	}
 
     /** This method is called from within the constructor to
@@ -191,7 +133,7 @@ public class CustomizeColorsDialog extends JDialog implements ActionListener
         bReset = new javax.swing.JButton();
         label = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        list = new javax.swing.JList<EditableColor>();
+        list = new javax.swing.JList<ColorPref>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -242,7 +184,7 @@ public class CustomizeColorsDialog extends JDialog implements ActionListener
     private scri.commons.gui.matisse.DialogPanel dialogPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel label;
-    private javax.swing.JList<EditableColor> list;
+    private javax.swing.JList<ColorPref> list;
     // End of variables declaration//GEN-END:variables
 
 }
