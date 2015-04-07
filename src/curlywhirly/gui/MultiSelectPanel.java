@@ -49,12 +49,12 @@ public class MultiSelectPanel extends JPanel implements ActionListener, ChangeLi
 		setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
 		initComponents();
+
 		JPanel centrePanel = setupCentrePanel();
 		add(centrePanel, BorderLayout.CENTER);
 
 		JPanel eastPanel = setupEastPanel();
 		add(eastPanel, BorderLayout.EAST);
-//		add(lblOptions, BorderLayout.EAST);
 
 		this.selectionRenderer = selectionOverlay;
 	}
@@ -98,14 +98,42 @@ public class MultiSelectPanel extends JPanel implements ActionListener, ChangeLi
 
 	private JPanel setupCentrePanel()
 	{
+		final int buttonWidth = 60;
+
+		// The GridBagLayout of the outer panel keeps the nested GroupLayout centred
 		JPanel centrePanel = new JPanel();
-		centrePanel.add(lblSelection);
-		centrePanel.add(selectionSlider);
-		centrePanel.add(lblSelectionCount);
-		centrePanel.add(lblAction);
-		centrePanel.add(selectionTypeCombo);
-		centrePanel.add(bOk);
-		centrePanel.add(bCancel);
+		centrePanel.setLayout(new GridBagLayout());
+
+		// Create a nested panel with a GroupLayout to get the right combination
+		// of control sizing and placement
+		JPanel nested = new JPanel();
+		GroupLayout layout = new GroupLayout(nested);
+		nested.setLayout(layout);
+
+		layout.setAutoCreateGaps(true);
+		layout.setAutoCreateContainerGaps(true);
+
+		layout.setHorizontalGroup(layout.createSequentialGroup()
+			.addComponent(lblSelection)
+			.addComponent(selectionSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+          GroupLayout.PREFERRED_SIZE)
+			.addComponent(lblSelectionCount)
+			.addComponent(lblAction)
+			.addComponent(selectionTypeCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+          GroupLayout.PREFERRED_SIZE)
+			.addComponent(bOk, buttonWidth, buttonWidth, buttonWidth)
+			.addComponent(bCancel));
+		layout.setVerticalGroup(layout.createSequentialGroup()
+			.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+			.addComponent(lblSelection)
+			.addComponent(selectionSlider)
+			.addComponent(lblSelectionCount)
+			.addComponent(lblAction)
+			.addComponent(selectionTypeCombo)
+			.addComponent(bOk)
+			.addComponent(bCancel)));
+
+		centrePanel.add(nested);
 
 		return centrePanel;
 	}
@@ -155,6 +183,10 @@ public class MultiSelectPanel extends JPanel implements ActionListener, ChangeLi
 			detectMultiSelectedPoints();
 			lblSelectionCount.setText(getSelectedPointsString());
 		}
+
+//		System.out.println(bCancel.getSize());
+		bOk.setSize(bCancel.getSize());
+		bOk.setPreferredSize(bCancel.getSize());
 	}
 
 	@Override
