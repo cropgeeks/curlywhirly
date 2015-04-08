@@ -178,7 +178,7 @@ public class CanvasMouseListener extends MouseInputAdapter
 
 			else if (e.getSource() == mMultiSelect)
 			{
-				panel.getSelectionOverlay().multiSelect(underMouse);
+				dataSet.setMultiSelectionPoint(underMouse);
 				winMain.getMultiSelectPanel().setVisible(true);
 			}
 		}

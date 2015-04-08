@@ -4,13 +4,11 @@
 package curlywhirly.gui;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.io.*;
 import java.util.*;
 import java.util.stream.*;
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.event.*;
 import javax.swing.filechooser.*;
 
 import curlywhirly.analysis.*;
@@ -22,7 +20,7 @@ import curlywhirly.util.*;
 import scri.commons.gui.*;
 import scri.commons.gui.matisse.*;
 
-public class MultiSelectPanel extends JPanel implements ActionListener, ChangeListener
+public class MultiSelectPanel extends JPanel
 {
 	private final MultiSelectionRenderer selectionRenderer;
 	private DataSet dataSet;
@@ -69,25 +67,25 @@ public class MultiSelectPanel extends JPanel implements ActionListener, ChangeLi
 		lblAction = new JLabel();
 		RB.setText(lblAction, "gui.viewer.multiSelectPanel.lblAction");
 
-		bCancel = new JButton();
-		RB.setText(bCancel, "gui.text.cancel");
-		bCancel.addActionListener(this);
-
 		bOk = new JButton();
 		RB.setText(bOk, "gui.text.ok");
-		bOk.addActionListener(this);
+		bOk.addActionListener(e -> okClicked());
+
+		bCancel = new JButton();
+		RB.setText(bCancel, "gui.text.cancel");
+		bCancel.addActionListener(e -> cancelClicked());
 
 		lblSelection = new JLabel();
 		lblSelectionCount = new JLabel();
 
 		lblExport = new HyperLinkLabel();
-		lblExport.setText("Export");
-		lblExport.addActionListener(this);
+		RB.setText(lblExport, "gui.viewer.MultiSelectPanel.lblExport");
+		lblExport.addActionListener(e -> exportClicked());
 		lblExport.setForeground(new Color(68, 106, 156));
 
 		lblOptions = new HyperLinkLabel();
 		RB.setText(lblOptions, "gui.viewer.MultiSelectPanel.lblOptions");
-		lblOptions.addActionListener(this);
+		lblOptions.addActionListener(e -> optionsClicked());
 		lblOptions.setForeground(new Color(68, 106, 156));
 
 		setupSlider();
@@ -161,7 +159,6 @@ public class MultiSelectPanel extends JPanel implements ActionListener, ChangeLi
 		selectionTypeModel.insertElementAt(RB.getString("gui.viewer.MultiSelectPanel.selectionTypeModel.toggle"), TOGGLE);
 		selectionTypeCombo.setModel(selectionTypeModel);
 		selectionTypeCombo.setSelectedIndex(0);
-		selectionTypeCombo.addActionListener(this);
 	}
 
 	private void setupSlider()
@@ -169,7 +166,7 @@ public class MultiSelectPanel extends JPanel implements ActionListener, ChangeLi
 		selectionSlider = new JSlider();
 		RB.setText(lblSelection, "gui.viewer.MultiSelectPanel.lblSelection");
 		selectionSlider.setValue(4);
-		selectionSlider.addChangeListener(this);
+		selectionSlider.addChangeListener(e -> sliderStateChanged());
 	}
 
 	@Override
@@ -180,36 +177,31 @@ public class MultiSelectPanel extends JPanel implements ActionListener, ChangeLi
 		super.setVisible(visible);
 		if (selectionRenderer != null)
 		{
-			detectMultiSelectedPoints();
+			dataSet.detectMultiSelectedPoints(Prefs.guiSelectionSphereSize);
 			lblSelectionCount.setText(getSelectedPointsString());
 		}
-
-//		System.out.println(bCancel.getSize());
-		bOk.setSize(bCancel.getSize());
-		bOk.setPreferredSize(bCancel.getSize());
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e)
+	private void okClicked()
 	{
-		if (e.getSource() == bOk)
-		{
-			setVisible(false);
-			selectionRenderer.finishedMultiSelect(selectionTypeCombo.getSelectedIndex());
-		}
+		setVisible(false);
+		selectionRenderer.finishedMultiSelect(selectionTypeCombo.getSelectedIndex());
+	}
 
-		else if (e.getSource() == bCancel)
-		{
-			setVisible(false);
-			selectionRenderer.cancelMultiSelect();
-		}
+	private void cancelClicked()
+	{
+		setVisible(false);
+		selectionRenderer.cancelMultiSelect();
+	}
 
-		else if (e.getSource() == lblOptions)
-			new MultiSelectOptionsDialog();
+	private void exportClicked()
+	{
+		exportSelectedDatapoints();
+	}
 
-		else if (e.getSource() == lblExport)
-			exportSelectedDatapoints();
-
+	private void optionsClicked()
+	{
+		new MultiSelectOptionsDialog();
 	}
 
 	private void exportSelectedDatapoints()
@@ -250,29 +242,25 @@ public class MultiSelectPanel extends JPanel implements ActionListener, ChangeLi
 		}
 	}
 
-	@Override
-	public void stateChanged(ChangeEvent e)
+	private void sliderStateChanged()
 	{
-		if (e.getSource() == selectionSlider)
+		if (selectionRenderer != null)
 		{
-			if (selectionRenderer != null)
-			{
-				float sliderVal = selectionSlider.getValue();
-				float min = selectionSlider.getMinimum();
-				float max = selectionSlider.getMaximum();
-				float pointSize = ((sliderVal-min)/(max-min) * (2f-0.06f) + 0.06f);
-				Prefs.guiSelectionSphereSize = pointSize;
-				selectionRenderer.setSelectPointSize(pointSize);
-				detectMultiSelectedPoints();
+			float sliderVal = selectionSlider.getValue();
+			float min = selectionSlider.getMinimum();
+			float max = selectionSlider.getMaximum();
+			float pointSize = ((sliderVal-min)/(max-min) * (2f-0.06f) + 0.06f);
+			Prefs.guiSelectionSphereSize = pointSize;
+			selectionRenderer.setSelectPointSize(pointSize);
+			dataSet.detectMultiSelectedPoints(pointSize);
 
-				lblSelectionCount.setText(getSelectedPointsString());
-			}
+			lblSelectionCount.setText(getSelectedPointsString());
 		}
 	}
 
 	private String getSelectedPointsString()
 	{
-		String selected = "" + selectionRenderer.multiSelectedPointsCount();
+		String selected = "" + dataSet.multiSelectedPoints().count();
 		String total = "" + dataSet.size();
 		int diff = total.length() - selected.length();
 		StringBuilder builder = new StringBuilder();
@@ -284,10 +272,5 @@ public class MultiSelectPanel extends JPanel implements ActionListener, ChangeLi
 		builder.append(selected).append(" / ").append(total).append(')');
 
 		return builder.toString();
-	}
-
-	private void detectMultiSelectedPoints()
-	{
-		selectionRenderer.detectMultiSelectedPoints();
 	}
 }

@@ -46,11 +46,11 @@ public class DataExporter extends SimpleJob
             writer.println(header);
 
             // Get the data for each point and write it out to file
-            for (DataPoint dataPoint : dataSet)
+            dataSet.getDataPoints().forEach(dataPoint ->
             {
                 String point = getDataPointString(dataPoint);
                 writer.println(point);
-            }
+            });
         }
         catch (Exception e) { e.printStackTrace(); }
     }

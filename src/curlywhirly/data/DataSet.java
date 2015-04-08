@@ -6,7 +6,7 @@ package curlywhirly.data;
 import java.util.*;
 import java.util.stream.*;
 
-public class DataSet implements Iterable<DataPoint>
+public class DataSet
 {
 	private final String name;
 
@@ -30,12 +30,6 @@ public class DataSet implements Iterable<DataPoint>
 		axes = new Axes(axisLabels);
 
 		setCurrentCategoryGroup(categoryGroups.get(0));
-	}
-
-	@Override
-	public Iterator<DataPoint> iterator()
-	{
-		return dataPoints.createIterator();
 	}
 
 	public void updatePointPositions()
@@ -72,9 +66,12 @@ public class DataSet implements Iterable<DataPoint>
 		dataPoints.clearMultiSelection();
 	}
 
-	public void detecteOverlappingPoints(DataPoint selectedPoint, float minDist)
+	// Checks for sphere sphere collisions by chcking the distance between all
+	// points and the multiselectionpoint and the sphere's radius.
+	public void detectMultiSelectedPoints(float minDist)
 	{
-		dataPoints.detectOverlappingPoints(selectedPoint, minDist);
+		clearMultiSelection();
+		dataPoints.detectOverlappingPoints(minDist);
 	}
 
 	public CategoryGroup getCurrentCategoryGroup()
@@ -112,4 +109,14 @@ public class DataSet implements Iterable<DataPoint>
 
 	public int size()
 	{	return dataPoints.size(); }
+
+	public void setMultiSelectionPoint(DataPoint multiSelectionPoint)
+	{
+		dataPoints.setMultiSelectionPoint(multiSelectionPoint);
+	}
+
+	public DataPoint getMultiSelectionPoint()
+	{
+		return dataPoints.getMultiSelectionPoint();
+	}
 }

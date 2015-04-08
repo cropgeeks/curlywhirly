@@ -10,6 +10,8 @@ public class DataSetPoints
 {
 	private final List<DataPoint> points;
 
+	private DataPoint multiSelectionPoint;
+
 	public DataSetPoints(List<DataPoint> points)
 	{
 		this.points = points;
@@ -81,11 +83,11 @@ public class DataSetPoints
 		multiSelectedPoints().forEach(point -> point.setMultiSelected(false));
 	}
 
-	public void detectOverlappingPoints(DataPoint selectedPoint, float minDist)
+	public void detectOverlappingPoints(float minDist)
 	{
 		points.forEach(point ->
 		{
-			float[] selectCoordinates = selectedPoint.getPosition();
+			float[] selectCoordinates = multiSelectionPoint.getPosition();
 			float[] pointCoordinates = point.getPosition();
 
 			// Find the distance between our two points
@@ -102,4 +104,14 @@ public class DataSetPoints
 
 	public List<DataPoint> getDataPoints()
 		{ return points; }
+
+	public void setMultiSelectionPoint(DataPoint multiSelectionPoint)
+	{
+		this.multiSelectionPoint = multiSelectionPoint;
+	}
+
+	public DataPoint getMultiSelectionPoint()
+	{
+		return multiSelectionPoint;
+	}
 }
