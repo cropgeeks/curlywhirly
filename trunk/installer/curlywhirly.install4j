@@ -43,7 +43,7 @@
   <launchers>
     <launcher name="curlywhirly" id="20" customizedId="" external="false" excludeFromMenu="false" unixMode="755" menuName="CurlyWhirly" icnsFile="../res/icons/curlywhirly_icon.icns" customMacBundleIdentifier="false" macBundleIdentifier="" swtApp="false" fileset="" macBundleBinary="JavaApplicationStub" addMacEntitlements="false" macEntitlementsFile="" useCustomMacosExecutableName="false" customMacosExecutableName="">
       <executable name="curlywhirly" type="1" iconSet="true" iconFile="" executableDir="." redirectStderr="true" stderrFile="${installer:sys.userHome}/.scri-bioinf/curlywhirly.log" stderrMode="overwrite" redirectStdout="true" stdoutFile="${installer:sys.userHome}/.scri-bioinf/curlywhirly.log" stdoutMode="overwrite" failOnStderrOutput="true" executableMode="1" changeWorkingDirectory="false" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="false" globalSingleInstance="false" singleInstanceActivate="true" dpiAware="false">
-        <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" productName="" />
+        <versionInfo include="true" fileVersion="" fileDescription="CurlyWhirly" legalCopyright="The James Hutton Institute" internalName="CurlyWhirly" productName="CurlyWhirly" />
       </executable>
       <splashScreen show="false" width="0" height="0" bitmapFile="../res/curlywhirlysplashScreen.png" windowsNative="false" textOverlay="false">
         <text>
