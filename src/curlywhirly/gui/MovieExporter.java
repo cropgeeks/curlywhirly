@@ -14,7 +14,7 @@ import org.monte.media.*;
 import org.monte.media.avi.*;
 import org.monte.media.math.*;
 
-import scri.commons.file.*;
+import scri.commons.io.*;
 import scri.commons.gui.*;
 
 import static org.monte.media.VideoFormatKeys.*;
