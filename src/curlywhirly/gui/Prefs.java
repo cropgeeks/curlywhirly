@@ -8,6 +8,7 @@ import java.io.*;
 import java.util.*;
 
 import scri.commons.gui.*;
+import scri.commons.io.*;
 
 public class Prefs extends XMLPreferences
 {
@@ -74,7 +75,7 @@ public class Prefs extends XMLPreferences
 
 	// The local working directory for disk caching
 	public static String cacheFolder =
-		SystemUtils.getTempUserDirectory("jhi-curlywhirly").getPath();
+		FileUtils.getTempUserDirectory("jhi-curlywhirly").getPath();
 
 	// A list of previously accessed documents
 	public static String[] guiRecentDocs = new String[10];

@@ -80,7 +80,7 @@ public class Commands
 
 	void openSample()
 	{
-		File dir = SystemUtils.getTempUserDirectory("scri-curlywhirly");
+		File dir = FileUtils.getTempUserDirectory("scri-curlywhirly");
 		File sample = new File(dir, "sample.txt");
 
 		winMain.getOpenGLPanel().stopAnimator();
