@@ -49,11 +49,11 @@ public class PreferencesDialog extends JDialog implements ActionListener
 
 	private JPanel createButtons()
 	{
-		bOK = SwingUtils.getButton(RB.getString("gui.text.ok"));
+		bOK = new JButton(RB.getString("gui.text.ok"));
 		bOK.addActionListener(this);
-		bCancel = SwingUtils.getButton(RB.getString("gui.text.cancel"));
+		bCancel = new JButton(RB.getString("gui.text.cancel"));
 		bCancel.addActionListener(this);
-		bHelp = SwingUtils.getButton(RB.getString("gui.text.help"));
+		bHelp = new JButton(RB.getString("gui.text.help"));
 		RB.setText(bHelp, "gui.text.help");
 
 		JPanel p1 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
