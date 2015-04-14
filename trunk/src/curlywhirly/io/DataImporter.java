@@ -13,7 +13,7 @@ import curlywhirly.data.*;
 import curlywhirly.gui.*;
 import curlywhirly.gui.viewer.*;
 
-import scri.commons.file.*;
+import scri.commons.io.*;
 import scri.commons.gui.*;
 
 public class DataImporter extends SimpleJob

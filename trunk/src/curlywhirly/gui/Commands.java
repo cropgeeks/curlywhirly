@@ -11,7 +11,7 @@ import javax.swing.filechooser.*;
 import curlywhirly.gui.dialog.*;
 import curlywhirly.io.*;
 
-import scri.commons.file.*;
+import scri.commons.io.*;
 import scri.commons.gui.*;
 
 public class Commands
