@@ -103,7 +103,10 @@ public class ColorPrefs
 	////////////////////////////////////////////////////////////////////////////
 	public static void setColor(String key, Color color)
 	{
-		colors.get(key).setColor(color);
+		if (colors.containsKey(key))
+			colors.get(key).setColor(color);
+		else
+			colors.put(key, new ColorPref(key, color));
 	}
 
 	public static void removeColor(String key)
