@@ -161,7 +161,6 @@ class PreferencesPanelNB extends JPanel
         bCustomizeColors.setText("Customize colours");
 
         chkColorInput.setText("Use colours specified in input files");
-        chkColorInput.setToolTipText("");
 
         javax.swing.GroupLayout otherPanelLayout = new javax.swing.GroupLayout(otherPanel);
         otherPanel.setLayout(otherPanelLayout);
