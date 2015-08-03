@@ -142,7 +142,7 @@ class CategoryGroupPanel extends JPanel implements TableModelListener
 
 	void updatePanelSize(CategoryPanel catPanel, JPanel tablePanel)
 	{
-		int tableHeight = catPanel.getTablePanel().getCatTable().getHeight();
+		int tableHeight = catPanel.getTableHeight();
 		prefHeight = tablePanel.isVisible() ? prefHeight + tableHeight : prefHeight - tableHeight;
 		setPreferredSize(new Dimension(getPreferredSize().width, prefHeight));
 	}

@@ -94,4 +94,7 @@ class CategoryPanel extends JPanel implements ActionListener
 
 	CategoryGroup getCategoryGroup()
 		{ return catGroup; }
+
+	int getTableHeight()
+		{ return tablePanel.getCatTable().getPreferredSize().height; }
 }
