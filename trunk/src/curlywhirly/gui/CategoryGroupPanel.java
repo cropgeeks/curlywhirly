@@ -130,14 +130,12 @@ class CategoryGroupPanel extends JPanel implements TableModelListener
 
 	void selectAll()
 	{
-		for (CategoryPanel panel : categoryPanels)
-			panel.selectAll();
+		categoryPanels.forEach(panel -> panel.selectAll());
 	}
 
 	void selectNone()
 	{
-		for (CategoryPanel panel : categoryPanels)
-			panel.selectNone();
+		categoryPanels.forEach(panel -> panel.selectNone());
 	}
 
 	void updatePanelSize(CategoryPanel catPanel, JPanel tablePanel)
@@ -152,8 +150,7 @@ class CategoryGroupPanel extends JPanel implements TableModelListener
 	@Override
 	public void tableChanged(TableModelEvent e)
 	{
-		for (CategoryPanel container : categoryPanels)
-			container.updateNamePanel();
+		categoryPanels.forEach(panel -> panel.updateNamePanel());
 
 		// Required to force the counts in tables other than the one that was
 		// changed to update.
