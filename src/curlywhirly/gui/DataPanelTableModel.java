@@ -182,13 +182,11 @@ public class DataPanelTableModel extends AbstractTableModel
 			Color color2 = p2.getColor();
 
 			if (p1.isSelected() && !p2.isSelected())
-			{
 				return 1;
-			}
 			else if (p1.isSelected() && p2.isSelected())
-			{
 				return compare(color1, color2);
-			}
+			else if (!p1.isSelected() && !p2.isSelected())
+				return compare(color1, color2);
 			else
 				return -1;
 		}
