@@ -3,7 +3,6 @@
 
 package curlywhirly.io;
 
-import curlywhirly.util.ColorPrefs;
 import java.awt.*;
 import java.io.*;
 import java.util.*;
@@ -11,7 +10,7 @@ import java.util.stream.*;
 
 import curlywhirly.data.*;
 import curlywhirly.gui.*;
-import curlywhirly.gui.viewer.*;
+import curlywhirly.util.*;
 
 import scri.commons.io.*;
 import scri.commons.gui.*;
@@ -71,12 +70,12 @@ public class DataImporter extends SimpleJob
 		readFile(reader);
 
 		// We need to assign colors to our categories
-		for (CategoryGroup group : categoryGroups)
+		categoryGroups.forEach(group ->
 		{
 			// Also sort the category groups at this point
 			group.sort();
 			assignColorsToCategories(group);
-		}
+		});
 
 		createDataPoints();
 		addDataPointsToCategories();
@@ -119,9 +118,7 @@ public class DataImporter extends SimpleJob
 		{
 			for (Category category : group.getCategories())
 			{
-				ArrayList<DataPoint> points = new ArrayList<DataPoint>();
-				for (String name : categoryPoints.get(category))
-					points.add(pointsByName.get(name));
+				ArrayList<DataPoint> points = categoryPoints.get(category).stream().map(name -> pointsByName.get(name)).collect(Collectors.toCollection(ArrayList::new));
 				group.addPointsForCategory(category, points);
 			}
 		}
@@ -190,17 +187,13 @@ public class DataImporter extends SimpleJob
 	{
 		categoryGroups = new ArrayList<>();
 
-		for (int i=0; i < columns.length; i++)
+		Stream.of(columns).filter(col -> col.toLowerCase().startsWith(CATEGORY_IDENTIFIER)).forEach(c ->
 		{
-			String column = columns[i];
-			if (column.toLowerCase().trim().startsWith(CATEGORY_IDENTIFIER))
-			{
-				String name = column.substring(column.indexOf(':')+1, column.length());
-				if (name.isEmpty())
-					name = MISSING_CATEGORY;
-				categoryGroups.add(new CategoryGroup(name));
-			}
-		}
+			String name = c.substring(c.indexOf(':')+1, c.length());
+			if (name.isEmpty())
+				name = MISSING_CATEGORY;
+			categoryGroups.add(new CategoryGroup(name));
+		});
 
 		return categoryGroups;
 	}
