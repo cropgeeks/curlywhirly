@@ -7,9 +7,11 @@ import java.awt.*;
 import java.io.*;
 import java.util.*;
 import java.util.stream.*;
+import javax.swing.*;
 
 import curlywhirly.data.*;
 import curlywhirly.gui.*;
+import curlywhirly.gui.dialog.*;
 import curlywhirly.util.*;
 
 import scri.commons.io.*;
@@ -45,6 +47,8 @@ public class DataImporter extends SimpleJob
 	private int expectedTokenCount = -1;
 
 	private String dbURL = "";
+
+	private ArrayList<String> duplicates = new ArrayList<>();
 
 	public DataImporter(File file)
 	{
@@ -238,23 +242,30 @@ public class DataImporter extends SimpleJob
 
 		String name = tokens[labelColumn];
 
-		// Read the category this data point is classified by for each group
-		String[] categoryNames = Arrays.copyOf(tokens, labelColumn);
-		HashMap<CategoryGroup, Category> categories = getCategoriesForDataPoint(categoryNames);
-
 		// Read all the values associated with the data point
 		String[] valuesArray = Arrays.copyOfRange(tokens, labelColumn+1, tokens.length);
 		ArrayList<Float> values = getValuesForDataPoint(valuesArray);
 
-		pointValues.put(name, values);
-
-		// Categories also need to know which points they are associated with.
-		for (Category category : categories.values())
+		if (pointValues.containsKey(name))
 		{
-			categoryPoints.putIfAbsent(category, new ArrayList<String>());
-			ArrayList<String> points = categoryPoints.get(category);
-			points.add(name);
-			categoryPoints.put(category, points);
+			duplicates.add(name);
+		}
+		else
+		{
+			pointValues.put(name, values);
+
+			// Read the category this data point is classified by for each group
+			String[] categoryNames = Arrays.copyOf(tokens, labelColumn);
+			HashMap<CategoryGroup, Category> categories = getCategoriesForDataPoint(categoryNames);
+
+			// Categories also need to know which points they are associated with.
+			for (Category category : categories.values())
+			{
+				categoryPoints.putIfAbsent(category, new ArrayList<String>());
+				ArrayList<String> points = categoryPoints.get(category);
+				points.add(name);
+				categoryPoints.put(category, points);
+			}
 		}
 	}
 
@@ -297,7 +308,7 @@ public class DataImporter extends SimpleJob
 		if (vals.length != axisLabels.length)
 			throw new ReadException(file, lineCount, ReadException.VALUE_COUNT_WRONG);
 
-		ArrayList<Float> values = new ArrayList<Float>();
+		ArrayList<Float> values = new ArrayList<>();
 		for (String value : vals)
 			values.add(Float.parseFloat(value.trim()));
 
@@ -332,6 +343,17 @@ public class DataImporter extends SimpleJob
 
 	public File getFile()
 		{ return file; }
+
+	public void displayDuplicates()
+	{
+		if (!duplicates.isEmpty())
+		{
+			Runnable r = () -> new DuplicateDataPointsDialog(duplicates);
+
+			try { SwingUtilities.invokeLater(r); }
+			catch (Exception e) {}
+		}
+	}
 
 	// Methods overriden from SimpleJob
 
