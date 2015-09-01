@@ -70,6 +70,9 @@ public class Commands
 
 				winMain.setDataSet(importer.getDataSet());
 				CurlyWhirlyFileHandler.addAsMostRecent(importer.getFile());
+
+				// Popup dialog to show duplicated points
+				importer.displayDuplicates();
 			}
 			catch (Exception e)
 			{
