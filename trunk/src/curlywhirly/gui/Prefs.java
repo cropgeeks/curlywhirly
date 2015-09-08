@@ -71,6 +71,8 @@ public class Prefs extends XMLPreferences
 
 	public static boolean guiMovieChkColourKey = true;
 
+	public static boolean guiDrawAxisTicks = false;
+
 	public static boolean ioUseFileColors = true;
 
 	// The local working directory for disk caching
