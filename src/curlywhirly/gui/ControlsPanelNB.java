@@ -43,6 +43,7 @@ public class ControlsPanelNB extends JPanel
 
 		setupAxisLabelsCheckBox();
 		setupDatasetLabelsCheckbox();
+		setupAxisTicksCheckbox();
 		setupAxisLabelSizeSlider();
 		setupPointSizeSlider();
 		setupDeselectedSlider();
@@ -62,6 +63,13 @@ public class ControlsPanelNB extends JPanel
 		RB.setText(chkDatasetLabels, "gui.ControlPanel.datasetLabels");
 		chkDatasetLabels.setSelected(Prefs.guiChkDatasetLabels);
 		chkDatasetLabels.addActionListener(e -> dataSetLabelsListener());
+	}
+
+	private void setupAxisTicksCheckbox()
+	{
+		RB.setText(chkAxisTicks, "gui.ControlPanel.axisTicks");
+		chkAxisTicks.setSelected(Prefs.guiDrawAxisTicks);
+		chkAxisTicks.addActionListener(e -> axisTicksListener());
 	}
 
 	private void setupAxisLabelSizeSlider()
@@ -266,6 +274,11 @@ public class ControlsPanelNB extends JPanel
 		Prefs.guiChkDatasetLabels = !Prefs.guiChkDatasetLabels;
 	}
 
+	private void axisTicksListener()
+	{
+		Prefs.guiDrawAxisTicks = !Prefs.guiDrawAxisTicks;
+	}
+
 	private void rbGreyListener()
 	{
 		winMain.getOpenGLPanel().setDeselectedSphereRenderer(new DeselectedSphereRendererGrey());
@@ -339,6 +352,7 @@ public class ControlsPanelNB extends JPanel
         lblSphereDetail = new javax.swing.JLabel();
         sphereDetailSlider = new javax.swing.JSlider();
         hlblReset = new scri.commons.gui.matisse.HyperLinkLabel();
+        chkAxisTicks = new javax.swing.JCheckBox();
         deselectedPanel = new javax.swing.JPanel();
         rbTransparent = new javax.swing.JRadioButton();
         rbGrey = new javax.swing.JRadioButton();
@@ -413,6 +427,8 @@ public class ControlsPanelNB extends JPanel
         hlblReset.setForeground(new java.awt.Color(68, 106, 156));
         hlblReset.setText("Reset to defaults");
 
+        chkAxisTicks.setText("Show axis ticks");
+
         javax.swing.GroupLayout advancedPanelLayout = new javax.swing.GroupLayout(advancedPanel);
         advancedPanel.setLayout(advancedPanelLayout);
         advancedPanelLayout.setHorizontalGroup(
@@ -429,29 +445,32 @@ public class ControlsPanelNB extends JPanel
                         .addComponent(sphereDetailSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                     .addGroup(advancedPanelLayout.createSequentialGroup()
                         .addGroup(advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblAxislLabelSize)
-                            .addComponent(chkAxisLabels)
-                            .addComponent(chkDatasetLabels))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(advancedPanelLayout.createSequentialGroup()
-                        .addGroup(advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblSizeSlider)
                             .addComponent(lblDeselected))
                         .addGap(18, 18, 18)
                         .addGroup(advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(axisLabelSizeSlider, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addComponent(pointSizeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(deselectedSizeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
+                            .addComponent(deselectedSizeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                    .addGroup(advancedPanelLayout.createSequentialGroup()
+                        .addGroup(advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(chkAxisTicks)
+                            .addComponent(chkAxisLabels)
+                            .addComponent(chkDatasetLabels)
+                            .addComponent(lblAxislLabelSize))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         advancedPanelLayout.setVerticalGroup(
             advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(advancedPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(chkAxisLabels)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkDatasetLabels)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkAxisTicks)
+                .addGap(18, 18, 18)
                 .addGroup(advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblAxislLabelSize)
                     .addComponent(axisLabelSizeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -467,7 +486,7 @@ public class ControlsPanelNB extends JPanel
                 .addGroup(advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblSphereDetail)
                     .addComponent(sphereDetailSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(hlblReset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -532,6 +551,7 @@ public class ControlsPanelNB extends JPanel
     private javax.swing.JPanel advancedPanel;
     private javax.swing.JSlider axisLabelSizeSlider;
     private javax.swing.JCheckBox chkAxisLabels;
+    private javax.swing.JCheckBox chkAxisTicks;
     private javax.swing.JCheckBox chkDatasetLabels;
     private javax.swing.JPanel dataPanel;
     private javax.swing.JPanel deselectedPanel;
