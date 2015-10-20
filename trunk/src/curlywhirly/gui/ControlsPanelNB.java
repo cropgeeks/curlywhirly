@@ -210,6 +210,7 @@ public class ControlsPanelNB extends JPanel
 		// Advanced panel variables
 		advancedPanel.setEnabled(enabled);
 		chkAxisLabels.setEnabled(enabled);
+		chkAxisTicks.setEnabled(enabled);
 		chkDatasetLabels.setEnabled(enabled);
 		lblAxislLabelSize.setEnabled(enabled);
 		axisLabelSizeSlider.setEnabled(enabled);
