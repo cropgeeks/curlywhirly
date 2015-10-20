@@ -6,7 +6,8 @@ package curlywhirly.util;
 import java.awt.*;
 import java.awt.image.*;
 import javax.swing.*;
-import scri.commons.gui.RB;
+
+import scri.commons.gui.*;
 
 public class ColorListRenderer implements ListCellRenderer<ColorPrefs.ColorPref>
 {

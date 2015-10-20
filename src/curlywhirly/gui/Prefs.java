@@ -3,10 +3,6 @@
 
 package curlywhirly.gui;
 
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-
 import scri.commons.gui.*;
 import scri.commons.io.*;
 
@@ -14,9 +10,6 @@ public class Prefs extends XMLPreferences
 {
 	// Unique Curlywhirly ID for this user
 	public static String curlywhirlyID = SystemUtils.createGUID(32);
-
-	//boolean to indicate whether we need to show this user instructions for controlling the 3D interface
-	public static boolean show3DControlInstructions = true;
 
 	// last "looked at" location when file browsing
 	// (default location to user's home, my documents, etc...)
@@ -33,21 +26,11 @@ public class Prefs extends XMLPreferences
 	// Is this the first time the program has ever been run (by this user)?
 	public static boolean isFirstRun = true;
 
-	//this boolean indicates whether we should display data labels on mouseOver
-	public static boolean showMouseOverLabels = true;
-
 	// Display localised text in...
 	public static String localeText = "auto";
 
 	// When to check for updates
 	public static int guiUpdateSchedule = Install4j.STARTUP;
-
-	// Graph background color
-	public static int guiGraphBackground = 0;
-
-	public static Color guiXAxisColor = Color.GREEN;
-	public static Color guiYAxisColor = Color.GREEN;
-	public static Color guiZAxisColor = Color.GREEN;
 
 	public static boolean guiChkAxisLabels = true;
 	public static boolean guiChkDatasetLabels = false;
@@ -59,8 +42,6 @@ public class Prefs extends XMLPreferences
 	public static int guiMovieCaptureLength = 5;
 
 	public static float guiRotationSpeed = -0.5f;
-
-	public static boolean guiAntialiasAxes = true;
 
 	public static int guiDataPanelFilter = 0;
 
@@ -78,26 +59,4 @@ public class Prefs extends XMLPreferences
 	// The local working directory for disk caching
 	public static String cacheFolder =
 		FileUtils.getTempUserDirectory("jhi-curlywhirly").getPath();
-
-	// A list of previously accessed documents
-	public static String[] guiRecentDocs = new String[10];
-
-	// Updates the array of recently accessed documents so that 'document' is
-	// the first element, even if it has been accessed previously
-	public static void setRecentDocument(File file)
-	{
-		// Convert the array of files back into a single string
-		String mostRecent = file.getPath();
-
-		LinkedList<String> list = new LinkedList<String>();
-		list.addAll(Arrays.asList(guiRecentDocs));
-
-		if (list.contains(mostRecent))
-			list.remove(mostRecent);
-
-		list.addFirst(mostRecent);
-
-		for (int i = 0; i < guiRecentDocs.length; i++)
-			guiRecentDocs[i] = list.get(i);
-	}
 }

@@ -7,7 +7,7 @@ import java.awt.datatransfer.*;
 import java.awt.dnd.*;
 import java.io.*;
 import java.util.*;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 public class FileDropAdapter extends DropTargetAdapter
 {
@@ -39,13 +39,7 @@ public class FileDropAdapter extends DropTargetAdapter
 					// We thread this off, so that Windows doesn't hang after a
 					// drag n drop from Explorer while CurlyWhirly actually loads
 					// the data
-					Runnable r = new Runnable() {
-						@Override
-						public void run()
-						{
-							winMain.getCommands().openFile(new File(filename));
-						}
-					};
+					Runnable r = () -> winMain.getCommands().openFile(new File(filename));
 
 					SwingUtilities.invokeLater(r);
 

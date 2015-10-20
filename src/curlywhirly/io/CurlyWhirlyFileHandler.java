@@ -9,6 +9,7 @@ import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
+
 import org.w3c.dom.*;
 
 /**
@@ -18,7 +19,6 @@ public class CurlyWhirlyFileHandler
 {
 	// A list of recently accessed CurlyWhirlyFile objects
 	public static final ArrayList<CurlyWhirlyFile> recentFiles = new ArrayList<>();
-
 
 	public static void addAsMostRecent(File file)
 	{

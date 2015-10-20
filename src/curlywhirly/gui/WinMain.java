@@ -116,7 +116,7 @@ public class WinMain extends JFrame
 		ctrlTabs.setToolTipTextAt(1, RB.getString("gui.WinMain.dataTab"));
 		ctrlTabs.add("", controlsPanel);
 		ctrlTabs.setIconAt(2, Icons.getIcon("CONTROLSTAB"));
-		ctrlTabs.setToolTipTextAt(2, "Controls");
+		ctrlTabs.setToolTipTextAt(2, RB.getString("gui.WinMain.controlsTab"));
 	}
 
 	private void createCanvas()

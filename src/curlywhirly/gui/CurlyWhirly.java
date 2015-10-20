@@ -3,18 +3,15 @@
 
 package curlywhirly.gui;
 
-import curlywhirly.util.ColorPrefs;
-import curlywhirly.gui.dialog.PreferencesDialog;
-import curlywhirly.gui.dialog.AboutDialog;
 import java.awt.event.*;
 import java.io.*;
 
+import curlywhirly.io.*;
+import curlywhirly.util.*;
+import curlywhirly.gui.dialog.*;
+
 import apple.dts.samplecode.osxadapter.*;
 
-import curlywhirly.gui.viewer.*;
-import curlywhirly.io.*;
-
-import scri.commons.io.*;
 import scri.commons.gui.*;
 
 public class CurlyWhirly
@@ -27,9 +24,6 @@ public class CurlyWhirly
 	public static File initialFile = null;
 
 	public static WinMain winMain;
-
-	public static final String titleString = "CurlyWhirly - " + Install4j.VERSION;
-
 
 	public static void main(String[] args)
 		throws Exception
@@ -148,7 +142,7 @@ public class CurlyWhirly
 		File old = new File(System.getProperty("user.home"), ".curlywhirly.xml");
 
 		if (old.exists())
-			try { FileUtils.copyFile(old, file, true); }
+			try { scri.commons.io.FileUtils.copyFile(old, file, true); }
 			catch (IOException e) { e.printStackTrace(); }
 
 		return file;

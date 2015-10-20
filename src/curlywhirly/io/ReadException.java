@@ -57,7 +57,7 @@ public class ReadException extends Exception
 				"io.ReadException.CATEGORY_COUNT_WRONG", lineNumber, file.getName());
 
 			case VALUE_COUNT_WRONG: return RB.format(
-				"io.ReadException.CATEGORY_COUNT_WRONG", lineNumber, file.getName());
+				"io.ReadException.VALUE_COUNT_WRONG", lineNumber, file.getName());
 
 			case MISSING_HEADER: return RB.format(
 				"io.ReadException.MISSING_HEADER", lineNumber, file.getName());

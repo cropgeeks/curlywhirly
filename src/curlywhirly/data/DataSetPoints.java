@@ -17,11 +17,6 @@ public class DataSetPoints
 		this.points = points;
 	}
 
-	public Iterator<DataPoint> createIterator()
-	{
-		return points.iterator();
-	}
-
 	public void updatePositions(int[] axes)
 	{
 		points.forEach(point -> point.setPositionForAxes(axes));

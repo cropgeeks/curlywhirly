@@ -3,7 +3,6 @@
 
 package curlywhirly.gui.dialog;
 
-import curlywhirly.util.ColorPrefs;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
