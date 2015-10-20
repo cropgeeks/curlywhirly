@@ -33,8 +33,10 @@ public class MultiSelectPanel extends JPanel
     private JComboBox<String> selectionTypeCombo;
 	private DefaultComboBoxModel<String> selectionTypeModel;
 	private JLabel lblSelectionCount;
+	private JLabel dbLinkSeparator = new JLabel(" | ");
 
 	private HyperLinkLabel lblExport;
+	private HyperLinkLabel lblDBLink;
 	private HyperLinkLabel lblOptions;
 
 	public static final int SELECT = 0;
@@ -60,6 +62,17 @@ public class MultiSelectPanel extends JPanel
 	public void setDataSet(DataSet dataSet)
 	{
 		this.dataSet = dataSet;
+
+		if (dataSet != null && !dataSet.getDbAssociation().isGroupPreviewEnabled())
+		{
+			dbLinkSeparator.setVisible(false);
+			lblDBLink.setVisible(false);
+		}
+		else
+		{
+			dbLinkSeparator.setVisible(true);
+			lblDBLink.setVisible(true);
+		}
 	}
 
 	private void initComponents()
@@ -80,8 +93,13 @@ public class MultiSelectPanel extends JPanel
 
 		lblExport = new HyperLinkLabel();
 		RB.setText(lblExport, "gui.viewer.MultiSelectPanel.lblExport");
-		lblExport.addActionListener(e -> exportClicked());
+		lblExport.addActionListener(e -> exportToFile());
 		lblExport.setForeground(new Color(68, 106, 156));
+
+		lblDBLink = new HyperLinkLabel();
+		RB.setText(lblDBLink, "gui.viewer.MultiSelectPanel.lblDBLink");
+		lblDBLink.addActionListener(e -> exportToDatabase());
+		lblDBLink.setForeground(new Color(68, 106, 156));
 
 		lblOptions = new HyperLinkLabel();
 		RB.setText(lblOptions, "gui.viewer.MultiSelectPanel.lblOptions");
@@ -144,6 +162,11 @@ public class MultiSelectPanel extends JPanel
 		// those in the centre panel
 		eastPanel.setBorder(new EmptyBorder(6, 0, 0, 0));
 		eastPanel.add(lblExport);
+
+		// We only want the DBLink option to show up when the data file has a url in it
+		eastPanel.add(dbLinkSeparator);
+		eastPanel.add(lblDBLink);
+
 		eastPanel.add(new JLabel(" | "));
 		eastPanel.add(lblOptions);
 
@@ -175,7 +198,7 @@ public class MultiSelectPanel extends JPanel
 		float pointSize = ((Prefs.guiSelectionSphereSize-0.06f)/(2f-0.06f) * (float)(selectionSlider.getMaximum()-selectionSlider.getMinimum()) + selectionSlider.getMinimum());
 		selectionSlider.setValue((int) pointSize);
 		super.setVisible(visible);
-		if (selectionRenderer != null)
+		if (selectionRenderer != null && visible)
 		{
 			dataSet.detectMultiSelectedPoints(Prefs.guiSelectionSphereSize);
 			lblSelectionCount.setText(getSelectedPointsString());
@@ -194,27 +217,40 @@ public class MultiSelectPanel extends JPanel
 		selectionRenderer.cancelMultiSelect();
 	}
 
-	private void exportClicked()
-	{
-		exportSelectedDatapoints();
-	}
-
 	private void optionsClicked()
 	{
 		new MultiSelectOptionsDialog();
 	}
 
-	private void exportSelectedDatapoints()
+	private void exportToDatabase()
+	{
+		File exportFile = new File(Prefs.cacheFolder + System.getProperty("file.separator") + System.currentTimeMillis() + "-group.txt");
+		exportFile.deleteOnExit();
+
+		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(exportFile))))
+		{
+			dataSet.multiSelectedPoints().forEach(point -> writer.println(point.getName()));
+		}
+		catch (Exception e) { e.printStackTrace(); }
+
+		try
+		{
+			dataSet.getDbAssociation().visitUrlForUpload(exportFile);
+		}
+		catch(Exception e) { e.printStackTrace(); }
+	}
+
+	private void exportToFile()
 	{
 		// Create a file with a default filename in the current directory
 		File saveAs = new File(Prefs.guiCurrentDir, "selectedpoints.txt");
 
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
-				RB.getString("gui.text.formats.txt"), "txt");
+			RB.getString("gui.text.formats.txt"), "txt");
 
 		// Ask the user for a filename to save the data to
 		String filename = FileUtils.getSaveFilename(
-				RB.getString("gui.viewer.MultiSelectPanel.saveDataPoints.saveDialog"), saveAs, filter);
+			RB.getString("gui.viewer.MultiSelectPanel.saveDataPoints.saveDialog"), saveAs, filter);
 
 		// Quit if the user cancelled the file selection
 		if (filename != null)
@@ -224,9 +260,9 @@ public class MultiSelectPanel extends JPanel
 			DataPointSaver saver = new DataPointSaver(saveAs, dataSet.multiSelectedPoints().collect(Collectors.toCollection(ArrayList::new)), dataSet.getAxes().getXYZLabels());
 
 			ProgressDialog dialog = new ProgressDialog(saver,
-					RB.getString("gui.viewer.MultiSelectPanel.saveDataPoints.title"),
-					RB.getString("gui.viewer.MultiSelectPanel.saveDataPoints.label"),
-					CurlyWhirly.winMain);
+				RB.getString("gui.viewer.MultiSelectPanel.saveDataPoints.title"),
+				RB.getString("gui.viewer.MultiSelectPanel.saveDataPoints.label"),
+				CurlyWhirly.winMain);
 
 			if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
 			{
@@ -235,7 +271,7 @@ public class MultiSelectPanel extends JPanel
 					dialog.getException().printStackTrace();
 
 					TaskDialog.showOpenLog(RB.format("gui.viewer.MultiSelectPanel.saveDataPoints.exception",
-							dialog.getException()), null);
+						dialog.getException()), null);
 				}
 			}
 			TaskDialog.showFileOpen(RB.getString("gui.viewer.MultiSelectPanel.saveDataPoints.openFile"), TaskDialog.INF, saveAs);
