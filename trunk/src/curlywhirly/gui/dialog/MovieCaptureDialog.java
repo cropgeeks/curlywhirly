@@ -12,7 +12,7 @@ import javax.swing.filechooser.*;
 
 import curlywhirly.gui.*;
 import curlywhirly.gui.viewer.*;
-import curlywhirly.util.FileUtils;
+import curlywhirly.util.*;
 
 import scri.commons.gui.*;
 
@@ -60,6 +60,7 @@ public class MovieCaptureDialog extends JDialog implements ActionListener, Chang
 		warningPanel.setBorder(new TitledBorder(RB.getString("gui.dialog.MovieCaptureDialog.warningPanel.title")));
 		RB.setText(fileSizeLabel, "gui.dialog.MovieCaptureDialog.fileSizeLabel");
 		RB.setText(filenameLabel, "gui.dialog.MovieCaptureDialog.fileNameLabel");
+        RB.setText(sizeLabel, "gui.dialog.MovieCaptureDialog.sizeLabel");
 		RB.setText(bBrowse, "gui.text.browse");
 
 		bBrowse.addActionListener(this);

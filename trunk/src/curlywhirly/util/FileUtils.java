@@ -13,7 +13,6 @@ import scri.commons.gui.*;
 
 public class FileUtils
 {
-
 	/**
 	 * Shows a SAVE file dialog, returning the path to the file selected as a
 	 * string. Also prompts to ensure the user really does want to overwrite an

@@ -4,7 +4,6 @@
 package curlywhirly.gui;
 
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 
 import scri.commons.gui.*;
@@ -33,23 +32,9 @@ class StartPanel extends JPanel
 			RB.getString("gui.NBStartFilePanel.title")), BorderLayout.NORTH);
 		filePanel.add(new StartPanelFileNB(winMain));
 
-/*		JPanel helpPanel = new JPanel(new BorderLayout());
-		helpPanel.setOpaque(false);
-		helpPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-		helpPanel.add(new TitlePanel3(
-			RB.getString("gui.NBStartHelpPanel.title")), BorderLayout.NORTH);
-		helpPanel.add(new StartPanelHelpNB());
-
-		JPanel pubPanel = new JPanel(new BorderLayout());
-		pubPanel.setOpaque(false);
-		pubPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 8, 2));
-		pubPanel.add(new TitlePanel3(
-			RB.getString("gui.NBStartPublicationPanel.title")), BorderLayout.NORTH);
-		pubPanel.add(new StartPanelPublicationNB());
-*/
 		JPanel huttonPanel = new JPanel(new BorderLayout());
 		huttonPanel.setOpaque(false);
-//		huttonPanel.add(pubPanel);
+
 		JPanel logoPanel = new JPanel(new BorderLayout(5, 0));
 		logoPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 15));
 		logoPanel.setOpaque(false);
@@ -60,7 +45,6 @@ class StartPanel extends JPanel
 		JPanel centrePanel = new JPanel(new GridLayout(1, 2, 0, 0));
 		centrePanel.setOpaque(false);
 		centrePanel.add(filePanel);
-//		centrePanel.add(helpPanel);
 
 		panel.add(welcomePanel, BorderLayout.NORTH);
 		panel.add(centrePanel, BorderLayout.CENTER);
@@ -75,11 +59,7 @@ class StartPanel extends JPanel
 		huttonLabel.setIcon(Icons.getIcon("HUTTON"));
 		huttonLabel.setBorder(BorderFactory.createEmptyBorder(65, 10, 0, 10));
 
-		huttonLabel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				GUIUtils.visitURL("http://www.hutton.ac.uk");
-			}
-		});
+		huttonLabel.addActionListener(e -> GUIUtils.visitURL("http://www.hutton.ac.uk"));
 
 		return huttonLabel;
 	}
@@ -90,11 +70,7 @@ class StartPanel extends JPanel
 		huttonLabel.setIcon(Icons.getIcon("MASAGRO"));
 		huttonLabel.setBorder(BorderFactory.createEmptyBorder(65, 0, 0, 10));
 
-		huttonLabel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				GUIUtils.visitURL("http://masagro.cimmyt.org");
-			}
-		});
+		huttonLabel.addActionListener(e -> GUIUtils.visitURL("http://masagro.cimmyt.org"));
 
 		return huttonLabel;
 	}
@@ -121,43 +97,43 @@ class StartPanel extends JPanel
 			g.drawImage(logo.getImage(), 0, 0, w, h, null);
 		}
 	}
-}
 
-class TitlePanel3 extends JPanel
-{
-	private static final Color lineColor = new Color(207, 219, 234);
-	private static final Color textColor = new Color(75, 105, 150);
-
-	private static final int h = 30;
-
-	private String title;
-
-	public TitlePanel3(String title)
+	class TitlePanel3 extends JPanel
 	{
-		this.title = title;
-		setOpaque(false);
-	}
+		private final Color lineColor = new Color(207, 219, 234);
+		private final Color textColor = new Color(75, 105, 150);
 
-	public Dimension getPreferredSize()
-	{
-		return new Dimension(50, h);
-	}
+		private static final int h = 30;
 
-	public void paintComponent(Graphics graphics)
-	{
-		super.paintComponent(graphics);
+		private String title;
 
-		Graphics2D g = (Graphics2D) graphics;
+		public TitlePanel3(String title)
+		{
+			this.title = title;
+			setOpaque(false);
+		}
 
-		int w = getWidth();
+		public Dimension getPreferredSize()
+		{
+			return new Dimension(50, h);
+		}
 
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g.setFont(new Font("Dialog", Font.BOLD, 13));
-		g.setColor(textColor);
-		g.drawString(title, 10, 18);
+		public void paintComponent(Graphics graphics)
+		{
+			super.paintComponent(graphics);
 
-		g.setPaint(new GradientPaint(0, h, lineColor, w, h, Color.white));
-		g.setStroke(new BasicStroke(3));
-		g.drawLine(10, 26, w-10, 26);
+			Graphics2D g = (Graphics2D) graphics;
+
+			int w = getWidth();
+
+			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g.setFont(new Font("Dialog", Font.BOLD, 13));
+			g.setColor(textColor);
+			g.drawString(title, 10, 18);
+
+			g.setPaint(new GradientPaint(0, h, lineColor, w, h, Color.white));
+			g.setStroke(new BasicStroke(3));
+			g.drawLine(10, 26, w-10, 26);
+		}
 	}
 }

@@ -3,14 +3,12 @@
 
 package curlywhirly.gui;
 
-import java.awt.event.*;
 import javax.swing.*;
 
 import scri.commons.gui.*;
 
-public class StartPanelWelcomeNB extends JPanel implements ActionListener
+public class StartPanelWelcomeNB extends JPanel
 {
-
     /** Creates new form NBStartWelcomePanel */
     public StartPanelWelcomeNB()
 	{
@@ -24,18 +22,9 @@ public class StartPanelWelcomeNB extends JPanel implements ActionListener
 
 		feedbackLabel.setIcon(Icons.getIcon("FEEDBACK"));
 		twitterLabel.setIcon(Icons.getIcon("TWITTER"));
-		feedbackLabel.addActionListener(this);
-		twitterLabel.addActionListener(this);
+		feedbackLabel.addActionListener(e -> GUIUtils.sendFeedback());
+		twitterLabel.addActionListener(e -> GUIUtils.visitURL("http://twitter.com/cropgeeks"));
     }
-
-	public void actionPerformed(ActionEvent e)
-	{
-		if (e.getSource() == feedbackLabel)
-			GUIUtils.sendFeedback();
-
-		else if (e.getSource() == twitterLabel)
-			GUIUtils.visitURL("http://twitter.com/cropgeeks");
-	}
 
     /** This method is called from within the constructor to
      * initialize the form.

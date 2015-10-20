@@ -6,13 +6,13 @@ package curlywhirly.gui.dialog;
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
+import java.io.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.table.*;
 
 import curlywhirly.data.*;
 import curlywhirly.gui.*;
-import java.io.UnsupportedEncodingException;
 
 import scri.commons.gui.*;
 
@@ -247,7 +247,7 @@ public class DataPointInformationDialog extends JDialog implements ActionListene
 			this.dataSet = dataSet;
 
 			columnNames = new String[] { RB.getString("gui.dialog.DataPointInformationDialog.CategoryTableModel.col1"),
-				RB.getString("gui.dialog.DataPointInformationDialog.ValueTableModel.col2") };
+				RB.getString("gui.dialog.DataPointInformationDialog.CategoryTableModel.col2") };
 		}
 
 		@Override

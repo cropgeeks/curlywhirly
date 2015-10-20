@@ -60,7 +60,7 @@ class AboutPanelNB extends JPanel
 			}
 		});
 
-		webLabel.addActionListener(e -> NetworkUtils.visitURL("http://bioinf.hutton.ac.uk/curlywhirly"));
+		webLabel.addActionListener(e -> NetworkUtils.visitURL("http://ics.hutton.ac.uk/curlywhirly"));
 	}
 
     /** This method is called from within the constructor to

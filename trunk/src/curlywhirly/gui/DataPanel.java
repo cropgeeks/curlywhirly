@@ -149,27 +149,15 @@ public class DataPanel extends JPanel
 
 		JMenuItem mSaveReads = new JMenuItem("", Icons.getIcon("FILESAVE16"));
 		RB.setText(mSaveReads, "gui.DataPanel.mTableSave");
-		mSaveReads.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				saveReadsSummary(false);
-			}
-		});
+		mSaveReads.addActionListener(evt -> saveReadsSummary(false));
 
 		JMenuItem mSaveHighlightedReads = new JMenuItem("", Icons.getIcon("FILESAVE16"));
 		RB.setText(mSaveHighlightedReads, "gui.DataPanel.mTableSaveHighlighted");
-		mSaveHighlightedReads.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				saveReadsSummary(true);
-			}
-		});
+		mSaveHighlightedReads.addActionListener(evt -> saveReadsSummary(true));
 
 		JMenuItem mTableCopy = new JMenuItem("", Icons.getIcon("CLIPBOARD"));
 		RB.setText(mTableCopy, "gui.DataPanel.mTableCopy");
-		mTableCopy.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CWUtils.copyTableToClipboard(controls.pointsTable, model);
-			}
-		});
+		mTableCopy.addActionListener(evt -> CWUtils.copyTableToClipboard(controls.pointsTable, model));
 
 		JPopupMenu menu = new JPopupMenu();
 		menu.add(mSaveReads);
@@ -204,7 +192,6 @@ public class DataPanel extends JPanel
 	void setTableFilter(RowFilter<DataPanelTableModel, Object> rf)
 	{
 		sorter.setRowFilter(rf);
-//		controls.contigsLabel.setText(getTitle(controls.table.getRowCount()));
 	}
 
 

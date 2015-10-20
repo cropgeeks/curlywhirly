@@ -3,7 +3,6 @@
 
 package curlywhirly.gui;
 
-import curlywhirly.util.ColorPrefs;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -11,7 +10,7 @@ import javax.swing.event.*;
 import javax.swing.table.*;
 
 import curlywhirly.data.*;
-import curlywhirly.gui.viewer.*;
+import curlywhirly.util.*;
 
 import scri.commons.gui.*;
 
@@ -86,22 +85,11 @@ class CategoryTablePanel extends JPanel
 	{
 		JMenuItem mAllInGroup = new JMenuItem();
 		RB.setText(mAllInGroup, "gui.CategoryPanel.mAllInGroup");
-		mAllInGroup.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setCategoriesSelected(true);
-			}
-		});
+		mAllInGroup.addActionListener(evt -> setCategoriesSelected(true));
 
 		JMenuItem mNoneInGroup = new JMenuItem();
 		RB.setText(mNoneInGroup, "gui.CategoryPanel.mNoneInGroup");
-		mNoneInGroup.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				setCategoriesSelected(false);
-			}
-		});
+		mNoneInGroup.addActionListener(evt -> setCategoriesSelected(false));
 
 		JPopupMenu menu = new JPopupMenu();
 		menu.add(mAllInGroup);
