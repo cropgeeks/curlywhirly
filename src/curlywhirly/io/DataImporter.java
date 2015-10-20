@@ -22,8 +22,10 @@ public class DataImporter extends SimpleJob
 	private static final String LABEL_IDENTIFIER = "label";
 	private static final String CATEGORY_IDENTIFIER = "categories:";
 	private static final String MISSING_CATEGORY = "Uncategorised";
-	private static final String URL_IDENTIFIER = "#url=";
-	private static final String COLOR_IDENTIFIER = "#color=";
+	private static final String POINT_URL = "# cwDatabaseLineSearch=";
+	private static final String GROUP_URL = "# cwDatabaseGroupPreview=";
+	private static final String UPLOAD_URL = "# cwDatabaseGroupUpload=";
+	private static final String COLOR_IDENTIFIER = "# color=";
 	private static final String COLOR_DELIMITER = "::CW::";
 
 	private File file;
@@ -47,6 +49,8 @@ public class DataImporter extends SimpleJob
 	private int expectedTokenCount = -1;
 
 	private String dbURL = "";
+	private String groupUrl = "";
+	private String uploadUrl = "";
 
 	private ArrayList<String> duplicates = new ArrayList<>();
 
@@ -89,6 +93,8 @@ public class DataImporter extends SimpleJob
 
 		// Finally set the link to access the database
 		dataSet.getDbAssociation().setDbPointUrl(dbURL);
+		dataSet.getDbAssociation().setDbGroupUrl(groupUrl);
+		dataSet.getDbAssociation().setDbUploadUrl(uploadUrl);
 	}
 
 	private void createDataPoints()
@@ -138,9 +144,23 @@ public class DataImporter extends SimpleJob
 		{
 			lineCount++;
 
-			// TODO Consider what to do about URL lines
-			if (str.toLowerCase().startsWith(URL_IDENTIFIER))
-				dbURL = str.substring(str.indexOf('=')+1);
+			// Parse out URL for database point linking functionality
+			if (str.startsWith(POINT_URL))
+			{
+				dbURL = str.substring(str.indexOf('=') + 1).trim();
+			}
+
+			// Parse out url needed to create a group preview in germinate
+			if (str.startsWith(GROUP_URL))
+			{
+				groupUrl = str.substring(str.indexOf('=') + 1).trim();
+			}
+
+			// Parse out url needed to upload info needed to create a group preview in germinate
+			if (str.startsWith(UPLOAD_URL))
+			{
+				uploadUrl = str.substring(str.indexOf('=') + 1).trim();
+			}
 
 			if (str.startsWith(COLOR_IDENTIFIER))
 			{

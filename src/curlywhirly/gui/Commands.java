@@ -87,6 +87,7 @@ public class Commands
 		File sample = new File(dir, "sample.txt");
 
 		winMain.getOpenGLPanel().stopAnimator();
+		winMain.getMultiSelectPanel().setVisible(false);
 
 		try
 		{

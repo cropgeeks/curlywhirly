@@ -213,6 +213,9 @@ public class WinMain extends JFrame
 
 		splitPane.setDividerLocation(location);
 
+		// Ensure the multiselect panel is hidden on the next dataset load
+		multiSelectPanel.setVisible(false);
+
 		setDataSet(null);
 	}
 
