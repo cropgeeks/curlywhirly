@@ -54,7 +54,7 @@
 				<exclude name="**/*Test.class"/>
 			</fileset>
 			<manifest>
-				<attribute name="Main-Class" value="curlywhirly.gui.CurlyWhirly"/>
+				<attribute name="Main-Class" value="jhi.curlywhirly.gui.CurlyWhirly"/>
 				<attribute name="Class-Path" value="${jar.classpath}"/>
 				<attribute name="Implementation-Version" value="${i4j.version}"/>
 			</manifest>
