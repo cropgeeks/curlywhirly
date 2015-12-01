@@ -132,6 +132,11 @@ class CategoryTablePanel extends JPanel
 				{
 					ColorPrefs.setColor(category.getColorKey(), newColor);
 					category.setColour(newColor);
+
+					// We need to force a re-color of all datapoints by the current category group incase the visible
+					// colour needs to change.
+					dataSet.getCurrentCategoryGroup().colorPointsByCategories();
+
 					// Needed to force an update of the colour displayed
 					// within the table
 					catTable.repaint();
