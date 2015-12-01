@@ -25,7 +25,7 @@ public class DataImporter extends SimpleJob
 	private static final String POINT_URL = "# cwDatabaseLineSearch=";
 	private static final String GROUP_URL = "# cwDatabaseGroupPreview=";
 	private static final String UPLOAD_URL = "# cwDatabaseGroupUpload=";
-	private static final String COLOR_IDENTIFIER = "# color=";
+	private static final String COLOR_IDENTIFIER = "#color=";
 	private static final String COLOR_DELIMITER = "::CW::";
 
 	private File file;
