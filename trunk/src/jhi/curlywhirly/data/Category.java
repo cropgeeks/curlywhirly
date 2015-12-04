@@ -34,6 +34,11 @@ public class Category implements Comparable<Category>
 		return (int) dataPoints.stream().filter(DataPoint::isSelected).count();
 	}
 
+	public boolean hasSelectedPoints()
+	{
+		return ((int) dataPoints.stream().filter(DataPoint::isSelected).count() != 0);
+	}
+
 	public String getSelectedText()
 	{
 		return "" + getSelectedCount() + "/" + getTotal();
