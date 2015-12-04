@@ -104,7 +104,7 @@ public class CategoryGroup implements Comparable<CategoryGroup>, Iterable<Catego
 
 	public Stream<Category> getActiveCategories()
 	{
-		return categories.stream().filter(Category::isSelected);
+		return categories.stream().filter(Category::hasSelectedPoints);
 	}
 
 	public ArrayList<Category> getCategories()
