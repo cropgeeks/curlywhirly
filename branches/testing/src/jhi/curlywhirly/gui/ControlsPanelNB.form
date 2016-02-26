@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.3" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="dataPanel" max="32767" attributes="0"/>
+                  <Component id="advancedPanel" alignment="0" max="32767" attributes="0"/>
+                  <Component id="deselectedPanel" alignment="0" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="dataPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="advancedPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="deselectedPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Container class="javax.swing.JPanel" name="dataPanel">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Coordinate options:"/>
+          </Border>
+        </Property>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="lblX" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblY" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblZ" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="yCombo" alignment="1" max="32767" attributes="0"/>
+                      <Component id="zCombo" alignment="0" max="32767" attributes="0"/>
+                      <Component id="xCombo" alignment="1" max="32767" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="2" attributes="0">
+                      <Component id="lblX" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="xCombo" alignment="2" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="2" attributes="0">
+                      <Component id="lblY" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="yCombo" alignment="2" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="2" attributes="0">
+                      <Component id="lblZ" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="zCombo" alignment="2" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JLabel" name="lblX">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="x-axis:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="xCombo">
+          <Properties>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="null"/>
+            </Property>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblZ">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="z-axis:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="yCombo">
+          <Properties>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="null"/>
+            </Property>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblY">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="y-axis:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="zCombo">
+          <Properties>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="null"/>
+            </Property>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+          </AuxValues>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JPanel" name="advancedPanel">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Advanced options:"/>
+          </Border>
+        </Property>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <Component id="hlblReset" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="lblSphereDetail" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
+                          <Component id="sphereDetailSlider" pref="0" max="32767" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="lblSizeSlider" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblDeselected" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="axisLabelSizeSlider" alignment="1" pref="0" max="32767" attributes="0"/>
+                              <Component id="pointSizeSlider" pref="0" max="32767" attributes="0"/>
+                              <Component id="deselectedSizeSlider" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="chkAxisTicks" min="-2" max="-2" attributes="0"/>
+                              <Component id="chkAxisLabels" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="chkDatasetLabels" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblAxislLabelSize" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="chkAxisLabels" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="chkDatasetLabels" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="chkAxisTicks" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="lblAxislLabelSize" min="-2" max="-2" attributes="0"/>
+                      <Component id="axisLabelSizeSlider" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="lblSizeSlider" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="pointSizeSlider" alignment="1" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="deselectedSizeSlider" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblDeselected" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="lblSphereDetail" min="-2" max="-2" attributes="0"/>
+                      <Component id="sphereDetailSlider" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Component id="hlblReset" min="-2" max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JCheckBox" name="chkAxisLabels">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Show axis labels"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="chkDatasetLabels">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Use dataset coordinate names"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblAxislLabelSize">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Axis labels size:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JSlider" name="axisLabelSizeSlider">
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblSizeSlider">
+          <Properties>
+            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="pointSizeSlider"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Selected point size:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JSlider" name="pointSizeSlider">
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblDeselected">
+          <Properties>
+            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="deselectedSizeSlider"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Deselected point size:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JSlider" name="deselectedSizeSlider">
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblSphereDetail">
+          <Properties>
+            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="sphereDetailSlider"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Point quality:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JSlider" name="sphereDetailSlider">
+        </Component>
+        <Component class="scri.commons.gui.matisse.HyperLinkLabel" name="hlblReset">
+          <Properties>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="9c" green="6a" red="44" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Reset to defaults"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="chkAxisTicks">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Show axis ticks"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JPanel" name="deselectedPanel">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Deselected points:"/>
+          </Border>
+        </Property>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="rbInvisible" min="-2" max="-2" attributes="0"/>
+                      <Component id="rbTransparent" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="rbGrey" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <Component id="rbGrey" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                  <Component id="rbTransparent" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                  <Component id="rbInvisible" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JRadioButton" name="rbTransparent">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Transparent"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="rbGrey">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Greyscale"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="rbInvisible">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Invisible"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+  </SubComponents>
+</Form>
