@@ -155,12 +155,14 @@ public class CurlyWhirly
 		try
 		{
 			// Register handlers to deal with the System menu about/quit options
-//			OSXAdapter.setPreferencesHandler(this,
-//				getClass().getDeclaredMethod("osxPreferences", (Class[])null));
+			OSXAdapter.setPreferencesHandler(this,
+				getClass().getDeclaredMethod("osxPreferences", (Class[])null));
 			OSXAdapter.setAboutHandler(this,
 				getClass().getDeclaredMethod("osxAbout", (Class[])null));
 			OSXAdapter.setQuitHandler(this,
 				getClass().getDeclaredMethod("osxShutdown", (Class[])null));
+			OSXAdapter.setFileHandler(this,
+				getClass().getDeclaredMethod("osxOpen", new Class[] { String.class }));
 
 			// Dock the menu bar at the top of the screen
 			System.setProperty("apple.laf.useScreenMenuBar", "true");
@@ -168,11 +170,11 @@ public class CurlyWhirly
 		catch (NoSuchMethodException | SecurityException e) { e.printStackTrace(); }
 	}
 
-//	/** "Preferences" on the OS X system menu. */
-//	public void osxPreferences()
-//	{
-//		new PreferencesDialog(winMain);
-//	}
+	/** "Preferences" on the OS X system menu. */
+	public void osxPreferences()
+	{
+		winMain.getCommands().showPrefs();
+	}
 
 	/** "About CurlyWhirly" on the OS X system menu. */
 	public void osxAbout()
@@ -185,5 +187,19 @@ public class CurlyWhirly
 	{
 		shutdown();
 		return true;
+	}
+
+	public void osxOpen(String path)
+	{
+		// If Tablet is already open, then open the file straight away
+		if (winMain != null && winMain.isVisible())
+		{
+			// TODO: If we have project modified checks, do them here too
+			winMain.getCommands().openFile(new File(path));
+		}
+
+		// Otherwise, mark it for opening once Flapjack is ready
+		else
+			initialFile = new File(path);
 	}
 }
