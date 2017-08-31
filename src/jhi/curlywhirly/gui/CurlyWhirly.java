@@ -62,7 +62,7 @@ public class CurlyWhirly
 		Install4j i4j = new Install4j("7308-4813-7424-6439", "281");
 
 		i4j.setUser(Prefs.guiUpdateSchedule, Prefs.curlywhirlyID, 0);
-		i4j.setURLs("http://bioinf.hutton.ac.uk/curlywhirly/installers/updates.xml",
+		i4j.setURLs("https://ics.hutton.ac.uk/resources/curlywhirly/installers/updates.xml",
 				    "http://bioinf.hutton.ac.uk/curlywhirly/logs/curlywhirly.pl");
 
 		i4j.doStartUpCheck(CurlyWhirly.class);
