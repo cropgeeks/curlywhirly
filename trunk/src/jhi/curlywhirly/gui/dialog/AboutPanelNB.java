@@ -100,7 +100,7 @@ class AboutPanelNB extends JPanel
         memLabel.setForeground(java.awt.Color.gray);
         memLabel.setText("Memory available to JVM:");
 
-        webLabel.setText("http://bioinf.hutton.ac.uk/curlywhirly");
+        webLabel.setText("https://ics.hutton.ac.uk/curlywhirly");
 
         iconPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 15, 5));
 
