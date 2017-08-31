@@ -1,4 +1,4 @@
-// Copyright 2009-2015 Information & Computational Sciences, JHI. All rights
+// Copyright 2009-2017 Information & Computational Sciences, JHI. All rights
 // reserved. Use is subject to the accompanying licence terms.
 
 package jhi.curlywhirly.gui.dialog;
@@ -70,8 +70,7 @@ class AboutPanelNB extends JPanel
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         p2 = new javax.swing.JPanel();
         localeLabel = new javax.swing.JLabel();
@@ -90,7 +89,7 @@ class AboutPanelNB extends JPanel
 
         nameLabel.setText("Gordon Stephen, Iain Milne, Micha Bayer,Paul Shaw and David Marshall");
 
-        copyrightLabel.setText("Copyright (C) 2009-2015, Information & Computational Sciences, JHI");
+        copyrightLabel.setText("Copyright (C) 2009-2017, Information & Computational Sciences, JHI");
 
         versionLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         versionLabel.setText("CurlyWhirly - x.xx.xx.xx");
