@@ -16,8 +16,6 @@ import static javax.media.opengl.fixedfunc.GLLightingFunc.*;
 
 public class DeselectedSphereRendererTransparent extends AbstractSphereRenderer
 {
-	private static final float DESELECTED_SPHERE_ALPHA = 0.2f;
-
 	@Override
 	public void renderSpheres(GL2 gl)
 	{
@@ -34,7 +32,7 @@ public class DeselectedSphereRendererTransparent extends AbstractSphereRenderer
 		pointsByColor.forEach((color, points) ->
 		{
 			float [] rgba = color.getRGBColorComponents(new float[4]);
-			rgba[3] = DESELECTED_SPHERE_ALPHA;
+			rgba[3] = transparencyAlpha;
 
 			gl.glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rgba, 0);
 			gl.glMaterialf(GL_FRONT, GL_SHININESS, 128);
