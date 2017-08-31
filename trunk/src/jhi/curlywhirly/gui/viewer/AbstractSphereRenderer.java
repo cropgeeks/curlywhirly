@@ -21,16 +21,16 @@ import static javax.media.opengl.fixedfunc.GLMatrixFunc.*;
 public abstract class AbstractSphereRenderer extends SceneRenderable implements GLEventListener
 {
 	private Sphere sphere;
-	public int sphereDetailLevel = 2;
+	private int sphereDetailLevel = 2;
+	private float pointSize = 0.03f;
+	protected float transparencyAlpha = 0.5f;
+	private boolean sphereDetailChanged = false;
 
 	protected DataSet dataSet;
+
 	protected Rotation rotation;
 
-	private float pointSize = 0.03f;
-
 	private CollisionDetection detector;
-
-	private boolean sphereDetailChanged = false;
 
 	public abstract void renderSpheres(GL2 gl);
 
@@ -128,4 +128,10 @@ public abstract class AbstractSphereRenderer extends SceneRenderable implements 
 
 	public Rotation getRotation()
 		{ return rotation; }
+
+	public void setTransparencyAlpha(float transparencyAlpha)
+		{ this.transparencyAlpha = transparencyAlpha; }
+
+	public float getTransparencyAlpha()
+		{ return transparencyAlpha; }
 }

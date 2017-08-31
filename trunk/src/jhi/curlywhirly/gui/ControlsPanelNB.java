@@ -15,7 +15,6 @@ public class ControlsPanelNB extends JPanel
 	private final WinMain winMain;
 	private Axes axes;
 
-    /** Creates new form ControlsPanelNB */
     public ControlsPanelNB(WinMain winMain)
 	{
         initComponents();
@@ -48,6 +47,7 @@ public class ControlsPanelNB extends JPanel
 		setupPointSizeSlider();
 		setupDeselectedSlider();
 		setupSphereDetailSlider();
+        setupTransparencySlider();
 		setupResetLabel();
 	}
 
@@ -107,6 +107,14 @@ public class ControlsPanelNB extends JPanel
 		sphereDetailSlider.setValue(2);
 		sphereDetailSlider.addChangeListener(e -> sphereDetailChanged());
 	}
+    
+    private void setupTransparencySlider()
+    {
+        transparencySlider.setMinimum(1);
+        transparencySlider.setMaximum(100);
+        transparencySlider.setValue(50);
+        transparencySlider.addChangeListener(e -> transparencySliderChanged());
+    }
 
 	private void setupResetLabel()
 	{
@@ -220,6 +228,7 @@ public class ControlsPanelNB extends JPanel
 		lblDeselected.setEnabled(enabled);
 		lblSphereDetail.setEnabled(enabled);
 		sphereDetailSlider.setEnabled(enabled);
+        transparencySlider.setEnabled(enabled);
 		hlblReset.setEnabled(enabled);
 		// Deselected panel variables
 		deselectedPanel.setEnabled(enabled);
@@ -227,8 +236,7 @@ public class ControlsPanelNB extends JPanel
 		rbTransparent.setEnabled(enabled);
 		rbInvisible.setEnabled(enabled);
 
-		if (enabled)
-			chkDatasetLabels.setEnabled(Prefs.guiChkAxisLabels);
+		chkDatasetLabels.setEnabled(enabled && Prefs.guiChkAxisLabels);
 	}
 
 	private float scaleSliderValue(JSlider slider, float sceneMin, float sceneMax)
@@ -307,22 +315,24 @@ public class ControlsPanelNB extends JPanel
 	{
 		float size = scaleSliderValue(pointSizeSlider, 0.002f, 0.05f);
 		winMain.getOpenGLPanel().getSphereRenderer().setPointSize(size);
-
-//		deselectedSizeSlider.setValue(pointSizeSlider.getValue());
 	}
 
 	private void deselectedSliderChanged()
 	{
 		float size = scaleSliderValue(deselectedSizeSlider, 0.002f, 0.05f);
 		winMain.getOpenGLPanel().getDeselectedSphereRenderer().setPointSize(size);
-
-//		pointSizeSlider.setValue(deselectedSizeSlider.getValue());
 	}
 
 	private void sphereDetailChanged()
 	{
 		winMain.getOpenGLPanel().getSphereRenderer().setSphereDetailLevel(sphereDetailSlider.getValue());
 	}
+    
+    private void transparencySliderChanged()
+    {
+        float alpha = scaleSliderValue(transparencySlider, 0.2f, 0.8f);
+		winMain.getOpenGLPanel().getDeselectedSphereRenderer().setTransparencyAlpha(alpha);
+    }
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -331,16 +341,15 @@ public class ControlsPanelNB extends JPanel
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         dataPanel = new javax.swing.JPanel();
         lblX = new javax.swing.JLabel();
-        xCombo = new javax.swing.JComboBox<String>();
+        xCombo = new javax.swing.JComboBox<>();
         lblZ = new javax.swing.JLabel();
-        yCombo = new javax.swing.JComboBox<String>();
+        yCombo = new javax.swing.JComboBox<>();
         lblY = new javax.swing.JLabel();
-        zCombo = new javax.swing.JComboBox<String>();
+        zCombo = new javax.swing.JComboBox<>();
         advancedPanel = new javax.swing.JPanel();
         chkAxisLabels = new javax.swing.JCheckBox();
         chkDatasetLabels = new javax.swing.JCheckBox();
@@ -358,6 +367,7 @@ public class ControlsPanelNB extends JPanel
         rbTransparent = new javax.swing.JRadioButton();
         rbGrey = new javax.swing.JRadioButton();
         rbInvisible = new javax.swing.JRadioButton();
+        transparencySlider = new javax.swing.JSlider();
 
         dataPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Coordinate options:"));
 
@@ -472,19 +482,19 @@ public class ControlsPanelNB extends JPanel
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkAxisTicks)
                 .addGap(18, 18, 18)
-                .addGroup(advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(lblAxislLabelSize)
                     .addComponent(axisLabelSizeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblSizeSlider, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(pointSizeSlider, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(lblSizeSlider)
+                    .addComponent(pointSizeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(deselectedSizeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblDeselected))
+                .addGroup(advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(lblDeselected)
+                    .addComponent(deselectedSizeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(lblSphereDetail)
                     .addComponent(sphereDetailSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -507,19 +517,24 @@ public class ControlsPanelNB extends JPanel
                 .addContainerGap()
                 .addGroup(deselectedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(rbInvisible)
-                    .addComponent(rbTransparent)
+                    .addGroup(deselectedPanelLayout.createSequentialGroup()
+                        .addComponent(rbTransparent)
+                        .addGap(42, 42, 42)
+                        .addComponent(transparencySlider, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                     .addComponent(rbGrey))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         deselectedPanelLayout.setVerticalGroup(
             deselectedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(deselectedPanelLayout.createSequentialGroup()
                 .addComponent(rbGrey)
-                .addGap(3, 3, 3)
-                .addComponent(rbTransparent)
-                .addGap(4, 4, 4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(deselectedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(transparencySlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rbTransparent))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rbInvisible)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -570,6 +585,7 @@ public class ControlsPanelNB extends JPanel
     private javax.swing.JRadioButton rbInvisible;
     private javax.swing.JRadioButton rbTransparent;
     private javax.swing.JSlider sphereDetailSlider;
+    private javax.swing.JSlider transparencySlider;
     private javax.swing.JComboBox<String> xCombo;
     private javax.swing.JComboBox<String> yCombo;
     private javax.swing.JComboBox<String> zCombo;

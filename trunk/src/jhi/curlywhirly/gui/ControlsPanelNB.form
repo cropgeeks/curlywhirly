@@ -202,24 +202,24 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="chkAxisTicks" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="lblAxislLabelSize" min="-2" max="-2" attributes="0"/>
-                      <Component id="axisLabelSizeSlider" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="2" attributes="0">
+                      <Component id="lblAxislLabelSize" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="axisLabelSizeSlider" alignment="2" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="lblSizeSlider" alignment="1" min="-2" max="-2" attributes="0"/>
-                      <Component id="pointSizeSlider" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="2" attributes="0">
+                      <Component id="lblSizeSlider" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="pointSizeSlider" alignment="2" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="deselectedSizeSlider" min="-2" max="-2" attributes="0"/>
-                      <Component id="lblDeselected" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="2" attributes="0">
+                      <Component id="lblDeselected" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="deselectedSizeSlider" alignment="2" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="lblSphereDetail" min="-2" max="-2" attributes="0"/>
-                      <Component id="sphereDetailSlider" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="2" attributes="0">
+                      <Component id="lblSphereDetail" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="sphereDetailSlider" alignment="2" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
                   <Component id="hlblReset" min="-2" max="-2" attributes="0"/>
@@ -306,10 +306,14 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="rbInvisible" min="-2" max="-2" attributes="0"/>
-                      <Component id="rbTransparent" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="rbTransparent" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
+                          <Component id="transparencySlider" pref="0" max="32767" attributes="0"/>
+                      </Group>
                       <Component id="rbGrey" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -317,11 +321,14 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <Component id="rbGrey" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                  <Component id="rbTransparent" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                  <Component id="rbInvisible" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="2" attributes="0">
+                      <Component id="transparencySlider" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="rbTransparent" alignment="2" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="rbInvisible" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -341,6 +348,8 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Invisible"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JSlider" name="transparencySlider">
         </Component>
       </SubComponents>
     </Container>
