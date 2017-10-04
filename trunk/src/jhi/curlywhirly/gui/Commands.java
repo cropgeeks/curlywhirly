@@ -11,11 +11,14 @@ import javax.swing.filechooser.*;
 import jhi.curlywhirly.gui.dialog.*;
 import jhi.curlywhirly.io.*;
 
+import jhi.curlywhirly.util.NetworkUtils;
 import scri.commons.io.*;
 import scri.commons.gui.*;
 
 public class Commands
 {
+	private static final String HELP_URL = "http://curlywhirly.hutton.ac.uk/en/latest/";
+
 	private final WinMain winMain;
 
 	Commands(WinMain winMain)
@@ -163,6 +166,11 @@ public class Commands
 	void showAbout()
 	{
 		new AboutDialog();
+	}
+
+	void showHelp()
+	{
+		NetworkUtils.visitURL(HELP_URL);
 	}
 
 	void screenshot()

@@ -32,6 +32,13 @@ class StartPanel extends JPanel
 			RB.getString("gui.NBStartFilePanel.title")), BorderLayout.NORTH);
 		filePanel.add(new StartPanelFileNB(winMain));
 
+		JPanel helpPanel = new JPanel(new BorderLayout());
+		helpPanel.setOpaque(false);
+		helpPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+		helpPanel.add(new TitlePanel3(
+			RB.getString("gui.NBStartHelpPanel.title")), BorderLayout.NORTH);
+		helpPanel.add(new StartPanelHelpNB());
+
 		JPanel huttonPanel = new JPanel(new BorderLayout());
 		huttonPanel.setOpaque(false);
 
@@ -45,6 +52,7 @@ class StartPanel extends JPanel
 		JPanel centrePanel = new JPanel(new GridLayout(1, 2, 0, 0));
 		centrePanel.setOpaque(false);
 		centrePanel.add(filePanel);
+		centrePanel.add(helpPanel);
 
 		panel.add(welcomePanel, BorderLayout.NORTH);
 		panel.add(centrePanel, BorderLayout.CENTER);
