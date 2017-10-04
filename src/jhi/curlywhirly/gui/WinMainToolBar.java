@@ -20,6 +20,7 @@ public class WinMainToolBar extends JToolBar
 	private final JButton movie;
 	private final JButton prefs;
 	private final JButton about;
+	private final JButton help;
 
 	private JSlider slider;
 
@@ -94,7 +95,11 @@ public class WinMainToolBar extends JToolBar
 
 		about = (JButton) getButton(false, null,
 			RB.getString("gui.WinMainToolBar.aboutTT"),
-			Icons.getIcon("HELP"), Actions.showAbout);
+			Icons.getIcon("INFO"), Actions.showAbout);
+
+		help = (JButton) getButton(false, null,
+			RB.getString("gui.WinMainToolBar.helpTT"),
+			Icons.getIcon("HELP"), Actions.showHelp);
 
 
 		if (SystemUtils.isMacOS() == false)
@@ -114,6 +119,7 @@ public class WinMainToolBar extends JToolBar
 		add(prefs);
 		addSeparator();
 		add(about);
+		add(help);
 
 		add(new JLabel(" "));
 	}

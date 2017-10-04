@@ -21,6 +21,7 @@ public class Actions
 	public static AbstractAction captureMovie;
 	public static AbstractAction showPrefs;
 	public static AbstractAction showAbout;
+	public static AbstractAction showHelp;
 
 	Actions(WinMain winMain)
 	{
@@ -97,10 +98,17 @@ public class Actions
 			}
 		};
 
-		showAbout = new AbstractAction("", getIcon("HELP")) {
+		showAbout = new AbstractAction("", getIcon("INFO")) {
             @Override
 			public void actionPerformed(ActionEvent e) {
 				winMain.getCommands().showAbout();
+			}
+		};
+
+		showHelp = new AbstractAction("", getIcon("HELP")) {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				winMain.getCommands().showHelp();
 			}
 		};
 	}
@@ -116,6 +124,7 @@ public class Actions
 		captureMovie.setEnabled(false);
 		showPrefs.setEnabled(true);
 		showAbout.setEnabled(true);
+		showHelp.setEnabled(true);
 	}
 
 	public static void openedData()
@@ -129,5 +138,6 @@ public class Actions
 		captureMovie.setEnabled(true);
 		showPrefs.setEnabled(true);
 		showAbout.setEnabled(true);
+		showHelp.setEnabled(true);
 	}
 }
