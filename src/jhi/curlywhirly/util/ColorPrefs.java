@@ -85,6 +85,7 @@ public class ColorPrefs
 		initColor("User.OpenGLPanel.multiSelectSphereColor", new Color(0.5f, 0.5f, 1.0f, 0.4f));
 		initColor("User.OpenGLPanel.multiSelectLineColor", Color.RED);
 		initColor("User.OpenGLPanel.multiSelectAxesColor", Color.BLUE);
+		initColor("User.OpenGLPanel.colorKeyText", Color.WHITE);
 	}
 
 	/**

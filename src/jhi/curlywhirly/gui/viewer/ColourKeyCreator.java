@@ -62,7 +62,7 @@ public class ColourKeyCreator
 		if (titleX == 0)
 			titleX = 2;
 
-		g.setColor(Color.WHITE);
+		g.setColor(ColorPrefs.getColor("User.OpenGLPanel.colorKeyText"));
 		// Draw key's title string
 		g.drawString(group.getName(), titleX, height);
 
@@ -76,7 +76,7 @@ public class ColourKeyCreator
 		}
 
 		// Draw category strings
-		g.setColor(Color.WHITE);
+		g.setColor(ColorPrefs.getColor("User.OpenGLPanel.colorKeyText"));
 		for (int i=0; i < activeCats.size(); i++)
 			g.drawString(activeCats.get(i).getName(), height+4, height + ((i+1)*height));
 	}
