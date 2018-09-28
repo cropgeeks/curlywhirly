@@ -7,6 +7,7 @@ import java.awt.*;
 import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
+import java.util.regex.*;
 import java.util.stream.*;
 import javax.swing.*;
 
@@ -175,8 +176,15 @@ public class DataImporter extends SimpleJob
 				String colorString = str.substring(str.indexOf('=')+1);
 				String[] tokens = colorString.split(COLOR_DELIMITER);
 				String key = tokens[0];
-				Color color = new Color(Integer.parseInt(tokens[1]));
-				if (ColorPrefs.get(key) == null || Prefs.ioUseFileColors)
+
+				// Parse either an rgb string, or integer based representation of a color
+				Color color;
+				if (tokens[1].toLowerCase().startsWith("rgb"))
+					color = parseRgbColor(tokens[1]);
+				else
+					color = new Color(Integer.parseInt(tokens[1]));
+
+				if (color != null && (ColorPrefs.get(key) == null || Prefs.ioUseFileColors))
 					ColorPrefs.setColor(key, color);
 			}
 
@@ -383,6 +391,22 @@ public class DataImporter extends SimpleJob
 			try { SwingUtilities.invokeLater(r); }
 			catch (Exception e) {}
 		}
+	}
+
+	// Adapted from the code at the following URL: https://stackoverflow.com/a/7614202
+	public Color parseRgbColor(String input)
+	{
+		Pattern c = Pattern.compile("rgb *\\( *([0-9]+), *([0-9]+), *([0-9]+) *\\)");
+		Matcher m = c.matcher(input);
+
+		if (m.matches())
+		{
+			return new Color(Integer.valueOf(m.group(1)),  // r
+				Integer.valueOf(m.group(2)),  // g
+				Integer.valueOf(m.group(3))); // b
+		}
+
+		return null;
 	}
 
 	// Methods overriden from SimpleJob

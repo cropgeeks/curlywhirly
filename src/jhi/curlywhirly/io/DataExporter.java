@@ -38,8 +38,8 @@ public class DataExporter extends SimpleJob
                 writer.println(URL_IDENTIFIER + dbUrl);
 
 			for (CategoryGroup group : dataSet.getCategoryGroups())
-				for (Category category : group.getCategories())
-					writer.println(COLOR_IDENTIFIER + category.getColorKey() + "::CW::" + category.getColor().getRGB());
+                for (Category category : group.getCategories())
+                    writer.println(COLOR_IDENTIFIER + category.getColorKey() + "::CW::" + category.getRGBString());
 
             // Output the header line
             String header = getHeaderString();

@@ -70,6 +70,11 @@ public class Category implements Comparable<Category>
 	public Color getColor()
 		{ return color; }
 
+	public String getRGBString()
+	{
+		return String.format("rgb(%s,%s,%s)", color.getRed(), color.getGreen(), color.getBlue());
+	}
+
 	@Override
 	public String toString()
 	{
