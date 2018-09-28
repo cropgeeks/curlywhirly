@@ -10,6 +10,7 @@
 	<property name="jar" value="${lib}/curlywhirly.jar"/>
 
 	<target name="init">
+		<mkdir dir="${cls}"/>
 	</target>
 
 	<!-- Development classpath -->
@@ -32,7 +33,7 @@
 		</javac>
 	</target>
 
-	<target name="clean">
+	<target name="clean" depends="init">
 		<delete includeemptydirs="true">
 			<fileset dir="${cls}" includes="**/*"/>
 			<fileset file="${jar}"/>
