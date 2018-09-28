@@ -86,16 +86,20 @@ public class CategoryGroup implements Comparable<CategoryGroup>, Iterable<Catego
 	public int selectedDataPointCount()
 	{
 		return (int) pointsForCategories.values().stream()
-			.flatMap(values -> values.stream())
-			.filter(DataPoint::isSelected).count();
+			.flatMap(Collection::stream)
+			.filter(DataPoint::isSelected)
+			.count();
 	}
 
 	public int totalDataPoints()
 	{
 		return pointsForCategories.values().stream()
-			.mapToInt(values -> values.size())
+			.mapToInt(ArrayList::size)
 			.sum();
 	}
+
+	public int getCategoryCount()
+		{ return categories.size(); }
 
 	public int selectedCategoriesCount()
 	{

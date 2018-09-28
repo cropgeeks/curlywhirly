@@ -78,13 +78,12 @@ class CategoryNamePanel extends JPanel
 		con.fill = GridBagConstraints.HORIZONTAL;
 		con.gridx = 1;
 		con.anchor = GridBagConstraints.LINE_START;
-		con.gridy = 0;
 		con.gridheight = GridBagConstraints.REMAINDER;
 		con.weightx = 1;
 
 		JRadioButton button = new JRadioButton();
-		button.setText(catGroup.getName());
-		button.setToolTipText(catGroup.getName());
+		button.setText(getName());
+		button.setToolTipText(getCategoryTooltip());
 		button.addActionListener(parent);
 
 		return button;
@@ -105,22 +104,29 @@ class CategoryNamePanel extends JPanel
 		return label;
 	}
 
-	String getCountString()
+	private String getCountString()
 	{
 		return "" + catGroup.selectedDataPointCount() + "/" + catGroup.totalDataPoints();
 	}
 
+	private String getCategoryTooltip()
+	{
+		return catGroup.getName() + ": contains " + catGroup.selectedCategoriesCount() + " selected categories, out of a total of " + catGroup.getCategories().size();
+	}
+
 	void updateCountLabel()
 	{
+		radioButton.setText(getName());
+		radioButton.setToolTipText(getCategoryTooltip());
 		lblCount.setText(getCountString());
 	}
 
-	public JRadioButton getRadioButton()
+	JRadioButton getRadioButton()
 	{
 		return radioButton;
 	}
 
-	public JRadioButton getExpandButton()
+	JRadioButton getExpandButton()
 	{
 		return expandButton;
 	}
@@ -128,6 +134,7 @@ class CategoryNamePanel extends JPanel
 	@Override
 	public String getName()
 	{
-		return catGroup == null ? "" : catGroup.getName();
+		String name = catGroup == null ? "" : String.format("%s (%s/%s)", catGroup.getName(), catGroup.selectedCategoriesCount(), catGroup.getCategoryCount());
+		return name;
 	}
 }
