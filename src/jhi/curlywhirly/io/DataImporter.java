@@ -353,9 +353,6 @@ public class DataImporter extends SimpleJob
 		return values;
 	}
 
-	// Assigns colors to each category on a per group basis
-	// TODO: If we're offering user selectable color pallete's this might need
-	// to go somewhere more generic
 	private void assignColorsToCategories(CategoryGroup group)
 	{
 		Color[] colours = GUIUtils.generateColours(group.size());
