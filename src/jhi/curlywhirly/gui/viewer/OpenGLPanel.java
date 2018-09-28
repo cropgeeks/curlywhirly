@@ -30,7 +30,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	public static int CANVAS_HEIGHT = 600;
 
 	// The animator which updates the display at the desired framerate
-	private Animator animator;
+	private FPSAnimator animator;
 
 	private GLU glu;
 
@@ -124,7 +124,8 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		if (animator != null)
 			animator.remove(this);
 
-		animator = new Animator(this);
+		animator = new FPSAnimator(30);
+		animator.add(this);
 		animator.setUpdateFPSFrames(10, null);
 		animator.setPrintExceptions(true);
 		animator.start();
@@ -186,7 +187,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 		// Get the graphics context
 		GL2 gl = drawable.getGL().getGL2();
-        scene.render(gl);
+		scene.render(gl);
 		drawTooltip(gl);
 	}
 

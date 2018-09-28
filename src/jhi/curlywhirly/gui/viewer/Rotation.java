@@ -43,7 +43,7 @@ public class Rotation
             rotateSceneBy(rotationAngle);
 	}
 
-    void rotateSceneBy(float angle)
+    private void rotateSceneBy(float angle)
     {
 		// Rotate around the Y-axis by angle
 		angle = (float) ((angle * Math.PI) / 180);
@@ -55,7 +55,7 @@ public class Rotation
     }
 
 	// Updates the value to the last user drag rotation.
-	public void updateLastRotation()
+	void updateLastRotation()
 	{
 		lastRotation.set(currRotation);
 	}
@@ -63,7 +63,7 @@ public class Rotation
 	// Updates the value of the current user rotation and multiplies it by the
 	// previous rotation to attain the difference between these two values. This
 	// is the value used to rotate the model.
-	public void updateCurrentRotation(Quat4f rotQuat)
+	void updateCurrentRotation(Quat4f rotQuat)
 	{
 		// Convert Quaternion Into Matrix3f
 		currRotation.setRotation(rotQuat);
@@ -71,7 +71,7 @@ public class Rotation
 		currRotation.mul(currRotation, lastRotation);
 	}
 
-	public void updateCombinedRotation()
+	void updateCombinedRotation()
 	{
 		// Multiply the current mouse rotation matrix by the combined matrix
 		// and store as the new combined matrix (multiply in this order as
@@ -81,23 +81,23 @@ public class Rotation
 		currRotation.setIdentity();
 	}
 
-	public float getRotationSpeed()
+	float getRotationSpeed()
 	{
 		return rotationAngle;
 	}
 
 	// Sets the speed at which the model automatically rotates
-	public void setRotationSpeed(float speed)
+	void setRotationSpeed(float speed)
 	{
 		this.rotationAngle = speed;
 	}
 
-	public void toggleSpin()
+	void toggleSpin()
 	{
 		autoSpin = !autoSpin;
 	}
 
-	public boolean isSpinning()
+	boolean isSpinning()
 	{
 		return autoSpin;
 	}
