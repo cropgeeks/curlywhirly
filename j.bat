@@ -1,4 +1,3 @@
 @ECHO OFF
-CALL libraries.bat
 
-java -Xmx1024m -cp .;classes;%cwcp% jhi.curlywhirly.gui.CurlyWhirly
+java -Xmx1024m -cp .;res;classes;lib\* jhi.curlywhirly.gui.CurlyWhirly
