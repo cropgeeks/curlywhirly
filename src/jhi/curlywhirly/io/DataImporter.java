@@ -5,6 +5,7 @@ package jhi.curlywhirly.io;
 
 import java.awt.*;
 import java.io.*;
+import java.nio.charset.*;
 import java.util.*;
 import java.util.stream.*;
 import javax.swing.*;
@@ -16,6 +17,8 @@ import jhi.curlywhirly.util.*;
 
 import scri.commons.io.*;
 import scri.commons.gui.*;
+
+import static java.util.stream.Collectors.*;
 
 public class DataImporter extends SimpleJob
 {
@@ -68,7 +71,7 @@ public class DataImporter extends SimpleJob
 		totalBytes = file.length();
 
 		is = new ProgressInputStream(new FileInputStream(file));
-		BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 
 		// Scan the start of the file for the required header line
 		String[] header = getHeaderLine(reader);
@@ -99,11 +102,14 @@ public class DataImporter extends SimpleJob
 
 	private void createDataPoints()
 	{
-		DataNormalizer dataNormalizer = new DataNormalizer(pointValues.values().stream()
-			.flatMap(values -> values.stream()).collect(Collectors.toCollection(ArrayList::new)));
+		ArrayList<Float> allPointValues = pointValues.values().stream()
+			.flatMap(Collection::stream)
+			.collect(toCollection(ArrayList::new));
+
+		DataNormalizer dataNormalizer = new DataNormalizer(allPointValues);
 
 		HashMap<String, ArrayList<Float>> normalizedValues = (HashMap<String, ArrayList<Float>>)pointValues.entrySet().stream()
-			.collect(Collectors.toMap(e -> e.getKey(), e -> dataNormalizer.normalizeValues(e.getValue().stream())));
+			.collect(toMap(Map.Entry::getKey, e -> dataNormalizer.normalizeValues(e.getValue().stream())));
 
 		pointValues.keySet().forEach(name ->
 		{
@@ -128,7 +134,9 @@ public class DataImporter extends SimpleJob
 		{
 			for (Category category : group.getCategories())
 			{
-				ArrayList<DataPoint> points = categoryPoints.get(category).stream().map(name -> pointsByName.get(name)).collect(Collectors.toCollection(ArrayList::new));
+				ArrayList<DataPoint> points = categoryPoints.get(category).stream()
+					.map(pointsByName::get)
+					.collect(toCollection(ArrayList::new));
 				group.addPointsForCategory(category, points);
 			}
 		}
@@ -211,13 +219,15 @@ public class DataImporter extends SimpleJob
 	{
 		categoryGroups = new ArrayList<>();
 
-		Stream.of(columns).filter(col -> col.toLowerCase().startsWith(CATEGORY_IDENTIFIER)).forEach(c ->
-		{
-			String name = c.substring(c.indexOf(':')+1, c.length());
-			if (name.isEmpty())
-				name = MISSING_CATEGORY;
-			categoryGroups.add(new CategoryGroup(name));
-		});
+		Stream.of(columns)
+			.filter(col -> col.toLowerCase().startsWith(CATEGORY_IDENTIFIER))
+			.forEach(c ->
+			{
+				String name = c.substring(c.indexOf(':')+1);
+				if (name.isEmpty())
+					name = MISSING_CATEGORY;
+				categoryGroups.add(new CategoryGroup(name));
+			});
 
 		return categoryGroups;
 	}
