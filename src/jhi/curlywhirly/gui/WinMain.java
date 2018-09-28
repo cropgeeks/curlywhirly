@@ -132,7 +132,7 @@ public class WinMain extends JFrame
 		canvasContainer = new JPanel();
 		canvasContainer.setLayout(new BorderLayout());
 		canvasContainer.add(canvas3D);
-		multiSelectPanel = new MultiSelectPanel(canvas3D.getSelectionOverlay());
+		multiSelectPanel = new MultiSelectPanel(canvas3D.getMultiSelectionRenderer());
 		canvasContainer.add(multiSelectPanel, BorderLayout.SOUTH);
 
 		colourKeyCreator = new ColourKeyCreator();

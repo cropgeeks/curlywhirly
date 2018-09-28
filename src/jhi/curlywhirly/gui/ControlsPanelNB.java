@@ -315,6 +315,7 @@ public class ControlsPanelNB extends JPanel
 	{
 		float size = scaleSliderValue(pointSizeSlider, 0.002f, 0.05f);
 		winMain.getOpenGLPanel().getSphereRenderer().setPointSize(size);
+		winMain.getOpenGLPanel().getMultiSelectionRenderer().setPointSize(size);
 	}
 
 	private void deselectedSliderChanged()
@@ -326,6 +327,8 @@ public class ControlsPanelNB extends JPanel
 	private void sphereDetailChanged()
 	{
 		winMain.getOpenGLPanel().getSphereRenderer().setSphereDetailLevel(sphereDetailSlider.getValue());
+		winMain.getOpenGLPanel().getMultiSelectionRenderer().setSphereDetailLevel(sphereDetailSlider.getValue());
+		winMain.getOpenGLPanel().getDeselectedSphereRenderer().setSphereDetailLevel(sphereDetailSlider.getValue());
 	}
     
     private void transparencySliderChanged()

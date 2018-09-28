@@ -22,7 +22,6 @@ import com.jogamp.opengl.util.awt.*;
 import java.awt.event.ActionEvent;
 
 import static javax.media.opengl.GL2.*;
-import static javax.media.opengl.fixedfunc.GLMatrixFunc.*;
 
 // TODO: Check what exactly needs to be done with the animators at various points
 public class OpenGLPanel extends GLJPanel implements GLEventListener
@@ -44,7 +43,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	private CollisionDetection detector;
 
 	private final CloseOverlay closeOverlay;
-	private final MultiSelectionRenderer selectionOverlay;
+	private final MultiSelectionRenderer multiSelectionRenderer;
 	private final SelectedSphereRenderer sphereRenderer;
 	private AbstractSphereRenderer deselectedSphereRenderer;
 	private final AxesRenderer axesRenderer;
@@ -64,7 +63,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		this.winMain = winMain;
 
 		closeOverlay = new CloseOverlay(winMain);
-		selectionOverlay = new MultiSelectionRenderer(winMain);
+		multiSelectionRenderer = new MultiSelectionRenderer(winMain);
 		axesRenderer = new AxesRenderer();
 		sphereRenderer = new SelectedSphereRenderer();
 		deselectedSphereRenderer = new DeselectedSphereRendererGrey();
@@ -89,7 +88,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
         scene = new Scene(rotation, perspectiveAngle, (float)CANVAS_WIDTH / CANVAS_HEIGHT);
 		mouseListener = new CanvasMouseListener(this, rotation, dataSet, winMain);
 
-		selectionOverlay.setDataSet(dataSet, rotation, detector);
+		multiSelectionRenderer.setDataSet(dataSet, rotation, detector);
 		axesRenderer.setDataSet(dataSet, rotation);
 		deselectedSphereRenderer.setDataSet(dataSet, rotation, detector);
 		sphereRenderer.setDataSet(dataSet, rotation, detector);
@@ -104,7 +103,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		removeGLEventListener(axesRenderer);
 		removeGLEventListener(sphereRenderer);
 		removeGLEventListener(deselectedSphereRenderer);
-		removeGLEventListener(selectionOverlay);
+		removeGLEventListener(multiSelectionRenderer);
 		removeGLEventListener(closeOverlay);
 		removeGLEventListener(movieCapture);
 	}
@@ -114,7 +113,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		addGLEventListener(axesRenderer);
 		addGLEventListener(sphereRenderer);
 		addGLEventListener(deselectedSphereRenderer);
-		addGLEventListener(selectionOverlay);
+		addGLEventListener(multiSelectionRenderer);
 		addGLEventListener(closeOverlay);
 		addGLEventListener(movieCapture);
 	}
@@ -316,7 +315,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	public void selectPoint()
 	{
-		if (underMouse != null && selectionOverlay.isMultiSelecting() == false)
+		if (underMouse != null && multiSelectionRenderer.isMultiSelecting() == false)
 		{
 			underMouse.toggleSelection();
 			winMain.getControlPanel().repaint();
@@ -373,8 +372,8 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	public CloseOverlay getCloseOverlay()
 		{ return closeOverlay; }
 
-	public MultiSelectionRenderer getSelectionOverlay()
-		{ return selectionOverlay; }
+	public MultiSelectionRenderer getMultiSelectionRenderer()
+		{ return multiSelectionRenderer; }
 
 	public MovieCaptureEventListener getMovieCapture()
 		{ return movieCapture; }
