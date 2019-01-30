@@ -15,6 +15,8 @@ public class DataExporter extends SimpleJob
 	private static final String CATEGORY_IDENTIFIER = "categories:";
 	private static final String MISSING_CATEGORY = "Uncategorised";
 	private static final String URL_IDENTIFIER = "# cwDatabaseLineSearch=";
+	private static final String GROUP_IDENTIFIER = "# cwDatabaseGroupPreview=";
+	private static final String UPLOAD_IDENTIFIER = "# cwDatabaseGroupUpload=";
 	private static final String COLOR_IDENTIFIER = "# color=";
 
     private final DataSet dataSet;
@@ -36,6 +38,14 @@ public class DataExporter extends SimpleJob
             String dbUrl = dataSet.getDbAssociation().getDbPointUrl();
             if (dbUrl != null && dbUrl.isEmpty() == false)
                 writer.println(URL_IDENTIFIER + dbUrl);
+
+			String groupUrl = dataSet.getDbAssociation().getDbGroupUrl();
+            if (groupUrl != null && groupUrl.isEmpty() == false)
+                writer.println(GROUP_IDENTIFIER + groupUrl);
+
+			String uploadUrl = dataSet.getDbAssociation().getDbUploadUrl();
+            if (uploadUrl != null && uploadUrl.isEmpty() == false)
+                writer.println(UPLOAD_IDENTIFIER + uploadUrl);
 
 			for (CategoryGroup group : dataSet.getCategoryGroups())
                 for (Category category : group.getCategories())
