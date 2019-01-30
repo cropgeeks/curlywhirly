@@ -26,10 +26,10 @@ public class DataImporter extends SimpleJob
 	private static final String LABEL_IDENTIFIER = "label";
 	private static final String CATEGORY_IDENTIFIER = "categories:";
 	private static final String MISSING_CATEGORY = "Uncategorised";
-	private static final String POINT_URL = "# cwDatabaseLineSearch=";
-	private static final String GROUP_URL = "# cwDatabaseGroupPreview=";
-	private static final String UPLOAD_URL = "# cwDatabaseGroupUpload=";
-	private static final String COLOR_IDENTIFIER = "#color=";
+	private static final String POINT_URL = "cwDatabaseLineSearch";
+	private static final String GROUP_URL = "cwDatabaseGroupPreview";
+	private static final String UPLOAD_URL = "cwDatabaseGroupUpload";
+	private static final String COLOR_IDENTIFIER = "color";
 	private static final String COLOR_DELIMITER = "::CW::";
 
 	private File file;
@@ -153,39 +153,44 @@ public class DataImporter extends SimpleJob
 		{
 			lineCount++;
 
-			// Parse out URL for database point linking functionality
-			if (str.startsWith(POINT_URL))
+			if (str.startsWith("#"))
 			{
-				dbURL = str.substring(str.indexOf('=') + 1).trim();
-			}
+				String key = str.toLowerCase().substring(1, str.indexOf('=')).trim();
 
-			// Parse out url needed to create a group preview in germinate
-			if (str.startsWith(GROUP_URL))
-			{
-				groupUrl = str.substring(str.indexOf('=') + 1).trim();
-			}
+				// Parse out URL for database point linking functionality
+				if (key.equalsIgnoreCase(POINT_URL))
+				{
+					dbURL = str.substring(str.indexOf('=') + 1).trim();
+				}
 
-			// Parse out url needed to upload info needed to create a group preview in germinate
-			if (str.startsWith(UPLOAD_URL))
-			{
-				uploadUrl = str.substring(str.indexOf('=') + 1).trim();
-			}
+				// Parse out url needed to create a group preview in germinate
+				else if (key.equalsIgnoreCase(GROUP_URL))
+				{
+					groupUrl = str.substring(str.indexOf('=') + 1).trim();
+				}
 
-			if (str.startsWith(COLOR_IDENTIFIER))
-			{
-				String colorString = str.substring(str.indexOf('=')+1);
-				String[] tokens = colorString.split(COLOR_DELIMITER);
-				String key = tokens[0];
+				// Parse out url needed to upload info needed to create a group preview in germinate
+				else if (key.equalsIgnoreCase(UPLOAD_URL))
+				{
+					uploadUrl = str.substring(str.indexOf('=') + 1).trim();
+				}
 
-				// Parse either an rgb string, or integer based representation of a color
-				Color color;
-				if (tokens[1].toLowerCase().startsWith("rgb"))
-					color = parseRgbColor(tokens[1]);
-				else
-					color = new Color(Integer.parseInt(tokens[1]));
+				else if (key.equalsIgnoreCase(COLOR_IDENTIFIER))
+				{
+					String colorString = str.substring(str.indexOf('=')+1);
+					String[] tokens = colorString.split(COLOR_DELIMITER);
+					String colorKey = tokens[0];
 
-				if (color != null && (ColorPrefs.get(key) == null || Prefs.ioUseFileColors))
-					ColorPrefs.setColor(key, color);
+					// Parse either an rgb string, or integer based representation of a color
+					Color color;
+					if (tokens[1].toLowerCase().startsWith("rgb"))
+						color = parseRgbColor(tokens[1]);
+					else
+						color = new Color(Integer.parseInt(tokens[1]));
+
+					if (color != null && (ColorPrefs.get(colorKey) == null || Prefs.ioUseFileColors))
+						ColorPrefs.setColor(colorKey, color);
+				}
 			}
 
 			// Is there a better way to identify the "header" line

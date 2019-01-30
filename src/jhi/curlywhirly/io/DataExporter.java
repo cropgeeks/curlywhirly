@@ -14,8 +14,8 @@ public class DataExporter extends SimpleJob
     private static final String LABEL_IDENTIFIER = "label";
 	private static final String CATEGORY_IDENTIFIER = "categories:";
 	private static final String MISSING_CATEGORY = "Uncategorised";
-	private static final String URL_IDENTIFIER = "#url=";
-	private static final String COLOR_IDENTIFIER = "#color=";
+	private static final String URL_IDENTIFIER = "# cwDatabaseLineSearch=";
+	private static final String COLOR_IDENTIFIER = "# color=";
 
     private final DataSet dataSet;
     private final File outputFile;
