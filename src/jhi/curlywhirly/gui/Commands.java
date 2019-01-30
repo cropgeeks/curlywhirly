@@ -108,7 +108,11 @@ public class Commands
 
     void exportDataSet()
 	{
-		File saveAs = new File(Prefs.guiCurrentDir, winMain.getDataSet().getName() + ".txt");
+		String name = winMain.getDataSet().getName();
+		if (!name.contains("."))
+			name += ".txt";
+
+		File saveAs = new File(Prefs.guiCurrentDir, name);
 
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
 			RB.getString("gui.Commands.exportDataSet.txtFiles"), "txt");
