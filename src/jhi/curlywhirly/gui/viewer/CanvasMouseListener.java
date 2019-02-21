@@ -6,6 +6,7 @@ package jhi.curlywhirly.gui.viewer;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.vecmath.*;
@@ -21,6 +22,7 @@ public class CanvasMouseListener extends MouseInputAdapter
 	private ArcBall arcBall;
 	private final Rotation rotation;
 	private final DataSet dataSet;
+	private final ArrayList<String> urlNames;
 	private final WinMain winMain;
 
 	private final CanvasMenu menu;
@@ -32,6 +34,7 @@ public class CanvasMouseListener extends MouseInputAdapter
 		this.panel = panel;
 		this.rotation = rotation;
 		this.dataSet = dataSet;
+		this.urlNames = dataSet != null ? dataSet.getUrlNames() : new ArrayList<>();
 		this.winMain = winMain;
 
 		// Register this class as the mouse listener for the OpenGLPanel
@@ -134,17 +137,40 @@ public class CanvasMouseListener extends MouseInputAdapter
 
 	class CanvasMenu implements ActionListener
 	{
-		private JMenuItem mVisitUrl;
+		private JMenu mVisitUrl;
+		private JMenuItem mDatabaseSearch;
 		private JMenuItem mPointInf;
 		private JMenuItem mMultiSelect;
 
 		// Create and display the popup menu
 		void display(MouseEvent e)
 		{
-			mVisitUrl = new JMenuItem();
+			mVisitUrl = new JMenu();
 			RB.setText(mVisitUrl, "gui.viewer.CanvasMouseListener.mVisitUrl");
-			mVisitUrl.addActionListener(this);
-			mVisitUrl.setEnabled(dataSet.getDbAssociation().isPointSearchEnabled());
+
+			mDatabaseSearch = new JMenuItem();
+			mDatabaseSearch.setText("Database search");
+			mDatabaseSearch.addActionListener(this);
+			mDatabaseSearch.setEnabled(dataSet.getDbAssociation().isPointSearchEnabled());
+
+			mVisitUrl.add(mDatabaseSearch);
+
+			for (String urlName : urlNames)
+			{
+				JMenuItem mItem = new JMenuItem(urlName);
+				mItem.addActionListener(listener ->
+				{
+					try
+					{
+						dataSet.getDbAssociation().visitUrlForPoint(urlName, underMouse);
+					}
+					catch (UnsupportedEncodingException ex)
+					{
+						ex.printStackTrace();
+					}
+				});
+				mVisitUrl.add(mItem);
+			}
 
 			mPointInf = new JMenuItem();
 			RB.setText(mPointInf, "gui.viewer.CanvasMouseListener.mPointInf");
@@ -164,7 +190,7 @@ public class CanvasMouseListener extends MouseInputAdapter
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			if (e.getSource() == mVisitUrl)
+			if (e.getSource() == mDatabaseSearch)
 			{
 				try
 				{

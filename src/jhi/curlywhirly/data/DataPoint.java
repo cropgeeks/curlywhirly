@@ -19,12 +19,14 @@ public class DataPoint
 
 	private Color color = Color.DARK_GRAY;
 
+	private final Map<String, String> urlMap;
 
-	public DataPoint(String name, ArrayList<Float> values, ArrayList<Float> normalizedValues)
+	public DataPoint(String name, ArrayList<Float> values, ArrayList<Float> normalizedValues, Map<String, String> urlMap)
 	{
 		this.name = name;
 		this.values = values;
 		this.normalizedValues = normalizedValues;
+		this.urlMap = urlMap;
 
 		isSelected = true;
 		isMultiSelected = false;
@@ -86,6 +88,9 @@ public class DataPoint
 	{
 		return color;
 	}
+
+	public Map<String, String> getUrlMap()
+		{ return urlMap; }
 
 	@Override
 	public String toString()

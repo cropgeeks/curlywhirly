@@ -71,6 +71,15 @@ public class DBAssociation
 		}
 	}
 
+	public void visitUrlForPoint(String urlName, DataPoint point)
+		throws UnsupportedEncodingException
+	{
+		String pointName = URLEncoder.encode(point.getName(), "UTF-8");
+		String url = point.getUrlMap().get(urlName);
+		String urlWithName = url.replace("$LINE", pointName);
+		NetworkUtils.visitURL(urlWithName);
+	}
+
 	public void visitUrlForGroup(String groupName)
 		throws UnsupportedEncodingException
 	{

@@ -12,13 +12,14 @@ public class DataSet
 
 	private final DataSetPoints dataPoints;
 	private final ArrayList<CategoryGroup> categoryGroups;
+	private final ArrayList<String> urlNames;
 	private final Axes axes;
 	private CategoryGroup currentGroup;
 
 	// DB-link/association data
 	private DBAssociation dbAssociation = new DBAssociation();
 
-	public DataSet(String name, ArrayList<DataPoint> dataPoints, ArrayList<CategoryGroup> categoryGroups, String[] axisLabels)
+	public DataSet(String name, ArrayList<DataPoint> dataPoints, ArrayList<CategoryGroup> categoryGroups, String[] axisLabels, ArrayList<String> urlNames)
 	{
 		this.name = name;
 		// The sort ensures CategoryGroups are displayed in alphabetical order
@@ -26,6 +27,7 @@ public class DataSet
 		this.categoryGroups = categoryGroups;
 
 		this.dataPoints = new DataSetPoints(dataPoints);
+		this.urlNames = urlNames;
 
 		axes = new Axes(axisLabels);
 
@@ -88,6 +90,9 @@ public class DataSet
 
 	public String getName()
 		{ return name; }
+
+	public ArrayList<String> getUrlNames()
+		{ return urlNames; }
 
 	public ArrayList<DataPoint> getDataPoints()
 		{ return (ArrayList<DataPoint>) dataPoints.getDataPoints(); }

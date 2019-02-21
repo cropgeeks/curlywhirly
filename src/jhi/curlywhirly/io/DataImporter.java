@@ -31,6 +31,7 @@ public class DataImporter extends SimpleJob
 	private static final String UPLOAD_URL = "cwDatabaseGroupUpload";
 	private static final String COLOR_IDENTIFIER = "color";
 	private static final String COLOR_DELIMITER = "::CW::";
+	private static final String URL_IDENTIFIER = "cwurl";
 
 	private File file;
 	private ProgressInputStream is;
@@ -44,10 +45,12 @@ public class DataImporter extends SimpleJob
 	private ArrayList<CategoryGroup> categoryGroups;
 	private String[] axisLabels;
 	private ArrayList<HashMap<String, Category>> categoriesToGroups;
+	private ArrayList<String> urlNames;
 
 	private final HashMap<String, ArrayList<Float>> pointValues = new HashMap<>();
 	private final HashMap<Category, ArrayList<String>> categoryPoints = new HashMap<>();
 	private final HashMap<String, DataPoint> pointsByName = new HashMap<>();
+	private final HashMap<String, Map<String, String>> pointUrlsByName = new HashMap<>();
 
 	private int lineCount = 0;
 	private int expectedTokenCount = -1;
@@ -73,7 +76,6 @@ public class DataImporter extends SimpleJob
 
 		is = new ProgressInputStream(new FileInputStream(file));
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-
 		// Scan the start of the file for the required header line
 		String[] header = getHeaderLine(reader);
 		processHeader(header);
@@ -93,7 +95,7 @@ public class DataImporter extends SimpleJob
 		addDataPointsToCategories();
 		addDataPointsToCategoryGroups();
 
-		dataSet = new DataSet(file.getName(), dataPoints, categoryGroups, axisLabels);
+		dataSet = new DataSet(file.getName(), dataPoints, categoryGroups, axisLabels, urlNames);
 
 		// Finally set the link to access the database
 		dataSet.getDbAssociation().setDbPointUrl(dbURL);
@@ -114,7 +116,7 @@ public class DataImporter extends SimpleJob
 
 		pointValues.keySet().forEach(name ->
 		{
-			DataPoint point = new DataPoint(name, pointValues.get(name), normalizedValues.get(name));
+			DataPoint point = new DataPoint(name, pointValues.get(name), normalizedValues.get(name), pointUrlsByName.get(name));
 			dataPoints.add(point);
 			pointsByName.put(name, point);
 		});
@@ -142,8 +144,6 @@ public class DataImporter extends SimpleJob
 			}
 		}
 	}
-
-	// Methods for processing the file's header
 
 	private String[] getHeaderLine(BufferedReader reader)
 		throws ReadException, IOException
@@ -177,7 +177,7 @@ public class DataImporter extends SimpleJob
 
 				else if (key.equalsIgnoreCase(COLOR_IDENTIFIER))
 				{
-					String colorString = str.substring(str.indexOf('=')+1);
+					String colorString = str.substring(str.indexOf('=') + 1);
 					String[] tokens = colorString.split(COLOR_DELIMITER);
 					String colorKey = tokens[0];
 
@@ -206,9 +206,10 @@ public class DataImporter extends SimpleJob
 	{
 		labelColumn = getLabelColumnIndex(header);
 		categoryGroups = getCategoryGroups(header);
+		urlNames = getUrlNames(header);
 		axisLabels = getAxisLabels(header);
 
-		expectedTokenCount = categoryGroups.size() + axisLabels.length + 1;
+		expectedTokenCount = categoryGroups.size() + urlNames.size() + axisLabels.length + 1;
 
 		categoriesToGroups = new ArrayList<>();
 		for (CategoryGroup group : categoryGroups)
@@ -234,6 +235,7 @@ public class DataImporter extends SimpleJob
 
 		Stream.of(columns)
 			.filter(col -> col.toLowerCase().startsWith(CATEGORY_IDENTIFIER))
+			.filter(col -> !col.toLowerCase().contains(URL_IDENTIFIER))
 			.forEach(c ->
 			{
 				String name = c.substring(c.indexOf(':')+1);
@@ -243,6 +245,28 @@ public class DataImporter extends SimpleJob
 			});
 
 		return categoryGroups;
+	}
+
+	private ArrayList<String> getUrlNames(String[] columns)
+	{
+		ArrayList<String> urlCategories = Stream.of(columns)
+			.filter(col -> col.toLowerCase().startsWith(CATEGORY_IDENTIFIER))
+			.filter(col -> col.toLowerCase().contains(URL_IDENTIFIER))
+			.collect(toCollection(ArrayList::new));
+
+		urlNames = new ArrayList<>();
+
+		for (String urlCategory : urlCategories)
+		{
+			String[] tokens = urlCategory.split(":");
+			if (tokens.length == 3 && tokens[1].toLowerCase().startsWith(URL_IDENTIFIER))
+			{
+				// Parse out tokens[2] and add to some data structure
+				urlNames.add(tokens[2]);
+			}
+		}
+
+		return urlNames;
 	}
 
 	private String[] getAxisLabels(String[] columns)
@@ -298,7 +322,7 @@ public class DataImporter extends SimpleJob
 			pointValues.put(name, values);
 
 			// Read the category this data point is classified by for each group
-			String[] categoryNames = Arrays.copyOf(tokens, labelColumn);
+			String[] categoryNames = Arrays.copyOf(tokens, categoryGroups.size());
 			HashMap<CategoryGroup, Category> categories = getCategoriesForDataPoint(categoryNames);
 
 			// Categories also need to know which points they are associated with.
@@ -309,6 +333,13 @@ public class DataImporter extends SimpleJob
 				points.add(name);
 				categoryPoints.put(category, points);
 			}
+
+			String[] pointUrls = Arrays.copyOfRange(tokens, categoryGroups.size(), labelColumn);
+			Map<String, String> pointUrlMap = new HashMap<>();
+			for (int i=0; i < urlNames.size(); i++)
+				pointUrlMap.put(urlNames.get(i), pointUrls[i]);
+
+			pointUrlsByName.put(name, pointUrlMap);
 		}
 	}
 
