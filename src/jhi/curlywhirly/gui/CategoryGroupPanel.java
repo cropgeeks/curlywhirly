@@ -130,13 +130,21 @@ class CategoryGroupPanel extends JPanel implements TableModelListener
 
 	void selectAll()
 	{
-		categoryPanels.forEach(panel -> panel.selectAll());
+		categoryPanels.forEach(panel ->
+		{
+			panel.selectAll();
+			panel.updateNamePanel();
+		});
 		dataSet.detectMultiSelectedPoints(Prefs.guiSelectionSphereSize);
 	}
 
 	void selectNone()
 	{
-		categoryPanels.forEach(panel -> panel.selectNone());
+		categoryPanels.forEach(panel ->
+		{
+			panel.selectNone();
+			panel.updateNamePanel();
+		});
 		dataSet.detectMultiSelectedPoints(Prefs.guiSelectionSphereSize);
 	}
 
