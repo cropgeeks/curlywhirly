@@ -144,7 +144,12 @@ class CategoryTablePanel extends JPanel
 			}
 
 			else if (col == 0)
+			{
 				catTable.setValueAt(catTable.getValueAt(row, col), row, col);
+				// Fudge to get round changing the selection status of a category not triggering a re-render of points
+				// in the multi-selected sphere
+				dataSet.detectMultiSelectedPoints(Prefs.guiSelectionSphereSize);
+			}
 		}
 	}
 }
