@@ -102,15 +102,15 @@ class CategoryTablePanel extends JPanel
 		@Override
 		public void mousePressed(MouseEvent e)
 		{
-			if (e.isPopupTrigger())
-				displayMenu(e);
+//			if (e.isPopupTrigger())
+//				displayMenu(e);
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e)
 		{
-			if (e.isPopupTrigger())
-				displayMenu(e);
+//			if (e.isPopupTrigger())
+//				displayMenu(e);
 		}
 
 		@Override
