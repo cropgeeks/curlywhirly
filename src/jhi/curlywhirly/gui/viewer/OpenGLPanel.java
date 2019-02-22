@@ -66,7 +66,14 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		multiSelectionRenderer = new MultiSelectionRenderer(winMain);
 		axesRenderer = new AxesRenderer();
 		sphereRenderer = new SelectedSphereRenderer();
-		deselectedSphereRenderer = new DeselectedSphereRendererGrey();
+
+		if (Prefs.guiDeselectedRenderer == Prefs.guiDeselectedGrey)
+			deselectedSphereRenderer = new DeselectedSphereRendererGrey();
+		else if (Prefs.guiDeselectedRenderer == Prefs.guiDeselectedTransparent)
+			deselectedSphereRenderer = new DeselectedSphereRendererTransparent();
+		else
+			deselectedSphereRenderer = new NullSphereRenderer();
+
 		movieCapture = new MovieCaptureEventListener(this);
 
 		addGLEventListener(this);

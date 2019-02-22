@@ -140,7 +140,15 @@ public class ControlsPanelNB extends JPanel
 		RB.setText(rbInvisible, "gui.ControlPanel.rbInvisible");
 		rbInvisible.addActionListener(e -> rbInvisibleListener());
 
-		rbGrey.setSelected(true);
+		switch (Prefs.guiDeselectedRenderer)
+		{
+			case 0: rbGrey.setSelected(true);
+					break;
+			case 1: rbTransparent.setSelected(true);
+				break;
+			case 2: rbInvisible.setSelected(true);
+				break;
+		}
 	}
 
 	public void setDataSet(DataSet dataSet)
@@ -290,17 +298,23 @@ public class ControlsPanelNB extends JPanel
 
 	private void rbGreyListener()
 	{
+		Prefs.guiDeselectedRenderer = Prefs.guiDeselectedGrey;
 		winMain.getOpenGLPanel().setDeselectedSphereRenderer(new DeselectedSphereRendererGrey());
+		winMain.getDataSet().detectMultiSelectedPoints(Prefs.guiSelectionSphereSize);
 	}
 
 	private void rbTransparentListener()
 	{
+		Prefs.guiDeselectedRenderer = Prefs.guiDeselectedTransparent;
 		winMain.getOpenGLPanel().setDeselectedSphereRenderer(new DeselectedSphereRendererTransparent());
+		winMain.getDataSet().detectMultiSelectedPoints(Prefs.guiSelectionSphereSize);
 	}
 
 	private void rbInvisibleListener()
 	{
+		Prefs.guiDeselectedRenderer = Prefs.guiDeselectedInvisible;
 		winMain.getOpenGLPanel().setDeselectedSphereRenderer(new NullSphereRenderer());
+		winMain.getDataSet().detectMultiSelectedPoints(Prefs.guiSelectionSphereSize);
 	}
 
 	// ChangeEvent listeners

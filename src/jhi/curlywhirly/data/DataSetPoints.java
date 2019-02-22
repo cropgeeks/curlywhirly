@@ -3,6 +3,8 @@
 
 package jhi.curlywhirly.data;
 
+import jhi.curlywhirly.gui.*;
+
 import java.util.*;
 import java.util.stream.*;
 
@@ -80,21 +82,32 @@ public class DataSetPoints
 
 	public void detectOverlappingPoints(float minDist)
 	{
-		points.forEach(point ->
+		if (multiSelectionPoint != null)
 		{
-			float[] selectCoordinates = multiSelectionPoint.getPosition();
-			float[] pointCoordinates = point.getPosition();
+			points.forEach(point ->
+			{
+				float[] selectCoordinates = multiSelectionPoint.getPosition();
+				float[] pointCoordinates = point.getPosition();
 
-			// Find the distance between our two points
-			float rX = selectCoordinates[0] - pointCoordinates[0];
-			float rY = selectCoordinates[1] - pointCoordinates[1];
-			float rZ = selectCoordinates[2] - pointCoordinates[2];
-			float dist = rX * rX + rY * rY + rZ * rZ;
-			// This should include poinSize but I've fudged it to ensure points
-			// look like they are included in the circle before they are selected.
-			if (dist < minDist * minDist)
-				point.setMultiSelected(true);
-		});
+				// Find the distance between our two points
+				float rX = selectCoordinates[0] - pointCoordinates[0];
+				float rY = selectCoordinates[1] - pointCoordinates[1];
+				float rZ = selectCoordinates[2] - pointCoordinates[2];
+				float dist = rX * rX + rY * rY + rZ * rZ;
+				// This should include poinSize but I've fudged it to ensure points
+				// look like they are included in the circle before they are selected.
+				if (dist < minDist * minDist)
+				{
+					if (Prefs.guiDeselectedRenderer == Prefs.guiDeselectedInvisible)
+					{
+						if (point.isSelected())
+							point.setMultiSelected(true);
+					}
+					else
+						point.setMultiSelected(true);
+				}
+			});
+		}
 	}
 
 	public List<DataPoint> getDataPoints()

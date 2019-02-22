@@ -59,4 +59,9 @@ public class Prefs extends XMLPreferences
 	// The local working directory for disk caching
 	public static String cacheFolder =
 		FileUtils.getTempUserDirectory("jhi-curlywhirly").getPath();
+
+	public static int guiDeselectedRenderer = 0;
+	public static int guiDeselectedGrey = 0;
+	public static int guiDeselectedTransparent = 1;
+	public static int guiDeselectedInvisible = 2;
 }
