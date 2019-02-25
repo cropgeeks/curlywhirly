@@ -4,6 +4,7 @@
 package jhi.curlywhirly.data;
 
 import jhi.curlywhirly.util.*;
+import okhttp3.*;
 
 import java.io.*;
 import java.net.*;
@@ -99,20 +100,29 @@ public class DBAssociation
 
 	public void visitUrlForUpload(File file)
 	{
-		try
+		// Create an http client so that we can send a multipart form request to a database server
+		OkHttpClient client = new OkHttpClient();
+
+		RequestBody body = new MultipartBody.Builder()
+			.setType(MultipartBody.FORM)
+			.addFormDataPart("textfile", file.getName(), RequestBody.create(MediaType.parse("text/plain"), file))
+			.build();
+
+		Request request = new Request.Builder()
+			.url(dbUploadUrl)
+			.post(body)
+			.build();
+
+		// Make the POST call and get the response back from the server
+		try (Response response = client.newCall(request).execute())
 		{
-			HttpURLConnection connection = NetworkUtils.multipartPostFile(dbUploadUrl, file);
-
-			int code = connection.getResponseCode();
-
-			if (code == HttpURLConnection.HTTP_OK)
+			if (response.code() == HttpURLConnection.HTTP_OK)
 			{
-				BufferedReader conReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-				String groupFilename = conReader.readLine();
+				String groupFilename = response.body().string();
 
 				visitUrlForGroup(groupFilename);
 			}
-			else if (code == 507)
+			else if (response.code() == 507)
 			{
 				// TODO: Something about fileSizeLimitExceeded
 				System.out.println("The upload file exceeded the server's file size limit.");
@@ -120,7 +130,7 @@ public class DBAssociation
 			else
 			{
 				// TODO: Actually handle this situation in some way
-				System.out.println("There was a problem sending the data to the server: " + code);
+				System.out.println("There was a problem sending the data to the server: " + response.code());
 			}
 		}
 		catch (IOException e)
