@@ -3,8 +3,8 @@
 
 package jhi.curlywhirly.gui.viewer;
 
-import java.awt.*;
 import javax.vecmath.*;
+import java.awt.*;
 
 public class ArcBall
 {
@@ -63,40 +63,40 @@ public class ArcBall
 	}
 
 	// Mouse clicked
-    public void click(Point point)
+	public void click(Point point)
 	{
-        mapToSphere(point, clickVec);
-    }
+		mapToSphere(point, clickVec);
+	}
 
-    // Mouse drag, calculate rotation
-    public void drag(Point point, Quat4f newRot)
+	// Mouse drag, calculate rotation
+	public void drag(Point point, Quat4f newRot)
 	{
-        // Map the point to the sphere
-        this.mapToSphere(point, dragVec);
+		// Map the point to the sphere
+		this.mapToSphere(point, dragVec);
 
-        // Return the quaternion equivalent to the rotation
-        if (newRot != null)
+		// Return the quaternion equivalent to the rotation
+		if (newRot != null)
 		{
 			// Compute the vector perpendicular to the begin and end vectors
-            Vector3f perp = new Vector3f();
+			Vector3f perp = new Vector3f();
 			perp.cross(clickVec, dragVec);
 
-            // Compute the length of the perpendicular vector
-            if (perp.length() > EPSILON)
-            {
-                // We're ok, so return the perpendicular vector as the transform after all
-                newRot.x = perp.x;
-                newRot.y = perp.y;
-                newRot.z = perp.z;
-                // In the quaternion values, w is cosine (theta / 2), where theta is rotation angle
-                newRot.w = clickVec.dot(dragVec);
-            }
+			// Compute the length of the perpendicular vector
+			if (perp.length() > EPSILON)
+			{
+				// We're ok, so return the perpendicular vector as the transform after all
+				newRot.x = perp.x;
+				newRot.y = perp.y;
+				newRot.z = perp.z;
+				// In the quaternion values, w is cosine (theta / 2), where theta is rotation angle
+				newRot.w = clickVec.dot(dragVec);
+			}
 			// Perp.length came out as our zero equivalent (epsilon)
 			else
-            {
-                // The begin and end vectors coincide, so return an identity transform
-                newRot.x = newRot.y = newRot.z = newRot.w = 0.0f;
-            }
-        }
-    }
+			{
+				// The begin and end vectors coincide, so return an identity transform
+				newRot.x = newRot.y = newRot.z = newRot.w = 0.0f;
+			}
+		}
+	}
 }

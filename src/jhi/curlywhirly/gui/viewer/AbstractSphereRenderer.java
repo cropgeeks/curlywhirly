@@ -3,12 +3,12 @@
 
 package jhi.curlywhirly.gui.viewer;
 
-import java.util.stream.*;
-import javax.media.opengl.*;
-
 import jhi.curlywhirly.data.*;
 
-import static javax.media.opengl.fixedfunc.GLMatrixFunc.*;
+import javax.media.opengl.*;
+import java.util.stream.*;
+
+import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_MODELVIEW_MATRIX;
 
 /**
  * Defines the generic state of a SphereRenderer which can be extended to provide
@@ -117,8 +117,10 @@ public abstract class AbstractSphereRenderer extends SceneRenderable implements 
 		this.pointSize = pointSize;
 	}
 
-    public float getPointSize()
-        { return pointSize; }
+	public float getPointSize()
+	{
+		return pointSize;
+	}
 
 	public void setSphereDetailLevel(int sphereDetailLevel)
 	{
@@ -127,11 +129,17 @@ public abstract class AbstractSphereRenderer extends SceneRenderable implements 
 	}
 
 	public Rotation getRotation()
-		{ return rotation; }
+	{
+		return rotation;
+	}
 
 	public void setTransparencyAlpha(float transparencyAlpha)
-		{ this.transparencyAlpha = transparencyAlpha; }
+	{
+		this.transparencyAlpha = transparencyAlpha;
+	}
 
 	public float getTransparencyAlpha()
-		{ return transparencyAlpha; }
+	{
+		return transparencyAlpha;
+	}
 }

@@ -3,18 +3,17 @@
 
 package jhi.curlywhirly.gui.viewer;
 
+import jhi.curlywhirly.data.*;
+import jhi.curlywhirly.gui.*;
+import scri.commons.gui.*;
+
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.vecmath.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.vecmath.*;
-
-import jhi.curlywhirly.data.*;
-import jhi.curlywhirly.gui.*;
-
-import scri.commons.gui.*;
 
 public class CanvasMouseListener extends MouseInputAdapter
 {
@@ -196,7 +195,10 @@ public class CanvasMouseListener extends MouseInputAdapter
 				{
 					panel.visitUrl();
 				}
-				catch (UnsupportedEncodingException ex) { ex.printStackTrace(); }
+				catch (UnsupportedEncodingException ex)
+				{
+					ex.printStackTrace();
+				}
 			}
 
 			else if (e.getSource() == mPointInf)

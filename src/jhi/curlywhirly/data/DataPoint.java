@@ -49,10 +49,14 @@ public class DataPoint
 	}
 
 	public String getName()
-		{ return name; }
+	{
+		return name;
+	}
 
 	public ArrayList<Float> getValues()
-		{ return values; }
+	{
+		return values;
+	}
 
 	public boolean isSelected()
 	{
@@ -90,7 +94,9 @@ public class DataPoint
 	}
 
 	public Map<String, String> getUrlMap()
-		{ return urlMap; }
+	{
+		return urlMap;
+	}
 
 	@Override
 	public String toString()

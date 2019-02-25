@@ -3,19 +3,18 @@
 
 package jhi.curlywhirly.gui;
 
+import jhi.curlywhirly.analysis.*;
+import jhi.curlywhirly.data.*;
+import jhi.curlywhirly.util.*;
+import scri.commons.gui.*;
+
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.filechooser.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.filechooser.*;
-
-import jhi.curlywhirly.analysis.*;
-import jhi.curlywhirly.data.*;
-import jhi.curlywhirly.util.*;
-
-import scri.commons.gui.*;
 
 class CategoryGroupPanel extends JPanel implements TableModelListener
 {
@@ -43,7 +42,8 @@ class CategoryGroupPanel extends JPanel implements TableModelListener
 	// vStrut as required. Prevents unwanted whitespace appearing in CategoryPanels
 	private void addComponentListener()
 	{
-		this.addComponentListener(new ComponentAdapter() {
+		this.addComponentListener(new ComponentAdapter()
+		{
 			@Override
 			public void componentResized(ComponentEvent e)
 			{
@@ -58,7 +58,7 @@ class CategoryGroupPanel extends JPanel implements TableModelListener
 						remove(vStrut);
 
 					// Adjust the size of vStrut and add it to the panel again
-					vStrut = Box.createVerticalStrut(parent.getHeight()-prefHeight);
+					vStrut = Box.createVerticalStrut(parent.getHeight() - prefHeight);
 					add(vStrut);
 				}
 			}
@@ -111,7 +111,7 @@ class CategoryGroupPanel extends JPanel implements TableModelListener
 		// to push our components to the top.
 		if (prefHeight < parent.getHeight())
 		{
-			vStrut = Box.createVerticalStrut(parent.getHeight()-prefHeight);
+			vStrut = Box.createVerticalStrut(parent.getHeight() - prefHeight);
 			add(vStrut);
 		}
 

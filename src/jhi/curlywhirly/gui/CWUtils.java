@@ -3,10 +3,10 @@
 
 package jhi.curlywhirly.gui;
 
-import java.awt.*;
-import java.awt.datatransfer.*;
 import javax.swing.*;
 import javax.swing.table.*;
+import java.awt.*;
+import java.awt.datatransfer.*;
 
 public class CWUtils
 {
@@ -19,7 +19,7 @@ public class CWUtils
 		for (int c = 0; c < model.getColumnCount(); c++)
 		{
 			text.append(model.getColumnName(c));
-			text.append(c < model.getColumnCount()-1 ? "\t" : newline);
+			text.append(c < model.getColumnCount() - 1 ? "\t" : newline);
 		}
 
 		// Each row
@@ -30,7 +30,7 @@ public class CWUtils
 			for (int c = 0; c < model.getColumnCount(); c++)
 			{
 				text.append(model.getValueAt(row, c));
-				text.append(c < model.getColumnCount()-1 ? "\t" : newline);
+				text.append(c < model.getColumnCount() - 1 ? "\t" : newline);
 			}
 		}
 

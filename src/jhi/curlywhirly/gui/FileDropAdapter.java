@@ -3,11 +3,11 @@
 
 package jhi.curlywhirly.gui;
 
+import javax.swing.*;
 import java.awt.datatransfer.*;
 import java.awt.dnd.*;
 import java.io.*;
 import java.util.*;
-import javax.swing.*;
 
 public class FileDropAdapter extends DropTargetAdapter
 {
@@ -50,6 +50,9 @@ public class FileDropAdapter extends DropTargetAdapter
 
 			dtde.dropComplete(true);
 		}
-		catch (UnsupportedFlavorException | IOException e) { e.printStackTrace(); }
+		catch (UnsupportedFlavorException | IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }

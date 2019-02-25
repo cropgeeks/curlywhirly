@@ -62,10 +62,10 @@ public class ColorPrefs
 	{
 		// Search (and clear) all colours beginning with "User." from the hash
 		ArrayList<String> toRemove = new ArrayList<>();
-		for (String key: colors.keySet())
+		for (String key : colors.keySet())
 			if (key.startsWith("User."))
 				toRemove.add(key);
-		for (String key: toRemove)
+		for (String key : toRemove)
 			colors.remove(key);
 
 		// Then rebuild them
@@ -134,10 +134,13 @@ public class ColorPrefs
 			p.loadFromXML(in);
 			in.close();
 		}
-		catch (IOException t) { t.printStackTrace(); }
+		catch (IOException t)
+		{
+			t.printStackTrace();
+		}
 
 		// Assign them to the main hashmap
-		for (Enumeration<?> keys = p.keys(); keys.hasMoreElements();)
+		for (Enumeration<?> keys = p.keys(); keys.hasMoreElements(); )
 		{
 			try
 			{
@@ -157,7 +160,10 @@ public class ColorPrefs
 
 				initColor(key, c);
 			}
-			catch (NumberFormatException e) { e.printStackTrace(); }
+			catch (NumberFormatException e)
+			{
+				e.printStackTrace();
+			}
 		}
 
 		initializeColors();
@@ -170,7 +176,7 @@ public class ColorPrefs
 			Properties p = new Properties();
 
 			// Dump the hashmap back into a properties object
-			for (String key: colors.keySet())
+			for (String key : colors.keySet())
 			{
 				Color c = colors.get(key).getColor();
 				p.setProperty(key, c.getRed() + "," + c.getGreen() + "," + c.getBlue());
@@ -182,7 +188,10 @@ public class ColorPrefs
 			p.storeToXML(os, null);
 			os.close();
 		}
-		catch (IOException t) { t.printStackTrace(); }
+		catch (IOException t)
+		{
+			t.printStackTrace();
+		}
 	}
 
 	public static class ColorPref

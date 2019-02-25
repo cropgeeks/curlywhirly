@@ -3,22 +3,21 @@
 
 package jhi.curlywhirly.gui;
 
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.util.stream.*;
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.filechooser.*;
-
 import jhi.curlywhirly.analysis.*;
 import jhi.curlywhirly.data.*;
 import jhi.curlywhirly.gui.dialog.*;
 import jhi.curlywhirly.gui.viewer.*;
 import jhi.curlywhirly.util.*;
-
 import scri.commons.gui.*;
 import scri.commons.gui.matisse.*;
+
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.filechooser.*;
+import java.awt.*;
+import java.io.*;
+import java.util.*;
+import java.util.stream.*;
 
 public class MultiSelectPanel extends JPanel
 {
@@ -26,11 +25,11 @@ public class MultiSelectPanel extends JPanel
 	private DataSet dataSet;
 
 	private JLabel lblAction;
-    private JButton bCancel;
-    private JButton bOk;
-    private JLabel lblSelection;
-    private JSlider selectionSlider;
-    private JComboBox<String> selectionTypeCombo;
+	private JButton bCancel;
+	private JButton bOk;
+	private JLabel lblSelection;
+	private JSlider selectionSlider;
+	private JComboBox<String> selectionTypeCombo;
 	private DefaultComboBoxModel<String> selectionTypeModel;
 	private JLabel lblSelectionCount;
 	private JLabel dbLinkSeparator = new JLabel(" | ");
@@ -132,22 +131,22 @@ public class MultiSelectPanel extends JPanel
 		layout.setHorizontalGroup(layout.createSequentialGroup()
 			.addComponent(lblSelection)
 			.addComponent(selectionSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-          GroupLayout.PREFERRED_SIZE)
+				GroupLayout.PREFERRED_SIZE)
 			.addComponent(lblSelectionCount)
 			.addComponent(lblAction)
 			.addComponent(selectionTypeCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-          GroupLayout.PREFERRED_SIZE)
+				GroupLayout.PREFERRED_SIZE)
 			.addComponent(bOk, buttonWidth, buttonWidth, buttonWidth)
 			.addComponent(bCancel));
 		layout.setVerticalGroup(layout.createSequentialGroup()
 			.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-			.addComponent(lblSelection)
-			.addComponent(selectionSlider)
-			.addComponent(lblSelectionCount)
-			.addComponent(lblAction)
-			.addComponent(selectionTypeCombo)
-			.addComponent(bOk)
-			.addComponent(bCancel)));
+				.addComponent(lblSelection)
+				.addComponent(selectionSlider)
+				.addComponent(lblSelectionCount)
+				.addComponent(lblAction)
+				.addComponent(selectionTypeCombo)
+				.addComponent(bOk)
+				.addComponent(bCancel)));
 
 		centrePanel.add(nested);
 
@@ -195,7 +194,7 @@ public class MultiSelectPanel extends JPanel
 	@Override
 	public void setVisible(boolean visible)
 	{
-		float pointSize = ((Prefs.guiSelectionSphereSize-0.06f)/(2f-0.06f) * (float)(selectionSlider.getMaximum()-selectionSlider.getMinimum()) + selectionSlider.getMinimum());
+		float pointSize = ((Prefs.guiSelectionSphereSize - 0.06f) / (2f - 0.06f) * (float) (selectionSlider.getMaximum() - selectionSlider.getMinimum()) + selectionSlider.getMinimum());
 		selectionSlider.setValue((int) pointSize);
 		super.setVisible(visible);
 		if (selectionRenderer != null && visible)
@@ -231,13 +230,19 @@ public class MultiSelectPanel extends JPanel
 		{
 			dataSet.multiSelectedPoints().forEach(point -> writer.println(point.getName()));
 		}
-		catch (Exception e) { e.printStackTrace(); }
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 
 		try
 		{
 			dataSet.getDbAssociation().visitUrlForUpload(exportFile);
 		}
-		catch(Exception e) { e.printStackTrace(); }
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	private void exportToFile()
@@ -285,7 +290,7 @@ public class MultiSelectPanel extends JPanel
 			float sliderVal = selectionSlider.getValue();
 			float min = selectionSlider.getMinimum();
 			float max = selectionSlider.getMaximum();
-			float pointSize = ((sliderVal-min)/(max-min) * (2f-0.06f) + 0.06f);
+			float pointSize = ((sliderVal - min) / (max - min) * (2f - 0.06f) + 0.06f);
 			Prefs.guiSelectionSphereSize = pointSize;
 			selectionRenderer.setSelectPointSize(pointSize);
 			dataSet.detectMultiSelectedPoints(pointSize);
@@ -303,7 +308,7 @@ public class MultiSelectPanel extends JPanel
 		builder.append(("("));
 		// Pad out the selected string with zeros. Prevents component from
 		// resizing as the number increases / decreases
-		for (int i=0; i < diff; i++)
+		for (int i = 0; i < diff; i++)
 			builder.append('0');
 		builder.append(selected).append(" / ").append(total).append(')');
 

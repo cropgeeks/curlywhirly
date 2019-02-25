@@ -3,17 +3,16 @@
 
 package jhi.curlywhirly.gui;
 
+import jhi.curlywhirly.data.*;
+import jhi.curlywhirly.gui.viewer.*;
+import scri.commons.gui.*;
+
+import javax.media.opengl.*;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.dnd.*;
 import java.awt.event.*;
 import java.beans.*;
-import javax.media.opengl.*;
-import javax.swing.*;
-
-import jhi.curlywhirly.data.*;
-import jhi.curlywhirly.gui.viewer.*;
-
-import scri.commons.gui.*;
 
 public class WinMain extends JFrame
 {
@@ -127,7 +126,7 @@ public class WinMain extends JFrame
 		caps.setSampleBuffers(true);
 		caps.setNumSamples(2);
 		canvas3D = new OpenGLPanel(this, caps);
-		canvas3D.setSize(new Dimension((Prefs.guiWinMainW-Prefs.guiSplitterLocation), Prefs.guiWinMainH));
+		canvas3D.setSize(new Dimension((Prefs.guiWinMainW - Prefs.guiSplitterLocation), Prefs.guiWinMainH));
 
 		canvasContainer = new JPanel();
 		canvasContainer.setLayout(new BorderLayout());
@@ -169,13 +168,14 @@ public class WinMain extends JFrame
 
 	private void addListeners()
 	{
-		addComponentListener(new ComponentAdapter() {
+		addComponentListener(new ComponentAdapter()
+		{
 			@Override
 			public void componentResized(ComponentEvent e)
 			{
 				if (getExtendedState() != Frame.MAXIMIZED_BOTH)
 				{
-					Prefs.guiWinMainW  = getSize().width;
+					Prefs.guiWinMainW = getSize().width;
 					Prefs.guiWinMainH = getSize().height;
 					Prefs.guiWinMainX = getLocation().x;
 					Prefs.guiWinMainY = getLocation().y;
@@ -235,9 +235,9 @@ public class WinMain extends JFrame
 		JCheckBox checkbox = new JCheckBox();
 		RB.setText(checkbox, "gui.WinMain.warnOnClose");
 
-		String[] options = new String[] {
+		String[] options = new String[]{
 			RB.getString("gui.text.yes"),
-			RB.getString("gui.text.no") };
+			RB.getString("gui.text.no")};
 
 		int response = TaskDialog.show(msg, TaskDialog.QST, 1, checkbox, options);
 
@@ -262,9 +262,9 @@ public class WinMain extends JFrame
 		JCheckBox checkbox = new JCheckBox();
 		RB.setText(checkbox, "gui.WinMain.warnOnExit");
 
-		String[] options = new String[] {
+		String[] options = new String[]{
 			RB.getString("gui.text.yes"),
-			RB.getString("gui.text.no") };
+			RB.getString("gui.text.no")};
 
 		int response = TaskDialog.show(msg, TaskDialog.QST, 1, checkbox, options);
 
@@ -279,22 +279,34 @@ public class WinMain extends JFrame
 	}
 
 	WinMainToolBar getToolbar()
-		{ return toolbar; }
+	{
+		return toolbar;
+	}
 
 	public OpenGLPanel getOpenGLPanel()
-		{ return canvas3D; }
+	{
+		return canvas3D;
+	}
 
 	public DataPanel getDataPanel()
-		{ return dataPanel; }
+	{
+		return dataPanel;
+	}
 
 	public DataSet getDataSet()
-		{ return dataSet; }
+	{
+		return dataSet;
+	}
 
 	Commands getCommands()
-		{ return toolbarActions; }
+	{
+		return toolbarActions;
+	}
 
 	public SelectionPanelNB getControlPanel()
-		{ return selectionPanel; }
+	{
+		return selectionPanel;
+	}
 
 	public JSplitPane getSplitPane()
 	{
@@ -302,11 +314,17 @@ public class WinMain extends JFrame
 	}
 
 	public GLCapabilities getCapabilities()
-		{ return caps; }
+	{
+		return caps;
+	}
 
 	public MultiSelectPanel getMultiSelectPanel()
-		{ return multiSelectPanel; }
+	{
+		return multiSelectPanel;
+	}
 
 	public ColourKeyCreator getColourKeyCreator()
-		{ return colourKeyCreator; }
+	{
+		return colourKeyCreator;
+	}
 }

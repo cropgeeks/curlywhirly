@@ -23,26 +23,38 @@ public class Position3D
 
 	public float[] getPosition()
 	{
-		return new float[] { x, y, z };
+		return new float[]{x, y, z};
 	}
 
 	// Getters and setters
 
 	public float getX()
-		{ return x; }
+	{
+		return x;
+	}
 
 	public void setX(float x)
-		{ this.x = x; }
+	{
+		this.x = x;
+	}
 
 	public float getY()
-		{ return y; }
+	{
+		return y;
+	}
 
 	public void setY(float y)
-		{ this.y = y; }
+	{
+		this.y = y;
+	}
 
 	public float getZ()
-		{ return z; }
+	{
+		return z;
+	}
 
 	public void setZ(float z)
-		{ this.z = z; }
+	{
+		this.z = z;
+	}
 }

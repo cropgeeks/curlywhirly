@@ -3,10 +3,10 @@
 
 package jhi.curlywhirly.gui;
 
-import java.awt.event.*;
-import javax.swing.*;
-
 import scri.commons.gui.*;
+
+import javax.swing.*;
+import java.awt.event.*;
 
 public class Actions
 {
@@ -14,7 +14,7 @@ public class Actions
 
 	public static AbstractAction fileOpen;
 	public static AbstractAction fileSample;
-    public static AbstractAction dataExport;
+	public static AbstractAction dataExport;
 	public static AbstractAction reset;
 	public static AbstractAction spin;
 	public static AbstractAction screenshot;
@@ -37,77 +37,97 @@ public class Actions
 	{
 		ImageIcon icon = Icons.getIcon(name);
 
-        return SystemUtils.isMacOS() ? null : icon;
+		return SystemUtils.isMacOS() ? null : icon;
 	}
 
 	private void createActions()
 	{
-		fileOpen = new AbstractAction(RB.getString("gui.WinMainToolBar.open"), getIcon("OPEN")) {
-            @Override
-			public void actionPerformed(ActionEvent e) {
+		fileOpen = new AbstractAction(RB.getString("gui.WinMainToolBar.open"), getIcon("OPEN"))
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
 				winMain.getCommands().open();
 			}
 		};
 
-		fileSample = new AbstractAction("", getIcon("SAMPLE")) {
-            @Override
-			public void actionPerformed(ActionEvent e) {
+		fileSample = new AbstractAction("", getIcon("SAMPLE"))
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
 				winMain.getCommands().openSample();
 			}
 		};
 
-        dataExport = new AbstractAction(RB.getString("gui.WinMainToolBar.export"), getIcon("EXPORT")) {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                winMain.getCommands().exportDataSet();
-            }
-        };
+		dataExport = new AbstractAction(RB.getString("gui.WinMainToolBar.export"), getIcon("EXPORT"))
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				winMain.getCommands().exportDataSet();
+			}
+		};
 
-		reset = new AbstractAction(RB.getString("gui.WinMainToolBar.reset"), getIcon("RESET")) {
-            @Override
-			public void actionPerformed(ActionEvent e) {
+		reset = new AbstractAction(RB.getString("gui.WinMainToolBar.reset"), getIcon("RESET"))
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
 				winMain.getCommands().reset();
 			}
 		};
 
-		spin = new AbstractAction(RB.getString("gui.WinMainToolBar.spin"), getIcon("SPIN")) {
-            @Override
-			public void actionPerformed(ActionEvent e) {
+		spin = new AbstractAction(RB.getString("gui.WinMainToolBar.spin"), getIcon("SPIN"))
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
 				winMain.getCommands().spin();
 			}
 		};
 
-		screenshot = new AbstractAction(RB.getString("gui.WinMainToolBar.screenshot"), getIcon("SCREENSHOT")) {
-            @Override
-			public void actionPerformed(ActionEvent e) {
+		screenshot = new AbstractAction(RB.getString("gui.WinMainToolBar.screenshot"), getIcon("SCREENSHOT"))
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
 				winMain.getCommands().screenshot();
 			}
 		};
 
-		captureMovie = new AbstractAction(RB.getString("gui.WinMainToolBar.movie"), getIcon("MOVIE")) {
-            @Override
-			public void actionPerformed(ActionEvent e) {
+		captureMovie = new AbstractAction(RB.getString("gui.WinMainToolBar.movie"), getIcon("MOVIE"))
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
 				winMain.getCommands().captureMovie();
 			}
 		};
 
-		showPrefs = new AbstractAction(RB.getString("gui.WinMainToolBar.prefs"), getIcon("PREFS")) {
-            @Override
-			public void actionPerformed(ActionEvent e) {
+		showPrefs = new AbstractAction(RB.getString("gui.WinMainToolBar.prefs"), getIcon("PREFS"))
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
 				winMain.getCommands().showPrefs();
 			}
 		};
 
-		showAbout = new AbstractAction("", getIcon("INFO")) {
-            @Override
-			public void actionPerformed(ActionEvent e) {
+		showAbout = new AbstractAction("", getIcon("INFO"))
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
 				winMain.getCommands().showAbout();
 			}
 		};
 
-		showHelp = new AbstractAction("", getIcon("HELP")) {
+		showHelp = new AbstractAction("", getIcon("HELP"))
+		{
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e)
+			{
 				winMain.getCommands().showHelp();
 			}
 		};
@@ -117,7 +137,7 @@ public class Actions
 	{
 		fileOpen.setEnabled(true);
 		fileSample.setEnabled(true);
-        dataExport.setEnabled(false);
+		dataExport.setEnabled(false);
 		reset.setEnabled(false);
 		spin.setEnabled(false);
 		screenshot.setEnabled(false);
@@ -131,7 +151,7 @@ public class Actions
 	{
 		fileOpen.setEnabled(true);
 		fileSample.setEnabled(true);
-        dataExport.setEnabled(true);
+		dataExport.setEnabled(true);
 		reset.setEnabled(true);
 		spin.setEnabled(true);
 		screenshot.setEnabled(true);

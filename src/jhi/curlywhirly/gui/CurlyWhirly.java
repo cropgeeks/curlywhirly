@@ -3,16 +3,14 @@
 
 package jhi.curlywhirly.gui;
 
-import java.awt.event.*;
-import java.io.*;
-
+import apple.dts.samplecode.osxadapter.*;
+import jhi.curlywhirly.gui.dialog.*;
 import jhi.curlywhirly.io.*;
 import jhi.curlywhirly.util.*;
-import jhi.curlywhirly.gui.dialog.*;
-
-import apple.dts.samplecode.osxadapter.*;
-
 import scri.commons.gui.*;
+
+import java.awt.event.*;
+import java.io.*;
 
 public class CurlyWhirly
 {
@@ -33,7 +31,7 @@ public class CurlyWhirly
 
 		// Some handy debug output...
 		System.out.println("CurlyWhirly " + Install4j.getVersion(CurlyWhirly.class) + " on "
-			+ System.getProperty("os.name")	+ " (" + System.getProperty("os.arch") + ")");
+			+ System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ")");
 		System.out.println("Using " + prefsFile);
 
 		mruFile = new File(prefsFile.getParent(), "curlywhirly-recent.xml");
@@ -63,7 +61,7 @@ public class CurlyWhirly
 
 		i4j.setUser(Prefs.guiUpdateSchedule, Prefs.curlywhirlyID, 0);
 		i4j.setURLs("https://ics.hutton.ac.uk/resources/curlywhirly/installers/updates.xml",
-				    "http://bioinf.hutton.ac.uk/curlywhirly/logs/curlywhirly.pl");
+			"http://bioinf.hutton.ac.uk/curlywhirly/logs/curlywhirly.pl");
 
 		i4j.doStartUpCheck(CurlyWhirly.class);
 	}
@@ -142,8 +140,14 @@ public class CurlyWhirly
 		File old = new File(System.getProperty("user.home"), ".curlywhirly.xml");
 
 		if (old.exists())
-			try { scri.commons.io.FileUtils.copyFile(old, file, true); }
-			catch (IOException e) { e.printStackTrace(); }
+			try
+			{
+				scri.commons.io.FileUtils.copyFile(old, file, true);
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
 
 		return file;
 	}
@@ -156,33 +160,42 @@ public class CurlyWhirly
 		{
 			// Register handlers to deal with the System menu about/quit options
 			OSXAdapter.setPreferencesHandler(this,
-				getClass().getDeclaredMethod("osxPreferences", (Class[])null));
+				getClass().getDeclaredMethod("osxPreferences", (Class[]) null));
 			OSXAdapter.setAboutHandler(this,
-				getClass().getDeclaredMethod("osxAbout", (Class[])null));
+				getClass().getDeclaredMethod("osxAbout", (Class[]) null));
 			OSXAdapter.setQuitHandler(this,
-				getClass().getDeclaredMethod("osxShutdown", (Class[])null));
+				getClass().getDeclaredMethod("osxShutdown", (Class[]) null));
 			OSXAdapter.setFileHandler(this,
-				getClass().getDeclaredMethod("osxOpen", new Class[] { String.class }));
+				getClass().getDeclaredMethod("osxOpen", new Class[]{String.class}));
 
 			// Dock the menu bar at the top of the screen
 			System.setProperty("apple.laf.useScreenMenuBar", "true");
 		}
-		catch (NoSuchMethodException | SecurityException e) { e.printStackTrace(); }
+		catch (NoSuchMethodException | SecurityException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
-	/** "Preferences" on the OS X system menu. */
+	/**
+	 * "Preferences" on the OS X system menu.
+	 */
 	public void osxPreferences()
 	{
 		winMain.getCommands().showPrefs();
 	}
 
-	/** "About CurlyWhirly" on the OS X system menu. */
+	/**
+	 * "About CurlyWhirly" on the OS X system menu.
+	 */
 	public void osxAbout()
 	{
 		new AboutDialog();
 	}
 
-	/** "Quit CurlyWhirly" on the OS X system menu. */
+	/**
+	 * "Quit CurlyWhirly" on the OS X system menu.
+	 */
 	public boolean osxShutdown()
 	{
 		shutdown();

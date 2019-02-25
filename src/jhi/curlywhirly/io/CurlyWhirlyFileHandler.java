@@ -3,14 +3,14 @@
 
 package jhi.curlywhirly.io;
 
-import java.io.*;
-import java.util.*;
+import org.w3c.dom.*;
+
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
-
-import org.w3c.dom.*;
+import java.io.*;
+import java.util.*;
 
 /**
  * Handler class for dealing with the MRU file list and .curlywhirly files.
@@ -36,7 +36,7 @@ public class CurlyWhirlyFileHandler
 
 		// Restrict the MRU list to no more than fifty entries
 		while (recentFiles.size() > 50)
-			recentFiles.remove(recentFiles.size()-1);
+			recentFiles.remove(recentFiles.size() - 1);
 	}
 
 	public static CurlyWhirlyFile createFromXML(File file)
@@ -134,7 +134,7 @@ public class CurlyWhirlyFileHandler
 		Element root = doc.createElement("curlywhirly-mru");
 		doc.appendChild(root);
 
-		for (CurlyWhirlyFile cwFile: recentFiles)
+		for (CurlyWhirlyFile cwFile : recentFiles)
 		{
 			Element eCW = doc.createElement("curlywhirly");
 			root.appendChild(eCW);

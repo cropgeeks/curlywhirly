@@ -3,13 +3,12 @@
 
 package jhi.curlywhirly.util;
 
-import java.io.*;
+import jhi.curlywhirly.gui.*;
+import scri.commons.gui.*;
+
 import javax.swing.*;
 import javax.swing.filechooser.*;
-
-import jhi.curlywhirly.gui.*;
-
-import scri.commons.gui.*;
+import java.io.*;
 
 public class FileUtils
 {

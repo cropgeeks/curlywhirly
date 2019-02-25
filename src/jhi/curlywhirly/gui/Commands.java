@@ -3,17 +3,16 @@
 
 package jhi.curlywhirly.gui;
 
-import java.io.*;
+import jhi.curlywhirly.gui.dialog.*;
+import jhi.curlywhirly.io.*;
+import jhi.curlywhirly.util.*;
+import scri.commons.gui.*;
+import scri.commons.io.FileUtils;
+
 import javax.imageio.*;
 import javax.swing.*;
 import javax.swing.filechooser.*;
-
-import jhi.curlywhirly.gui.dialog.*;
-import jhi.curlywhirly.io.*;
-
-import jhi.curlywhirly.util.NetworkUtils;
-import scri.commons.io.*;
-import scri.commons.gui.*;
+import java.io.*;
 
 public class Commands
 {
@@ -64,7 +63,7 @@ public class Commands
 					{
 						TaskDialog.error(
 							RB.format("gui.Commands.import.error",
-							dialog.getException()),
+								dialog.getException()),
 							RB.getString("gui.text.close"));
 					}
 
@@ -106,7 +105,7 @@ public class Commands
 		openFile(sample);
 	}
 
-    void exportDataSet()
+	void exportDataSet()
 	{
 		String name = winMain.getDataSet().getName();
 		if (!name.contains("."))
@@ -127,10 +126,10 @@ public class Commands
 
 		try
 		{
-            File exportedData = new File(filename);
-            // Replace these lines with dataset export code
-            DataExporter exporter = new DataExporter(winMain.getDataSet(), exportedData);
-            exporter.runJob(0);
+			File exportedData = new File(filename);
+			// Replace these lines with dataset export code
+			DataExporter exporter = new DataExporter(winMain.getDataSet(), exportedData);
+			exporter.runJob(0);
 
 			TaskDialog.showFileOpen(
 				RB.format("gui.Commands.exportDataSet.success", filename),
@@ -228,7 +227,7 @@ public class Commands
 			{
 				TaskDialog.error(
 					RB.format("gui.Commands.captureMovie.error",
-					dialog.getException()),
+						dialog.getException()),
 					RB.getString("gui.text.close"));
 			}
 		}

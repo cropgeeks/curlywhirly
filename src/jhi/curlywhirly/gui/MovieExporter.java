@@ -3,19 +3,17 @@
 
 package jhi.curlywhirly.gui;
 
-import java.awt.image.*;
-import java.io.*;
-import java.util.*;
-import javax.imageio.*;
-
 import jhi.curlywhirly.gui.viewer.*;
-
 import org.monte.media.*;
 import org.monte.media.avi.*;
 import org.monte.media.math.*;
-
-import scri.commons.io.*;
 import scri.commons.gui.*;
+import scri.commons.io.*;
+
+import javax.imageio.*;
+import java.awt.image.*;
+import java.io.*;
+import java.util.*;
 
 import static org.monte.media.VideoFormatKeys.*;
 
@@ -54,7 +52,7 @@ public class MovieExporter extends SimpleJob
 
 	@Override
 	public void runJob(int i)
-			throws Exception
+		throws Exception
 	{
 		File file = panel.getMovieCapture().startMovieCapture(totalFrames, rotation);
 
@@ -111,15 +109,15 @@ public class MovieExporter extends SimpleJob
 			QualityKey, 1f, MediaTypeKey, MediaType.VIDEO, FrameRateKey,
 			new Rational(frameRate, 1), WidthKey, width, HeightKey, height);
 
-        try
+		try
 		{
-            // Create the writer
-            AVIWriter out = new AVIWriter(file);
+			// Create the writer
+			AVIWriter out = new AVIWriter(file);
 
 			BufferedImage image = ImageIO.read(new File(images.get(0)));
 			// Add a track to the writer
-            out.addTrack(format);
-            out.setPalette(0, image.getColorModel());
+			out.addTrack(format);
+			out.setPalette(0, image.getColorModel());
 
 			for (String filename : images)
 			{
@@ -135,6 +133,9 @@ public class MovieExporter extends SimpleJob
 
 			out.close();
 		}
-		catch (IOException e) { e.printStackTrace(); }
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }

@@ -3,23 +3,21 @@
 
 package jhi.curlywhirly.gui.viewer;
 
-import java.awt.event.*;
-import java.awt.*;
-import java.awt.image.*;
-import java.io.*;
+import com.jogamp.opengl.util.*;
+import com.jogamp.opengl.util.awt.*;
+import jhi.curlywhirly.data.*;
+import jhi.curlywhirly.gui.*;
+import jhi.curlywhirly.gui.dialog.*;
+
 import javax.media.opengl.*;
 import javax.media.opengl.awt.*;
 import javax.media.opengl.glu.*;
 import javax.swing.*;
 import javax.vecmath.*;
-
-import jhi.curlywhirly.data.*;
-import jhi.curlywhirly.gui.*;
-import jhi.curlywhirly.gui.dialog.*;
-
-import com.jogamp.opengl.util.*;
-import com.jogamp.opengl.util.awt.*;
-import java.awt.event.ActionEvent;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.*;
+import java.io.*;
 
 import static javax.media.opengl.GL2.*;
 
@@ -89,10 +87,10 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		removeGLListeners();
 
 		this.dataSet = dataSet;
-        Rotation rotation = new Rotation();
+		Rotation rotation = new Rotation();
 		detector = new CollisionDetection();
-        int perspectiveAngle = 45;
-        scene = new Scene(rotation, perspectiveAngle, (float)CANVAS_WIDTH / CANVAS_HEIGHT);
+		int perspectiveAngle = 45;
+		scene = new Scene(rotation, perspectiveAngle, (float) CANVAS_WIDTH / CANVAS_HEIGHT);
 		mouseListener = new CanvasMouseListener(this, rotation, dataSet, winMain);
 
 		multiSelectionRenderer.setDataSet(dataSet, rotation, detector);
@@ -154,7 +152,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	private void setupFpsTimer()
 	{
-		fpsTimer = new Timer(2500, e -> winMain.updateStatusBarFps((int)animator.getLastFPS()));
+		fpsTimer = new Timer(2500, e -> winMain.updateStatusBarFps((int) animator.getLastFPS()));
 		fpsTimer.setInitialDelay(0);
 		fpsTimer.start();
 	}
@@ -179,11 +177,13 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		gl.glEnable(GL_NORMALIZE);
 		gl.glEnable(GL_CULL_FACE);
 
-        scene.init(gl);
+		scene.init(gl);
 	}
 
 	@Override
-	public void dispose(GLAutoDrawable drawable) { }
+	public void dispose(GLAutoDrawable drawable)
+	{
+	}
 
 	@Override
 	public void display(GLAutoDrawable drawable)
@@ -205,9 +205,9 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		GL2 gl = drawable.getGL().getGL2();
 
 		height = height == 0 ? 1 : height;
-		float aspect = (float)width / height;
+		float aspect = (float) width / height;
 
-        scene.setAspect(aspect);
+		scene.setAspect(aspect);
 
 		CANVAS_WIDTH = width;
 		CANVAS_HEIGHT = height;
@@ -224,27 +224,27 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 		mouseListener.initialiseArcBall(CANVAS_WIDTH, CANVAS_HEIGHT);
 		animator.start();
-    }
+	}
 
 	// Uses GLPanel's method of getting a screenshot on the EDT, other methods
-    // of getting screenshots could clutter up the rendering code.
+	// of getting screenshots could clutter up the rendering code.
 	public BufferedImage getScreenShot(boolean includeKey)
-        throws Exception
+		throws Exception
 	{
-        // Create an image of the correct proportions
-        BufferedImage image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = image.createGraphics();
-        // "Print" the current state of the panel to that image
-        setupPrint(1, 1, 1, getWidth(), getHeight());
-        printAll(g);
-        image.flush();
-        // Called to release the panel from the EDT.
-        releasePrint();
+		// Create an image of the correct proportions
+		BufferedImage image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = image.createGraphics();
+		// "Print" the current state of the panel to that image
+		setupPrint(1, 1, 1, getWidth(), getHeight());
+		printAll(g);
+		image.flush();
+		// Called to release the panel from the EDT.
+		releasePrint();
 
 		if (includeKey)
 			winMain.getColourKeyCreator().drawColorKey(dataSet.getCurrentCategoryGroup(), g);
 
-        return image;
+		return image;
 	}
 
 	// Screenshot capture for exporting movies, not screenshots (which utilise
@@ -273,14 +273,14 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		int[] view = new int[4];
 		float[] model = new float[16];
 
-        float[] proj = scene.getProj();
+		float[] proj = scene.getProj();
 
 		gl.glGetIntegerv(GL.GL_VIEWPORT, view, 0);
 		// Get the current model view matrix
 		gl.glGetFloatv(GL_MODELVIEW_MATRIX, model, 0);
 		float winX = mousePoint.x;
 		// Adjust into opengl y space
-		float winY = view[3] - (float)mousePoint.y;
+		float winY = view[3] - (float) mousePoint.y;
 
 		// Used to store the result of gluUnproject for the near clipping plane
 		float[] near = new float[4];
@@ -335,7 +335,8 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		int menuShortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
 		// Zoom-in
-		Action zoomIn = new AbstractAction() {
+		Action zoomIn = new AbstractAction()
+		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
@@ -346,7 +347,8 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		mapKeyToAction(zoomIn, KeyStroke.getKeyStroke(KeyEvent.VK_ADD, menuShortcut), "zoomInNumPad");
 
 		// Zoom-out
-		Action zoomOut = new AbstractAction() {
+		Action zoomOut = new AbstractAction()
+		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
@@ -378,25 +380,39 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 	}
 
 	public CloseOverlay getCloseOverlay()
-		{ return closeOverlay; }
+	{
+		return closeOverlay;
+	}
 
 	public MultiSelectionRenderer getMultiSelectionRenderer()
-		{ return multiSelectionRenderer; }
+	{
+		return multiSelectionRenderer;
+	}
 
 	public MovieCaptureEventListener getMovieCapture()
-		{ return movieCapture; }
+	{
+		return movieCapture;
+	}
 
 	public SelectedSphereRenderer getSphereRenderer()
-		{ return sphereRenderer; }
+	{
+		return sphereRenderer;
+	}
 
 	public AbstractSphereRenderer getDeselectedSphereRenderer()
-		{ return deselectedSphereRenderer; }
+	{
+		return deselectedSphereRenderer;
+	}
 
 	public AxesRenderer getAxesRenderer()
-		{ return axesRenderer; }
+	{
+		return axesRenderer;
+	}
 
-    public Scene getScene()
-        { return scene; }
+	public Scene getScene()
+	{
+		return scene;
+	}
 
 	public void showDataPointDialog(DataPoint point)
 	{

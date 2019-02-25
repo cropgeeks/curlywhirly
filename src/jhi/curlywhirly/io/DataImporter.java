@@ -3,23 +3,23 @@
 
 package jhi.curlywhirly.io;
 
+import jhi.curlywhirly.data.*;
+import jhi.curlywhirly.gui.*;
+import jhi.curlywhirly.gui.dialog.*;
+import jhi.curlywhirly.util.*;
+import scri.commons.gui.*;
+import scri.commons.io.*;
+
+import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
 import java.util.regex.*;
 import java.util.stream.*;
-import javax.swing.*;
 
-import jhi.curlywhirly.data.*;
-import jhi.curlywhirly.gui.*;
-import jhi.curlywhirly.gui.dialog.*;
-import jhi.curlywhirly.util.*;
-
-import scri.commons.io.*;
-import scri.commons.gui.*;
-
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toMap;
 
 public class DataImporter extends SimpleJob
 {
@@ -111,7 +111,7 @@ public class DataImporter extends SimpleJob
 
 		DataNormalizer dataNormalizer = new DataNormalizer(allPointValues);
 
-		HashMap<String, ArrayList<Float>> normalizedValues = (HashMap<String, ArrayList<Float>>)pointValues.entrySet().stream()
+		HashMap<String, ArrayList<Float>> normalizedValues = (HashMap<String, ArrayList<Float>>) pointValues.entrySet().stream()
 			.collect(toMap(Map.Entry::getKey, e -> dataNormalizer.normalizeValues(e.getValue().stream())));
 
 		pointValues.keySet().forEach(name ->
@@ -219,7 +219,7 @@ public class DataImporter extends SimpleJob
 	private int getLabelColumnIndex(String[] columns)
 		throws ReadException
 	{
-		for (int i=0; i < columns.length; i++)
+		for (int i = 0; i < columns.length; i++)
 			if (columns[i].trim().equalsIgnoreCase(LABEL_IDENTIFIER))
 				labelColumn = i;
 
@@ -238,7 +238,7 @@ public class DataImporter extends SimpleJob
 			.filter(col -> !col.toLowerCase().contains(URL_IDENTIFIER))
 			.forEach(c ->
 			{
-				String name = c.substring(c.indexOf(':')+1);
+				String name = c.substring(c.indexOf(':') + 1);
 				if (name.isEmpty())
 					name = MISSING_CATEGORY;
 				categoryGroups.add(new CategoryGroup(name));
@@ -271,8 +271,8 @@ public class DataImporter extends SimpleJob
 
 	private String[] getAxisLabels(String[] columns)
 	{
-		String[] labels = Arrays.copyOfRange(columns, labelColumn+1, columns.length);
-		for (int i=0; i < labels.length; i++)
+		String[] labels = Arrays.copyOfRange(columns, labelColumn + 1, columns.length);
+		for (int i = 0; i < labels.length; i++)
 			labels[i] = labels[i].trim();
 
 		return labels;
@@ -310,7 +310,7 @@ public class DataImporter extends SimpleJob
 		String name = tokens[labelColumn];
 
 		// Read all the values associated with the data point
-		String[] valuesArray = Arrays.copyOfRange(tokens, labelColumn+1, tokens.length);
+		String[] valuesArray = Arrays.copyOfRange(tokens, labelColumn + 1, tokens.length);
 		ArrayList<Float> values = getValuesForDataPoint(valuesArray);
 
 		if (pointValues.containsKey(name))
@@ -336,7 +336,7 @@ public class DataImporter extends SimpleJob
 
 			String[] pointUrls = Arrays.copyOfRange(tokens, categoryGroups.size(), labelColumn);
 			Map<String, String> pointUrlMap = new HashMap<>();
-			for (int i=0; i < urlNames.size(); i++)
+			for (int i = 0; i < urlNames.size(); i++)
 				pointUrlMap.put(urlNames.get(i), pointUrls[i]);
 
 			pointUrlsByName.put(name, pointUrlMap);
@@ -353,7 +353,7 @@ public class DataImporter extends SimpleJob
 		// Each data point stores a HashMap of CategoryGroups to Categories to
 		// allow fast lookup of categories by CategoryGroup.
 		HashMap<CategoryGroup, Category> categories = new HashMap<>();
-		for (int i=0; i < names.length; i++)
+		for (int i = 0; i < names.length; i++)
 		{
 			CategoryGroup group = categoryGroups.get(i);
 			HashMap<String, Category> groupCategories = categoriesToGroups.get(i);
@@ -392,7 +392,7 @@ public class DataImporter extends SimpleJob
 	private void assignColorsToCategories(CategoryGroup group)
 	{
 		Color[] colours = GUIUtils.generateColours(group.size());
-		int i=0;
+		int i = 0;
 		for (Category category : group)
 		{
 			// Check if a color preference already exists for this category
@@ -410,10 +410,14 @@ public class DataImporter extends SimpleJob
 	}
 
 	public DataSet getDataSet()
-		{ return dataSet; }
+	{
+		return dataSet;
+	}
 
 	public File getFile()
-		{ return file; }
+	{
+		return file;
+	}
 
 	public void displayDuplicates()
 	{
@@ -421,8 +425,13 @@ public class DataImporter extends SimpleJob
 		{
 			Runnable r = () -> new DuplicateDataPointsDialog(duplicates);
 
-			try { SwingUtilities.invokeLater(r); }
-			catch (Exception e) {}
+			try
+			{
+				SwingUtilities.invokeLater(r);
+			}
+			catch (Exception e)
+			{
+			}
 		}
 	}
 

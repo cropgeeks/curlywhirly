@@ -3,13 +3,14 @@
 
 package jhi.curlywhirly.gui.viewer;
 
-import java.nio.*;
-import javax.media.opengl.*;
-
 import com.jogamp.common.nio.*;
 
+import javax.media.opengl.*;
+import java.nio.*;
+
 import static javax.media.opengl.GL.*;
-import static javax.media.opengl.fixedfunc.GLPointerFunc.*;
+import static javax.media.opengl.fixedfunc.GLPointerFunc.GL_NORMAL_ARRAY;
+import static javax.media.opengl.fixedfunc.GLPointerFunc.GL_VERTEX_ARRAY;
 
 public class GLIcoSphere implements Sphere
 {
@@ -31,10 +32,10 @@ public class GLIcoSphere implements Sphere
 	 * Constructs a GLIcoSphere using the given opengl context and level of
 	 * of detail.
 	 *
-	 * @param gl					Opengl context that allows opengl operations
-	 *								to be carried out
-	 * @param sphereDetailLevel		Level of detail for IcoSphere creation.
-	 *								Larger number = more detail.
+	 * @param gl                Opengl context that allows opengl operations
+	 *                          to be carried out
+	 * @param sphereDetailLevel Level of detail for IcoSphere creation.
+	 *                          Larger number = more detail.
 	 */
 	public GLIcoSphere(GL gl, int sphereDetailLevel)
 	{
@@ -105,11 +106,17 @@ public class GLIcoSphere implements Sphere
 	}
 
 	public int getVertexBufferSize()
-		{ return sphere.vertexCount() * 4; }
+	{
+		return sphere.vertexCount() * 4;
+	}
 
 	public int getIndexBufferSize()
-		{ return sphere.faceNormalCount() * 4; }
+	{
+		return sphere.faceNormalCount() * 4;
+	}
 
 	public int getIndexCount()
-		{ return sphere.faceNormalCount(); }
+	{
+		return sphere.faceNormalCount();
+	}
 }

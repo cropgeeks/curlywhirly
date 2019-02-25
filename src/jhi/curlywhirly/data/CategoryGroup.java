@@ -24,7 +24,9 @@ public class CategoryGroup implements Comparable<CategoryGroup>, Iterable<Catego
 	}
 
 	public String getName()
-		{ return name; }
+	{
+		return name;
+	}
 
 	public Category get(int index)
 	{
@@ -99,7 +101,9 @@ public class CategoryGroup implements Comparable<CategoryGroup>, Iterable<Catego
 	}
 
 	public int getCategoryCount()
-		{ return categories.size(); }
+	{
+		return categories.size();
+	}
 
 	public int selectedCategoriesCount()
 	{
@@ -112,5 +116,7 @@ public class CategoryGroup implements Comparable<CategoryGroup>, Iterable<Catego
 	}
 
 	public ArrayList<Category> getCategories()
-		{ return categories; }
+	{
+		return categories;
+	}
 }

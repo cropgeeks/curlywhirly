@@ -111,7 +111,9 @@ public class DataSetPoints
 	}
 
 	public List<DataPoint> getDataPoints()
-		{ return points; }
+	{
+		return points;
+	}
 
 	public void setMultiSelectionPoint(DataPoint multiSelectionPoint)
 	{

@@ -27,7 +27,9 @@ public class Category implements Comparable<Category>
 	// getTotal and getNoSelected are used in the reporting of the data points
 	// which are selected on a per category basis.
 	public int getTotal()
-		{ return dataPoints.size(); }
+	{
+		return dataPoints.size();
+	}
 
 	public int getSelectedCount()
 	{
@@ -45,7 +47,9 @@ public class Category implements Comparable<Category>
 	}
 
 	public String getName()
-		{ return name; }
+	{
+		return name;
+	}
 
 	public void setSelected(boolean selected)
 	{
@@ -55,7 +59,9 @@ public class Category implements Comparable<Category>
 	}
 
 	public boolean isSelected()
-		{ return selected; }
+	{
+		return selected;
+	}
 
 	public void addDataPoint(DataPoint dataPoint)
 	{
@@ -68,7 +74,9 @@ public class Category implements Comparable<Category>
 	}
 
 	public Color getColor()
-		{ return color; }
+	{
+		return color;
+	}
 
 	public String getRGBString()
 	{

@@ -32,7 +32,7 @@ public class Rotation
 	void setIdentity()
 	{
 		lastRotation.setIdentity();
-        currRotation.setIdentity();
+		currRotation.setIdentity();
 		autoRotation.setIdentity();
 		combinedRotation.setIdentity();
 	}
@@ -40,19 +40,19 @@ public class Rotation
 	void automaticallyRotate()
 	{
 		if (autoSpin)
-            rotateSceneBy(rotationAngle);
+			rotateSceneBy(rotationAngle);
 	}
 
-    private void rotateSceneBy(float angle)
-    {
+	private void rotateSceneBy(float angle)
+	{
 		// Rotate around the Y-axis by angle
 		angle = (float) ((angle * Math.PI) / 180);
 		autoRotation.set(new AxisAngle4f(0, 1, 0, -angle));
-        // When carrying out automatic rotation we need to multiply the
-        // automatic rotation by our combined rotation and set our
-        // combined rotation to the result of this.
-        combinedRotation.mul(autoRotation, combinedRotation);
-    }
+		// When carrying out automatic rotation we need to multiply the
+		// automatic rotation by our combined rotation and set our
+		// combined rotation to the result of this.
+		combinedRotation.mul(autoRotation, combinedRotation);
+	}
 
 	// Updates the value to the last user drag rotation.
 	void updateLastRotation()
@@ -109,21 +109,21 @@ public class Rotation
 		float[] dest = new float[16];
 
 		dest[0] = matrix.m00;
-        dest[1] = matrix.m10;
-        dest[2] = matrix.m20;
-        dest[3] = matrix.m30;
-        dest[4] = matrix.m01;
-        dest[5] = matrix.m11;
-        dest[6] = matrix.m21;
-        dest[7] = matrix.m31;
-        dest[8] = matrix.m02;
-        dest[9] = matrix.m12;
-        dest[10] = matrix.m22;
-        dest[11] = matrix.m32;
-        dest[12] = matrix.m03;
-        dest[13] = matrix.m13;
-        dest[14] = matrix.m23;
-        dest[15] = matrix.m33;
+		dest[1] = matrix.m10;
+		dest[2] = matrix.m20;
+		dest[3] = matrix.m30;
+		dest[4] = matrix.m01;
+		dest[5] = matrix.m11;
+		dest[6] = matrix.m21;
+		dest[7] = matrix.m31;
+		dest[8] = matrix.m02;
+		dest[9] = matrix.m12;
+		dest[10] = matrix.m22;
+		dest[11] = matrix.m32;
+		dest[12] = matrix.m03;
+		dest[13] = matrix.m13;
+		dest[14] = matrix.m23;
+		dest[15] = matrix.m33;
 
 		return dest;
 	}

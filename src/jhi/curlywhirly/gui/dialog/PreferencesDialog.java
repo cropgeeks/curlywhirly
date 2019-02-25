@@ -3,13 +3,12 @@
 
 package jhi.curlywhirly.gui.dialog;
 
+import jhi.curlywhirly.gui.*;
+import scri.commons.gui.*;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
-
-import jhi.curlywhirly.gui.*;
-
-import scri.commons.gui.*;
 
 public class PreferencesDialog extends JDialog implements ActionListener
 {
@@ -31,9 +30,9 @@ public class PreferencesDialog extends JDialog implements ActionListener
 		tabs = new JTabbedPane();
 		tabs.setBorder(BorderFactory.createEmptyBorder(2, 2, 10, 2));
 		tabs.addTab(RB.getString("gui.dialog.PreferencesDialog.generalTab"),
-		Icons.getIcon("GENERALTAB"), nbPanel);
+			Icons.getIcon("GENERALTAB"), nbPanel);
 		tabs.addTab(RB.getString("gui.dialog.PreferencesDialog.warningTab"),
-		Icons.getIcon("WARNINGSTAB"), nbWarning);
+			Icons.getIcon("WARNINGSTAB"), nbWarning);
 
 		add(tabs);
 		add(createButtons(), BorderLayout.SOUTH);
@@ -76,7 +75,7 @@ public class PreferencesDialog extends JDialog implements ActionListener
 			setVisible(false);
 		}
 
-		else if(e.getSource() == nbPanel.bCustomizeColors)
+		else if (e.getSource() == nbPanel.bCustomizeColors)
 		{
 			new CustomizeColorsDialog();
 		}
@@ -88,5 +87,7 @@ public class PreferencesDialog extends JDialog implements ActionListener
 	}
 
 	public boolean isOK()
-		{ return isOK; }
+	{
+		return isOK;
+	}
 }

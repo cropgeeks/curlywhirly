@@ -3,18 +3,19 @@
 
 package jhi.curlywhirly.gui.viewer;
 
-import java.awt.*;
-import javax.media.opengl.*;
-import javax.media.opengl.glu.*;
-
+import com.jogamp.opengl.util.awt.*;
 import jhi.curlywhirly.data.*;
 import jhi.curlywhirly.gui.*;
 import jhi.curlywhirly.util.*;
 
-import com.jogamp.opengl.util.awt.*;
+import javax.media.opengl.*;
+import javax.media.opengl.glu.*;
+import java.awt.*;
 
-import static javax.media.opengl.GL.*;
-import static javax.media.opengl.fixedfunc.GLLightingFunc.*;
+import static javax.media.opengl.GL.GL_FRONT_AND_BACK;
+import static javax.media.opengl.GL.GL_LINES;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_AMBIENT_AND_DIFFUSE;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SHININESS;
 
 public class AxesRenderer extends SceneRenderable implements GLEventListener
 {
@@ -69,21 +70,24 @@ public class AxesRenderer extends SceneRenderable implements GLEventListener
 	{
 		switch (axis)
 		{
-			case X_AXIS :	gl.glBegin(GL_LINES);
-							gl.glVertex3f(-1f, 0, 0);
-							gl.glVertex3f(1f, 0, 0);
-							gl.glEnd();
-							break;
-			case Y_AXIS : 	gl.glBegin(GL_LINES);
-							gl.glVertex3f(0, -1f, 0);
-							gl.glVertex3f(0, 1f, 0);
-							gl.glEnd();
-							break;
-			case Z_AXIS : 	gl.glBegin(GL_LINES);
-							gl.glVertex3f(0, 0, -1f);
-							gl.glVertex3f(0, 0, 1f);
-							gl.glEnd();
-							break;
+			case X_AXIS:
+				gl.glBegin(GL_LINES);
+				gl.glVertex3f(-1f, 0, 0);
+				gl.glVertex3f(1f, 0, 0);
+				gl.glEnd();
+				break;
+			case Y_AXIS:
+				gl.glBegin(GL_LINES);
+				gl.glVertex3f(0, -1f, 0);
+				gl.glVertex3f(0, 1f, 0);
+				gl.glEnd();
+				break;
+			case Z_AXIS:
+				gl.glBegin(GL_LINES);
+				gl.glVertex3f(0, 0, -1f);
+				gl.glVertex3f(0, 0, 1f);
+				gl.glEnd();
+				break;
 		}
 	}
 
@@ -110,7 +114,7 @@ public class AxesRenderer extends SceneRenderable implements GLEventListener
 
 		// Ticks for X-Axis
 		gl.glPushMatrix();
-		for (int i=startTick; i <= endTick; i++)
+		for (int i = startTick; i <= endTick; i++)
 		{
 			if (i == 0)
 				continue;
@@ -199,7 +203,7 @@ public class AxesRenderer extends SceneRenderable implements GLEventListener
 			billboardText(gl, getAxisLabel(X_AXIS));
 		gl.glPopMatrix();
 
-		float [] yAxisColor = ColorPrefs.getColorAsRGB("User.OpenGLPanel.yAxisColor");
+		float[] yAxisColor = ColorPrefs.getColorAsRGB("User.OpenGLPanel.yAxisColor");
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, yAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
 		gl.glPushMatrix();
@@ -214,7 +218,7 @@ public class AxesRenderer extends SceneRenderable implements GLEventListener
 			billboardText(gl, getAxisLabel(Y_AXIS));
 		gl.glPopMatrix();
 
-		float [] zAxisColor = ColorPrefs.getColorAsRGB("User.OpenGLPanel.zAxisColor");
+		float[] zAxisColor = ColorPrefs.getColorAsRGB("User.OpenGLPanel.zAxisColor");
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, zAxisColor, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
 		gl.glPushMatrix();
@@ -229,19 +233,23 @@ public class AxesRenderer extends SceneRenderable implements GLEventListener
 		glu.gluDeleteQuadric(quadric);
 	}
 
-    private String getAxisLabel(int axis)
+	private String getAxisLabel(int axis)
 	{
 		switch (axis)
 		{
-			case X_AXIS: return Prefs.guiChkDatasetLabels ? dataSet.getAxes().getXYZLabels()[0] : "X";
-			case Y_AXIS: return Prefs.guiChkDatasetLabels ? dataSet.getAxes().getXYZLabels()[1] : "Y";
-			case Z_AXIS: return Prefs.guiChkDatasetLabels ? dataSet.getAxes().getXYZLabels()[2] : "Z";
+			case X_AXIS:
+				return Prefs.guiChkDatasetLabels ? dataSet.getAxes().getXYZLabels()[0] : "X";
+			case Y_AXIS:
+				return Prefs.guiChkDatasetLabels ? dataSet.getAxes().getXYZLabels()[1] : "Y";
+			case Z_AXIS:
+				return Prefs.guiChkDatasetLabels ? dataSet.getAxes().getXYZLabels()[2] : "Z";
 
-			default: return null;
+			default:
+				return null;
 		}
 	}
 
-    // To render billboarded text we must rotate the text that we are drawing
+	// To render billboarded text we must rotate the text that we are drawing
 	// by the inverse of the rotations that are applied to the camera. This
 	// keeps the text facing the camera at all times.
 	private void billboardText(GL2 gl, String text)
@@ -291,5 +299,7 @@ public class AxesRenderer extends SceneRenderable implements GLEventListener
 	}
 
 	public void setAxisLabelSize(float axisLabelSize)
-		{ this.axisLabelSize = axisLabelSize; }
+	{
+		this.axisLabelSize = axisLabelSize;
+	}
 }

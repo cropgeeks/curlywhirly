@@ -3,14 +3,13 @@
 
 package jhi.curlywhirly.gui.dialog;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-
 import jhi.curlywhirly.gui.*;
-
 import scri.commons.gui.*;
 import scri.commons.gui.matisse.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
 public class AboutDialog extends JDialog implements ActionListener
 {
@@ -21,7 +20,7 @@ public class AboutDialog extends JDialog implements ActionListener
 
 	public AboutDialog()
 	{
-        super(CurlyWhirly.winMain, true);
+		super(CurlyWhirly.winMain, true);
 
 		nbPanel = new AboutPanelNB();
 

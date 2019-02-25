@@ -3,15 +3,14 @@
 
 package jhi.curlywhirly.gui;
 
+import jhi.curlywhirly.data.*;
+import scri.commons.gui.*;
+
+import javax.swing.*;
+import javax.swing.table.*;
 import java.awt.*;
 import java.awt.image.*;
 import java.util.*;
-import javax.swing.*;
-import javax.swing.table.*;
-
-import jhi.curlywhirly.data.*;
-
-import scri.commons.gui.*;
 
 public class DataPanelTableModel extends AbstractTableModel
 {
@@ -27,11 +26,11 @@ public class DataPanelTableModel extends AbstractTableModel
 
 		dataPoints = dataSet.getDataPoints();
 
-		columnNames = new String[] { RB.getString("gui.DataPanelTableModel.headers.col1"),
-									RB.getString("gui.DataPanelTableModel.headers.col2"),
-									RB.format("gui.DataPanelTableModel.headers.col3", axes.getXYZLabels()[0]),
-									RB.format("gui.DataPanelTableModel.headers.col4", axes.getXYZLabels()[1]),
-									RB.format("gui.DataPanelTableModel.headers.col5", axes.getXYZLabels()[2]) };
+		columnNames = new String[]{RB.getString("gui.DataPanelTableModel.headers.col1"),
+			RB.getString("gui.DataPanelTableModel.headers.col2"),
+			RB.format("gui.DataPanelTableModel.headers.col3", axes.getXYZLabels()[0]),
+			RB.format("gui.DataPanelTableModel.headers.col4", axes.getXYZLabels()[1]),
+			RB.format("gui.DataPanelTableModel.headers.col5", axes.getXYZLabels()[2])};
 	}
 
 	@Override
@@ -51,13 +50,19 @@ public class DataPanelTableModel extends AbstractTableModel
 	{
 		switch (column)
 		{
-			case 0: return Color.class;
-			case 1: return DataPoint.class;
-			case 2: return Float.class;
-			case 3: return Float.class;
-			case 4: return Float.class;
+			case 0:
+				return Color.class;
+			case 1:
+				return DataPoint.class;
+			case 2:
+				return Float.class;
+			case 3:
+				return Float.class;
+			case 4:
+				return Float.class;
 
-			default: return null;
+			default:
+				return null;
 		}
 	}
 
@@ -76,11 +81,16 @@ public class DataPanelTableModel extends AbstractTableModel
 		// can pull out the correct data for display in the table.
 		switch (columnIndex)
 		{
-			case 0: return point;
-			case 1: return point;
-			case 2: return point.getValues().get(axes.getX());
-			case 3: return point.getValues().get(axes.getY());
-			case 4: return point.getValues().get(axes.getZ());
+			case 0:
+				return point;
+			case 1:
+				return point;
+			case 2:
+				return point.getValues().get(axes.getX());
+			case 3:
+				return point.getValues().get(axes.getY());
+			case 4:
+				return point.getValues().get(axes.getZ());
 		}
 
 		return null;
@@ -96,7 +106,7 @@ public class DataPanelTableModel extends AbstractTableModel
 		// Set the attributes of the class and return a reference
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value,
-			boolean isSelected, boolean hasFocus, int row, int column)
+													   boolean isSelected, boolean hasFocus, int row, int column)
 		{
 			super.getTableCellRendererComponent(table, value, isSelected,
 				hasFocus, row, column);
@@ -109,7 +119,7 @@ public class DataPanelTableModel extends AbstractTableModel
 			Graphics2D g = image.createGraphics();
 
 			GradientPaint paint;
-			if (((DataPoint)table.getValueAt(row, 1)).isSelected())
+			if (((DataPoint) table.getValueAt(row, 1)).isSelected())
 				paint = new GradientPaint(0, 0, color.brighter(), 20, 10, color.darker());
 			else
 			{
@@ -132,7 +142,9 @@ public class DataPanelTableModel extends AbstractTableModel
 
 		@Override
 		public Insets getInsets(Insets i)
-			{ return new Insets(0, 3, 0, 0); }
+		{
+			return new Insets(0, 3, 0, 0);
+		}
 	}
 
 	static class PointSelectedRenderer extends DefaultTableCellRenderer
@@ -140,7 +152,7 @@ public class DataPanelTableModel extends AbstractTableModel
 		// Set the attributes of the class and return a reference
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value,
-			boolean isSelected, boolean hasFocus, int row, int column)
+													   boolean isSelected, boolean hasFocus, int row, int column)
 		{
 			super.getTableCellRendererComponent(table, value, isSelected,
 				hasFocus, row, column);
@@ -163,8 +175,10 @@ public class DataPanelTableModel extends AbstractTableModel
 	{
 		switch (col)
 		{
-			case 0: return new ColorListRenderer();
-			default: return new PointSelectedRenderer();
+			case 0:
+				return new ColorListRenderer();
+			default:
+				return new PointSelectedRenderer();
 		}
 	}
 
@@ -197,11 +211,11 @@ public class DataPanelTableModel extends AbstractTableModel
 				return (c2.getAlpha() - c1.getAlpha());
 			// Extract the HSB, and impose the ordering.
 			float[] firstHSB = Color.RGBtoHSB(c1.getRed(),
-							  c1.getGreen(),
-							  c1.getBlue(), null);
+				c1.getGreen(),
+				c1.getBlue(), null);
 			float[] secondHSB = Color.RGBtoHSB(c2.getRed(),
-							   c2.getGreen(),
-							   c2.getBlue(), null);
+				c2.getGreen(),
+				c2.getBlue(), null);
 			int[] comp = new int[3];
 			// First saturation...
 			comp[0] = -Float.compare(firstHSB[1], secondHSB[1]);
@@ -211,9 +225,9 @@ public class DataPanelTableModel extends AbstractTableModel
 			comp[2] = Float.compare(firstHSB[0], secondHSB[0]);
 
 			// Run through the comparisons, return if not zero.
-			for (int i=0; i<3; i++)
+			for (int i = 0; i < 3; i++)
 				if (comp[i] != 0)
-				return comp[i];
+					return comp[i];
 			return 0;
 		}
 	}

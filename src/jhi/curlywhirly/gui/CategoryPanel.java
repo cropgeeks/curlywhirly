@@ -3,11 +3,11 @@
 
 package jhi.curlywhirly.gui;
 
+import jhi.curlywhirly.data.*;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
-
-import jhi.curlywhirly.data.*;
 
 class CategoryPanel extends JPanel implements ActionListener
 {
@@ -93,8 +93,12 @@ class CategoryPanel extends JPanel implements ActionListener
 	}
 
 	CategoryGroup getCategoryGroup()
-		{ return catGroup; }
+	{
+		return catGroup;
+	}
 
 	int getTableHeight()
-		{ return tablePanel.getCatTable().getPreferredSize().height; }
+	{
+		return tablePanel.getCatTable().getPreferredSize().height;
+	}
 }

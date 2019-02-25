@@ -3,16 +3,16 @@
 
 package jhi.curlywhirly.gui.viewer;
 
-import java.awt.*;
-import javax.media.opengl.*;
-
+import com.jogamp.opengl.util.gl2.*;
 import jhi.curlywhirly.gui.*;
 import jhi.curlywhirly.util.*;
 
-import com.jogamp.opengl.util.gl2.*;
+import javax.media.opengl.*;
+import java.awt.*;
 
 import static javax.media.opengl.GL.*;
-import static javax.media.opengl.fixedfunc.GLLightingFunc.*;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_AMBIENT_AND_DIFFUSE;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SHININESS;
 
 /**
  * Renders a semi-transparent sphere representing the current size of the
@@ -52,7 +52,7 @@ public class MultiSelectionRenderer extends AbstractSphereRenderer
 		Color color = ColorPrefs.getColor("User.OpenGLPanel.multiSelectColor");
 
 		// Get each color component into the 0-1 range instead of 0-255
-		float [] rgba = color.getRGBColorComponents(new float[3]);
+		float[] rgba = color.getRGBColorComponents(new float[3]);
 		gl.glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rgba, 0);
 		gl.glMaterialf(GL_FRONT, GL_SHININESS, 128);
 
@@ -65,7 +65,7 @@ public class MultiSelectionRenderer extends AbstractSphereRenderer
 		if (dataSet.getMultiSelectionPoint() == null || !Prefs.guiChkAnchorPoints)
 			return;
 
-		float [] rgba = ColorPrefs.getColorAsRGB("User.OpenGLPanel.multiSelectLineColor");
+		float[] rgba = ColorPrefs.getColorAsRGB("User.OpenGLPanel.multiSelectLineColor");
 
 		gl.glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rgba, 0);
 		gl.glMaterialf(GL_FRONT, GL_SHININESS, 128);
@@ -126,7 +126,7 @@ public class MultiSelectionRenderer extends AbstractSphereRenderer
 		// Scale our sphere to match the desired size set in the UI
 		gl.glScalef(selectionSphereSize, selectionSphereSize, selectionSphereSize);
 
-		float[] rgba = new float[] { 0.5f, 0.5f, 1.0f, 0.4f };
+		float[] rgba = new float[]{0.5f, 0.5f, 1.0f, 0.4f};
 		gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, rgba, 0);
 		gl.glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
 		glut.glutSolidSphere(1, 16, 16);
@@ -177,7 +177,7 @@ public class MultiSelectionRenderer extends AbstractSphereRenderer
 	{
 		this.selectionSphereSize = selectPointSize;
 	}
-	
+
 	public boolean isMultiSelecting()
 	{
 		return dataSet.getMultiSelectionPoint() != null;

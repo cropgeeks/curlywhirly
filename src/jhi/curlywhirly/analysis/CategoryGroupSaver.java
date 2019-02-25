@@ -3,12 +3,11 @@
 
 package jhi.curlywhirly.analysis;
 
+import jhi.curlywhirly.data.*;
+import scri.commons.gui.*;
+
 import java.io.*;
 import java.util.*;
-
-import jhi.curlywhirly.data.*;
-
-import scri.commons.gui.*;
 
 public class CategoryGroupSaver extends SimpleJob
 {

@@ -3,14 +3,14 @@
 
 package jhi.curlywhirly.gui;
 
+import scri.commons.gui.*;
+
+import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
-import javax.swing.*;
-
-import scri.commons.gui.*;
 
 public class GUIUtils
 {
@@ -19,11 +19,11 @@ public class GUIUtils
 	 */
 	public static Color[] generateColours(int numColours)
 	{
-		Color[] kellyColors = new Color[] {
+		Color[] kellyColors = new Color[]{
 			new Color(255, 179, 0),
 			new Color(128, 62, 117),
 			new Color(255, 104, 0),
-			new Color(166, 189,215),
+			new Color(166, 189, 215),
 			new Color(193, 0, 32),
 			new Color(206, 162, 98),
 			new Color(129, 112, 102),
@@ -52,8 +52,8 @@ public class GUIUtils
 		{
 			int additionalColours = numColours - kellyColors.length;
 
-			Color [] colours = new Color[additionalColours];
-			float increment = 1/(float)additionalColours;
+			Color[] colours = new Color[additionalColours];
+			float increment = 1 / (float) additionalColours;
 			float currentHue = 0;
 			for (int i = 0; i < colours.length; i++)
 			{
@@ -74,9 +74,9 @@ public class GUIUtils
 	{
 		// Shuffle colours so we don't always see the same palette across all category groups
 		Random rnd = ThreadLocalRandom.current();
-		for (int i=maxColours-1; i > 0; i--)
+		for (int i = maxColours - 1; i > 0; i--)
 		{
-			int index = rnd.nextInt(i +1);
+			int index = rnd.nextInt(i + 1);
 			Color color = colors[index];
 			colors[index] = colors[i];
 			colors[i] = color;
@@ -94,7 +94,7 @@ public class GUIUtils
 			URI uri = new URI(html);
 			desktop.browse(uri);
 		}
-		catch(URISyntaxException | IOException e)
+		catch (URISyntaxException | IOException e)
 		{
 			String message = RB.format("gui.GUIUtils.urlError", html);
 			TaskDialog.error(message, RB.getString("gui.text.close"));
@@ -110,7 +110,10 @@ public class GUIUtils
 			Desktop desktop = Desktop.getDesktop();
 			desktop.mail(new URI("mailto:curlywhirly@hutton.ac.uk?subject=CurlyWhirly%20Feedback"));
 		}
-		catch (URISyntaxException | IOException e) { System.out.println(e); }
+		catch (URISyntaxException | IOException e)
+		{
+			System.out.println(e);
+		}
 	}
 
 	/*

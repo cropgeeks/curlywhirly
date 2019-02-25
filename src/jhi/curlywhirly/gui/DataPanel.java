@@ -3,20 +3,19 @@
 
 package jhi.curlywhirly.gui;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
+import jhi.curlywhirly.analysis.*;
+import jhi.curlywhirly.data.*;
+import jhi.curlywhirly.util.*;
+import scri.commons.gui.*;
+
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.filechooser.*;
 import javax.swing.table.*;
-
-import jhi.curlywhirly.analysis.*;
-import jhi.curlywhirly.data.*;
-import jhi.curlywhirly.util.*;
-
-import scri.commons.gui.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 
 public class DataPanel extends JPanel
 {
@@ -93,7 +92,7 @@ public class DataPanel extends JPanel
 		// Loop over the table pulling out the data points to hand off to the
 		// DataPointSaver
 		ArrayList<DataPoint> dataPoints = new ArrayList<>();
-		for (int i=0; i < controls.pointsTable.getRowCount(); i++)
+		for (int i = 0; i < controls.pointsTable.getRowCount(); i++)
 		{
 			int row = controls.pointsTable.convertRowIndexToModel(i);
 			DataPoint point = (DataPoint) model.getValueAt(row, 1);

@@ -3,14 +3,13 @@
 
 package jhi.curlywhirly.gui;
 
-import java.awt.*;
-import java.awt.image.*;
+import jhi.curlywhirly.data.*;
+import scri.commons.gui.*;
+
 import javax.swing.*;
 import javax.swing.table.*;
-
-import jhi.curlywhirly.data.*;
-
-import scri.commons.gui.*;
+import java.awt.*;
+import java.awt.image.*;
 
 public class CategoryTableModel extends AbstractTableModel
 {
@@ -42,12 +41,17 @@ public class CategoryTableModel extends AbstractTableModel
 	{
 		switch (column)
 		{
-			case 0: return Integer.class;
-			case 1: return Color.class;
-			case 2: return Category.class;
-			case 3: return String.class;
+			case 0:
+				return Integer.class;
+			case 1:
+				return Color.class;
+			case 2:
+				return Category.class;
+			case 3:
+				return String.class;
 
-			default: return null;
+			default:
+				return null;
 		}
 	}
 
@@ -63,12 +67,17 @@ public class CategoryTableModel extends AbstractTableModel
 
 		switch (columnIndex)
 		{
-			case 0: return state;
-			case 1: return category;
-			case 2: return category;
-			case 3: return category.getSelectedText();
+			case 0:
+				return state;
+			case 1:
+				return category;
+			case 2:
+				return category;
+			case 3:
+				return category.getSelectedText();
 
-			default: return null;
+			default:
+				return null;
 		}
 	}
 
@@ -79,8 +88,9 @@ public class CategoryTableModel extends AbstractTableModel
 
 		switch (columnIndex)
 		{
-			case 0: toggleThreeStateCheckBox(category);
-					break;
+			case 0:
+				toggleThreeStateCheckBox(category);
+				break;
 		}
 	}
 
@@ -90,12 +100,15 @@ public class CategoryTableModel extends AbstractTableModel
 
 		switch (state)
 		{
-			case 1: cat.setSelected(false);
-					break;
-			case 2: cat.setSelected(false);
-					break;
-			case 3: cat.setSelected(true);
-					break;
+			case 1:
+				cat.setSelected(false);
+				break;
+			case 2:
+				cat.setSelected(false);
+				break;
+			case 3:
+				cat.setSelected(true);
+				break;
 		}
 
 		fireTableDataChanged();
@@ -117,7 +130,7 @@ public class CategoryTableModel extends AbstractTableModel
 		// Set the attributes of the class and return a reference
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value,
-			boolean isSelected, boolean hasFocus, int row, int column)
+													   boolean isSelected, boolean hasFocus, int row, int column)
 		{
 			super.getTableCellRendererComponent(table, value, isSelected,
 				hasFocus, row, column);
@@ -154,7 +167,9 @@ public class CategoryTableModel extends AbstractTableModel
 
 		@Override
 		public Insets getInsets(Insets i)
-			{ return new Insets(0, 3, 0, 0); }
+		{
+			return new Insets(0, 3, 0, 0);
+		}
 	}
 
 	static class RightRenderer extends DefaultTableCellRenderer
@@ -162,14 +177,14 @@ public class CategoryTableModel extends AbstractTableModel
 		// Set the attributes of the class and return a reference
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value,
-			boolean isSelected, boolean hasFocus, int row, int column)
+													   boolean isSelected, boolean hasFocus, int row, int column)
 		{
 			super.getTableCellRendererComponent(table, value, isSelected,
 				hasFocus, row, column);
 
 			setHorizontalAlignment(SwingConstants.RIGHT);
 
-			if ((((String)value).charAt(0)) == '0')
+			if ((((String) value).charAt(0)) == '0')
 				setForeground(Color.GRAY);
 			else
 				setForeground(UIManager.getColor("Label.foreground"));
@@ -183,12 +198,12 @@ public class CategoryTableModel extends AbstractTableModel
 		// Set the attributes of the class and return a reference
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value,
-			boolean isSelected, boolean hasFocus, int row, int column)
+													   boolean isSelected, boolean hasFocus, int row, int column)
 		{
 			super.getTableCellRendererComponent(table, value, isSelected,
 				hasFocus, row, column);
 
-			if (((Category)value).getSelectedCount() == 0)
+			if (((Category) value).getSelectedCount() == 0)
 				setForeground(Color.GRAY);
 			else
 				setForeground(UIManager.getColor("Label.foreground"));
@@ -206,21 +221,24 @@ public class CategoryTableModel extends AbstractTableModel
 		// Set the attributes of the class and return a reference
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value,
-			boolean isSelected, boolean hasFocus, int row, int column)
+													   boolean isSelected, boolean hasFocus, int row, int column)
 		{
 			super.getTableCellRendererComponent(table, value, isSelected,
 				hasFocus, row, column);
 
 			setText("");
 
-			switch ((Integer)value)
+			switch ((Integer) value)
 			{
-				case 1: setIcon(CHECK_ON);
-						break;
-				case 2: setIcon(CHECK_MID);
-						break;
-				case 3: setIcon(CHECK_OFF);
-						break;
+				case 1:
+					setIcon(CHECK_ON);
+					break;
+				case 2:
+					setIcon(CHECK_MID);
+					break;
+				case 3:
+					setIcon(CHECK_OFF);
+					break;
 			}
 
 			return this;
@@ -231,11 +249,16 @@ public class CategoryTableModel extends AbstractTableModel
 	{
 		switch (col)
 		{
-			case 0: return new TickRenderer();
-			case 1: return new ColorListRenderer();
-			case 2: return new CategoryRenderer();
-			case 3: return new RightRenderer();
-			default: return null;
+			case 0:
+				return new TickRenderer();
+			case 1:
+				return new ColorListRenderer();
+			case 2:
+				return new CategoryRenderer();
+			case 3:
+				return new RightRenderer();
+			default:
+				return null;
 		}
 	}
 }

@@ -3,10 +3,10 @@
 
 package jhi.curlywhirly.data;
 
+import jhi.curlywhirly.util.*;
+
 import java.io.*;
 import java.net.*;
-
-import jhi.curlywhirly.util.*;
 
 /**
  * Holds information needed by CurlyWhirly to associate the dataset with a database
@@ -26,7 +26,9 @@ public class DBAssociation
 	}
 
 	public String getDbPointUrl()
-		{ return dbPointUrl; }
+	{
+		return dbPointUrl;
+	}
 
 	public void setDbPointUrl(String dbPointUrl)
 	{
@@ -48,7 +50,10 @@ public class DBAssociation
 		this.dbGroupUrl = dbGroupUrl;
 	}
 
-	public boolean isGroupPreviewEnabled() { return dbGroupUrl.length() > 0; }
+	public boolean isGroupPreviewEnabled()
+	{
+		return dbGroupUrl.length() > 0;
+	}
 
 	public String getDbUploadUrl()
 	{

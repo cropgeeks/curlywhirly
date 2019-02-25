@@ -3,16 +3,15 @@
 
 package jhi.curlywhirly.gui;
 
-import java.awt.*;
-import java.awt.event.*;
+import jhi.curlywhirly.data.*;
+import jhi.curlywhirly.util.*;
+import scri.commons.gui.*;
+
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
-
-import jhi.curlywhirly.data.*;
-import jhi.curlywhirly.util.*;
-
-import scri.commons.gui.*;
+import java.awt.*;
+import java.awt.event.*;
 
 class CategoryTablePanel extends JPanel
 {
@@ -79,7 +78,9 @@ class CategoryTablePanel extends JPanel
 	}
 
 	JTable getCatTable()
-		{ return catTable; }
+	{
+		return catTable;
+	}
 
 	private void displayMenu(MouseEvent e)
 	{

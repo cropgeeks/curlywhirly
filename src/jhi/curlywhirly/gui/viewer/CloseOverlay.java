@@ -3,13 +3,12 @@
 
 package jhi.curlywhirly.gui.viewer;
 
-import jhi.curlywhirly.util.ColorPrefs;
-import java.awt.*;
-import javax.media.opengl.*;
-
 import com.jogamp.opengl.util.awt.*;
-
 import jhi.curlywhirly.gui.*;
+import jhi.curlywhirly.util.*;
+
+import javax.media.opengl.*;
+import java.awt.*;
 
 /**
  * Renders the X in the top right hand corner of the screen which the user can
@@ -51,12 +50,12 @@ public class CloseOverlay implements GLEventListener
 		// To forcce the relevant area of the overlay to redraw (allowing colour
 		// changes) use mark dirty. Dirty area is wider than drawing area to
 		// ensure we update all of the x drawn in the overaly.
-		overlay.markDirty(canvasWidth-25, 5, 20, 20);
+		overlay.markDirty(canvasWidth - 25, 5, 20, 20);
 
-		 xLeft = canvasWidth - 20;
-		 xRight = canvasWidth - 10;
-		 yHigh = 10;
-		 yLow = 20;
+		xLeft = canvasWidth - 20;
+		xRight = canvasWidth - 10;
+		yHigh = 10;
+		yLow = 20;
 
 		g2d.setColor(ColorPrefs.getColor("User.OpenGLPanel.closeButtonColor"));
 		g2d.setStroke(new BasicStroke(3));

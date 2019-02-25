@@ -3,11 +3,11 @@
 
 package jhi.curlywhirly.gui;
 
-import java.awt.*;
-import javax.swing.*;
-
 import scri.commons.gui.*;
 import scri.commons.gui.matisse.*;
+
+import javax.swing.*;
+import java.awt.*;
 
 class StartPanel extends JPanel
 {
@@ -141,7 +141,7 @@ class StartPanel extends JPanel
 
 			g.setPaint(new GradientPaint(0, h, lineColor, w, h, Color.white));
 			g.setStroke(new BasicStroke(3));
-			g.drawLine(10, 26, w-10, 26);
+			g.drawLine(10, 26, w - 10, 26);
 		}
 	}
 }

@@ -77,25 +77,39 @@ public class DataSet
 	}
 
 	public CategoryGroup getCurrentCategoryGroup()
-		{ return currentGroup; }
+	{
+		return currentGroup;
+	}
 
 	public Axes getAxes()
-		{ return axes; }
+	{
+		return axes;
+	}
 
 	public ArrayList<CategoryGroup> getCategoryGroups()
-		{ return categoryGroups; }
+	{
+		return categoryGroups;
+	}
 
 	public DBAssociation getDbAssociation()
-		{ return dbAssociation; }
+	{
+		return dbAssociation;
+	}
 
 	public String getName()
-		{ return name; }
+	{
+		return name;
+	}
 
 	public ArrayList<String> getUrlNames()
-		{ return urlNames; }
+	{
+		return urlNames;
+	}
 
 	public ArrayList<DataPoint> getDataPoints()
-		{ return (ArrayList<DataPoint>) dataPoints.getDataPoints(); }
+	{
+		return (ArrayList<DataPoint>) dataPoints.getDataPoints();
+	}
 
 	public Stream<DataPoint> selectedPoints()
 	{
@@ -113,7 +127,9 @@ public class DataSet
 	}
 
 	public int size()
-	{	return dataPoints.size(); }
+	{
+		return dataPoints.size();
+	}
 
 	public void setMultiSelectionPoint(DataPoint multiSelectionPoint)
 	{

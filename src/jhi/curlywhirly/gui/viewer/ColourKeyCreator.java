@@ -3,13 +3,13 @@
 
 package jhi.curlywhirly.gui.viewer;
 
-import jhi.curlywhirly.util.ColorPrefs;
+import jhi.curlywhirly.data.*;
+import jhi.curlywhirly.util.*;
+
 import java.awt.*;
 import java.awt.image.*;
 import java.util.*;
 import java.util.stream.*;
-
-import jhi.curlywhirly.data.*;
 
 public class ColourKeyCreator
 {
@@ -58,7 +58,7 @@ public class ColourKeyCreator
 		if (nameWidth < stringWidth)
 			nameWidth += height;
 		// +2 to push the title out from the edge if it is there
-		int titleX = (stringWidth-nameWidth)/2;
+		int titleX = (stringWidth - nameWidth) / 2;
 		if (titleX == 0)
 			titleX = 2;
 
@@ -69,22 +69,22 @@ public class ColourKeyCreator
 		ArrayList<Category> activeCats = group.getActiveCategories().collect(Collectors.toCollection(ArrayList::new));
 
 		// Draw category colors
-		for (int i=0; i < activeCats.size(); i++)
+		for (int i = 0; i < activeCats.size(); i++)
 		{
 			g.setColor(activeCats.get(i).getColor());
-			g.fillRect(2, ((i+1)*height+5), height, height-2);
+			g.fillRect(2, ((i + 1) * height + 5), height, height - 2);
 		}
 
 		// Draw category strings
 		g.setColor(ColorPrefs.getColor("User.OpenGLPanel.colorKeyText"));
-		for (int i=0; i < activeCats.size(); i++)
-			g.drawString(activeCats.get(i).getName(), height+4, height + ((i+1)*height));
+		for (int i = 0; i < activeCats.size(); i++)
+			g.drawString(activeCats.get(i).getName(), height + 4, height + ((i + 1) * height));
 	}
 
 	private int getKeyWidth(FontMetrics metrics, CategoryGroup group)
 	{
 		int width = metrics.stringWidth(group.getName());
-		for (int i=0; i < group.size(); i++)
+		for (int i = 0; i < group.size(); i++)
 		{
 			int catWidth = metrics.stringWidth(group.get(i).getName());
 			if (catWidth > width)

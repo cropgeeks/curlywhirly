@@ -34,22 +34,22 @@ public class IcoSphere
 	private void setupVertices()
 	{
 		// Initialize the data for the icosahedron vertices.
-		float t = (float)((1 + (Math.sqrt(5)))/2);
+		float t = (float) ((1 + (Math.sqrt(5))) / 2);
 
-		addVertex(new Float[] { -1f, t, 0f });
-		addVertex(new Float[] { 1f, t, 0f });
-		addVertex(new Float[] { -1f, -t, 0f });
-		addVertex(new Float[] { 1f, -t, 0f });
+		addVertex(new Float[]{-1f, t, 0f});
+		addVertex(new Float[]{1f, t, 0f});
+		addVertex(new Float[]{-1f, -t, 0f});
+		addVertex(new Float[]{1f, -t, 0f});
 
-		addVertex(new Float[] { 0f, -1f, t });
-		addVertex(new Float[] { 0f, 1f, t });
-		addVertex(new Float[] { 0f, -1f, -t });
-		addVertex(new Float[] { 0f, 1f, -t });
+		addVertex(new Float[]{0f, -1f, t});
+		addVertex(new Float[]{0f, 1f, t});
+		addVertex(new Float[]{0f, -1f, -t});
+		addVertex(new Float[]{0f, 1f, -t});
 
-		addVertex(new Float[] { t, 0f, -1f });
-		addVertex(new Float[] { t, 0f, 1f });
-		addVertex(new Float[] { -t, 0f, -1f });
-		addVertex(new Float[] { -t, 0f, 1f });
+		addVertex(new Float[]{t, 0f, -1f});
+		addVertex(new Float[]{t, 0f, 1f});
+		addVertex(new Float[]{-t, 0f, -1f});
+		addVertex(new Float[]{-t, 0f, 1f});
 	}
 
 	// Create the default 20 faces of the icosahedron
@@ -81,7 +81,7 @@ public class IcoSphere
 	private void makeIcosphere(int subdivision)
 	{
 		// Subdivide our faces by the number of times specified
-		for (int i=0; i < subdivision; i++)
+		for (int i = 0; i < subdivision; i++)
 		{
 			ArrayList<FaceTriangle> subdividedFaces = new ArrayList<>();
 			for (FaceTriangle face : icoFaces)
@@ -136,10 +136,10 @@ public class IcoSphere
 		Float[] point1 = icoVertices.get(p1);
 		Float[] point2 = icoVertices.get(p2);
 		// Generate a 3D point that is in the middle of point 1 and 2
-		Float[] middle = new Float[] {
-				(point1[0] + point2[0]) / 2f,
-				(point1[1] + point2[1]) / 2f,
-				(point1[2] + point2[2]) / 2f };
+		Float[] middle = new Float[]{
+			(point1[0] + point2[0]) / 2f,
+			(point1[1] + point2[1]) / 2f,
+			(point1[2] + point2[2]) / 2f};
 
 		int i = addVertex(middle);
 		middlePointCache.put(key, i);
@@ -155,7 +155,7 @@ public class IcoSphere
 
 	private void normalizeVertex(Float[] v)
 	{
-		float length = (float)Math.sqrt((v[0] * v[0]) + (v[1] * v[1]) + (v[2] * v[2]));
+		float length = (float) Math.sqrt((v[0] * v[0]) + (v[1] * v[1]) + (v[2] * v[2]));
 		v[0] /= length;
 		v[1] /= length;
 		v[2] /= length;
@@ -172,10 +172,14 @@ public class IcoSphere
 	}
 
 	public int vertexCount()
-		{ return vertexIndices.size(); }
+	{
+		return vertexIndices.size();
+	}
 
 	public int faceNormalCount()
-		{ return faceNormals.size(); }
+	{
+		return faceNormals.size();
+	}
 
 	static class FaceTriangle
 	{

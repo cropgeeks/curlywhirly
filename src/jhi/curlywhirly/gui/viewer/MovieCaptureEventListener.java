@@ -3,15 +3,14 @@
 
 package jhi.curlywhirly.gui.viewer;
 
+import com.jogamp.opengl.util.awt.*;
+import jhi.curlywhirly.gui.*;
+
+import javax.imageio.*;
+import javax.media.opengl.*;
 import java.awt.image.*;
 import java.io.*;
 import java.util.concurrent.atomic.*;
-import javax.imageio.*;
-import javax.media.opengl.*;
-
-import jhi.curlywhirly.gui.*;
-
-import com.jogamp.opengl.util.awt.*;
 
 public class MovieCaptureEventListener implements GLEventListener
 {
@@ -56,7 +55,10 @@ public class MovieCaptureEventListener implements GLEventListener
 				imgFile.deleteOnExit();
 				ImageIO.write(image, "bmp", imgFile);
 			}
-			catch (IOException e) { e.printStackTrace(); }
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
 
 			recordedFrames.incrementAndGet();
 
@@ -66,10 +68,14 @@ public class MovieCaptureEventListener implements GLEventListener
 	}
 
 	@Override
-	public void dispose(GLAutoDrawable drawable) {}
+	public void dispose(GLAutoDrawable drawable)
+	{
+	}
 
 	@Override
-	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) { }
+	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height)
+	{
+	}
 
 	public File startMovieCapture(int totalFrames, float rotation)
 	{
@@ -77,7 +83,7 @@ public class MovieCaptureEventListener implements GLEventListener
 		imageDir.mkdir();
 		imageDir.deleteOnExit();
 
-		recordMovie=true;
+		recordMovie = true;
 
 		// Store the old value of rotation to restore it after the movie has
 		// been captured
@@ -101,5 +107,7 @@ public class MovieCaptureEventListener implements GLEventListener
 	}
 
 	public int getRenderedFrames()
-		{ return recordedFrames.get(); }
+	{
+		return recordedFrames.get();
+	}
 }

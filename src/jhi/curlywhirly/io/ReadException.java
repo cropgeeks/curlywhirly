@@ -3,13 +3,15 @@
 
 package jhi.curlywhirly.io;
 
-import java.io.*;
-
 import scri.commons.gui.*;
+
+import java.io.*;
 
 public class ReadException extends Exception
 {
-	/** Thrown when attempting to parse a file that cannot be understood. */
+	/**
+	 * Thrown when attempting to parse a file that cannot be understood.
+	 */
 	public static final int UNKNOWN_FORMAT = 10;
 	public static final int TOKEN_COUNT_WRONG = 20;
 	public static final int CATEGORY_COUNT_WRONG = 30;
@@ -25,7 +27,7 @@ public class ReadException extends Exception
 	{
 		this.file = file;
 		this.lineNumber = lineNumber;
-		this.message =  RB.format(
+		this.message = RB.format(
 			"io.ReadException.UNKNOWN_ERROR", lineNumber, file.getName(), exception.toString());
 	}
 
@@ -47,23 +49,29 @@ public class ReadException extends Exception
 	{
 		switch (error)
 		{
-			case UNKNOWN_FORMAT: return RB.getString(
-				"io.ReadException.UNKNOWN_FORMAT");
+			case UNKNOWN_FORMAT:
+				return RB.getString(
+					"io.ReadException.UNKNOWN_FORMAT");
 
-			case TOKEN_COUNT_WRONG:	return RB.format(
-				"io.ReadException.TOKEN_COUNT_WRONG", lineNumber, file.getName());
+			case TOKEN_COUNT_WRONG:
+				return RB.format(
+					"io.ReadException.TOKEN_COUNT_WRONG", lineNumber, file.getName());
 
-			case CATEGORY_COUNT_WRONG: return RB.format(
-				"io.ReadException.CATEGORY_COUNT_WRONG", lineNumber, file.getName());
+			case CATEGORY_COUNT_WRONG:
+				return RB.format(
+					"io.ReadException.CATEGORY_COUNT_WRONG", lineNumber, file.getName());
 
-			case VALUE_COUNT_WRONG: return RB.format(
-				"io.ReadException.VALUE_COUNT_WRONG", lineNumber, file.getName());
+			case VALUE_COUNT_WRONG:
+				return RB.format(
+					"io.ReadException.VALUE_COUNT_WRONG", lineNumber, file.getName());
 
-			case MISSING_HEADER: return RB.format(
-				"io.ReadException.MISSING_HEADER", lineNumber, file.getName());
+			case MISSING_HEADER:
+				return RB.format(
+					"io.ReadException.MISSING_HEADER", lineNumber, file.getName());
 
-			case MISSING_NAME_HEADER: return RB.format(
-				"io.ReadException.MISSING_NAME_HEADER", lineNumber, file.getName());
+			case MISSING_NAME_HEADER:
+				return RB.format(
+					"io.ReadException.MISSING_NAME_HEADER", lineNumber, file.getName());
 		}
 
 		return "curlwhirly.io.ReadException";

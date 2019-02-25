@@ -3,7 +3,7 @@
 
 package jhi.curlywhirly.gui.viewer;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.*;
 
 /**
  * NullObject for use when deselected spheres should be rendered as invisible.

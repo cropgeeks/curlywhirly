@@ -3,17 +3,16 @@
 
 package jhi.curlywhirly.gui.dialog;
 
+import jhi.curlywhirly.gui.*;
+import scri.commons.gui.*;
+import scri.commons.gui.matisse.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.util.*;
 import java.util.stream.*;
-
-import jhi.curlywhirly.gui.*;
-
-import scri.commons.gui.*;
-import scri.commons.gui.matisse.*;
 
 public class DuplicateDataPointsDialog extends JDialog implements ActionListener
 {

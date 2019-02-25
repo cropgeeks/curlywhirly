@@ -3,9 +3,9 @@
 
 package jhi.curlywhirly.gui.viewer;
 
-import javax.media.opengl.*;
-
 import com.jogamp.opengl.util.gl2.*;
+
+import javax.media.opengl.*;
 
 public class GlutSphere implements Sphere
 {
@@ -18,15 +18,20 @@ public class GlutSphere implements Sphere
 
 		switch (sphereDetailLevel)
 		{
-			case 0: glutSlices = 4;
+			case 0:
+				glutSlices = 4;
 				break;
-			case 1: glutSlices = 6;
+			case 1:
+				glutSlices = 6;
 				break;
-			case 2: glutSlices = 8;
+			case 2:
+				glutSlices = 8;
 				break;
-			case 3: glutSlices = 10;
+			case 3:
+				glutSlices = 10;
 				break;
-			case 4: glutSlices = 12;
+			case 4:
+				glutSlices = 12;
 		}
 	}
 

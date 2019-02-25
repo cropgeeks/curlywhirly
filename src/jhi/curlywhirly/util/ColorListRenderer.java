@@ -3,18 +3,18 @@
 
 package jhi.curlywhirly.util;
 
+import scri.commons.gui.*;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.*;
-import javax.swing.*;
-
-import scri.commons.gui.*;
 
 public class ColorListRenderer implements ListCellRenderer<ColorPrefs.ColorPref>
 {
 	// Set the attributes of the class and return a reference
 	@Override
 	public Component getListCellRendererComponent(JList<? extends ColorPrefs.ColorPref> list,
-		ColorPrefs.ColorPref colorPref, int index, boolean isSelected, boolean cellHasFocus)
+												  ColorPrefs.ColorPref colorPref, int index, boolean isSelected, boolean cellHasFocus)
 	{
 		DefaultListCellRenderer renderer = new DefaultListCellRenderer();
 		JLabel component = (JLabel) renderer.getListCellRendererComponent(list, colorPref, index, isSelected, cellHasFocus);

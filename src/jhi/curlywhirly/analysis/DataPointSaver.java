@@ -3,12 +3,11 @@
 
 package jhi.curlywhirly.analysis;
 
+import jhi.curlywhirly.data.*;
+import scri.commons.gui.*;
+
 import java.io.*;
 import java.util.*;
-
-import jhi.curlywhirly.data.*;
-
-import scri.commons.gui.*;
 
 public class DataPointSaver extends SimpleJob
 {
@@ -42,7 +41,7 @@ public class DataPointSaver extends SimpleJob
 			+ RB.format("analysis.DataPointSaver.z", axisLabels[2]));
 
 		// Then output each dataPoint in turn
-		for (DataPoint dataPoint: dataPoints)
+		for (DataPoint dataPoint : dataPoints)
 		{
 			if (!okToRun)
 				break;
@@ -72,7 +71,7 @@ public class DataPointSaver extends SimpleJob
 		builder.append(dataPoint.getName()).append('\t');
 
 		// Followed by the value for each of the currently visible axes
-		for (int i=0; i < position.length; i++)
+		for (int i = 0; i < position.length; i++)
 		{
 			builder.append(position[i]);
 			if (i < position.length - 1)

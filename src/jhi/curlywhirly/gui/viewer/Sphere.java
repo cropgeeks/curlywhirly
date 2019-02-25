@@ -3,11 +3,13 @@
 
 package jhi.curlywhirly.gui.viewer;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.*;
 
 public interface Sphere
 {
 	void preRender(GL2 gl);
+
 	void render(GL2 gl);
+
 	void postRender(GL2 gl);
 }

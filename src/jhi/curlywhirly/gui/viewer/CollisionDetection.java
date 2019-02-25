@@ -3,10 +3,10 @@
 
 package jhi.curlywhirly.gui.viewer;
 
-import java.util.*;
-import javax.vecmath.*;
-
 import jhi.curlywhirly.data.*;
+
+import javax.vecmath.*;
+import java.util.*;
 
 public class CollisionDetection
 {
@@ -22,7 +22,7 @@ public class CollisionDetection
 	// Keeps track of the translated positions of all of our DataPoints
 	void updatePointLocation(float[] modelView, DataPoint point)
 	{
-		float [] location = new float[] { modelView[12], modelView[13], modelView[14] };
+		float[] location = new float[]{modelView[12], modelView[13], modelView[14]};
 
 		translatedPoints.put(point, location);
 	}

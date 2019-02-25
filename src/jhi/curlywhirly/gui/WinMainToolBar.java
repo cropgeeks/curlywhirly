@@ -3,17 +3,17 @@
 
 package jhi.curlywhirly.gui;
 
-import java.awt.*;
+import scri.commons.gui.*;
+
 import javax.swing.*;
 import javax.swing.event.*;
-
-import scri.commons.gui.*;
+import java.awt.*;
 
 public class WinMainToolBar extends JToolBar
 {
 	private final JButton open;
 	private final JButton sample;
-    private final JButton export;
+	private final JButton export;
 	private final JButton reset;
 	private final JToggleButton spin;
 	private final JButton screenshot;
@@ -29,7 +29,7 @@ public class WinMainToolBar extends JToolBar
 		setFloatable(false);
 
 		// Convert rotation speed to our slider model's number scale
-		float initial = ((Prefs.guiRotationSpeed-(-0.1f)) / (-1.0f-(-0.1f)) * (100f-0f) + 0f);
+		float initial = ((Prefs.guiRotationSpeed - (-0.1f)) / (-1.0f - (-0.1f)) * (100f - 0f) + 0f);
 		slider = new JSlider(0, 100, (int) initial)
 		{
 			@Override
@@ -46,7 +46,7 @@ public class WinMainToolBar extends JToolBar
 			public void stateChanged(ChangeEvent evt)
 			{
 				int speed = slider.getValue();
-				float rotation = ((speed-0f)/(100f-0f) * (-1.0f-(-0.1f)) + -0.1f);
+				float rotation = ((speed - 0f) / (100f - 0f) * (-1.0f - (-0.1f)) + -0.1f);
 				Prefs.guiRotationSpeed = rotation;
 				winMain.getOpenGLPanel().getScene().setRotationSpeed(rotation);
 			}
@@ -63,7 +63,7 @@ public class WinMainToolBar extends JToolBar
 			RB.getString("gui.WinMainToolBar.sampleTT"),
 			Icons.getIcon("SAMPLE"), Actions.fileSample);
 
-        export = (JButton) getButton(false,
+		export = (JButton) getButton(false,
 			RB.getString("gui.WinMainToolBar.export"),
 			RB.getString("gui.WinMainToolBar.exportTT"),
 			Icons.getIcon("EXPORT"), Actions.dataExport);
@@ -107,7 +107,7 @@ public class WinMainToolBar extends JToolBar
 
 		add(open);
 		add(sample);
-        add(export);
+		add(export);
 		addSeparator();
 		add(reset);
 		add(spin);
@@ -127,7 +127,7 @@ public class WinMainToolBar extends JToolBar
 	// Utility method to help create the buttons. Sets their text, tooltip, and
 	// icon, as well as adding actionListener, defining margings, etc.
 	private AbstractButton getButton(boolean toggle, String title,
-			String tt, ImageIcon icon, Action a)
+									 String tt, ImageIcon icon, Action a)
 	{
 		AbstractButton button = toggle ? new JToggleButton(a) : new JButton(a);
 
@@ -142,8 +142,12 @@ public class WinMainToolBar extends JToolBar
 	}
 
 	JSlider getSlider()
-		{ return slider; }
+	{
+		return slider;
+	}
 
 	JToggleButton getSpin()
-		{ return spin; }
+	{
+		return spin;
+	}
 }

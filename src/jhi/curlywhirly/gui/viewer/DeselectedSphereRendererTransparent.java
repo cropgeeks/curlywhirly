@@ -4,15 +4,16 @@
 package jhi.curlywhirly.gui.viewer;
 
 
+import jhi.curlywhirly.data.*;
+
+import javax.media.opengl.*;
 import java.awt.*;
 import java.util.*;
 import java.util.stream.*;
-import javax.media.opengl.*;
-
-import jhi.curlywhirly.data.*;
 
 import static javax.media.opengl.GL.*;
-import static javax.media.opengl.fixedfunc.GLLightingFunc.*;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_AMBIENT_AND_DIFFUSE;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SHININESS;
 
 public class DeselectedSphereRendererTransparent extends AbstractSphereRenderer
 {
@@ -31,7 +32,7 @@ public class DeselectedSphereRendererTransparent extends AbstractSphereRenderer
 		Map<Color, java.util.List<DataPoint>> pointsByColor = dataSet.deselectedPoints().collect(Collectors.groupingBy(DataPoint::getColor));
 		pointsByColor.forEach((color, points) ->
 		{
-			float [] rgba = color.getRGBColorComponents(new float[4]);
+			float[] rgba = color.getRGBColorComponents(new float[4]);
 			rgba[3] = transparencyAlpha;
 
 			gl.glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, rgba, 0);

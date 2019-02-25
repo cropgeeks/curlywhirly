@@ -3,11 +3,11 @@
 
 package jhi.curlywhirly.gui;
 
-import java.awt.*;
+import jhi.curlywhirly.data.*;
+
 import javax.swing.*;
 import javax.swing.border.*;
-
-import jhi.curlywhirly.data.*;
+import java.awt.*;
 
 class CategoryNamePanel extends JPanel
 {
