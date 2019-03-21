@@ -21,6 +21,7 @@ public class DBAssociation
 
 	public DBAssociation()
 	{
+		System.out.println("New DB association");
 		dbPointUrl = "";
 		dbGroupUrl = "";
 		dbUploadUrl = "";
@@ -38,7 +39,7 @@ public class DBAssociation
 
 	public boolean isPointSearchEnabled()
 	{
-		return dbPointUrl.length() > 0;
+		return dbPointUrl != null && dbPointUrl.length() > 0;
 	}
 
 	public String getDbGroupUrl()
@@ -91,7 +92,6 @@ public class DBAssociation
 	{
 		if (isGroupPreviewEnabled())
 		{
-			System.out.println(dbGroupUrl);
 			String groupUrl = URLEncoder.encode(groupName, "UTF-8");
 			String url = dbGroupUrl.replace("$GROUP", groupUrl);
 			NetworkUtils.visitURL(url);

@@ -17,7 +17,7 @@ public class DataSet
 	private CategoryGroup currentGroup;
 
 	// DB-link/association data
-	private DBAssociation dbAssociation = new DBAssociation();
+	private DBAssociation dbAssociation;
 
 	public DataSet(String name, ArrayList<DataPoint> dataPoints, ArrayList<CategoryGroup> categoryGroups, String[] axisLabels, ArrayList<String> urlNames)
 	{
@@ -30,6 +30,8 @@ public class DataSet
 		this.urlNames = urlNames;
 
 		axes = new Axes(axisLabels);
+
+		dbAssociation = new DBAssociation();
 
 		setCurrentCategoryGroup(categoryGroups.get(0));
 	}

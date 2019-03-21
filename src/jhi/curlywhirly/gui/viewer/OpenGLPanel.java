@@ -91,7 +91,16 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		detector = new CollisionDetection();
 		int perspectiveAngle = 45;
 		scene = new Scene(rotation, perspectiveAngle, (float) CANVAS_WIDTH / CANVAS_HEIGHT);
-		mouseListener = new CanvasMouseListener(this, rotation, dataSet, winMain);
+		if (dataSet == null)
+		{
+			this.removeMouseListener(mouseListener);
+			this.removeMouseMotionListener(mouseListener);
+			this.removeMouseWheelListener(mouseListener);
+		}
+		else
+		{
+			mouseListener = new CanvasMouseListener(this, rotation, dataSet, winMain);
+		}
 
 		multiSelectionRenderer.setDataSet(dataSet, rotation, detector);
 		axesRenderer.setDataSet(dataSet, rotation);
