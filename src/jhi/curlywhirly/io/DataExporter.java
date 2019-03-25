@@ -3,10 +3,15 @@
 
 package jhi.curlywhirly.io;
 
-import jhi.curlywhirly.data.*;
-import scri.commons.gui.*;
-
+import java.awt.*;
 import java.io.*;
+import java.util.*;
+
+import jhi.curlywhirly.data.*;
+import jhi.curlywhirly.util.*;
+import jhi.curlywhirly.util.ColorPrefs.*;
+
+import scri.commons.gui.*;
 
 public class DataExporter extends SimpleJob
 {
@@ -50,6 +55,18 @@ public class DataExporter extends SimpleJob
 			for (CategoryGroup group : dataSet.getCategoryGroups())
 				for (Category category : group.getCategories())
 					writer.println(COLOR_IDENTIFIER + category.getColorKey() + "::CW::" + category.getRGBString());
+
+			// Export user selected colors for UI elements
+			HashMap<String, ColorPref> colors = ColorPrefs.getColors();
+
+			for (String key : colors.keySet())
+			{
+				if (key.startsWith("User"))
+				{
+					Color color = colors.get(key).getColor();
+					writer.println(COLOR_IDENTIFIER + key + "::CW::" + String.format("rgb(%s,%s,%s)", color.getRed(), color.getGreen(), color.getBlue()));
+				}
+			}
 
 			// Output the header line
 			String header = getHeaderString();
