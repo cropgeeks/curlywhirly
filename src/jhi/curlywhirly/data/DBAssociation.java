@@ -21,7 +21,6 @@ public class DBAssociation
 
 	public DBAssociation()
 	{
-		System.out.println("New DB association");
 		dbPointUrl = "";
 		dbGroupUrl = "";
 		dbUploadUrl = "";
