@@ -26,6 +26,73 @@ CurlyWhirly supports the definition of URLs for uploading a group of points to a
 
 .. _Germinate: https://ics.hutton.ac.uk/get-germinate/
 
+Colour headers
+~~~~~~~~~~~~~
+
+Category colours
+````````````````
+
+Users can optionally specify custom colours for categories in CurlyWhirly as part of the input format. These take the form of key value pairs in header lines where the key is the name of the category group separated from the category by a ``.`` character and the value is a textual representation of the colour to be used for that category in the form of an RGB string e.g. ``rgb(0,0,0)`` for the colour black, and ``rgb(255,255,255)`` for the colour white. You can customise the colours assocatied with a category from within CurlyWhirly by double clicking on the colour swatch for that category in the selection tab and selecting your preferred colour for that category. Any colour customisation can then be exported back out to share with other users as part of the ``Export data`` function. Assuming we have a category group called ``size``, with the categories ``large``, ``medium``, and ``small``, you may expect to see the following colour headers:
+
+::
+
+ # color=size.large::CW::rgb(255,0,0)
+ # color=size.medium::CW::rgb(0,255,0)
+ # color=size.small::CW::rgb(0,0,255)
+
+This would result in points categorised as being large would be coloured red, medium points would be green, and small points would be blue.
+
+User interface colours
+``````````````````````
+
+It is also possible to customise the colour of a number of CurlyWhirly's user interface components. These are saved out on export much like custom category colours, however users could also specify these in advance by specifing colours to go along with the following colour keys / UI components. All of these colours can be customised from CurlyWhirly's settings dialog. The colours below represent the default colours for each user interface component.
+
+Background / canvas colour
+**************************
+::
+
+ # color=User.OpenGLPanel.background::CW::rgb(0,0,0)
+
+This defines the background colour of the view in CurlyWhirly and defaults to black.
+
+Close button colour
+*******************
+::
+
+ # color=User.OpenGLPanel.closeButtonColor::CW::rgb(64,64,64)
+
+This defines the colour of the close button (the small X in the top right of the display), which can be used to close the dataset that is currently open. It defaults to a dark grey.
+
+Colour key text
+***************
+::
+
+ # color=User.OpenGLPanel.colorKeyText::CW::rgb(255,255,255)
+
+Defines the colour of the text in the colour key which can optionally be included in screenshots and movies that are exported from CurlyWhirly. This defaults to black, but users should pick a colour which stands out from the background colour.
+
+Axis colours
+************
+::
+
+ # color=User.OpenGLPanel.xAxisColor::CW::rgb(0,255,0)
+ # color=User.OpenGLPanel.yAxisColor::CW::rgb(0,255,0)
+ # color=User.OpenGLPanel.zAxisColor::CW::rgb(0,255,0)
+ # color=User.OpenGLPanel.axisLabels::CW::rgb(255,255,255)
+
+Defines the colours of the axes, and of the axis labels. The axes default to being coloured green and their labels default to being white.
+
+Multi-selection colours
+***********************
+::
+
+ # color=User.OpenGLPanel.multiSelectAxesColor::CW::rgb(0,0,255)
+ # color=User.OpenGLPanel.multiSelectSphereColor::CW::rgb(128,128,255)
+ # color=User.OpenGLPanel.multiSelectColor::CW::rgb(255,255,255)
+ # color=User.OpenGLPanel.multiSelectLineColor::CW::rgb(255,0,0)
+
+The colours of the multi-selection sphere, multi-selected points, lines connecting multi-selected points to the central point, and the mini-axes which can be shown within the multi-selection sphere.
+
 Header
 ------
 Input files should have a header (following on from any of the optional header lines which start with a ``#``). The minimum requirement for a CurlyWhirly file header is the it should start with ``label`` and be followed by at least one (but preferably 3 or more) coordinate column.
