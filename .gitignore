@@ -22,10 +22,12 @@ hs_err_pid*
 
 # Project specific settings
 build.properties
-build.wildcat.properties
-brapi-client.jar
-lib/brapi.jar
-web/context.xml
+lib/curlywhirly.jar
+installer
+keys
+docs/_build_html/
+docs/sphinx-env/
+nbproject/
 
 # IntelliJ IDEA specific settings
 .idea
