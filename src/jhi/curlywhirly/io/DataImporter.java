@@ -83,6 +83,20 @@ public class DataImporter extends SimpleJob
 		// Once the header has been processed we can process the rest of the file
 		readFile(reader);
 
+		// Deal with the situation that no categories have been provided (i.e. header line starts with "label")
+		if (categoryGroups.isEmpty())
+		{
+			categoryGroups.add(new CategoryGroup(MISSING_CATEGORY));
+			Category category = new Category(MISSING_CATEGORY, MISSING_CATEGORY);
+			categoryGroups.get(0).add(category);
+
+			categoryPoints.put(category, new ArrayList<>(pointValues.keySet()));
+
+			categoriesToGroups = new ArrayList<>();
+			categoriesToGroups.add(new HashMap<String, Category>());
+			categoriesToGroups.get(0).put(MISSING_CATEGORY, category);
+		}
+
 		// We need to assign colors to our categories
 		categoryGroups.forEach(group ->
 		{
@@ -194,7 +208,7 @@ public class DataImporter extends SimpleJob
 			}
 
 			// Is there a better way to identify the "header" line
-			else if (str.toLowerCase().startsWith(CATEGORY_IDENTIFIER))
+			else if (str.toLowerCase().startsWith(CATEGORY_IDENTIFIER) || str.toLowerCase().startsWith(LABEL_IDENTIFIER))
 				return str.split("\t");
 		}
 
