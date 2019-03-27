@@ -237,8 +237,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 	// Uses GLPanel's method of getting a screenshot on the EDT, other methods
 	// of getting screenshots could clutter up the rendering code.
-	public BufferedImage getScreenShot(boolean includeKey)
-		throws Exception
+	public BufferedImage getScreenShot()
 	{
 		// Create an image of the correct proportions
 		BufferedImage image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -250,8 +249,17 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		// Called to release the panel from the EDT.
 		releasePrint();
 
-		if (includeKey)
-			winMain.getColourKeyCreator().drawColorKey(dataSet.getCurrentCategoryGroup(), g);
+		return image;
+	}
+
+	// Rather than passing a boolean into getScreenshot, we can have two separate methods, with getScreenShotWithKey()
+	// calling the original getScreenshot() then drawing the colour key over the top of it.
+	public BufferedImage getScreenShotWithKey()
+	{
+		BufferedImage image = getScreenShot();
+		Graphics2D g = image.createGraphics();
+
+		winMain.getColourKeyCreator().drawColorKey(dataSet.getCurrentCategoryGroup(), g);
 
 		return image;
 	}

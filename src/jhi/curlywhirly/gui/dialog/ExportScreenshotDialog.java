@@ -34,15 +34,6 @@ public class ExportScreenshotDialog extends JDialog implements ActionListener
 
 		isOK = false;
 
-		try
-		{
-			image = winMain.getOpenGLPanel().getScreenShot(false);
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-
 		initComponents();
 		initComponents2();
 		getContentPane().setBackground(Color.WHITE);
@@ -97,6 +88,15 @@ public class ExportScreenshotDialog extends JDialog implements ActionListener
 	{
 		if (e.getSource() == bOK)
 		{
+			if (btnScene.isSelected())
+				image = winMain.getOpenGLPanel().getScreenShot();
+
+			else if (btnSceneWithKey.isSelected())
+				image = winMain.getOpenGLPanel().getScreenShotWithKey();
+
+			else if (btnKey.isSelected())
+				image = winMain.getColourKeyCreator().getColourKeyImage();
+
 			isOK = true;
 			setVisible(false);
 		}
@@ -111,35 +111,6 @@ public class ExportScreenshotDialog extends JDialog implements ActionListener
 			String filename = FileUtils.getSaveFilename(RB.getString("gui.dialog.ExportScreenshotDialog.saveAs"), null, filter);
 			if (filename != null)
 				filenameTextField.setText(filename);
-		}
-
-		else if (e.getSource() == btnKey)
-		{
-			image = winMain.getColourKeyCreator().getColourKeyImage();
-		}
-
-		else if (e.getSource() == btnScene)
-		{
-			try
-			{
-				image = winMain.getOpenGLPanel().getScreenShot(false);
-			}
-			catch (Exception ex)
-			{
-				ex.printStackTrace();
-			}
-		}
-
-		else if (e.getSource() == btnSceneWithKey)
-		{
-			try
-			{
-				image = winMain.getOpenGLPanel().getScreenShot(true);
-			}
-			catch (Exception ex)
-			{
-				ex.printStackTrace();
-			}
 		}
 	}
 
