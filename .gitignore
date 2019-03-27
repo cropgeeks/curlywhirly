@@ -32,3 +32,5 @@ nbproject/
 # IntelliJ IDEA specific settings
 .idea
 *.iml
+
+*.vscode
