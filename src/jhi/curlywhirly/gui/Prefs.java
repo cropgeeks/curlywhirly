@@ -34,6 +34,15 @@ public class Prefs extends XMLPreferences
 
 	public static boolean guiChkAxisLabels = true;
 	public static boolean guiChkDatasetLabels = false;
+	public static int guiAxisLabelsSize = 50;
+	public static int guiSelectedPointSize = 50;
+	public static int guiDeselectedPointSize = 50;
+	public static int guiPointQuality = 2;
+	public static int guiDeselectedPointOpacity = 50;
+	public static int guiDeselectedRenderer = 0;
+	public static int guiDeselectedGrey = 0;
+	public static int guiDeselectedTransparent = 1;
+	public static int guiDeselectedInvisible = 2;
 
 	public static boolean guiWarnOnExit = true;
 	public static boolean guiWarnOnClose = true;
@@ -47,7 +56,6 @@ public class Prefs extends XMLPreferences
 
 	public static boolean guiChkAnchorPoints = true;
 	public static boolean guiChkSelectionAxes = false;
-
 	public static float guiSelectionSphereSize = 0.06f;
 
 	public static boolean guiMovieChkColourKey = true;
@@ -59,9 +67,4 @@ public class Prefs extends XMLPreferences
 	// The local working directory for disk caching
 	public static String cacheFolder =
 		FileUtils.getTempUserDirectory("jhi-curlywhirly").getPath();
-
-	public static int guiDeselectedRenderer = 0;
-	public static int guiDeselectedGrey = 0;
-	public static int guiDeselectedTransparent = 1;
-	public static int guiDeselectedInvisible = 2;
 }

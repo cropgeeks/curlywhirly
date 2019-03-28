@@ -66,10 +66,8 @@ public abstract class AbstractSphereRenderer extends SceneRenderable implements 
 		// Bring our translations into the correct coordinate space
 		gl.glTranslatef(axes[0], axes[1], axes[2]);
 
-		float size = pointSize;
-
 		// Scale our unit sphere down to a more manageable scale
-		gl.glScalef(size, size, size);
+		gl.glScalef(pointSize, pointSize, pointSize);
 
 		float[] modelView = new float[16];
 		gl.glGetFloatv(GL_MODELVIEW_MATRIX, modelView, 0);

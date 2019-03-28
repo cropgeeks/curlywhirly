@@ -76,7 +76,7 @@ public class ControlsPanelNB extends JPanel
 		RB.setText(lblAxislLabelSize, "gui.ControlPanel.lblAxisLabelSize");
 		axisLabelSizeSlider.setMinimum(1);
 		axisLabelSizeSlider.setMaximum(100);
-		axisLabelSizeSlider.setValue(50);
+		axisLabelSizeSlider.setValue(Prefs.guiAxisLabelsSize);
 		axisLabelSizeSlider.addChangeListener(e -> axisLabelSizeSliderChanged());
 	}
 
@@ -85,7 +85,7 @@ public class ControlsPanelNB extends JPanel
 		RB.setText(lblSizeSlider, "gui.ControlPanel.lblSizeSlider");
 		pointSizeSlider.setMinimum(1);
 		pointSizeSlider.setMaximum(100);
-		pointSizeSlider.setValue(50);
+		pointSizeSlider.setValue(Prefs.guiSelectedPointSize);
 		pointSizeSlider.addChangeListener(e -> pointSizeSliderChanged());
 	}
 
@@ -94,7 +94,7 @@ public class ControlsPanelNB extends JPanel
 		RB.setText(lblDeselected, "gui.ControlPanel.lblDeselected");
 		deselectedSizeSlider.setMinimum(1);
 		deselectedSizeSlider.setMaximum(100);
-		deselectedSizeSlider.setValue(50);
+		deselectedSizeSlider.setValue(Prefs.guiDeselectedPointSize);
 		deselectedSizeSlider.addChangeListener(e -> deselectedSliderChanged());
 	}
 
@@ -102,7 +102,7 @@ public class ControlsPanelNB extends JPanel
 	{
 		RB.setText(lblSphereDetail, "gui.ControlPanel.lblSphereDetail");
 		sphereDetailSlider.setMinimum(0);
-		sphereDetailSlider.setMaximum(4);
+		sphereDetailSlider.setMaximum(Prefs.guiPointQuality);
 		sphereDetailSlider.setValue(2);
 		sphereDetailSlider.addChangeListener(e -> sphereDetailChanged());
 	}
@@ -111,7 +111,7 @@ public class ControlsPanelNB extends JPanel
 	{
 		transparencySlider.setMinimum(1);
 		transparencySlider.setMaximum(100);
-		transparencySlider.setValue(50);
+		transparencySlider.setValue(Prefs.guiDeselectedPointOpacity);
 		transparencySlider.addChangeListener(e -> transparencySliderChanged());
 	}
 
@@ -209,9 +209,13 @@ public class ControlsPanelNB extends JPanel
 
 	private void reset()
 	{
+		chkAxisLabels.setSelected(true);
+		chkDatasetLabels.setSelected(false);
+		chkAxisTicks.setSelected(false);
 		axisLabelSizeSlider.setValue(50);
 		pointSizeSlider.setValue(50);
 		deselectedSizeSlider.setValue(50);
+		transparencySlider.setValue(50);
 		sphereDetailSlider.setValue(2);
 	}
 
@@ -247,16 +251,6 @@ public class ControlsPanelNB extends JPanel
 		rbInvisible.setEnabled(enabled);
 
 		chkDatasetLabels.setEnabled(enabled && Prefs.guiChkAxisLabels);
-	}
-
-	private float scaleSliderValue(JSlider slider, float sceneMin, float sceneMax)
-	{
-		float sliderVal = slider.getValue();
-		float min = slider.getMinimum();
-		float max = slider.getMaximum();
-		float size = ((sliderVal - min) / (max - 1f) * (sceneMax - sceneMin) + sceneMin);
-
-		return size;
 	}
 
 	// ActionEvent listeners
@@ -323,34 +317,32 @@ public class ControlsPanelNB extends JPanel
 
 	private void axisLabelSizeSliderChanged()
 	{
-		float size = scaleSliderValue(axisLabelSizeSlider, 0.01f, 0.06f);
-		winMain.getOpenGLPanel().getAxesRenderer().setAxisLabelSize(size);
+		Prefs.guiAxisLabelsSize = axisLabelSizeSlider.getValue();
+		winMain.getOpenGLPanel().setAxesLabelSizes(axisLabelSizeSlider.getValue(), axisLabelSizeSlider.getMinimum(), axisLabelSizeSlider.getMaximum());
 	}
 
 	private void pointSizeSliderChanged()
 	{
-		float size = scaleSliderValue(pointSizeSlider, 0.002f, 0.05f);
-		winMain.getOpenGLPanel().getSphereRenderer().setPointSize(size);
-		winMain.getOpenGLPanel().getMultiSelectionRenderer().setPointSize(size);
+		Prefs.guiSelectedPointSize = pointSizeSlider.getValue();
+		winMain.getOpenGLPanel().setSelectedPointSize(pointSizeSlider.getValue(), pointSizeSlider.getMinimum(), pointSizeSlider.getMaximum());
 	}
 
 	private void deselectedSliderChanged()
 	{
-		float size = scaleSliderValue(deselectedSizeSlider, 0.002f, 0.05f);
-		winMain.getOpenGLPanel().getDeselectedSphereRenderer().setPointSize(size);
+		Prefs.guiDeselectedPointSize = deselectedSizeSlider.getValue();
+		winMain.getOpenGLPanel().setDeselectedPointSize(deselectedSizeSlider.getValue(), deselectedSizeSlider.getMinimum(), deselectedSizeSlider.getMaximum());
 	}
 
 	private void sphereDetailChanged()
 	{
-		winMain.getOpenGLPanel().getSphereRenderer().setSphereDetailLevel(sphereDetailSlider.getValue());
-		winMain.getOpenGLPanel().getMultiSelectionRenderer().setSphereDetailLevel(sphereDetailSlider.getValue());
-		winMain.getOpenGLPanel().getDeselectedSphereRenderer().setSphereDetailLevel(sphereDetailSlider.getValue());
+		Prefs.guiPointQuality = sphereDetailSlider.getValue();
+		winMain.getOpenGLPanel().setSphereDetailLevel(sphereDetailSlider.getValue());
 	}
 
 	private void transparencySliderChanged()
 	{
-		float alpha = scaleSliderValue(transparencySlider, 0.2f, 0.8f);
-		winMain.getOpenGLPanel().getDeselectedSphereRenderer().setTransparencyAlpha(alpha);
+		Prefs.guiDeselectedPointOpacity = transparencySlider.getValue();
+		winMain.getOpenGLPanel().setDeselectedPointOpacity(transparencySlider.getValue(), transparencySlider.getMinimum(), transparencySlider.getMaximum());
 	}
 
 	/**

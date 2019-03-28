@@ -65,12 +65,7 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		axesRenderer = new AxesRenderer();
 		sphereRenderer = new SelectedSphereRenderer();
 
-		if (Prefs.guiDeselectedRenderer == Prefs.guiDeselectedGrey)
-			deselectedSphereRenderer = new DeselectedSphereRendererGrey();
-		else if (Prefs.guiDeselectedRenderer == Prefs.guiDeselectedTransparent)
-			deselectedSphereRenderer = new DeselectedSphereRendererTransparent();
-		else
-			deselectedSphereRenderer = new NullSphereRenderer();
+		initialiseScene();
 
 		movieCapture = new MovieCaptureEventListener(this);
 
@@ -80,6 +75,23 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 
 		ToolTipManager.sharedInstance().setInitialDelay(0);
 		setLayout(new BorderLayout());
+	}
+
+	// Set up the scene defaults using the user's previously stored preferences / default values
+	private void initialiseScene()
+	{
+		if (Prefs.guiDeselectedRenderer == Prefs.guiDeselectedGrey)
+			deselectedSphereRenderer = new DeselectedSphereRendererGrey();
+		else if (Prefs.guiDeselectedRenderer == Prefs.guiDeselectedTransparent)
+			deselectedSphereRenderer = new DeselectedSphereRendererTransparent();
+		else
+			deselectedSphereRenderer = new NullSphereRenderer();
+
+		setAxesLabelSizes(Prefs.guiAxisLabelsSize, 1, 100);
+		setSelectedPointSize(Prefs.guiSelectedPointSize, 1, 100);
+		setDeselectedPointSize(Prefs.guiDeselectedPointSize, 1, 100);
+		setSphereDetailLevel(Prefs.guiPointQuality);
+		setDeselectedPointOpacity(Prefs.guiDeselectedPointOpacity, 1, 100);
 	}
 
 	public void setDataSet(DataSet dataSet)
@@ -394,6 +406,57 @@ public class OpenGLPanel extends GLJPanel implements GLEventListener
 		this.deselectedSphereRenderer.setDataSet(dataSet, sphereRenderer.getRotation(), detector);
 
 		addGLEventListener(this.deselectedSphereRenderer);
+	}
+
+	private float scaleValue(float value, float min, float max, float sceneMin, float sceneMax)
+	{
+		float size = ((value - min) / (max - 1f) * (sceneMax - sceneMin) + sceneMin);
+
+		return size;
+	}
+
+	public void setAxesLabelSizes(int guiValue, int guiMin, int guiMax)
+	{
+		float labelMin = 0.01f;
+		float labelMax = 0.06f;
+
+		float scaledSize = scaleValue(guiValue, guiMin, guiMax, labelMin, labelMax);
+		axesRenderer.setAxisLabelSize(scaledSize);
+	}
+
+	public void setSelectedPointSize(int guiValue, int guiMin, int guiMax)
+	{
+		float pointMin = 0.002f;
+		float pointMax = 0.05f;
+
+		float scaledSize = scaleValue(guiValue, guiMin, guiMax, pointMin, pointMax);
+		sphereRenderer.setPointSize(scaledSize);
+		multiSelectionRenderer.setPointSize(scaledSize);
+	}
+
+	public void setDeselectedPointSize(int guiValue, int guiMin, int guiMax)
+	{
+		float pointMin = 0.002f;
+		float pointMax = 0.05f;
+
+		float scaledSize = scaleValue(guiValue, guiMin, guiMax, pointMin, pointMax);
+		deselectedSphereRenderer.setPointSize(scaledSize);
+	}
+
+	public void setSphereDetailLevel(int value)
+	{
+		sphereRenderer.setSphereDetailLevel(value);
+		multiSelectionRenderer.setSphereDetailLevel(value);
+		deselectedSphereRenderer.setSphereDetailLevel(value);
+	}
+
+	public void setDeselectedPointOpacity(int guiValue, int guiMin, int guiMax)
+	{
+		float pointMin = 0.02f;
+		float pointMax = 0.08f;
+
+		float scaledSize = scaleValue(guiValue, guiMin, guiMax, pointMin, pointMax);
+		deselectedSphereRenderer.setTransparencyAlpha(scaledSize);
 	}
 
 	public CloseOverlay getCloseOverlay()
