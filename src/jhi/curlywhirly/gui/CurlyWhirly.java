@@ -3,7 +3,8 @@
 
 package jhi.curlywhirly.gui;
 
-import apple.dts.samplecode.osxadapter.*;
+import java.awt.*;
+import java.awt.desktop.*;
 import jhi.curlywhirly.gui.dialog.*;
 import jhi.curlywhirly.io.*;
 import jhi.curlywhirly.util.*;
@@ -12,7 +13,7 @@ import scri.commons.gui.*;
 import java.awt.event.*;
 import java.io.*;
 
-public class CurlyWhirly
+public class CurlyWhirly implements OpenFilesHandler
 {
 	private static final File prefsFile = getPrefsFile();
 	private static File mruFile;
@@ -26,9 +27,6 @@ public class CurlyWhirly
 	public static void main(String[] args)
 		throws Exception
 	{
-		// OS X: This has to be set before anything else
-		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "CurlyWhirly");
-
 		// Some handy debug output...
 		System.out.println("CurlyWhirly " + Install4j.getVersion(CurlyWhirly.class) + " on "
 			+ System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ")");
@@ -156,25 +154,13 @@ public class CurlyWhirly
 
 	private void handleOSXStupidities()
 	{
-		try
-		{
-			// Register handlers to deal with the System menu about/quit options
-			OSXAdapter.setPreferencesHandler(this,
-				getClass().getDeclaredMethod("osxPreferences", (Class[]) null));
-			OSXAdapter.setAboutHandler(this,
-				getClass().getDeclaredMethod("osxAbout", (Class[]) null));
-			OSXAdapter.setQuitHandler(this,
-				getClass().getDeclaredMethod("osxShutdown", (Class[]) null));
-			OSXAdapter.setFileHandler(this,
-				getClass().getDeclaredMethod("osxOpen", new Class[]{String.class}));
+		Desktop desktop = Desktop.getDesktop();
 
-			// Dock the menu bar at the top of the screen
-			System.setProperty("apple.laf.useScreenMenuBar", "true");
-		}
-		catch (NoSuchMethodException | SecurityException e)
-		{
-			e.printStackTrace();
-		}
+		// Register handlers to deal with the System menu about/quit options
+        desktop.setAboutHandler(e -> osxAbout());
+        desktop.setPreferencesHandler(e -> osxPreferences());
+        desktop.setQuitHandler((e,r) -> osxShutdown());
+		desktop.setOpenFileHandler(this);
 	}
 
 	/**
@@ -202,17 +188,22 @@ public class CurlyWhirly
 		return true;
 	}
 
-	public void osxOpen(String path)
+	/** Deal with desktop-double clicking of registered files */
+	public void openFiles(OpenFilesEvent e)
 	{
-		// If Tablet is already open, then open the file straight away
+		String[] paths = new String[e.getFiles().size()];
+		for (int i = 0; i < paths.length; i++)
+			paths[i] = e.getFiles().get(i).toString();
+
+		// If CW is already open, then open the file straight away
 		if (winMain != null && winMain.isVisible())
 		{
 			// TODO: If we have project modified checks, do them here too
-			winMain.getCommands().openFile(new File(path));
+			winMain.getCommands().openFile(new File(paths[0]));
 		}
 
-		// Otherwise, mark it for opening once Flapjack is ready
+		// Otherwise, mark it for opening once CW is ready
 		else
-			initialFile = new File(path);
+			initialFile = new File(paths[0]);
 	}
 }
