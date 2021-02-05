@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="7.0.12" transformSequenceNumber="7">
   <directoryPresets config="../keys/icsmacbookpro-application-id.p12" />
-  <application name="CurlyWhirly" distributionSourceDir="" applicationId="7308-4813-7424-6439" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="false" shortName="curlywhirly" publisher="The James Hutton Institute" publisherWeb="http://www.hutton.ac.uk" version="x.xx.xx.xx" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" macVolumeId="2dd482938c2af94a" javaMinVersion="1.8" javaMaxVersion="" allowBetaVM="true" jdkMode="runtimeJre" jdkName="">
+  <application name="CurlyWhirly" distributionSourceDir="" applicationId="7308-4813-7424-6439" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="false" shortName="curlywhirly" publisher="The James Hutton Institute" publisherWeb="https://www.hutton.ac.uk" version="x.xx.xx.xx" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" macVolumeId="2dd482938c2af94a" javaMinVersion="1.8" javaMaxVersion="" allowBetaVM="true" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="true" languageSelectionInPrincipalLanguage="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages>
@@ -14,8 +14,8 @@
       <envVar name="JDK_HOME" />
     </searchSequence>
     <variables>
-      <variable name="urlWebsite" value="http://ics.hutton.ac.uk/curlywhirly" description="" category="" />
-      <variable name="urlWhatsNew" value="http://ics.hutton.ac.uk/curlywhirly/download-curlywhirly/curlywhirly-release-notes/" description="" category="" />
+      <variable name="urlWebsite" value="https://ics.hutton.ac.uk/curlywhirly" description="" category="" />
+      <variable name="urlWhatsNew" value="https://ics.hutton.ac.uk/curlywhirly/download-curlywhirly/curlywhirly-release-notes/" description="" category="" />
       <variable name="changeLog" value="Show change log" description="" category="" />
     </variables>
     <mergedProjects />
@@ -943,7 +943,7 @@ context.goForward(1, true, true);
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.update.CheckForUpdateAction">
                       <void property="url">
-                        <string>https://ics.hutton.ac.uk/resources/curlywhirly/installers/updates.xml</string>
+                        <string>https://bioinf.hutton.ac.uk/curlywhirly/installers/updates.xml</string>
                       </void>
                       <void property="variable">
                         <string>updateDescriptor</string>
