@@ -48,7 +48,7 @@ class AboutPanelNB extends JPanel
 		{
 			public void mouseClicked(MouseEvent event)
 			{
-				NetworkUtils.visitURL("http://www.hutton.ac.uk");
+				NetworkUtils.visitURL("https://www.hutton.ac.uk");
 			}
 		});
 
@@ -61,7 +61,7 @@ class AboutPanelNB extends JPanel
 			}
 		});
 
-		webLabel.addActionListener(e -> NetworkUtils.visitURL("http://ics.hutton.ac.uk/curlywhirly"));
+		webLabel.addActionListener(e -> NetworkUtils.visitURL("https://ics.hutton.ac.uk/curlywhirly"));
 	}
 
 	/**

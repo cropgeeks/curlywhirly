@@ -67,7 +67,7 @@ class StartPanel extends JPanel
 		huttonLabel.setIcon(Icons.getIcon("HUTTON"));
 		huttonLabel.setBorder(BorderFactory.createEmptyBorder(65, 10, 0, 10));
 
-		huttonLabel.addActionListener(e -> GUIUtils.visitURL("http://www.hutton.ac.uk"));
+		huttonLabel.addActionListener(e -> GUIUtils.visitURL("https://www.hutton.ac.uk"));
 
 		return huttonLabel;
 	}

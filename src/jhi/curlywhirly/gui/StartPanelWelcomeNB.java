@@ -25,7 +25,7 @@ public class StartPanelWelcomeNB extends JPanel
 		feedbackLabel.setIcon(Icons.getIcon("FEEDBACK"));
 		twitterLabel.setIcon(Icons.getIcon("TWITTER"));
 		feedbackLabel.addActionListener(e -> GUIUtils.sendFeedback());
-		twitterLabel.addActionListener(e -> GUIUtils.visitURL("http://twitter.com/cropgeeks"));
+		twitterLabel.addActionListener(e -> GUIUtils.visitURL("https://twitter.com/cropgeeks"));
 	}
 
 	/**
