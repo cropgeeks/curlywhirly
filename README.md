@@ -1,3 +1,6 @@
+![GitHub](https://img.shields.io/github/license/cropgeeks/curlywhirly?style=flat-square)
+![GitHub last commit](https://img.shields.io/github/last-commit/cropgeeks/curlywhirly?style=flat-square)
+
 # CurlyWhirly
 
 CurlyWhirly is an application for viewing multi-dimensional data, with a particular focus on the outputs of Principle Coordinate Analysis and Principal Components Analysis.
