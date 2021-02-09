@@ -13,7 +13,7 @@
       <variable name="changeLog" value="Show change log" />
     </variables>
     <codeSigning macEnabled="true" macPkcs12File="../keys/icsmacbookpro-application-id.p12" windowsPkcs12File="../keys/OS201306044993.pfx" />
-    <jreBundles jdkProviderId="AdoptOpenJDK" release="openjdk11/jdk-11.0.10+9_openj9-0.24.0" />
+    <jreBundles jdkProviderId="AdoptOpenJDK" release="openjdk11/jdk-11.0.10+9" />
   </application>
   <files>
     <mountPoints>
